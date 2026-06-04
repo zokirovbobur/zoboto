@@ -162,6 +162,30 @@ const PROTOTYPES = [
     description: "Interactive AS-IS / TO-BE architecture explorer: Core Banking ABS, Middleware layer, client channels, compliance modules and external integrations — with multilingual support (UZ/RU/EN)."
   },
   {
+    title: "Enterprise Banking Web App",
+    product: "Trastbank",
+    type: "Internal",
+    status: "Demo",
+    url: "prototypes/banking-infra/islamic-bank-dbo.html",
+    description: "Corporate internet banking web application — accounts, payments, transfers and client management."
+  },
+  {
+    title: "Banking Bonus Management",
+    product: "Trastbank",
+    type: "Internal",
+    status: "Demo",
+    url: "prototypes/banking-infra/bonus-proto.html",
+    description: "Front office bonus calculation app — daily accruals, anti-bonus rules, formula breakdown per operation."
+  },
+  {
+    title: "Banking Loan Management System",
+    product: "Trastbank",
+    type: "Internal",
+    status: "Demo",
+    url: "prototypes/banking-infra/kredit-konveyer.html",
+    description: "End-to-end loan conveyor — application intake, scoring, approval workflow and disbursement tracking."
+  },
+  {
     title: "Islamic Banking Mobile Concept",
     product: "Islamic Banking",
     type: "Internal",
