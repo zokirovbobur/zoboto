@@ -162,7 +162,7 @@ const PROTOTYPES = [
     description: "Interactive AS-IS / TO-BE architecture explorer: Core Banking ABS, Middleware layer, client channels, compliance modules and external integrations — with multilingual support (UZ/RU/EN)."
   },
   {
-    title: "Enterprise Banking Web App",
+    title: "Islamic Banking Web App",
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
