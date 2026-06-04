@@ -368,19 +368,56 @@ const PROTOTYPES = [
   }
   revealObserve(document.querySelectorAll(".reveal"));
 
-  /* ---------- Contact form (static — no backend) ----------
-     To make this send for real, choose ONE:
-     • Formspree  : <form action="https://formspree.io/f/XXXX" method="POST"> and remove the JS preventDefault below.
-     • Netlify    : add `netlify` + `name="contact"` attributes to the <form> (Netlify auto-detects on deploy).
-     • EmailJS    : load the EmailJS SDK and call emailjs.send(...) inside the submit handler.            */
+  /* ---------- Contact form — EmailJS ---------- */
+  // EmailJS credentials — replace with your real values from https://www.emailjs.com/
+  var EMAILJS_PUBLIC_KEY  = "YOUR_PUBLIC_KEY";   // Account → API Keys → Public Key
+  var EMAILJS_SERVICE_ID  = "YOUR_SERVICE_ID";   // Email Services → Service ID
+  var EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";  // Email Templates → Template ID
+
+  if (typeof emailjs !== "undefined") {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
+
   const form = document.getElementById("contactForm");
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      const status = document.getElementById("formStatus");
-      status.textContent = "Thanks — your message is ready. Connect Formspree / Netlify / EmailJS to deliver it. (See comments in main.js.)";
-      status.classList.add("show");
-      form.reset();
+      const status  = document.getElementById("formStatus");
+      const btn     = document.getElementById("formSubmit");
+      const name    = document.getElementById("cf-name").value.trim();
+      const email   = document.getElementById("cf-email").value.trim();
+      const message = document.getElementById("cf-msg").value.trim();
+
+      if (typeof emailjs === "undefined") {
+        status.textContent = "EmailJS SDK yuklanmadi. Sahifani qayta yuklang.";
+        status.classList.add("show");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+      status.classList.remove("show");
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        from_name:    name,
+        from_email:   email,
+        message:      message,
+        to_email:     "zokirovbobur93@gmail.com"
+      }).then(function () {
+        status.textContent = "✓ Message sent! I'll get back to you soon.";
+        status.style.color = "var(--accent)";
+        status.classList.add("show");
+        form.reset();
+        btn.disabled = false;
+        btn.textContent = "Send message";
+      }, function (err) {
+        status.textContent = "⚠ Something went wrong. Please email me directly at zokirovbobur93@gmail.com";
+        status.style.color = "#e05a5a";
+        status.classList.add("show");
+        btn.disabled = false;
+        btn.textContent = "Send message";
+        console.error("EmailJS error:", err);
+      });
     });
   }
 
