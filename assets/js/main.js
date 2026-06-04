@@ -206,6 +206,158 @@ const PROTOTYPES = [
   },
 ];
 
+/* =========================== I18N ================================== */
+var LANG = localStorage.getItem("lang") || "en";
+
+const I18N = {
+  en: {
+    nav_about:"About", nav_expertise:"Expertise", nav_experience:"Experience",
+    nav_portfolio:"Portfolio", nav_prototypes:"Prototypes", nav_resume:"Résumé", nav_contact:"Contact",
+    hero_eyebrow:"Chief Product Officer",
+    hero_title:"Product Manager · Fintech & Digital Banking",
+    hero_loc:"Tashkent, Uzbekistan",
+    hero_lede:"I help fintech, banking, retail, and digital products move from idea to scalable execution — through product strategy, MVP delivery, cross-functional leadership, and data-driven growth.",
+    hero_btn_resume:"Download Résumé", hero_btn_portfolio:"View Portfolio", hero_btn_contact:"Contact me →",
+    about_eyebrow:"About",
+    about_lead:"Product leadership built on an engineer's foundation — turning strategy into shipped products and measurable growth.",
+    about_p1:"Bobur Zokirov is an experienced Product Manager and Chief Product Officer with a background in software engineering, fintech, digital banking, BNPL, retail technology, AdTech, and product transformation.",
+    about_p2:"He has led MVP launches, product roadmaps, cross-functional teams, process transformation, and investor-ready initiatives — pairing executive clarity with hands-on delivery.",
+    exp_eyebrow:"Key expertise", exp_h2:"Where I create leverage",
+    tl_eyebrow:"Experience", tl_h2:"A decade across banking, fintech & engineering",
+    tl_expand:"Show previous experience · 7 positions", tl_collapse:"Hide previous experience",
+    pf_eyebrow:"Portfolio", pf_h2:"Selected products & initiatives",
+    pf_desc:"Click any project for the full case study — overview, problem, role, features, process, and outcomes.",
+    pf_btn_case:"View Case Study", pf_btn_cjm:"Open CJM ↗",
+    proto_eyebrow:"Prototype library", proto_h2:"Interactive prototypes & demos",
+    proto_desc:"Internal prototypes hosted on this domain, plus links to external Figma / Framer / Canva flows.",
+    filter_all:"All", filter_internal:"Internal", filter_external:"External",
+    proto_btn_open:"Open Prototype", proto_btn_link:"Open Link ↗", proto_btn_soon:"Coming Soon",
+    resume_eyebrow:"Résumé", resume_h2:"Education, certifications & languages",
+    resume_edu:"Education", resume_lang_h:"Languages", resume_cert:"Certifications",
+    resume_cta_h3:"Full résumé & work history",
+    resume_cta_p:"Download the complete CV with detailed roles, scope, and outcomes.",
+    resume_btn:"Download CV",
+    contact_eyebrow:"Contact", contact_h2:"Let's build something durable",
+    contact_desc:"Open to product leadership, fintech transformation, advisory, mentoring, and strategic product opportunities.",
+    form_name:"Name", form_name_ph:"Your name",
+    form_email:"Email", form_email_ph:"you@company.com",
+    form_msg:"Message", form_msg_ph:"Tell me a little about what you have in mind…",
+    form_submit:"Send message", form_sending:"Sending…",
+    form_success:"✓ Message sent! I'll get back to you soon.",
+    form_error:"⚠ Something went wrong. Please email me directly at zokirovbobur93@gmail.com",
+    footer_loc:"Tashkent",
+  },
+  ru: {
+    nav_about:"Обо мне", nav_expertise:"Экспертиза", nav_experience:"Опыт",
+    nav_portfolio:"Портфолио", nav_prototypes:"Прототипы", nav_resume:"Резюме", nav_contact:"Контакт",
+    hero_eyebrow:"Chief Product Officer",
+    hero_title:"Product Manager · Финтех и Цифровой банкинг",
+    hero_loc:"Ташкент, Узбекистан",
+    hero_lede:"Помогаю финтех-, банковским, ритейл- и цифровым продуктам двигаться от идеи к масштабируемому исполнению — через продуктовую стратегию, MVP-запуск, кросс-функциональное лидерство и рост на основе данных.",
+    hero_btn_resume:"Скачать резюме", hero_btn_portfolio:"Портфолио", hero_btn_contact:"Написать →",
+    about_eyebrow:"Обо мне",
+    about_lead:"Продуктовое лидерство на инженерном фундаменте — превращение стратегии в готовые продукты и измеримый рост.",
+    about_p1:"Бобур Зокиров — опытный Product Manager и Chief Product Officer с опытом в разработке ПО, финтехе, цифровом банкинге, BNPL, ритейл-технологиях, AdTech и продуктовой трансформации.",
+    about_p2:"Руководил запусками MVP, продуктовыми роадмапами, кросс-функциональными командами, трансформацией процессов и инвестиционными инициативами — сочетая стратегическое видение с практической реализацией.",
+    exp_eyebrow:"Ключевая экспертиза", exp_h2:"Где я создаю ценность",
+    tl_eyebrow:"Опыт работы", tl_h2:"Десятилетие в банкинге, финтехе и инженерии",
+    tl_expand:"Показать предыдущий опыт · 7 позиций", tl_collapse:"Скрыть предыдущий опыт",
+    pf_eyebrow:"Портфолио", pf_h2:"Избранные продукты и инициативы",
+    pf_desc:"Нажмите на проект для полного кейса — обзор, проблема, роль, функции, процесс и результаты.",
+    pf_btn_case:"Кейс-стади", pf_btn_cjm:"Открыть CJM ↗",
+    proto_eyebrow:"Библиотека прототипов", proto_h2:"Интерактивные прототипы и демо",
+    proto_desc:"Внутренние прототипы на этом домене, а также ссылки на внешние Figma / Framer / Canva потоки.",
+    filter_all:"Все", filter_internal:"Внутренние", filter_external:"Внешние",
+    proto_btn_open:"Открыть прототип", proto_btn_link:"Открыть ↗", proto_btn_soon:"Скоро",
+    resume_eyebrow:"Резюме", resume_h2:"Образование, сертификаты и языки",
+    resume_edu:"Образование", resume_lang_h:"Языки", resume_cert:"Сертификаты",
+    resume_cta_h3:"Полное резюме и история работы",
+    resume_cta_p:"Скачайте полное CV с подробными ролями, масштабом и результатами.",
+    resume_btn:"Скачать CV",
+    contact_eyebrow:"Контакт", contact_h2:"Давайте создадим что-то долговечное",
+    contact_desc:"Открыт к продуктовому лидерству, финтех-трансформации, консультациям, менторингу и стратегическим продуктовым возможностям.",
+    form_name:"Имя", form_name_ph:"Ваше имя",
+    form_email:"Email", form_email_ph:"you@company.com",
+    form_msg:"Сообщение", form_msg_ph:"Расскажите немного о том, что вас интересует…",
+    form_submit:"Отправить", form_sending:"Отправка…",
+    form_success:"✓ Сообщение отправлено! Свяжусь с вами в ближайшее время.",
+    form_error:"⚠ Ошибка. Напишите напрямую: zokirovbobur93@gmail.com",
+    footer_loc:"Ташкент",
+  },
+  uz: {
+    nav_about:"Men haqimda", nav_expertise:"Tajriba", nav_experience:"Ish tajribasi",
+    nav_portfolio:"Portfolio", nav_prototypes:"Prototiplar", nav_resume:"Rezyume", nav_contact:"Aloqa",
+    hero_eyebrow:"Chief Product Officer",
+    hero_title:"Product Manager · Fintech va Raqamli Banking",
+    hero_loc:"Toshkent, O'zbekiston",
+    hero_lede:"Fintech, banking, retail va raqamli mahsulotlarni g'oyadan kengaytiriladigan amalga oshirishga olib borishga yordam beraman — mahsulot strategiyasi, MVP yetkazib berish, funksiyalararo yetakchilik va ma'lumotlarga asoslangan o'sish orqali.",
+    hero_btn_resume:"Rezyume yuklab olish", hero_btn_portfolio:"Portfolioga o'tish", hero_btn_contact:"Bog'lanish →",
+    about_eyebrow:"Men haqimda",
+    about_lead:"Muhandis asosida qurilgan mahsulot yetakchiligi — strategiyani tayyor mahsulotlar va o'lchanadigan o'sishga aylantirish.",
+    about_p1:"Bobur Zokirov — dasturiy ta'minot muhandisligi, fintech, raqamli banking, BNPL, chakana savdo texnologiyalari, AdTech va mahsulot transformatsiyasi sohasida tajribaga ega Product Manager va Chief Product Officer.",
+    about_p2:"MVP ishga tushirish, mahsulot yo'l xaritalari, funksiyalararo jamoalar, jarayon transformatsiyasi va investorlar uchun tashabbuslarga rahbarlik qilgan — ijrochi ravshanligi va amaliy yetkazib berishni birlashtirgan holda.",
+    exp_eyebrow:"Asosiy tajriba", exp_h2:"Men qayerda ta'sir yarataman",
+    tl_eyebrow:"Ish tajribasi", tl_h2:"Banking, fintech va muhandilikda o'n yillik tajriba",
+    tl_expand:"Avvalgi tajribani ko'rsatish · 7 ta lavozim", tl_collapse:"Avvalgi tajribani yashirish",
+    pf_eyebrow:"Portfolio", pf_h2:"Tanlangan mahsulotlar va tashabbuslar",
+    pf_desc:"To'liq keys-stadi uchun har qanday loyihani bosing — umumiy ko'rinish, muammo, rol, xususiyatlar, jarayon va natijalar.",
+    pf_btn_case:"Keys-stadi", pf_btn_cjm:"CJM ni ochish ↗",
+    proto_eyebrow:"Prototiplar kutubxonasi", proto_h2:"Interaktiv prototiplar va demolar",
+    proto_desc:"Ushbu domenida joylashtirilgan ichki prototiplar, shuningdek tashqi Figma / Framer / Canva oqimlariga havolalar.",
+    filter_all:"Hammasi", filter_internal:"Ichki", filter_external:"Tashqi",
+    proto_btn_open:"Prototipni ochish", proto_btn_link:"Ochish ↗", proto_btn_soon:"Tez kunda",
+    resume_eyebrow:"Rezyume", resume_h2:"Ta'lim, sertifikatlar va tillar",
+    resume_edu:"Ta'lim", resume_lang_h:"Tillar", resume_cert:"Sertifikatlar",
+    resume_cta_h3:"To'liq rezyume va ish tarixi",
+    resume_cta_p:"Batafsil lavozimlar, ko'lam va natijalar bilan to'liq CV ni yuklab oling.",
+    resume_btn:"CV yuklab olish",
+    contact_eyebrow:"Aloqa", contact_h2:"Keling, biror mustahkam narsa yarataylik",
+    contact_desc:"Mahsulot yetakchiligi, fintech transformatsiyasi, maslahat, mentorlik va strategik mahsulot imkoniyatlariga ochiqman.",
+    form_name:"Ism", form_name_ph:"Ismingiz",
+    form_email:"Email", form_email_ph:"siz@kompaniya.com",
+    form_msg:"Xabar", form_msg_ph:"Niyatingiz haqida biroz aytib bering…",
+    form_submit:"Xabar yuborish", form_sending:"Yuborilmoqda…",
+    form_success:"✓ Xabar yuborildi! Tez orada javob beraman.",
+    form_error:"⚠ Xatolik yuz berdi. Menga bevosita yozing: zokirovbobur93@gmail.com",
+    footer_loc:"Toshkent",
+  }
+};
+
+function applyLang(lang) {
+  LANG = lang;
+  localStorage.setItem("lang", lang);
+  var tr = I18N[lang] || I18N.en;
+  // Static elements
+  document.querySelectorAll("[data-i18n]").forEach(function (el) {
+    var key = el.dataset.i18n;
+    if (tr[key] !== undefined) el.textContent = tr[key];
+  });
+  // Placeholders
+  document.querySelectorAll("[data-i18n-ph]").forEach(function (el) {
+    var key = el.dataset.i18nPh;
+    if (tr[key] !== undefined) el.placeholder = tr[key];
+  });
+  // Lang switcher active state
+  document.querySelectorAll(".lang-sw button").forEach(function (b) {
+    b.classList.toggle("active", b.dataset.lang === lang);
+  });
+  // Expand button text (set by JS)
+  var tlBtn = document.getElementById("tlExpandBtn");
+  if (tlBtn) {
+    var isOpen = tlBtn.classList.contains("open");
+    var arrow = isOpen
+      ? '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 10l-4-4-4 4"/></svg>'
+      : '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>';
+    tlBtn.innerHTML = arrow + " " + (isOpen ? tr.tl_collapse : tr.tl_expand);
+  }
+  // Re-render dynamic sections
+  var pfWrap = document.getElementById("portfolioGrid");
+  if (pfWrap) renderPortfolio(pfWrap);
+  var protoWrap = document.getElementById("protoGrid");
+  if (protoWrap) renderProtos("All", protoWrap);
+  document.documentElement.lang = lang;
+}
+
 /* ====================== RENDER & INTERACTIONS ======================= */
 (function () {
   "use strict";
@@ -288,13 +440,13 @@ const PROTOTYPES = [
   }
 
   /* ---------- Render portfolio ---------- */
-  const pfWrap = document.getElementById("portfolioGrid");
-  if (pfWrap) {
-    pfWrap.innerHTML = PORTFOLIO.map(function (p, i) {
+  function renderPortfolio(wrap) {
+    var tr = I18N[LANG] || I18N.en;
+    wrap.innerHTML = PORTFOLIO.map(function (p, i) {
       const caseBtn = p.caseStudy
-        ? '<button class="btn btn--ghost btn--sm" data-case="' + i + '">View Case Study</button>' : "";
+        ? '<button class="btn btn--ghost btn--sm" data-case="' + i + '">' + tr.pf_btn_case + '</button>' : "";
       const cjmBtn = p.cjmUrl
-        ? '<a class="btn btn--text btn--sm" href="' + p.cjmUrl + '" target="_blank" rel="noopener">Open CJM ↗</a>' : "";
+        ? '<a class="btn btn--text btn--sm" href="' + p.cjmUrl + '" target="_blank" rel="noopener">' + tr.pf_btn_cjm + '</a>' : "";
       return '' +
         '<article class="pf-card reveal">' +
           '<div class="pf-body">' +
@@ -306,46 +458,53 @@ const PROTOTYPES = [
           '</div>' +
         '</article>';
     }).join("");
-
-    pfWrap.querySelectorAll("[data-case]").forEach(function (btn) {
+    wrap.querySelectorAll("[data-case]").forEach(function (btn) {
       btn.addEventListener("click", function () { openCase(PORTFOLIO[+btn.dataset.case]); });
     });
+    revealObserve(wrap.querySelectorAll(".reveal"));
   }
+  const pfWrap = document.getElementById("portfolioGrid");
+  if (pfWrap) renderPortfolio(pfWrap);
 
   /* ---------- Render prototype library (with filters) ---------- */
   const protoWrap = document.getElementById("protoGrid");
-  function renderProtos(filter) {
-    const list = filter && filter !== "All"
-      ? PROTOTYPES.filter(function (p) { return p.type === filter; })
+  var currentFilter = "All";
+  function renderProtos(filter, wrap) {
+    var w = wrap || protoWrap;
+    if (!w) return;
+    if (filter) currentFilter = filter;
+    var tr = I18N[LANG] || I18N.en;
+    const list = currentFilter && currentFilter !== "All"
+      ? PROTOTYPES.filter(function (p) { return p.type === currentFilter; })
       : PROTOTYPES;
-    protoWrap.innerHTML = list.map(function (p) {
+    w.innerHTML = list.map(function (p) {
       const isInternal = p.type === "Internal";
       const isSoon = p.status === "Coming Soon";
       const stClass = p.status === "Demo" ? "badge--demo"
         : p.status === "Public" ? "badge--public"
         : p.status === "Coming Soon" ? "badge--soon"
         : "badge--private";
+      const typeLabel = isInternal ? tr.filter_internal : tr.filter_external;
+      const statusLabel = isSoon ? tr.proto_btn_soon : p.status;
       const action = isSoon
-        ? '<span class="btn btn--primary btn--sm" style="opacity:.4;cursor:not-allowed">Coming Soon</span>'
+        ? '<span class="btn btn--primary btn--sm" style="opacity:.4;cursor:not-allowed">' + tr.proto_btn_soon + '</span>'
         : isInternal
-          ? '<a class="btn btn--primary btn--sm" href="' + p.url + '">Open Prototype</a>'
-          : '<a class="btn btn--primary btn--sm" href="' + p.url + '" target="_blank" rel="noopener">Open Link ↗</a>';
+          ? '<a class="btn btn--primary btn--sm" href="' + p.url + '">' + tr.proto_btn_open + '</a>'
+          : '<a class="btn btn--primary btn--sm" href="' + p.url + '" target="_blank" rel="noopener">' + tr.proto_btn_link + '</a>';
       return '' +
         '<article class="proto-card reveal' + (isSoon ? ' proto-card--soon' : '') + '">' +
           '<div class="proto-top">' +
-            '<div>' +
-              '<h3>' + p.title + '</h3>' +
-            '</div>' +
+            '<div><h3>' + p.title + '</h3></div>' +
             '<div class="proto-badges">' +
-              '<span class="badge ' + (isInternal ? "badge--int" : "badge--ext") + '">' + p.type + '</span>' +
-              '<span class="badge ' + stClass + '">' + p.status + '</span>' +
+              '<span class="badge ' + (isInternal ? "badge--int" : "badge--ext") + '">' + typeLabel + '</span>' +
+              '<span class="badge ' + stClass + '">' + statusLabel + '</span>' +
             '</div>' +
           '</div>' +
           '<p class="proto-desc">' + p.description + '</p>' +
           '<div class="pf-actions">' + action + '</div>' +
         '</article>';
     }).join("");
-    revealObserve(protoWrap.querySelectorAll(".reveal"));
+    revealObserve(w.querySelectorAll(".reveal"));
   }
   if (protoWrap) {
     renderProtos("All");
@@ -357,6 +516,18 @@ const PROTOTYPES = [
       });
     });
   }
+
+  /* ---------- Lang switcher ---------- */
+  var langSw = document.getElementById("langSw");
+  if (langSw) {
+    langSw.querySelectorAll("button").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        applyLang(btn.dataset.lang);
+      });
+    });
+  }
+  // Apply saved/default lang on load
+  applyLang(LANG);
 
   /* ---------- Case-study modal ---------- */
   const modal = document.getElementById("modal");

@@ -166,6 +166,16 @@ img{max-width:100%;display:block;}
 .nav__links a{font-size:14px;font-weight:500;color:var(--ink-soft);transition:color .18s;}
 .nav__links a:hover{color:var(--accent-text);}
 .nav__actions{display:flex;align-items:center;gap:14px;}
+/* lang switcher */
+.lang-sw{display:flex;gap:2px;margin-left:4px;}
+.lang-sw button{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;
+  padding:5px 9px;border-radius:6px;
+  border:1px solid var(--line-strong);background:transparent;
+  color:var(--muted);cursor:pointer;transition:all .15s;
+}
+.lang-sw button:hover{color:var(--ink);border-color:var(--line-strong);}
+.lang-sw button.active{color:var(--accent-text);border-color:var(--accent);background:var(--accent-soft);}
 
 /* theme toggle */
 .theme-toggle{width:40px;height:40px;border-radius:50%;border:1px solid var(--line-strong);background:var(--surface);
