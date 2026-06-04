@@ -18,7 +18,7 @@ const PORTFOLIO = [
     category: "Fintech / Digital Banking",
     role: "Chief Product Officer",
     description: "Online banking transformation focused on scalability, user growth, payment-flow optimization, deposits, P2P transactions, KPI monitoring, and product governance.",
-    prototypeUrl: "prototypes/trastpay-dashboard/index.html",
+    image: "assets/img/portfolio/trastpay.jpg",
     caseStudy: {
       overview: "End-to-end transformation of Trastbank's retail online-banking product (Trastpay) — moving from a feature-led backlog to a strategy-led roadmap with clear KPIs and governance.",
       problem: "Fragmented payment flows, slow growth, and no shared view of product performance across the bank. Acquisition costs were high and engagement plateaued.",
@@ -39,6 +39,7 @@ const PORTFOLIO = [
     category: "SME Banking",
     role: "Chief Product Officer",
     description: "Corporate & SME banking platform with onboarding, roles & permissions, maker-checker flows, payment UX, statements, exports, and reliability improvements.",
+    image: "assets/img/portfolio/trast-business.jpg",
     caseStudy: {
       overview: "A corporate and SME online-banking platform built for reliability, multi-user control, and efficient day-to-day treasury operations.",
       problem: "SME clients needed multi-user access with proper controls, faster payments, and dependable statements/exports — without enterprise complexity.",
@@ -57,7 +58,7 @@ const PORTFOLIO = [
     category: "Islamic Banking / Fintech",
     role: "Product & Strategy Lead",
     description: "Islamic Window concept: business case, P&L model, investor-ready pitch, organizational structure, technical infrastructure analysis, and product prototypes.",
-    prototypeUrl: "prototypes/islamic-banking/index.html",
+    image: "assets/img/portfolio/islamic-banking.jpg",
     caseStudy: {
       overview: "Strategy and product foundation for a Shariah-compliant 'Islamic Window' — from business case to investor-ready pitch and early prototypes.",
       problem: "Significant unmet demand for Shariah-compliant products, but no validated business case, operating model, or technical path.",
@@ -76,7 +77,7 @@ const PORTFOLIO = [
     category: "BNPL / Retail Fintech",
     role: "Senior Product Manager",
     description: "Unified BNPL processing platform for client onboarding, identification, credit-limit allocation, and installment-plan execution across financial partners.",
-    prototypeUrl: "prototypes/bnpl-broker/index.html",
+    image: "assets/img/portfolio/bnpl-broker.jpg",
     caseStudy: {
       overview: "A single BNPL 'broker' layer connecting retailers with multiple banks and microfinance organizations through one unified processing flow.",
       problem: "Each financial partner had different onboarding, scoring, and installment rules — creating friction for retailers and customers.",
@@ -95,7 +96,7 @@ const PORTFOLIO = [
     category: "Retail Tech / B2B Mobile",
     role: "Senior Product Manager",
     description: "Mobile CRM for retail employees covering client creation, lead conversion, training, promotions, KPI tracking, and planning.",
-    prototypeUrl: "prototypes/oneup-pro/index.html",
+    image: "assets/img/portfolio/oneup.jpg",
     caseStudy: {
       overview: "A mobile-first CRM for field sales agents — turning daily retail activity into structured leads, conversions, and measurable KPIs.",
       problem: "Sales agents lacked tooling to capture clients, track conversion, and stay trained and aligned on promotions.",
@@ -114,7 +115,7 @@ const PORTFOLIO = [
     category: "AdTech / DOOH",
     role: "Product Manager",
     description: "Programmatic advertising platform for digital out-of-home media buying with location, audience, inventory, and campaign-planning features.",
-    prototypeUrl: "prototypes/geomotive-dsp/index.html",
+    image: "assets/img/portfolio/geomotive.jpg",
     caseStudy: {
       overview: "A demand-side platform for programmatic Digital-Out-Of-Home (DOOH) advertising — letting buyers plan campaigns by location, audience, and inventory.",
       problem: "DOOH buying was manual and opaque; advertisers needed programmatic targeting and transparent inventory.",
@@ -133,6 +134,8 @@ const PORTFOLIO = [
     category: "BNPL / Fintech",
     role: "Product Manager",
     description: "Platform connecting retail networks and financial institutions to streamline installment processing, scoring, and agent operations.",
+    image: "assets/img/portfolio/paynet.jpg",
+    cjmUrl: "https://www.figma.com/board/gO7guh26s58CXbbOVuX2rX/Future-Sprint--Onboarding-process?node-id=0-1&t=8QYlBqoA1Z1HC1jx-1",
     caseStudy: {
       overview: "A BNPL platform linking retail networks with financial institutions — streamlining installment processing, scoring, and agent operations.",
       problem: "Installment processing was slow and inconsistent across retail networks, with weak incentives for agents.",
@@ -290,16 +293,19 @@ const PROTOTYPES = [
     pfWrap.innerHTML = PORTFOLIO.map(function (p, i) {
       const caseBtn = p.caseStudy
         ? '<button class="btn btn--ghost btn--sm" data-case="' + i + '">View Case Study</button>' : "";
-      const protoBtn = p.prototypeUrl
-        ? '<a class="btn btn--text btn--sm" href="' + p.prototypeUrl + '">Open Prototype →</a>' : "";
+      const cjmBtn = p.cjmUrl
+        ? '<a class="btn btn--text btn--sm" href="' + p.cjmUrl + '" target="_blank" rel="noopener">Open CJM ↗</a>' : "";
+      const thumb = p.image
+        ? '<img src="' + p.image + '" alt="' + p.title + '" style="width:100%;height:100%;object-fit:cover;display:block;">'
+        : '<span>project visual</span>';
       return '' +
         '<article class="pf-card reveal">' +
-          '<div class="pf-thumb"><span class="pf-cat">' + p.category + '</span><span>project visual</span></div>' +
+          '<div class="pf-thumb"><span class="pf-cat">' + p.category + '</span>' + thumb + '</div>' +
           '<div class="pf-body">' +
             '<h3>' + p.title + '</h3>' +
             '<p class="pf-role"><b>Role:</b> ' + p.role + '</p>' +
             '<p class="pf-desc">' + p.description + '</p>' +
-            '<div class="pf-actions">' + caseBtn + protoBtn + '</div>' +
+            '<div class="pf-actions">' + caseBtn + cjmBtn + '</div>' +
           '</div>' +
         '</article>';
     }).join("");
@@ -364,8 +370,8 @@ const PROTOTYPES = [
       return '<div class="cs-metric"><div class="v">' + m.v + '</div><div class="k">' + m.k + '</div></div>';
     }).join("");
     const features = (cs.features || []).map(function (f) { return "<li>" + f + "</li>"; }).join("");
-    const protoFoot = p.prototypeUrl
-      ? '<a class="btn btn--primary" href="' + p.prototypeUrl + '">Open Prototype →</a>' : "";
+    const protoFoot = p.cjmUrl
+      ? '<a class="btn btn--primary" href="' + p.cjmUrl + '" target="_blank" rel="noopener">Open CJM ↗</a>' : "";
     modalBody.innerHTML = '' +
       '<div class="cs-hero">' +
         '<span class="pf-cat">' + p.category + '</span>' +
