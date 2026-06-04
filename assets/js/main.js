@@ -154,7 +154,7 @@ const PORTFOLIO = [
    url    : internal path (e.g. "prototypes/x/index.html") or external https link  */
 const PROTOTYPES = [
   {
-    title: "Islamic Banking IT Infrastructure",
+    title: "Enterprise Banking IT Infrastructure",
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
