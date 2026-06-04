@@ -301,8 +301,7 @@ const PROTOTYPES = [
       const action = isSoon
         ? '<span class="btn btn--primary btn--sm" style="opacity:.4;cursor:not-allowed">Coming Soon</span>'
         : isInternal
-          ? '<a class="btn btn--primary btn--sm" href="' + p.url + '">Open Prototype</a>' +
-            '<a class="btn btn--text btn--sm" href="' + p.url + '">View Details →</a>'
+          ? '<a class="btn btn--primary btn--sm" href="' + p.url + '">Open Prototype</a>'
           : '<a class="btn btn--primary btn--sm" href="' + p.url + '" target="_blank" rel="noopener">Open Link ↗</a>';
       return '' +
         '<article class="proto-card reveal' + (isSoon ? ' proto-card--soon' : '') + '">' +
