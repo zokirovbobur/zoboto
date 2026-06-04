@@ -370,9 +370,9 @@ const PROTOTYPES = [
 
   /* ---------- Contact form — EmailJS ---------- */
   // EmailJS credentials — replace with your real values from https://www.emailjs.com/
-  var EMAILJS_PUBLIC_KEY  = "YOUR_PUBLIC_KEY";   // Account → API Keys → Public Key
-  var EMAILJS_SERVICE_ID  = "YOUR_SERVICE_ID";   // Email Services → Service ID
-  var EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";  // Email Templates → Template ID
+  var EMAILJS_PUBLIC_KEY  = "p-hAzWwHzIuIxS3Wt";
+  var EMAILJS_SERVICE_ID  = "service_zoboto_mail";
+  var EMAILJS_TEMPLATE_ID = "template_01oel1r";
 
   if (typeof emailjs !== "undefined") {
     emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
