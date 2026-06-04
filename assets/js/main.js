@@ -154,10 +154,26 @@ const PORTFOLIO = [
    url    : internal path (e.g. "prototypes/x/index.html") or external https link  */
 const PROTOTYPES = [
   {
+    title: "Islamic Banking IT Infrastructure",
+    product: "Trastbank",
+    type: "Internal",
+    status: "Demo",
+    url: "prototypes/banking-infra/index.html",
+    description: "Interactive AS-IS / TO-BE architecture explorer: Core Banking ABS, Middleware layer, client channels, compliance modules and external integrations — with multilingual support (UZ/RU/EN)."
+  },
+  {
+    title: "Finport — Investment Portfolio",
+    product: "Finport",
+    type: "External",
+    status: "Public",
+    url: "https://finport.uz/",
+    description: "Investment portfolio management platform — live product."
+  },
+  {
     title: "Trastpay Product Dashboard",
     product: "Trastpay",
     type: "Internal",
-    status: "Demo",
+    status: "Coming Soon",
     url: "prototypes/trastpay-dashboard/index.html",
     description: "Interactive prototype for product KPI monitoring and the executive dashboard."
   },
@@ -165,7 +181,7 @@ const PROTOTYPES = [
     title: "Islamic Banking Mobile Concept",
     product: "Islamic Banking",
     type: "Internal",
-    status: "Demo",
+    status: "Coming Soon",
     url: "prototypes/islamic-banking/index.html",
     description: "Concept prototype for a Shariah-compliant digital-banking customer journey."
   },
@@ -173,7 +189,7 @@ const PROTOTYPES = [
     title: "BNPL Broker Flow",
     product: "Mediapark",
     type: "Internal",
-    status: "Demo",
+    status: "Coming Soon",
     url: "prototypes/bnpl-broker/index.html",
     description: "Onboarding, identification, and installment-plan execution across financial partners."
   },
@@ -181,7 +197,7 @@ const PROTOTYPES = [
     title: "OneUP Pro — Agent CRM",
     product: "Mediapark",
     type: "Internal",
-    status: "Demo",
+    status: "Coming Soon",
     url: "prototypes/oneup-pro/index.html",
     description: "Mobile CRM flow: client creation, lead conversion, and KPI tracking for sales agents."
   },
@@ -189,18 +205,9 @@ const PROTOTYPES = [
     title: "Geomotive DSP Planner",
     product: "Geomotive",
     type: "Internal",
-    status: "Demo",
+    status: "Coming Soon",
     url: "prototypes/geomotive-dsp/index.html",
     description: "DOOH campaign planning by location, audience, and inventory."
-  },
-  {
-    // EXAMPLE external link — replace url with your real Figma/Framer/Canva link.
-    title: "Deposit Journey (Figma)",
-    product: "Trastpay",
-    type: "External",
-    status: "Private",
-    url: "https://figma.com/",
-    description: "High-fidelity Figma flow for the deposits & savings customer journey."
   }
 ];
 
@@ -272,13 +279,19 @@ const PROTOTYPES = [
       : PROTOTYPES;
     protoWrap.innerHTML = list.map(function (p) {
       const isInternal = p.type === "Internal";
-      const stClass = p.status === "Demo" ? "badge--demo" : p.status === "Public" ? "badge--public" : "badge--private";
-      const action = isInternal
-        ? '<a class="btn btn--primary btn--sm" href="' + p.url + '">Open Prototype</a>' +
-          '<a class="btn btn--text btn--sm" href="' + p.url + '">View Details →</a>'
-        : '<a class="btn btn--primary btn--sm" href="' + p.url + '" target="_blank" rel="noopener">Open Link ↗</a>';
+      const isSoon = p.status === "Coming Soon";
+      const stClass = p.status === "Demo" ? "badge--demo"
+        : p.status === "Public" ? "badge--public"
+        : p.status === "Coming Soon" ? "badge--soon"
+        : "badge--private";
+      const action = isSoon
+        ? '<span class="btn btn--primary btn--sm" style="opacity:.4;cursor:not-allowed">Coming Soon</span>'
+        : isInternal
+          ? '<a class="btn btn--primary btn--sm" href="' + p.url + '">Open Prototype</a>' +
+            '<a class="btn btn--text btn--sm" href="' + p.url + '">View Details →</a>'
+          : '<a class="btn btn--primary btn--sm" href="' + p.url + '" target="_blank" rel="noopener">Open Link ↗</a>';
       return '' +
-        '<article class="proto-card reveal">' +
+        '<article class="proto-card reveal' + (isSoon ? ' proto-card--soon' : '') + '">' +
           '<div class="proto-top">' +
             '<div>' +
               '<h3>' + p.title + '</h3>' +

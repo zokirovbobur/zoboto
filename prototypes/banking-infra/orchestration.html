@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Middleware — Orkestratsiya</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#F1F5F9;color:#1E293B;font-size:14px}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+
+/* Layout */
+.layout{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:220px;min-width:220px;background:#0F172A;color:#94A3B8;display:flex;flex-direction:column;z-index:10}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* Sidebar */
+.sb-logo{padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #1E293B}
+.sb-logo-icon{width:32px;height:32px;background:#3B82F6;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:15px;flex-shrink:0}
+.sb-logo-info .name{font-size:14px;font-weight:600;color:white;line-height:1.2}
+.sb-logo-info .sub{font-size:11px;color:#475569}
+.sb-section{padding:16px 16px 4px;font-size:10px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.08em}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:6px;margin:1px 8px;cursor:pointer;font-size:13px;color:#94A3B8;transition:all .15s;user-select:none}
+.sb-item:hover{background:#1E293B;color:#E2E8F0}
+.sb-item.active{background:#1D4ED8;color:white}
+.sb-item .ico{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-item .dot{width:5px;height:5px;background:#10B981;border-radius:50%;margin-left:auto}
+.sb-bottom{margin-top:auto;padding:12px 16px;border-top:1px solid #1E293B;display:flex;align-items:center;gap:8px}
+.sb-avatar{width:28px;height:28px;background:#1D4ED8;border-radius:6px;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700;flex-shrink:0}
+
+/* Topbar */
+.topbar{height:52px;background:white;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
+.topbar-title{font-size:15px;font-weight:600;color:#1E293B}
+.topbar-bc{display:flex;align-items:center;gap:6px;font-size:13px;color:#64748B}
+.topbar-bc .sep{color:#CBD5E1}
+.topbar-bc .cur{color:#1E293B;font-weight:500}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;line-height:1}
+.btn-primary{background:#3B82F6;color:white}.btn-primary:hover{background:#2563EB}
+.btn-secondary{background:white;color:#374151;border:1px solid #D1D5DB}.btn-secondary:hover{background:#F9FAFB}
+.btn-success{background:#10B981;color:white}.btn-success:hover{background:#059669}
+.btn-danger{background:#EF4444;color:white}.btn-danger:hover{background:#DC2626}
+.btn-ghost{background:transparent;color:#6B7280}.btn-ghost:hover{background:#F3F4F6}
+.btn-outline-primary{background:white;color:#3B82F6;border:1px solid #BFDBFE}.btn-outline-primary:hover{background:#EFF6FF}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-xs{padding:3px 8px;font-size:11px;border-radius:4px}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.badge-published{background:#D1FAE5;color:#065F46}
+.badge-draft{background:#FEF3C7;color:#92400E}
+.badge-review{background:#DBEAFE;color:#1E40AF}
+.badge-archived{background:#F1F5F9;color:#64748B}
+.badge-http{background:#EEF2FF;color:#4338CA}
+.badge-cron{background:#F0FDF4;color:#166534}
+.badge-manual{background:#FDF4FF;color:#7E22CE}
+.badge-pass{background:#D1FAE5;color:#065F46}
+.badge-fail{background:#FEE2E2;color:#991B1B}
+.badge-running{background:#FEF3C7;color:#92400E}
+
+/* Content */
+.content{flex:1;overflow-y:auto;padding:20px}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.ph-left{display:flex;align-items:center;gap:12px}
+.page-title{font-size:18px;font-weight:600;color:#0F172A}
+
+/* Cards */
+.card{background:white;border:1px solid #E2E8F0;border-radius:8px}
+.card-header{padding:14px 16px;border-bottom:1px solid #F1F5F9;display:flex;align-items:center;justify-content:space-between}
+.card-header-title{font-size:13px;font-weight:600;color:#374151}
+.card-body{padding:16px}
+
+/* Table */
+.table{width:100%;border-collapse:collapse;font-size:13px}
+.table th{padding:9px 14px;text-align:left;font-size:11px;font-weight:600;color:#64748B;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid #E2E8F0;background:#F8FAFC;white-space:nowrap}
+.table td{padding:12px 14px;border-bottom:1px solid #F1F5F9;color:#374151;vertical-align:middle}
+.table tr:hover td{background:#F8FAFC;cursor:pointer}
+.table tr:last-child td{border-bottom:none}
+
+/* Forms */
+.input{padding:8px 12px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;color:#1E293B;background:white;outline:none;width:100%;transition:border-color .15s}
+.input:focus{border-color:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;cursor:pointer}
+.textarea{resize:vertical;min-height:80px;font-family:inherit}
+.label{font-size:12px;font-weight:500;color:#374151;margin-bottom:5px;display:block}
+.form-group{margin-bottom:14px}
+.form-row{display:grid;gap:12px}
+.form-row-2{grid-template-columns:1fr 1fr}
+.hint{font-size:11px;color:#94A3B8;margin-top:4px}
+
+/* Filters row */
+.filters{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-select{padding:6px 28px 6px 10px;border:1px solid #E2E8F0;border-radius:6px;font-size:12px;color:#374151;background:white;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer;outline:none}
+.search-wrap{position:relative;flex:1;max-width:260px}
+.search-wrap input{padding-left:30px}
+.search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#94A3B8;font-size:13px;pointer-events:none}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(2px)}
+.modal{background:white;border-radius:12px;width:520px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:fadeUp .2s ease}
+.modal-lg{width:680px}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid #F1F5F9;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-size:16px;font-weight:600;color:#0F172A}
+.modal-body{padding:20px 24px}
+.modal-footer{padding:16px 24px;border-top:1px solid #F1F5F9;display:flex;justify-content:flex-end;gap:8px}
+.close-btn{background:none;border:none;cursor:pointer;color:#94A3B8;font-size:18px;line-height:1;padding:4px}
+.close-btn:hover{color:#374151}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Trigger cards */
+.trigger-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+.trigger-card{border:2px solid #E2E8F0;border-radius:10px;padding:16px;cursor:pointer;transition:all .15s;text-align:center}
+.trigger-card:hover{border-color:#93C5FD;background:#F0F9FF}
+.trigger-card.selected{border-color:#3B82F6;background:#EFF6FF}
+.trigger-card .tc-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 10px;color:white}
+.trigger-card .tc-name{font-size:13px;font-weight:600;color:#1E293B;margin-bottom:4px}
+.trigger-card .tc-desc{font-size:11px;color:#64748B;line-height:1.4}
+
+/* Wizard steps */
+.wizard-steps{display:flex;align-items:center;gap:0;margin-bottom:24px}
+.wstep{display:flex;align-items:center;gap:6px;font-size:12px;color:#94A3B8}
+.wstep.active{color:#1D4ED8;font-weight:600}
+.wstep.done{color:#10B981}
+.wstep-num{width:22px;height:22px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.wstep-sep{flex:1;height:1px;background:#E2E8F0;margin:0 8px}
+
+/* Canvas Editor Layout */
+.canvas-editor{display:flex;flex:1;overflow:hidden;height:100%;flex-direction:column}
+.canvas-row{display:flex;flex:1;overflow:hidden}
+.canvas-topbar{height:52px;background:white;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0}
+.canvas-service-name{font-size:14px;font-weight:600;color:#1E293B;min-width:0}
+.canvas-topbar .divider{width:1px;height:24px;background:#E2E8F0}
+.ct-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:5px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#64748B;transition:all .15s}
+.ct-btn:hover{background:#F1F5F9;color:#1E293B}
+.ct-btn.active{background:#DBEAFE;color:#1D4ED8}
+
+/* Palette */
+.palette{width:230px;min-width:230px;background:white;border-right:1px solid #E2E8F0;overflow-y:auto;display:flex;flex-direction:column}
+.palette-search{padding:10px;border-bottom:1px solid #F1F5F9}
+.palette-cat{padding:8px 12px 4px;font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.07em}
+.palette-item{display:flex;align-items:center;gap:9px;padding:8px 12px;cursor:grab;transition:background .1s;user-select:none;border-radius:0}
+.palette-item:hover{background:#F8FAFC}
+.palette-item:active{cursor:grabbing}
+.pi-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:white;flex-shrink:0}
+.pi-label{font-size:12px;font-weight:500;color:#374151;line-height:1.2}
+.pi-sub{font-size:10px;color:#94A3B8}
+
+/* Canvas area */
+.canvas-area{flex:1;position:relative;background:#F8FAFC;overflow:hidden;background-image:radial-gradient(circle,#CBD5E1 1px,transparent 1px);background-size:24px 24px}
+.canvas-inner{position:absolute;top:0;left:0;width:100%;height:100%}
+.canvas-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible}
+.canvas-nodes{position:absolute;top:0;left:0}
+
+/* Flow Nodes */
+.flow-node{position:absolute;min-width:168px;max-width:200px;background:white;border:2px solid #E2E8F0;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:grab;user-select:none;transition:border-color .12s,box-shadow .12s}
+.flow-node:hover{border-color:#BFDBFE;box-shadow:0 4px 16px rgba(59,130,246,.12)}
+.flow-node.selected{border-color:#3B82F6;box-shadow:0 4px 20px rgba(59,130,246,.22)}
+.flow-node:active{cursor:grabbing}
+.fn-header{padding:8px 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #F1F5F9}
+.fn-icon{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:white;flex-shrink:0}
+.fn-info{flex:1;min-width:0}
+.fn-name{font-size:12px;font-weight:600;color:#1E293B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fn-type{font-size:10px;color:#94A3B8}
+.fn-status{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.fn-body{padding:6px 10px 8px;font-size:11px;color:#64748B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fn-port{position:absolute;width:12px;height:12px;background:white;border:2px solid #94A3B8;border-radius:50%;z-index:5;transition:all .12s;cursor:crosshair}
+.fn-port:hover{background:#3B82F6;border-color:#3B82F6;transform:scale(1.4)!important}
+.fn-port-out{right:-7px;top:50%;transform:translateY(-50%)}
+.fn-port-in{left:-7px;top:50%;transform:translateY(-50%)}
+
+/* Right Panel */
+.prop-panel{width:280px;min-width:280px;background:white;border-left:1px solid #E2E8F0;display:flex;flex-direction:column;overflow:hidden}
+.pp-header{padding:12px 14px;border-bottom:1px solid #F1F5F9;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.pp-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:white;flex-shrink:0}
+.pp-body{flex:1;overflow-y:auto;padding:14px}
+.pp-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94A3B8;padding:20px;text-align:center;gap:8px}
+
+/* Test panel */
+.test-panel{background:white;border-top:1px solid #E2E8F0;flex-shrink:0}
+.tp-header{padding:9px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:500;color:#374151;user-select:none}
+.tp-header:hover{background:#F8FAFC}
+.tp-body{padding:14px 16px;border-top:1px solid #F1F5F9;display:flex;gap:12px}
+.tp-input{flex:1}
+.tp-results{flex:1;display:flex;flex-direction:column;gap:6px}
+.step-result{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;padding:8px 10px;font-size:11px}
+.sr-header{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.sr-name{font-weight:600;color:#374151}
+.sr-latency{color:#94A3B8;margin-left:auto}
+.sr-json{background:#0F172A;color:#7DD3FC;border-radius:4px;padding:6px 8px;font-family:monospace;font-size:10px;overflow-x:auto;white-space:pre-wrap;max-height:80px;overflow-y:auto}
+
+/* Run History */
+.run-row td:first-child{font-family:monospace;font-size:11px;color:#64748B}
+.waterfall{display:flex;gap:2px;align-items:center}
+.wf-bar{height:14px;border-radius:2px;min-width:4px}
+
+/* Version History */
+.version-timeline{display:flex;flex-direction:column;gap:0}
+.version-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid #F1F5F9}
+.vt-dot{width:10px;height:10px;border-radius:50%;background:#3B82F6;flex-shrink:0;margin-top:4px}
+.vt-dot.current{background:#10B981;box-shadow:0 0 0 3px #D1FAE5}
+.vt-line-wrap{display:flex;flex-direction:column;align-items:center;gap:0}
+.vt-line{width:2px;flex:1;background:#E2E8F0;min-height:16px}
+
+/* Diff viewer */
+.diff-view{font-family:monospace;font-size:11px;border:1px solid #E2E8F0;border-radius:6px;overflow:hidden}
+.diff-line{padding:2px 10px;display:flex;gap:8px;line-height:1.6}
+.diff-line.add{background:#F0FDF4;color:#166534}
+.diff-line.rem{background:#FEF2F2;color:#991B1B}
+.diff-line.ctx{color:#64748B}
+.diff-lnum{color:#94A3B8;min-width:24px;text-align:right;user-select:none}
+
+/* Notification toast */
+.toast{position:fixed;bottom:20px;right:20px;background:#0F172A;color:white;padding:12px 16px;border-radius:8px;font-size:13px;z-index:9999;animation:toastIn .25s ease;display:flex;align-items:center;gap:8px;max-width:340px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast-success .ti{color:#10B981}
+.toast-error .ti{color:#EF4444}
+.toast-info .ti{color:#3B82F6}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat-card{background:white;border:1px solid #E2E8F0;border-radius:8px;padding:14px 16px}
+.stat-label{font-size:11px;color:#64748B;font-weight:500;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.stat-value{font-size:24px;font-weight:700;color:#0F172A}
+.stat-value.green{color:#10B981}
+.stat-value.red{color:#EF4444}
+.stat-value.blue{color:#3B82F6}
+
+/* Misc */
+.sep{height:1px;background:#F1F5F9;margin:10px 0}
+.empty{text-align:center;padding:48px 20px;color:#94A3B8;font-size:13px}
+.text-muted{color:#94A3B8;font-size:12px}
+.text-mono{font-family:monospace;font-size:12px}
+.code-block{background:#0F172A;color:#7DD3FC;border-radius:6px;padding:10px 12px;font-family:monospace;font-size:11px;overflow-x:auto;white-space:pre-wrap;line-height:1.5}
+.flex{display:flex}.items-center{align-items:center}.gap-1{gap:4px}.gap-2{gap:8px}.gap-3{gap:12px}.justify-between{justify-content:space-between}
+.ml-auto{margin-left:auto}
+.mt-1{margin-top:4px}.mt-2{margin-top:8px}.mt-3{margin-top:12px}.mt-4{margin-top:16px}
+.mb-2{margin-bottom:8px}.mb-3{margin-bottom:12px}
+.w-full{width:100%}
+.font-mono{font-family:monospace}
+.truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#0F172A">
+  <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+    <rect width="120" height="80" fill="#0F172A"/>
+    <rect x="0" y="0" width="22" height="80" fill="#1E293B"/>
+    <rect x="3" y="10" width="16" height="4" rx="2" fill="#3B82F6"/>
+    <rect x="3" y="18" width="12" height="3" rx="1.5" fill="#334155"/>
+    <rect x="3" y="24" width="14" height="3" rx="1.5" fill="#334155"/>
+    <rect x="3" y="30" width="11" height="3" rx="1.5" fill="#334155"/>
+    <rect x="26" y="8" width="90" height="10" rx="2" fill="#1E293B"/>
+    <rect x="28" y="22" width="86" height="50" rx="3" fill="#1E293B"/>
+    <rect x="32" y="30" width="18" height="12" rx="3" fill="#7C3AED"/>
+    <line x1="50" y1="36" x2="58" y2="36" stroke="#334155" strokeWidth="1.5"/>
+    <rect x="58" y="30" width="18" height="12" rx="3" fill="#3B82F6"/>
+    <line x1="76" y1="36" x2="84" y2="36" stroke="#334155" strokeWidth="1.5"/>
+    <rect x="84" y="30" width="18" height="12" rx="3" fill="#4F46E5"/>
+    <line x1="102" y1="36" x2="108" y2="36" stroke="#334155" strokeWidth="1.5"/>
+    <rect x="108" y="30" width="14" height="12" rx="3" fill="#DC2626"/>
+  </svg>
+</template>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState, useRef, useEffect, useCallback} = React;
+
+/* ============ CONSTANTS ============ */
+const STEP_TYPES = {
+  HTTP_TRIGGER:  {label:'HTTP Trigger',   color:'#7C3AED', short:'H', cat:'Trigger'},
+  CRON_TRIGGER:  {label:'Cron Trigger',   color:'#7C3AED', short:'C', cat:'Trigger'},
+  MANUAL_TRIGGER:{label:'Manual Trigger', color:'#7C3AED', short:'M', cat:'Trigger'},
+  HTTP_REQUEST:  {label:'HTTP Request',   color:'#3B82F6', short:'↗', cat:'HTTP'},
+  JSON_TRANSFORM:{label:'JSON Transform', color:'#0891B2', short:'{}', cat:'Data'},
+  FILTER:        {label:'Filter',         color:'#EA580C', short:'▽', cat:'Logic'},
+  IF_ELSE:       {label:'If / Else',      color:'#D97706', short:'?', cat:'Logic'},
+  LOOP:          {label:'Loop',           color:'#059669', short:'↺', cat:'Logic'},
+  MERGE:         {label:'Merge',          color:'#4F46E5', short:'⊕', cat:'Logic'},
+  SET_VARIABLE:  {label:'Set Variable',   color:'#475569', short:'S', cat:'Data'},
+  GET_VARIABLE:  {label:'Get Variable',   color:'#475569', short:'G', cat:'Data'},
+  CUSTOM_CODE:   {label:'Custom Code JS', color:'#0F172A', short:'</', cat:'Code'},
+  RETURN:        {label:'Return',         color:'#DC2626', short:'⟵', cat:'Output'},
+};
+
+const PALETTE_CATS = ['Trigger','HTTP','Logic','Data','Code','Output'];
+
+const INITIAL_SERVICES = [
+  {id:'s1',name:"Mijoz to'liq profili",slug:'customer-full-profile',triggerType:'HTTP',status:'Published',lastRun:'2026-04-20 14:23',successRate:96.2,author:'Anora T.',version:'1.2.0',group:'ABS Integration',description:"PNFL bo'yicha ABS + i-Hamkor ma'lumotlarini birlashtiruvchi servis"},
+  {id:'s2',name:'Soliq kunlik sinxronizatsiya',slug:'tax-daily-sync',triggerType:'Cron',status:'Published',lastRun:'2026-04-20 03:00',successRate:100,author:'Bekzod R.',version:'2.0.1',group:'Tax Integration',description:"Har kuni soat 03:00 da Soliq API'dan yangi to'lovchilar ro'yxatini yuklab olish"},
+  {id:'s3',name:'Maosh hisoblash v2',slug:'salary-calc-v2',triggerType:'HTTP',status:'In Review',lastRun:'2026-04-19 10:15',successRate:88.5,author:'Diyora M.',version:'2.0.0',group:'i-Hamkor',description:"Koeffitsient 0.5 dan 0.6 ga yangilandi — qarz to'lov hisoblash",reviewNote:'Koeffitsient o\'zgarishi — biznes mantig\'ini tekshiring'},
+  {id:'s4',name:'Wings batch import',slug:'wings-batch',triggerType:'Manual',status:'Draft',lastRun:null,successRate:null,author:'Bekzod R.',version:'0.1.0',group:'Wings',description:"Wings tizimiga batch ma'lumot yuklash"},
+  {id:'s5',name:'MVD tekshiruv',slug:'mvd-check',triggerType:'HTTP',status:'Published',lastRun:'2026-04-20 09:41',successRate:99.1,author:'Anora T.',version:'1.0.3',group:'Security',description:"Mijoz ma'lumotlarini MVD bazasida tekshirish"},
+  {id:'s6',name:'FB-IABS sinxron',slug:'fb-iabs-sync',triggerType:'Cron',status:'Published',lastRun:'2026-04-20 12:00',successRate:97.8,author:'Bekzod R.',version:'1.1.0',group:'FB-IABS',description:"Har soat FB-IABS bilan sinxronizatsiya"},
+];
+
+const SERVICE_GRAPHS = {
+  s1:{
+    nodes:[
+      {id:'n1',type:'HTTP_TRIGGER',name:'HTTP Trigger',sub:'GET ?pnfl=',x:40,y:170,status:'pass',config:{method:'GET',path:'/api/orchestration/customer-full-profile',auth:'Bearer',queryParam:'pnfl (string, required)'}},
+      {id:'n2',type:'HTTP_REQUEST',name:'ABS get-customer',sub:'GET /api/abs-proxy/...',x:290,y:60,status:'pass',config:{url:'/api/abs-proxy/1.0.0/get-customer',method:'GET',headers:'{}',body:'',timeout:10,retry:2}},
+      {id:'n3',type:'HTTP_REQUEST',name:"i-Hamkor salary",sub:'POST /api/integrations/...',x:290,y:280,status:'pass',config:{url:'/api/integrations/rmp/i-hamkor/fiz-salary',method:'POST',body:'{"pnfl":"{{trigger.query.pnfl}}"}',timeout:10,retry:2}},
+      {id:'n4',type:'MERGE',name:'Merge natijalar',sub:'Deep merge',x:560,y:170,status:'pass',config:{strategy:'deep-merge',sources:'n2, n3'}},
+      {id:'n5',type:'RETURN',name:'Return 200',sub:'{{merge1.output}}',x:810,y:170,status:'pass',config:{statusCode:200,body:'{{n4.output}}',headers:'{"Content-Type":"application/json"}'}},
+    ],
+    edges:[
+      {id:'e1',from:'n1',to:'n2'},{id:'e2',from:'n1',to:'n3'},
+      {id:'e3',from:'n2',to:'n4'},{id:'e4',from:'n3',to:'n4'},
+      {id:'e5',from:'n4',to:'n5'},
+    ]
+  },
+  s2:{
+    nodes:[
+      {id:'n1',type:'CRON_TRIGGER',name:'Cron Trigger',sub:'0 3 * * * Tashkent',x:40,y:180,status:'pass',config:{expression:'0 3 * * *',timezone:'Asia/Tashkent',onOverlap:'skip'}},
+      {id:'n2',type:'HTTP_REQUEST',name:'Soliq API',sub:'GET /daily-changes',x:280,y:180,status:'pass',config:{url:'/soliq/daily-changes',method:'GET',timeout:30}},
+      {id:'n3',type:'CUSTOM_CODE',name:'Filter & batch',sub:'100 ta gruppalar',x:510,y:180,status:'pass',config:{code:"const items = input.data;\nconst batches = [];\nfor(let i=0;i<items.length;i+=100)\n  batches.push(items.slice(i,i+100));\nreturn {batches};",timeout:10,ram:64}},
+      {id:'n4',type:'LOOP',name:'Har batch',sub:'parallel: 5',x:740,y:180,status:'pass',config:{source:'{{n3.output.batches}}',parallel:5}},
+      {id:'n5',type:'HTTP_REQUEST',name:'Wings POST',sub:'POST /wings/import',x:970,y:180,status:'pass',config:{url:'/wings/import',method:'POST',body:'{{loop.item}}',timeout:30}},
+    ],
+    edges:[{id:'e1',from:'n1',to:'n2'},{id:'e2',from:'n2',to:'n3'},{id:'e3',from:'n3',to:'n4'},{id:'e4',from:'n4',to:'n5'}]
+  },
+  s3:{
+    nodes:[
+      {id:'n1',type:'HTTP_TRIGGER',name:'HTTP Trigger',sub:'POST /salary-calc-v2',x:40,y:200,status:'pass',config:{method:'POST',path:'/api/orchestration/salary-calc-v2',auth:'Bearer'}},
+      {id:'n2',type:'HTTP_REQUEST',name:"i-Hamkor maosh",sub:'GET /fiz-salary',x:280,y:200,status:'pass',config:{url:'/api/integrations/rmp/i-hamkor/fiz-salary',method:'GET',timeout:10}},
+      {id:'n3',type:'CUSTOM_CODE',name:'Koeffitsient hisob',sub:'koef = 0.6 ✏️',x:510,y:200,status:'pass',config:{code:"// Yangilangan koeffitsient: 0.6\nconst koef = 0.6;\nconst salary = input.salary;\nconst qarzLimit = salary * koef;\nreturn { salary, koef, qarzLimit };",timeout:5,ram:64}},
+      {id:'n4',type:'RETURN',name:'Return 200',sub:'{{n3.output}}',x:740,y:200,status:'pass',config:{statusCode:200,body:'{{n3.output}}'}},
+    ],
+    edges:[{id:'e1',from:'n1',to:'n2'},{id:'e2',from:'n2',to:'n3'},{id:'e3',from:'n3',to:'n4'}]
+  },
+  s4:{
+    nodes:[
+      {id:'n1',type:'MANUAL_TRIGGER',name:'Manual Trigger',sub:'Input: file_url',x:40,y:200,status:'untested',config:{params:'file_url (string)'}},
+      {id:'n2',type:'HTTP_REQUEST',name:'Fetch data',sub:'GET {{trigger.file_url}}',x:280,y:200,status:'untested',config:{url:'{{trigger.file_url}}',method:'GET'}},
+      {id:'n3',type:'JSON_TRANSFORM',name:'Transform',sub:'Mapping...',x:510,y:200,status:'untested',config:{mapping:'{}'}},
+      {id:'n4',type:'HTTP_REQUEST',name:'Wings import',sub:'POST /wings/batch',x:740,y:200,status:'untested',config:{url:'/wings/batch',method:'POST'}},
+    ],
+    edges:[{id:'e1',from:'n1',to:'n2'},{id:'e2',from:'n2',to:'n3'},{id:'e3',from:'n3',to:'n4'}]
+  },
+};
+
+const INITIAL_RUNS = [
+  {id:'r001',serviceId:'s1',serviceName:"Mijoz to'liq profili",version:'1.2.0',trigger:'HTTP GET ?pnfl=12345',startedAt:'2026-04-20 14:23:11',duration:342,status:'success',steps:[{name:'HTTP Trigger',status:'pass',latency:2,input:'{"pnfl":"12345"}',output:'{"pnfl":"12345"}'},{name:'ABS get-customer',status:'pass',latency:181,input:'GET /api/abs-proxy?pnfl=12345',output:'{"id":"c001","name":"Alisher Karimov","balance":15000000}'},{name:"i-Hamkor salary",status:'pass',latency:143,input:'POST /fiz-salary {"pnfl":"12345"}',output:'{"salary":8500000,"employer":"Trust Bank"}'},{name:'Merge natijalar',status:'pass',latency:1,input:'[obj1, obj2]',output:'{"id":"c001","name":"Alisher Karimov","balance":15000000,"salary":8500000}'},{name:'Return 200',status:'pass',latency:1,input:'',output:'HTTP 200 OK'}]},
+  {id:'r002',serviceId:'s1',serviceName:"Mijoz to'liq profili",version:'1.2.0',trigger:'HTTP GET ?pnfl=67890',startedAt:'2026-04-20 12:11:43',duration:891,status:'failed',steps:[{name:'HTTP Trigger',status:'pass',latency:2,input:'{"pnfl":"67890"}',output:'{"pnfl":"67890"}'},{name:'ABS get-customer',status:'fail',latency:887,input:'GET /api/abs-proxy?pnfl=67890',output:'HTTP 504 Gateway Timeout',error:'Connection timeout after 887ms'}]},
+  {id:'r003',serviceId:'s2',serviceName:'Soliq kunlik sinxronizatsiya',version:'2.0.1',trigger:'Cron 03:00',startedAt:'2026-04-20 03:00:00',duration:12340,status:'success',steps:[{name:'Cron Trigger',status:'pass',latency:0,input:'',output:'triggered'},{name:'Soliq API',status:'pass',latency:2100,input:'GET /daily-changes',output:'{"count":147,"data":[...]}'},{name:'Filter & batch',status:'pass',latency:45,input:'147 items',output:'2 batches'},{name:'Har batch',status:'pass',latency:10100,input:'batch[0], batch[1]',output:'imported: 147'},{name:'Wings POST',status:'pass',latency:95,input:'POST /wings/import',output:'{"inserted":147}'}]},
+  {id:'r004',serviceId:'s5',serviceName:'MVD tekshiruv',version:'1.0.3',trigger:'HTTP POST',startedAt:'2026-04-20 09:41:22',duration:210,status:'success',steps:[]},
+  {id:'r005',serviceId:'s1',serviceName:"Mijoz to'liq profili",version:'1.2.0',trigger:'HTTP GET ?pnfl=11111',startedAt:'2026-04-19 17:05:30',duration:298,status:'success',steps:[]},
+];
+
+const VERSIONS_S3 = [
+  {version:'2.0.0',status:'In Review',publishedAt:'2026-04-19 09:00',author:'Diyora M.',comment:"Koeffitsient 0.5 → 0.6 ga yangilandi. Yangi mahsulot talabi.",isCurrent:true},
+  {version:'1.1.0',status:'Published',publishedAt:'2026-04-10 14:30',author:'Bekzod R.',comment:"Retry policy qo'shildi, timeout oshirildi",isCurrent:false},
+  {version:'1.0.0',status:'Archived',publishedAt:'2026-03-25 10:15',author:'Anora T.',comment:"Boshlang'ich versiya",isCurrent:false},
+];
+
+/* ============ UTILS ============ */
+function StatusBadge({status}){
+  const m={Published:'badge-published',Draft:'badge-draft','In Review':'badge-review',Archived:'badge-archived'};
+  return <span className={`badge ${m[status]||'badge-draft'}`}>{status}</span>;
+}
+function TriggerBadge({type}){
+  const m={HTTP:'badge-http',Cron:'badge-cron',Manual:'badge-manual'};
+  return <span className={`badge ${m[type]||'badge-http'}`}>{type}</span>;
+}
+function NodeIcon({type,size=26}){
+  const t=STEP_TYPES[type]||{color:'#94A3B8',short:'?'};
+  return <div className="fn-icon" style={{background:t.color,width:size,height:size,minWidth:size}}>{t.short}</div>;
+}
+
+/* ============ SIDEBAR ============ */
+function Sidebar({activeView, setActiveView, onNewService}){
+  const items=[
+    {id:'dashboard',label:'Dashboard',ico:'▦'},
+    {id:'list',label:'Orkestratsiya',ico:'⚙',dot:true},
+    {id:'endpoints',label:'Endpointlar',ico:'⊹'},
+    {id:'api-tester',label:'API Tester',ico:'▷'},
+    {id:'logs',label:'Loglar',ico:'≡'},
+  ];
+  return (
+    <div className="sidebar">
+      <div className="sb-logo">
+        <div className="sb-logo-icon">M</div>
+        <div className="sb-logo-info">
+          <div className="name">Middleware</div>
+          <div className="sub">Trust Bank</div>
+        </div>
+      </div>
+      <div className="sb-section">Menyu</div>
+      {items.map(it=>(
+        <div key={it.id} className={`sb-item${activeView===it.id||it.id==='list'&&['list','canvas','runs','versions'].includes(activeView)?' active':''}`}
+          onClick={()=>{if(it.id==='list')setActiveView('list'); else if(it.id==='dashboard') setActiveView('dashboard'); else setActiveView('list');}}>
+          <span className="ico">{it.ico}</span>
+          <span>{it.label}</span>
+          {it.dot&&<span className="dot"/>}
+        </div>
+      ))}
+      <div className="sb-bottom">
+        <div className="sb-avatar">CP</div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:12,fontWeight:600,color:'#E2E8F0'}}>CPO Office</div>
+          <div style={{fontSize:11,color:'#475569'}}>Reviewer</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============ SERVICES LIST ============ */
+function ServicesList({services, onOpen, onCreate, onViewRuns, onApprove, onClone}){
+  const [filter,setFilter]=useState({status:'',triggerType:'',search:''});
+  const filtered=services.filter(s=>{
+    if(filter.status && s.status!==filter.status) return false;
+    if(filter.triggerType && s.triggerType!==filter.triggerType) return false;
+    if(filter.search && !s.name.toLowerCase().includes(filter.search.toLowerCase())) return false;
+    return true;
+  });
+  const reviewCount=services.filter(s=>s.status==='In Review').length;
+  return(
+    <div className="content">
+      <div className="ph">
+        <div className="ph-left">
+          <span className="page-title">Orkestratsiya</span>
+          {reviewCount>0&&<span className="badge badge-review">⏳ {reviewCount} ta review kutilmoqda</span>}
+        </div>
+        <button className="btn btn-primary" onClick={onCreate}>+ Yangi servis</button>
+      </div>
+
+      <div className="stats-row">
+        <div className="stat-card">
+          <div className="stat-label">📋 Jami servislar</div>
+          <div className="stat-value blue">{services.length}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-label">✅ Published</div>
+          <div className="stat-value green">{services.filter(s=>s.status==='Published').length}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-label">⏳ Review</div>
+          <div className="stat-value" style={{color:'#D97706'}}>{reviewCount}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-label">📝 Draft</div>
+          <div className="stat-value" style={{color:'#64748B'}}>{services.filter(s=>s.status==='Draft').length}</div>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="card-header">
+          <span className="card-header-title">Servislar ro'yxati</span>
+          <div className="filters" style={{margin:0}}>
+            <div className="search-wrap">
+              <span className="search-ico">🔍</span>
+              <input className="input" style={{height:32,fontSize:12,paddingLeft:28}} placeholder="Qidirish..." value={filter.search} onChange={e=>setFilter(f=>({...f,search:e.target.value}))}/>
+            </div>
+            <select className="filter-select" value={filter.status} onChange={e=>setFilter(f=>({...f,status:e.target.value}))}>
+              <option value="">Barcha holat</option>
+              <option>Published</option>
+              <option>Draft</option>
+              <option>In Review</option>
+              <option>Archived</option>
+            </select>
+            <select className="filter-select" value={filter.triggerType} onChange={e=>setFilter(f=>({...f,triggerType:e.target.value}))}>
+              <option value="">Barcha trigger</option>
+              <option>HTTP</option>
+              <option>Cron</option>
+              <option>Manual</option>
+            </select>
+          </div>
+        </div>
+        <table className="table">
+          <thead><tr>
+            <th>Nom / Slug</th>
+            <th>Trigger</th>
+            <th>Holat</th>
+            <th>Oxirgi run</th>
+            <th>Success %</th>
+            <th>Versiya</th>
+            <th>Muallif</th>
+            <th>Amallar</th>
+          </tr></thead>
+          <tbody>
+            {filtered.length===0&&<tr><td colSpan={8}><div className="empty">Servis topilmadi</div></td></tr>}
+            {filtered.map(s=>(
+              <tr key={s.id} onClick={()=>onOpen(s)}>
+                <td>
+                  <div style={{fontWeight:600,color:'#1E293B',fontSize:13}}>{s.name}</div>
+                  <div className="text-mono text-muted">/api/orchestration/{s.slug}</div>
+                </td>
+                <td><TriggerBadge type={s.triggerType}/></td>
+                <td>
+                  <StatusBadge status={s.status}/>
+                  {s.status==='In Review'&&<div style={{fontSize:10,color:'#64748B',marginTop:2}}>Tasdiqlash kutilmoqda</div>}
+                </td>
+                <td style={{fontSize:12,color:'#64748B'}}>{s.lastRun||'—'}</td>
+                <td>
+                  {s.successRate!=null?
+                    <span style={{fontWeight:600,color:s.successRate>=95?'#10B981':s.successRate>=80?'#D97706':'#EF4444'}}>{s.successRate}%</span>
+                    :<span style={{color:'#CBD5E1'}}>—</span>}
+                </td>
+                <td><span className="text-mono" style={{fontSize:12}}>v{s.version}</span></td>
+                <td style={{fontSize:12,color:'#64748B'}}>{s.author}</td>
+                <td onClick={e=>e.stopPropagation()}>
+                  <div className="flex gap-1">
+                    <button className="btn btn-xs btn-secondary" onClick={()=>onOpen(s)}>Ochish</button>
+                    <button className="btn btn-xs btn-secondary" onClick={()=>onClone(s)}>Klon</button>
+                    {s.status==='In Review'&&<button className="btn btn-xs btn-primary" onClick={()=>onApprove(s)}>Review</button>}
+                    <button className="btn btn-xs btn-ghost" onClick={()=>onViewRuns(s)}>📊</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+/* ============ NEW SERVICE WIZARD ============ */
+function NewServiceWizard({onCancel, onCreate}){
+  const [step,setStep]=useState(1);
+  const [triggerType,setTriggerType]=useState(null);
+  const [form,setForm]=useState({name:'',group:'',slug:'',method:'GET',cronExpr:'0 3 * * *',timezone:'Asia/Tashkent',auth:'Bearer',description:''});
+  const nextCrons=['2026-04-21 03:00','2026-04-22 03:00','2026-04-23 03:00','2026-04-24 03:00','2026-04-25 03:00'];
+
+  const handleNameChange=(v)=>{
+    const slug=v.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    setForm(f=>({...f,name:v,slug:slug}));
+  };
+
+  const canNext=step===1?!!triggerType:form.name.trim()&&form.slug.trim();
+
+  return(
+    <div className="content">
+      <div className="ph">
+        <div className="flex items-center gap-2">
+          <button className="btn btn-ghost btn-sm" onClick={onCancel}>← Orqaga</button>
+          <span className="page-title">Yangi servis yaratish</span>
+        </div>
+      </div>
+      <div style={{maxWidth:680,margin:'0 auto'}}>
+        <div className="wizard-steps">
+          <div className={`wstep ${step>=1?'active':''} ${step>1?'done':''}`}>
+            <div className="wstep-num">{step>1?'✓':'1'}</div>
+            <span>Trigger turi</span>
+          </div>
+          <div className="wstep-sep"/>
+          <div className={`wstep ${step>=2?'active':''}`}>
+            <div className="wstep-num">2</div>
+            <span>Asosiy sozlamalar</span>
+          </div>
+          <div className="wstep-sep"/>
+          <div className="wstep">
+            <div className="wstep-num">3</div>
+            <span>Canvas muharriri</span>
+          </div>
+        </div>
+
+        {step===1&&(
+          <div className="card">
+            <div className="card-header"><span className="card-header-title">Trigger turini tanlang</span></div>
+            <div className="card-body">
+              <div className="trigger-cards">
+                <div className={`trigger-card${triggerType==='HTTP'?' selected':''}`} onClick={()=>setTriggerType('HTTP')}>
+                  <div className="tc-icon" style={{background:'#3B82F6'}}>↗</div>
+                  <div className="tc-name">HTTP Request</div>
+                  <div className="tc-desc">Tashqi mijoz HTTP so'rov yuborganida ishga tushadi. GET, POST va boshqa metodlar.</div>
+                </div>
+                <div className={`trigger-card${triggerType==='Cron'?' selected':''}`} onClick={()=>setTriggerType('Cron')}>
+                  <div className="tc-icon" style={{background:'#059669'}}>⏱</div>
+                  <div className="tc-name">Cron / Schedule</div>
+                  <div className="tc-desc">Vaqt jadvali bo'yicha avtomatik ishga tushadi. Cron expression yoki tayyor presetlar.</div>
+                </div>
+                <div className={`trigger-card${triggerType==='Manual'?' selected':''}`} onClick={()=>setTriggerType('Manual')}>
+                  <div className="tc-icon" style={{background:'#7C3AED'}}>▷</div>
+                  <div className="tc-name">Manual</div>
+                  <div className="tc-desc">UI tugmasi yoki REST endpoint orqali qo'lda ishga tushiriladi. Input parametrlar formasi.</div>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer" style={{borderTop:'1px solid #F1F5F9',padding:'14px 16px'}}>
+              <button className="btn btn-secondary" onClick={onCancel}>Bekor qilish</button>
+              <button className="btn btn-primary" disabled={!canNext} onClick={()=>setStep(2)}>Davom etish →</button>
+            </div>
+          </div>
+        )}
+
+        {step===2&&(
+          <div className="card">
+            <div className="card-header">
+              <span className="card-header-title">Servis sozlamalari — {triggerType} trigger</span>
+              <TriggerBadge type={triggerType}/>
+            </div>
+            <div className="card-body">
+              <div className="form-row form-row-2">
+                <div className="form-group">
+                  <label className="label">Servis nomi *</label>
+                  <input className="input" placeholder="Masalan: Mijoz to'liq profili" value={form.name} onChange={e=>handleNameChange(e.target.value)}/>
+                </div>
+                <div className="form-group">
+                  <label className="label">Guruh</label>
+                  <input className="input" placeholder="Masalan: ABS Integration" value={form.group} onChange={e=>setForm(f=>({...f,group:e.target.value}))}/>
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="label">Slug (URL path) *</label>
+                <div className="flex items-center gap-1" style={{background:'#F8FAFC',border:'1px solid #E2E8F0',borderRadius:6,overflow:'hidden'}}>
+                  <span style={{padding:'8px 10px',color:'#94A3B8',fontSize:12,whiteSpace:'nowrap',borderRight:'1px solid #E2E8F0'}}>/api/orchestration/</span>
+                  <input className="input" style={{border:'none',background:'transparent',borderRadius:0}} placeholder="my-service" value={form.slug} onChange={e=>setForm(f=>({...f,slug:e.target.value.toLowerCase().replace(/[^a-z0-9-]/g,'')}))}/>
+                </div>
+              </div>
+
+              {triggerType==='HTTP'&&(
+                <div className="form-row form-row-2">
+                  <div className="form-group">
+                    <label className="label">HTTP Method</label>
+                    <select className="input select" value={form.method} onChange={e=>setForm(f=>({...f,method:e.target.value}))}>
+                      <option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option><option>PATCH</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="label">Autentifikatsiya</label>
+                    <select className="input select" value={form.auth} onChange={e=>setForm(f=>({...f,auth:e.target.value}))}>
+                      <option>Bearer</option><option>API Key</option><option>None</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {triggerType==='Cron'&&(
+                <>
+                  <div className="form-row form-row-2">
+                    <div className="form-group">
+                      <label className="label">Cron expression</label>
+                      <input className="input font-mono" placeholder="0 3 * * *" value={form.cronExpr} onChange={e=>setForm(f=>({...f,cronExpr:e.target.value}))}/>
+                      <div className="hint">5-field: daqiqa soat kun oy hafta_kuni</div>
+                    </div>
+                    <div className="form-group">
+                      <label className="label">Timezone</label>
+                      <select className="input select" value={form.timezone} onChange={e=>setForm(f=>({...f,timezone:e.target.value}))}>
+                        <option>Asia/Tashkent</option><option>UTC</option><option>Europe/Moscow</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="label">Keyingi 5 ta ishga tushish</label>
+                    <div style={{background:'#F8FAFC',border:'1px solid #E2E8F0',borderRadius:6,padding:'10px 12px',fontSize:12,fontFamily:'monospace'}}>
+                      {nextCrons.map((t,i)=><div key={i} style={{padding:'2px 0',color:'#374151'}}>• {t}</div>)}
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="label">Parallel run holati</label>
+                    <select className="input select">
+                      <option>Skip (oldingi tugamasa o'tkazib yuborish)</option>
+                      <option>Parallel (bir vaqtda ishlatish)</option>
+                      <option>Queue (navbatga qo'yish)</option>
+                    </select>
+                  </div>
+                </>
+              )}
+
+              <div className="form-group">
+                <label className="label">Tavsif</label>
+                <textarea className="input textarea" placeholder="Servis nima qiladi?" value={form.description} onChange={e=>setForm(f=>({...f,description:e.target.value}))} rows={2}/>
+              </div>
+            </div>
+            <div className="modal-footer" style={{borderTop:'1px solid #F1F5F9',padding:'14px 16px'}}>
+              <button className="btn btn-secondary" onClick={()=>setStep(1)}>← Orqaga</button>
+              <button className="btn btn-primary" disabled={!canNext} onClick={()=>onCreate({...form,triggerType,status:'Draft',version:'0.1.0',successRate:null,lastRun:null,author:'CPO Office',id:'s_'+Date.now()})}>
+                Canvas muharririga o'tish →
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ============ CANVAS EDITOR ============ */
+const NODE_W=172, NODE_H=62;
+
+function CanvasEditor({service, onBack, onPublishRequest, onShowRuns, onShowVersions, showToast}){
+  const graphData=SERVICE_GRAPHS[service.id];
+  const [nodes,setNodes]=useState(graphData?graphData.nodes.map(n=>({...n})):[
+    {id:'n1',type:service.triggerType==='Cron'?'CRON_TRIGGER':service.triggerType==='Manual'?'MANUAL_TRIGGER':'HTTP_TRIGGER',name:'Trigger',sub:service.triggerType+' trigger',x:40,y:200,status:'untested',config:{}}
+  ]);
+  const [edges,setEdges]=useState(graphData?[...graphData.edges]:[]);
+  const [selectedId,setSelectedId]=useState(null);
+  const [isDirty,setIsDirty]=useState(false);
+  const [testExpanded,setTestExpanded]=useState(false);
+  const [testRunning,setTestRunning]=useState(false);
+  const [testResults,setTestResults]=useState(null);
+  const [testPayload,setTestPayload]=useState('{\n  "pnfl": "12345678901234"\n}');
+  const [pan,setPan]=useState({x:0,y:0});
+  const [connectFrom,setConnectFrom]=useState(null);
+  const [mousePos,setMousePos]=useState({x:0,y:0});
+
+  const dragRef=useRef(null);
+  const panRef=useRef(null);
+  const canvasRef=useRef(null);
+  const selectedNode=nodes.find(n=>n.id===selectedId);
+
+  // Global mouseup — sichqoncha canvas'dan tashqarida yoki port ustida qo'yib yuborilsa ham drag to'xtaydi
+  useEffect(()=>{
+    const up=()=>{ dragRef.current=null; panRef.current=null; };
+    window.addEventListener('mouseup',up);
+    return ()=>window.removeEventListener('mouseup',up);
+  },[]);
+
+  const handleNodeMouseDown=(e,nodeId)=>{
+    e.stopPropagation();
+    if(connectFrom) return;
+    const node=nodes.find(n=>n.id===nodeId);
+    dragRef.current={nodeId,sx:e.clientX,sy:e.clientY,nx:node.x,ny:node.y};
+    setSelectedId(nodeId);
+  };
+
+  const handleCanvasMouseDown=(e)=>{
+    if(e.target===canvasRef.current||e.target.classList.contains('canvas-area')||e.target.classList.contains('canvas-inner')){
+      panRef.current={sx:e.clientX,sy:e.clientY,px:pan.x,py:pan.y};
+      setSelectedId(null);
+      if(connectFrom) setConnectFrom(null);
+    }
+  };
+
+  const handleMouseMove=(e)=>{
+    const rect=canvasRef.current?.getBoundingClientRect();
+    if(rect) setMousePos({x:e.clientX-rect.left-pan.x,y:e.clientY-rect.top-pan.y});
+    if(dragRef.current){
+      // dragRef ni avval mahalliy o'zgaruvchiga olamiz — setNodes callback chaqirilguncha null bo'lib qolmasin
+      const drag=dragRef.current;
+      const dx=e.clientX-drag.sx, dy=e.clientY-drag.sy;
+      setNodes(prev=>prev.map(n=>n.id===drag.nodeId?{...n,x:drag.nx+dx,y:drag.ny+dy}:n));
+    } else if(panRef.current){
+      const pan2=panRef.current;
+      const dx=e.clientX-pan2.sx, dy=e.clientY-pan2.sy;
+      setPan({x:pan2.px+dx,y:pan2.py+dy});
+    }
+  };
+
+  const handleMouseUp=()=>{ dragRef.current=null; panRef.current=null; };
+
+  const handlePortOut=(e,nodeId)=>{
+    e.stopPropagation();
+    setConnectFrom(nodeId);
+  };
+
+  const handlePortIn=(e,nodeId)=>{
+    e.stopPropagation();
+    // Port ustida mouseup bo'lsa drag ham to'xtashi kerak (global listener bilan birga ikki qatlam himoya)
+    dragRef.current=null;
+    panRef.current=null;
+    if(connectFrom&&connectFrom!==nodeId){
+      const exists=edges.find(ed=>ed.from===connectFrom&&ed.to===nodeId);
+      if(!exists){
+        setEdges(prev=>[...prev,{id:'e'+Date.now(),from:connectFrom,to:nodeId}]);
+        setIsDirty(true);
+      }
+    }
+    setConnectFrom(null);
+  };
+
+  const addNode=(type)=>{
+    const t=STEP_TYPES[type];
+    const id='n'+Date.now();
+    setNodes(prev=>[...prev,{id,type,name:t.label,sub:'Sozlanmagan',x:200+Math.random()*200,y:100+Math.random()*200,status:'untested',config:{}}]);
+    setSelectedId(id);
+    setIsDirty(true);
+  };
+
+  const deleteSelected=()=>{
+    if(!selectedId) return;
+    setNodes(prev=>prev.filter(n=>n.id!==selectedId));
+    setEdges(prev=>prev.filter(e=>e.from!==selectedId&&e.to!==selectedId));
+    setSelectedId(null);
+    setIsDirty(true);
+  };
+
+  const updateNodeConfig=(key,val)=>{
+    setNodes(prev=>prev.map(n=>n.id===selectedId?{...n,config:{...n.config,[key]:val}}:n));
+    setIsDirty(true);
+  };
+  const updateNodeName=(val)=>{
+    setNodes(prev=>prev.map(n=>n.id===selectedId?{...n,name:val}:n));
+    setIsDirty(true);
+  };
+
+  const handleSave=()=>{ setIsDirty(false); showToast('Servis saqlandi','success'); };
+
+  const handleTest=()=>{
+    setTestRunning(true);
+    setTestResults(null);
+    setTimeout(()=>{
+      setTestRunning(false);
+      const results=nodes.map((n,i)=>({
+        id:n.id,name:n.name,status:'pass',
+        latency:Math.floor(Math.random()*300+10),
+        input:i===0?testPayload:`{{step${i}.output}}`,
+        output:i===nodes.length-1?'HTTP 200 OK':'{"status":"ok","data":{...}}'
+      }));
+      setNodes(prev=>prev.map(n=>({...n,status:'pass'})));
+      setTestResults(results);
+      showToast('Test muvaffaqiyatli o\'tdi ✓','success');
+    },1800);
+  };
+
+  const handlePublish=()=>{
+    if(service.status==='In Review'){ onPublishRequest(service); return; }
+    onPublishRequest(service);
+    showToast('Publish so\'rovi yuborildi. Reviewer tasdig\'i kutilmoqda.','info');
+  };
+
+  // Bezier path between nodes
+  const getEdgePath=(fromNode,toNode)=>{
+    if(!fromNode||!toNode) return '';
+    const x1=fromNode.x+NODE_W, y1=fromNode.y+NODE_H/2;
+    const x2=toNode.x, y2=toNode.y+NODE_H/2;
+    const cx=x1+(x2-x1)*0.5;
+    return `M${x1},${y1} C${cx},${y1} ${cx},${y2} ${x2},${y2}`;
+  };
+
+  const svgW=Math.max(...nodes.map(n=>n.x+NODE_W+100),800);
+  const svgH=Math.max(...nodes.map(n=>n.y+NODE_H+100),500);
+
+  return(
+    <div className="canvas-editor">
+      {/* Canvas Topbar */}
+      <div className="canvas-topbar">
+        <button className="ct-btn" onClick={onBack}>← Orkestratsiya</button>
+        <div className="divider"/>
+        <span className="canvas-service-name">{service.name}</span>
+        <StatusBadge status={service.status}/>
+        <span style={{fontSize:12,color:'#94A3B8'}}>v{service.version}</span>
+        <div className="divider"/>
+        <button className="ct-btn" onClick={()=>setNodes(prev=>prev)}>↩ Undo</button>
+        <button className="ct-btn" onClick={()=>setPan({x:0,y:0})}>⊡ Fit</button>
+        <div style={{marginLeft:'auto',display:'flex',gap:8}}>
+          {selectedId&&<button className="btn btn-xs btn-secondary" style={{color:'#EF4444'}} onClick={deleteSelected}>🗑 O'chirish</button>}
+          <button className="ct-btn" onClick={()=>onShowVersions(service)}>📋 Versiyalar</button>
+          <button className="ct-btn" onClick={()=>onShowRuns(service)}>📊 Run history</button>
+          <button className="btn btn-sm btn-secondary" onClick={handleSave} style={isDirty?{borderColor:'#F59E0B'}:{}}>
+            {isDirty?'💾 Saqlash*':'💾 Saqlash'}
+          </button>
+          <button className="btn btn-sm btn-secondary" onClick={()=>{setTestExpanded(t=>!t);}}>
+            ▷ Test
+          </button>
+          {service.status!=='Published'&&(
+            <button className="btn btn-sm btn-primary" onClick={handlePublish}>
+              {service.status==='In Review'?'👁 Review ko\'rish':'📤 Publish so\'rovi'}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* 3-column layout */}
+      <div className="canvas-row">
+        {/* Left: Palette */}
+        <div className="palette">
+          <div className="palette-search">
+            <input className="input" style={{fontSize:12,height:32}} placeholder="🔍 Qadam qidirish..."/>
+          </div>
+          {PALETTE_CATS.map(cat=>{
+            const items=Object.entries(STEP_TYPES).filter(([,v])=>v.cat===cat);
+            if(!items.length) return null;
+            return(
+              <div key={cat}>
+                <div className="palette-cat">{cat}</div>
+                {items.map(([type,t])=>(
+                  <div key={type} className="palette-item" draggable onClick={()=>addNode(type)}>
+                    <div className="pi-icon" style={{background:t.color}}>{t.short}</div>
+                    <div>
+                      <div className="pi-label">{t.label}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Center: Canvas */}
+        <div className="canvas-area" ref={canvasRef}
+          onMouseDown={handleCanvasMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          style={{cursor:connectFrom?'crosshair':undefined}}>
+          <div className="canvas-inner" style={{transform:`translate(${pan.x}px,${pan.y}px)`}}>
+            <svg className="canvas-svg" width={svgW} height={svgH}>
+              {/* Existing edges */}
+              {edges.map(edge=>{
+                const fn=nodes.find(n=>n.id===edge.from);
+                const tn=nodes.find(n=>n.id===edge.to);
+                return fn&&tn?(
+                  <path key={edge.id} d={getEdgePath(fn,tn)}
+                    fill="none" stroke="#94A3B8" strokeWidth={2}
+                    strokeDasharray={fn.status==='untested'?'6,3':undefined}/>
+                ):null;
+              })}
+              {/* Connecting line */}
+              {connectFrom&&(()=>{
+                const fn=nodes.find(n=>n.id===connectFrom);
+                if(!fn) return null;
+                const x1=fn.x+NODE_W, y1=fn.y+NODE_H/2;
+                return <line x1={x1} y1={y1} x2={mousePos.x} y2={mousePos.y} stroke="#3B82F6" strokeWidth={2} strokeDasharray="5,3"/>;
+              })()}
+            </svg>
+            {/* Nodes */}
+            {nodes.map(node=>{
+              const t=STEP_TYPES[node.type]||{color:'#94A3B8'};
+              const statusColor=node.status==='pass'?'#10B981':node.status==='fail'?'#EF4444':node.status==='running'?'#F59E0B':'#CBD5E1';
+              return(
+                <div key={node.id} className={`flow-node${selectedId===node.id?' selected':''}`}
+                  style={{left:node.x,top:node.y,width:NODE_W}}
+                  onMouseDown={e=>handleNodeMouseDown(e,node.id)}>
+                  <div className="fn-header">
+                    <div className="fn-icon" style={{background:t.color}}>{t.short}</div>
+                    <div className="fn-info">
+                      <div className="fn-name">{node.name}</div>
+                      <div className="fn-type">{t.label}</div>
+                    </div>
+                    <div className="fn-status" style={{background:statusColor}}/>
+                  </div>
+                  <div className="fn-body">{node.sub}</div>
+                  {/* Ports */}
+                  {node.type!=='HTTP_TRIGGER'&&node.type!=='CRON_TRIGGER'&&node.type!=='MANUAL_TRIGGER'&&(
+                    <div className="fn-port fn-port-in" onMouseUp={e=>handlePortIn(e,node.id)} title="Kirish"/>
+                  )}
+                  {node.type!=='RETURN'&&(
+                    <div className="fn-port fn-port-out" onMouseDown={e=>handlePortOut(e,node.id)} title="Chiqish"/>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          {connectFrom&&<div style={{position:'absolute',bottom:8,left:'50%',transform:'translateX(-50%)',background:'#1E293B',color:'white',padding:'5px 12px',borderRadius:6,fontSize:12,pointerEvents:'none'}}>Bog'lamoqchi bo'lgan qadam input portiga bosing</div>}
+        </div>
+
+        {/* Right: Property Panel */}
+        <div className="prop-panel">
+          <div className="pp-header">
+            {selectedNode?(
+              <>
+                <div className="pp-icon" style={{background:(STEP_TYPES[selectedNode.type]||{}).color||'#94A3B8'}}>
+                  {(STEP_TYPES[selectedNode.type]||{}).short}
+                </div>
+                <div>
+                  <div style={{fontSize:13,fontWeight:600,color:'#1E293B'}}>{selectedNode.name}</div>
+                  <div style={{fontSize:11,color:'#94A3B8'}}>{(STEP_TYPES[selectedNode.type]||{}).label}</div>
+                </div>
+              </>
+            ):<span style={{fontSize:13,fontWeight:600,color:'#94A3B8'}}>Qadam tanlang</span>}
+          </div>
+          {selectedNode?(
+            <div className="pp-body">
+              <div className="form-group">
+                <label className="label">Qadam nomi</label>
+                <input className="input" value={selectedNode.name} onChange={e=>updateNodeName(e.target.value)}/>
+              </div>
+              {/* Dynamic config by type */}
+              {(selectedNode.type==='HTTP_REQUEST'||selectedNode.type==='HTTP_TRIGGER')&&(
+                <>
+                  <div className="form-group">
+                    <label className="label">URL / Path</label>
+                    <input className="input font-mono" style={{fontSize:11}} value={selectedNode.config.url||selectedNode.config.path||''} onChange={e=>updateNodeConfig(selectedNode.type==='HTTP_TRIGGER'?'path':'url',e.target.value)} placeholder="/api/..."/>
+                  </div>
+                  <div className="form-group">
+                    <label className="label">Method</label>
+                    <select className="input select" value={selectedNode.config.method||'GET'} onChange={e=>updateNodeConfig('method',e.target.value)}>
+                      <option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option><option>PATCH</option>
+                    </select>
+                  </div>
+                  {selectedNode.type==='HTTP_REQUEST'&&(
+                    <>
+                      <div className="form-group">
+                        <label className="label">Body (Templating)</label>
+                        <textarea className="input textarea font-mono" style={{fontSize:11,minHeight:60}} value={selectedNode.config.body||''} onChange={e=>updateNodeConfig('body',e.target.value)} placeholder={'{"pnfl":"{{trigger.query.pnfl}}"}'}/>
+                        <div className="hint">{'{{trigger.x}}, {{stepN.body.y}}, {{vars.name}}'}</div>
+                      </div>
+                      <div className="form-row form-row-2">
+                        <div className="form-group">
+                          <label className="label">Timeout (s)</label>
+                          <input className="input" type="number" value={selectedNode.config.timeout||10} onChange={e=>updateNodeConfig('timeout',+e.target.value)} min={1} max={60}/>
+                        </div>
+                        <div className="form-group">
+                          <label className="label">Retry</label>
+                          <input className="input" type="number" value={selectedNode.config.retry||0} onChange={e=>updateNodeConfig('retry',+e.target.value)} min={0} max={5}/>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+              {selectedNode.type==='CRON_TRIGGER'&&(
+                <>
+                  <div className="form-group">
+                    <label className="label">Cron expression</label>
+                    <input className="input font-mono" value={selectedNode.config.expression||''} onChange={e=>updateNodeConfig('expression',e.target.value)}/>
+                  </div>
+                  <div className="form-group">
+                    <label className="label">Timezone</label>
+                    <select className="input select" value={selectedNode.config.timezone||'Asia/Tashkent'} onChange={e=>updateNodeConfig('timezone',e.target.value)}>
+                      <option>Asia/Tashkent</option><option>UTC</option>
+                    </select>
+                  </div>
+                </>
+              )}
+              {selectedNode.type==='CUSTOM_CODE'&&(
+                <>
+                  <div className="form-group">
+                    <label className="label">JavaScript kodi</label>
+                    <textarea className="input textarea font-mono" style={{fontSize:11,minHeight:120}} value={selectedNode.config.code||''} onChange={e=>updateNodeConfig('code',e.target.value)} placeholder={"// input orqali oldingi qadam natijasi\nreturn { result: input.data };"}/>
+                  </div>
+                  <div className="form-row form-row-2">
+                    <div className="form-group">
+                      <label className="label">Timeout (s, max 30)</label>
+                      <input className="input" type="number" value={selectedNode.config.timeout||5} onChange={e=>updateNodeConfig('timeout',Math.min(30,+e.target.value))} min={1} max={30}/>
+                    </div>
+                    <div className="form-group">
+                      <label className="label">RAM (MB, max 256)</label>
+                      <input className="input" type="number" value={selectedNode.config.ram||64} onChange={e=>updateNodeConfig('ram',Math.min(256,+e.target.value))} min={16} max={256}/>
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="label">Tarmoq whitelist</label>
+                    <input className="input" placeholder="Masalan: api.soliq.uz" value={selectedNode.config.whitelist||''} onChange={e=>updateNodeConfig('whitelist',e.target.value)}/>
+                    <div className="hint">Bo'sh = barcha tashqi tarmoq bloklangan (xavfsiz)</div>
+                  </div>
+                </>
+              )}
+              {selectedNode.type==='IF_ELSE'&&(
+                <div className="form-group">
+                  <label className="label">Shart (Boolean expression)</label>
+                  <input className="input font-mono" value={selectedNode.config.condition||''} onChange={e=>updateNodeConfig('condition',e.target.value)} placeholder={'{{step1.body.status}} === "active"'}/>
+                </div>
+              )}
+              {selectedNode.type==='MERGE'&&(
+                <div className="form-group">
+                  <label className="label">Strategiya</label>
+                  <select className="input select" value={selectedNode.config.strategy||'deep-merge'} onChange={e=>updateNodeConfig('strategy',e.target.value)}>
+                    <option value="deep-merge">Deep merge</option>
+                    <option value="shallow-merge">Shallow merge</option>
+                    <option value="concat">Concat (array)</option>
+                  </select>
+                </div>
+              )}
+              {selectedNode.type==='LOOP'&&(
+                <>
+                  <div className="form-group">
+                    <label className="label">Manba massiv</label>
+                    <input className="input font-mono" style={{fontSize:11}} value={selectedNode.config.source||''} onChange={e=>updateNodeConfig('source',e.target.value)} placeholder={'{{step1.body.items}}'}/>
+                  </div>
+                  <div className="form-group">
+                    <label className="label">Parallel limit (max 20)</label>
+                    <input className="input" type="number" value={selectedNode.config.parallel||1} onChange={e=>updateNodeConfig('parallel',Math.min(20,+e.target.value))} min={1} max={20}/>
+                  </div>
+                </>
+              )}
+              {selectedNode.type==='RETURN'&&(
+                <>
+                  <div className="form-group">
+                    <label className="label">Status code</label>
+                    <input className="input" type="number" value={selectedNode.config.statusCode||200} onChange={e=>updateNodeConfig('statusCode',+e.target.value)}/>
+                  </div>
+                  <div className="form-group">
+                    <label className="label">Response body</label>
+                    <textarea className="input textarea font-mono" style={{fontSize:11,minHeight:60}} value={selectedNode.config.body||''} onChange={e=>updateNodeConfig('body',e.target.value)} placeholder={'{{step1.output}}'}/>
+                  </div>
+                </>
+              )}
+              {selectedNode.type==='SET_VARIABLE'&&(
+                <>
+                  <div className="form-group">
+                    <label className="label">O'zgaruvchi nomi</label>
+                    <input className="input" value={selectedNode.config.varName||''} onChange={e=>updateNodeConfig('varName',e.target.value)} placeholder="threshold"/>
+                  </div>
+                  <div className="form-group">
+                    <label className="label">Qiymat</label>
+                    <input className="input font-mono" style={{fontSize:11}} value={selectedNode.config.value||''} onChange={e=>updateNodeConfig('value',e.target.value)} placeholder={'{{step1.body.result}}'}/>
+                  </div>
+                </>
+              )}
+              {selectedNode.type==='JSON_TRANSFORM'&&(
+                <div className="form-group">
+                  <label className="label">JSONata expression</label>
+                  <textarea className="input textarea font-mono" style={{fontSize:11,minHeight:80}} value={selectedNode.config.mapping||''} onChange={e=>updateNodeConfig('mapping',e.target.value)} placeholder={"{\n  \"name\": body.fullName,\n  \"amount\": $sum(body.items.price)\n}"}/>
+                </div>
+              )}
+              {selectedNode.type==='FILTER'&&(
+                <div className="form-group">
+                  <label className="label">Shart (true bo'lsa davom etadi)</label>
+                  <input className="input font-mono" style={{fontSize:11}} value={selectedNode.config.condition||''} onChange={e=>updateNodeConfig('condition',e.target.value)} placeholder={'{{step1.body.status}} !== "inactive"'}/>
+                </div>
+              )}
+              <div style={{marginTop:16,paddingTop:12,borderTop:'1px solid #F1F5F9'}}>
+                <div style={{fontSize:11,fontWeight:600,color:'#64748B',marginBottom:6}}>STATUS</div>
+                <div className="flex gap-2 items-center">
+                  <div style={{width:8,height:8,borderRadius:'50%',background:selectedNode.status==='pass'?'#10B981':selectedNode.status==='fail'?'#EF4444':'#CBD5E1'}}/>
+                  <span style={{fontSize:12,color:'#374151'}}>{selectedNode.status==='pass'?'Test muvaffaqiyatli':selectedNode.status==='fail'?'Test xato':'Testlanmagan'}</span>
+                </div>
+              </div>
+            </div>
+          ):(
+            <div className="pp-empty">
+              <div style={{fontSize:28}}>◱</div>
+              <div style={{fontSize:13,fontWeight:500}}>Qadam tanlanmagan</div>
+              <div style={{fontSize:11}}>Canvas'dan qadam tanlang yoki chapdan yangi qadam qo'shing</div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Test Panel */}
+      <div className="test-panel" style={{maxHeight:testExpanded?320:42,overflow:'hidden',transition:'max-height .2s'}}>
+        <div className="tp-header" onClick={()=>setTestExpanded(t=>!t)}>
+          <span>{testExpanded?'▼':'▶'}</span>
+          <span>Test rejimi (Dry-run)</span>
+          {testRunning&&<span className="badge badge-running" style={{fontSize:11}}>⏳ Ishlayapti...</span>}
+          {testResults&&!testRunning&&<span className="badge badge-pass" style={{fontSize:11}}>✓ {testResults.length} qadam o'tdi</span>}
+          <div style={{marginLeft:'auto',display:'flex',gap:8}}>
+            <button className="btn btn-sm btn-secondary" disabled={testRunning} onClick={e=>{e.stopPropagation();if(!testExpanded)setTestExpanded(true);handleTest();}}>
+              {testRunning?'⏳ Ishlamoqda...':'▷ Test ishlatish'}
+            </button>
+          </div>
+        </div>
+        <div className="tp-body">
+          <div className="tp-input">
+            <div style={{fontSize:11,fontWeight:600,color:'#64748B',marginBottom:6}}>MOCK TRIGGER PAYLOAD</div>
+            <textarea className="input textarea font-mono" style={{fontSize:11,minHeight:120}} value={testPayload} onChange={e=>setTestPayload(e.target.value)}/>
+          </div>
+          <div className="tp-results">
+            <div style={{fontSize:11,fontWeight:600,color:'#64748B',marginBottom:6}}>NATIJALAR</div>
+            {!testResults&&<div style={{color:'#94A3B8',fontSize:12}}>Test ishlatilgandan keyin natijalar bu yerda ko'rinadi</div>}
+            {testResults&&testResults.map(r=>(
+              <div key={r.id} className="step-result">
+                <div className="sr-header">
+                  <div style={{width:6,height:6,borderRadius:'50%',background:r.status==='pass'?'#10B981':'#EF4444'}}/>
+                  <span className="sr-name">{r.name}</span>
+                  <span className="sr-latency">{r.latency}ms</span>
+                </div>
+                <div className="sr-json">{r.output}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============ RUN HISTORY ============ */
+function RunHistory({service, runs, onBack, onShowDetail}){
+  const [selectedRun,setSelectedRun]=useState(null);
+  const filteredRuns=runs.filter(r=>r.serviceId===service.id);
+  return(
+    <div className="content">
+      <div className="ph">
+        <div className="flex items-center gap-2">
+          <button className="btn btn-ghost btn-sm" onClick={onBack}>← Orqaga</button>
+          <span className="page-title">Run History — {service.name}</span>
+        </div>
+        <div className="flex gap-2">
+          <span className="badge badge-http">v{service.version}</span>
+          <StatusBadge status={service.status}/>
+        </div>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:16}}>
+        <div className="stat-card"><div className="stat-label">🔄 Jami runlar (30 kun)</div><div className="stat-value blue">{filteredRuns.length + 48}</div></div>
+        <div className="stat-card"><div className="stat-label">✅ Success rate</div><div className="stat-value green">{service.successRate||'—'}%</div></div>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+        <div className="card">
+          <div className="card-header"><span className="card-header-title">Runlar</span></div>
+          <table className="table">
+            <thead><tr>
+              <th>Run ID</th>
+              <th>Trigger</th>
+              <th>Boshlandi</th>
+              <th>Davomiyligi</th>
+              <th>Holat</th>
+            </tr></thead>
+            <tbody>
+              {filteredRuns.length===0&&<tr><td colSpan={5}><div className="empty">Runlar yo'q</div></td></tr>}
+              {filteredRuns.map(r=>(
+                <tr key={r.id} className="run-row" onClick={()=>setSelectedRun(r)} style={{cursor:'pointer',background:selectedRun?.id===r.id?'#EFF6FF':''}}>
+                  <td>#{r.id.toUpperCase()}</td>
+                  <td style={{fontSize:11,maxWidth:120,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{r.trigger}</td>
+                  <td style={{fontSize:12}}>{r.startedAt}</td>
+                  <td style={{fontSize:12}}>{r.duration}ms</td>
+                  <td><span className={`badge ${r.status==='success'?'badge-pass':'badge-fail'}`}>{r.status}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="card">
+          {selectedRun?(
+            <>
+              <div className="card-header">
+                <span className="card-header-title">Run #{selectedRun.id.toUpperCase()} — Waterfall</span>
+                <span className={`badge ${selectedRun.status==='success'?'badge-pass':'badge-fail'}`}>{selectedRun.status}</span>
+              </div>
+              <div className="card-body">
+                {selectedRun.steps.length===0&&<div className="empty">Qadam detallari mavjud emas</div>}
+                {selectedRun.steps.map((s,i)=>(
+                  <div key={i} style={{marginBottom:12}}>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div style={{width:7,height:7,borderRadius:'50%',background:s.status==='pass'?'#10B981':'#EF4444',flexShrink:0}}/>
+                      <span style={{fontSize:12,fontWeight:600}}>{s.name}</span>
+                      <span style={{fontSize:11,color:'#94A3B8',marginLeft:'auto'}}>{s.latency}ms</span>
+                    </div>
+                    <div style={{marginLeft:15,background:'#F8FAFC',borderRadius:5,border:'1px solid #E2E8F0',padding:'6px 10px',fontSize:11,fontFamily:'monospace',color:'#374151'}}>
+                      {s.output}
+                      {s.error&&<div style={{color:'#EF4444',marginTop:4}}>⚠ {s.error}</div>}
+                    </div>
+                  </div>
+                ))}
+                <div style={{marginTop:12,padding:'10px',background:'#F8FAFC',borderRadius:6,fontSize:11,color:'#64748B'}}>
+                  <div>Boshlandi: {selectedRun.startedAt}</div>
+                  <div>Umumiy: {selectedRun.duration}ms</div>
+                  <div>Versiya: {selectedRun.version}</div>
+                </div>
+              </div>
+            </>
+          ):(
+            <div className="pp-empty" style={{height:'100%'}}>
+              <div style={{fontSize:28}}>📊</div>
+              <div style={{fontSize:13,fontWeight:500}}>Run tanlang</div>
+              <div style={{fontSize:11}}>Chapdan run tanlang — waterfall ko'rinishda ko'rasiz</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============ VERSION HISTORY ============ */
+function VersionHistory({service, onBack}){
+  const [showDiff,setShowDiff]=useState(null);
+  const versions=service.id==='s3'?VERSIONS_S3:[
+    {version:service.version,status:service.status,publishedAt:'2026-04-20',author:service.author,comment:"Joriy versiya",isCurrent:true},
+    {version:'1.0.0',status:'Archived',publishedAt:'2026-03-15',author:service.author,comment:"Boshlang'ich versiya",isCurrent:false},
+  ];
+  const diffLines=[
+    {type:'ctx',n:1,text:'"type": "CUSTOM_CODE"'},
+    {type:'ctx',n:2,text:'"name": "Koeffitsient hisob"'},
+    {type:'rem',n:3,text:'"code": "const koef = 0.5; return {...}"'},
+    {type:'add',n:3,text:'"code": "const koef = 0.6; return {...}"'},
+    {type:'ctx',n:4,text:'"timeout": 5'},
+  ];
+  return(
+    <div className="content">
+      <div className="ph">
+        <div className="flex items-center gap-2">
+          <button className="btn btn-ghost btn-sm" onClick={onBack}>← Orqaga</button>
+          <span className="page-title">Versiya tarixi — {service.name}</span>
+        </div>
+      </div>
+      <div style={{maxWidth:780}}>
+        {versions.map((v,i)=>(
+          <div key={v.version} style={{display:'flex',gap:14,marginBottom:0}}>
+            <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:0,paddingTop:16}}>
+              <div style={{width:12,height:12,borderRadius:'50%',background:v.isCurrent?'#10B981':'#94A3B8',boxShadow:v.isCurrent?'0 0 0 3px #D1FAE5':'none',flexShrink:0}}/>
+              {i<versions.length-1&&<div style={{width:2,flex:1,background:'#E2E8F0',minHeight:24}}/>}
+            </div>
+            <div className="card" style={{flex:1,marginBottom:12}}>
+              <div className="card-body">
+                <div className="flex items-center gap-2 mb-2">
+                  <span style={{fontSize:15,fontWeight:700,color:'#1E293B'}}>v{v.version}</span>
+                  <StatusBadge status={v.status}/>
+                  {v.isCurrent&&<span className="badge" style={{background:'#D1FAE5',color:'#065F46'}}>Joriy</span>}
+                  <span style={{marginLeft:'auto',fontSize:12,color:'#94A3B8'}}>{v.publishedAt} · {v.author}</span>
+                </div>
+                <div style={{fontSize:13,color:'#374151',marginBottom:10}}>{v.comment}</div>
+                <div className="flex gap-2">
+                  {!v.isCurrent&&<button className="btn btn-xs btn-secondary" onClick={()=>alert('Rollback: v'+v.version+' ga qaytish')}>↩ Bu versiyaga qaytish</button>}
+                  {i>0&&<button className="btn btn-xs btn-outline-primary" onClick={()=>setShowDiff(v.version)}>⊞ Diff ko'rish</button>}
+                </div>
+                {showDiff===v.version&&(
+                  <div className="diff-view mt-2">
+                    <div style={{padding:'6px 10px',background:'#F8FAFC',borderBottom:'1px solid #E2E8F0',fontSize:11,fontWeight:600,color:'#64748B'}}>
+                      v{versions[i+1]?.version} → v{v.version} — o'zgargan qatorlar
+                    </div>
+                    {diffLines.map((l,j)=>(
+                      <div key={j} className={`diff-line ${l.type}`}>
+                        <span className="diff-lnum">{l.n}</span>
+                        <span>{l.type==='add'?'+ ':l.type==='rem'?'- ':'  '}{l.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ============ APPROVE MODAL ============ */
+function ApproveModal({service, onApprove, onReject, onClose}){
+  const [comment,setComment]=useState('');
+  const diffLines=[
+    {type:'ctx',n:1,text:'"type": "CUSTOM_CODE"'},
+    {type:'rem',n:2,text:'"code": "const koef = 0.5;"'},
+    {type:'add',n:2,text:'"code": "const koef = 0.6;"'},
+    {type:'ctx',n:3,text:'"timeout": 5'},
+  ];
+  return(
+    <div className="overlay" onClick={e=>{if(e.target.classList.contains('overlay'))onClose()}}>
+      <div className="modal modal-lg">
+        <div className="modal-header">
+          <div>
+            <div className="modal-title">📋 Publish Review — {service.name}</div>
+            <div style={{fontSize:12,color:'#94A3B8',marginTop:2}}>Reviewer sifatida servisni ko'rib chiqing va tasdiqlang yoki rad eting</div>
+          </div>
+          <button className="close-btn" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body">
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
+            <div>
+              <div style={{fontSize:11,fontWeight:700,color:'#64748B',marginBottom:6}}>SERVIS MA'LUMOTI</div>
+              <div style={{background:'#F8FAFC',borderRadius:6,border:'1px solid #E2E8F0',padding:'10px 12px',fontSize:12}}>
+                <div className="flex justify-between mb-1"><span style={{color:'#64748B'}}>Nom:</span><span style={{fontWeight:600}}>{service.name}</span></div>
+                <div className="flex justify-between mb-1"><span style={{color:'#64748B'}}>Slug:</span><span className="font-mono">/api/orchestration/{service.slug}</span></div>
+                <div className="flex justify-between mb-1"><span style={{color:'#64748B'}}>Versiya:</span><span style={{fontWeight:600}}>v{service.version}</span></div>
+                <div className="flex justify-between mb-1"><span style={{color:'#64748B'}}>Muallif:</span><span>{service.author}</span></div>
+                <div className="flex justify-between"><span style={{color:'#64748B'}}>Trigger:</span><TriggerBadge type={service.triggerType}/></div>
+              </div>
+            </div>
+            <div>
+              <div style={{fontSize:11,fontWeight:700,color:'#64748B',marginBottom:6}}>O'ZGARISHLAR (DIFF)</div>
+              <div className="diff-view">
+                {diffLines.map((l,j)=>(
+                  <div key={j} className={`diff-line ${l.type}`}>
+                    <span className="diff-lnum">{l.n}</span>
+                    <span>{l.type==='add'?'+ ':l.type==='rem'?'- ':'  '}{l.text}</span>
+                  </div>
+                ))}
+              </div>
+              {service.reviewNote&&(
+                <div style={{marginTop:8,background:'#FEF3C7',borderRadius:5,padding:'7px 10px',fontSize:12,color:'#92400E'}}>
+                  📝 {service.reviewNote}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="label">Izoh (ixtiyoriy)</label>
+            <textarea className="input textarea" rows={3} placeholder="Masalan: Koeffitsient o'zgarishi to'g'ri, biznes talabiga mos..." value={comment} onChange={e=>setComment(e.target.value)}/>
+          </div>
+          <div style={{background:'#FEF9C3',border:'1px solid #FDE68A',borderRadius:6,padding:'8px 12px',fontSize:12,color:'#78350F'}}>
+            ⚠️ <strong>4-ko'z prinsipi:</strong> Siz Author emas, Reviewer sifatida tasdiqlaysiz. Tasdiqlanganida Publisher roli publish qiladi.
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-secondary" onClick={onClose}>Yopish</button>
+          <button className="btn btn-danger" onClick={()=>onReject(comment)}>✕ Rad etish</button>
+          <button className="btn btn-success" onClick={()=>onApprove(comment)}>✓ Tasdiqlash</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============ DASHBOARD ============ */
+function Dashboard({services,onNavigate}){
+  return(
+    <div className="content">
+      <div className="ph">
+        <span className="page-title">Dashboard</span>
+        <span style={{fontSize:12,color:'#94A3B8'}}>2026-04-13 → 2026-04-20</span>
+      </div>
+      <div className="stats-row" style={{gridTemplateColumns:'repeat(4,1fr)'}}>
+        <div className="stat-card"><div className="stat-label">📊 Jami so'rovlar</div><div className="stat-value blue">2,847</div></div>
+        <div className="stat-card"><div className="stat-label">⏱ O'rtacha latency</div><div className="stat-value">342ms</div></div>
+        <div className="stat-card"><div className="stat-label">⚠ Xatolar</div><div className="stat-value red">47</div></div>
+        <div className="stat-card"><div className="stat-label">✅ Success %</div><div className="stat-value green">98.35</div></div>
+      </div>
+      <div className="card">
+        <div className="card-header"><span className="card-header-title">Orkestratsiya servislari</span>
+          <button className="btn btn-xs btn-primary" onClick={()=>onNavigate('list')}>Barchasini ko'rish</button>
+        </div>
+        <table className="table">
+          <thead><tr><th>Nom</th><th>Trigger</th><th>Holat</th><th>Success %</th></tr></thead>
+          <tbody>
+            {services.slice(0,4).map(s=>(
+              <tr key={s.id} onClick={()=>onNavigate('list')}>
+                <td style={{fontWeight:500}}>{s.name}</td>
+                <td><TriggerBadge type={s.triggerType}/></td>
+                <td><StatusBadge status={s.status}/></td>
+                <td>{s.successRate!=null?<span style={{color:'#10B981',fontWeight:600}}>{s.successRate}%</span>:'—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+/* ============ TOAST ============ */
+function Toast({message,type,onDone}){
+  useEffect(()=>{const t=setTimeout(onDone,3200);return()=>clearTimeout(t);},[]);
+  const ico=type==='success'?'✓':type==='error'?'✕':'ℹ';
+  return(
+    <div className={`toast toast-${type}`}>
+      <span className="ti">{ico}</span>
+      <span>{message}</span>
+    </div>
+  );
+}
+
+/* ============ APP ============ */
+function App(){
+  const [view,setView]=useState('list');
+  const [services,setServices]=useState(INITIAL_SERVICES);
+  const [selectedService,setSelectedService]=useState(null);
+  const [approveService,setApproveService]=useState(null);
+  const [toast,setToast]=useState(null);
+  const [runs]=useState(INITIAL_RUNS);
+
+  const showToast=(msg,type='info')=>setToast({msg,type,id:Date.now()});
+
+  const handleOpenService=(s)=>{ setSelectedService(s); setView('canvas'); };
+  const handleCreate=()=>setView('new-service');
+  const handleNewServiceCreated=(newSvc)=>{
+    setServices(prev=>[newSvc,...prev]);
+    setSelectedService(newSvc);
+    setView('canvas');
+    showToast("Yangi servis yaratildi — Canvas muharririga xush kelibsiz!",'success');
+  };
+  const handleClone=(s)=>{
+    const clone={...s,id:'s_'+Date.now(),name:s.name+' (Klon)',slug:s.slug+'-klon',status:'Draft',version:'0.1.0',lastRun:null,successRate:null,author:'CPO Office'};
+    setServices(prev=>[clone,...prev]);
+    showToast(`"${s.name}" klonlandi`,'success');
+  };
+  const handleApprove=(s)=>{ setApproveService(s); };
+  const handleApproveConfirm=(comment)=>{
+    setServices(prev=>prev.map(s=>s.id===approveService.id?{...s,status:'Published',version:s.version.replace('-draft','')}:s));
+    if(selectedService?.id===approveService.id) setSelectedService(s=>({...s,status:'Published'}));
+    setApproveService(null);
+    showToast("✓ Servis tasdiqlandi va Published holatiga o'tdi!",'success');
+  };
+  const handleRejectConfirm=(comment)=>{
+    setServices(prev=>prev.map(s=>s.id===approveService.id?{...s,status:'Draft'}:s));
+    setApproveService(null);
+    showToast("Servis rad etildi — Author'ga qaytarildi",'error');
+  };
+  const handleViewRuns=(s)=>{ setSelectedService(s); setView('runs'); };
+  const handleViewVersions=(s)=>{ setSelectedService(s); setView('versions'); };
+  const handlePublishRequest=(s)=>{
+    if(s.status==='In Review'){ setApproveService(s); return; }
+    setServices(prev=>prev.map(sv=>sv.id===s.id?{...sv,status:'In Review'}:sv));
+    if(selectedService?.id===s.id) setSelectedService(sv=>({...sv,status:'In Review'}));
+    showToast("Publish so'rovi yuborildi. Reviewer tasdig'i kutilmoqda.",'info');
+  };
+
+  return(
+    <div className="layout">
+      <Sidebar activeView={view} setActiveView={setView}/>
+      <div className="main">
+        {view==='dashboard'&&<><div className="topbar"><span className="topbar-title">Dashboard</span><div className="topbar-actions"><div className="sb-avatar" style={{width:32,height:32,fontSize:12}}>CP</div></div></div><Dashboard services={services} onNavigate={setView}/></>}
+
+        {view==='list'&&(
+          <>
+            <div className="topbar">
+              <span className="topbar-title">Orkestratsiya</span>
+              <div className="topbar-actions"><div className="sb-avatar" style={{width:32,height:32,fontSize:12}}>CP</div></div>
+            </div>
+            <ServicesList services={services} onOpen={handleOpenService} onCreate={handleCreate} onViewRuns={handleViewRuns} onApprove={handleApprove} onClone={handleClone}/>
+          </>
+        )}
+
+        {view==='new-service'&&(
+          <>
+            <div className="topbar">
+              <div className="topbar-bc">
+                <span onClick={()=>setView('list')} style={{cursor:'pointer'}}>Orkestratsiya</span>
+                <span className="sep">›</span>
+                <span className="cur">Yangi servis</span>
+              </div>
+              <div className="topbar-actions"><div className="sb-avatar" style={{width:32,height:32,fontSize:12}}>CP</div></div>
+            </div>
+            <NewServiceWizard onCancel={()=>setView('list')} onCreate={handleNewServiceCreated}/>
+          </>
+        )}
+
+        {view==='canvas'&&selectedService&&(
+          <>
+            <div className="topbar" style={{display:'none'}}/>
+            <CanvasEditor
+              service={selectedService}
+              onBack={()=>setView('list')}
+              onPublishRequest={handlePublishRequest}
+              onShowRuns={handleViewRuns}
+              onShowVersions={handleViewVersions}
+              showToast={showToast}
+            />
+          </>
+        )}
+
+        {view==='runs'&&selectedService&&(
+          <>
+            <div className="topbar">
+              <div className="topbar-bc">
+                <span onClick={()=>setView('list')} style={{cursor:'pointer'}}>Orkestratsiya</span>
+                <span className="sep">›</span>
+                <span onClick={()=>{setView('canvas')}} style={{cursor:'pointer'}}>{selectedService.name}</span>
+                <span className="sep">›</span>
+                <span className="cur">Run History</span>
+              </div>
+              <div className="topbar-actions"><div className="sb-avatar" style={{width:32,height:32,fontSize:12}}>CP</div></div>
+            </div>
+            <RunHistory service={selectedService} runs={runs} onBack={()=>setView('canvas')}/>
+          </>
+        )}
+
+        {view==='versions'&&selectedService&&(
+          <>
+            <div className="topbar">
+              <div className="topbar-bc">
+                <span onClick={()=>setView('list')} style={{cursor:'pointer'}}>Orkestratsiya</span>
+                <span className="sep">›</span>
+                <span onClick={()=>{setView('canvas')}} style={{cursor:'pointer'}}>{selectedService.name}</span>
+                <span className="sep">›</span>
+                <span className="cur">Versiya tarixi</span>
+              </div>
+              <div className="topbar-actions"><div className="sb-avatar" style={{width:32,height:32,fontSize:12}}>CP</div></div>
+            </div>
+            <VersionHistory service={selectedService} onBack={()=>setView('canvas')}/>
+          </>
+        )}
+      </div>
+
+      {approveService&&(
+        <ApproveModal
+          service={approveService}
+          onApprove={handleApproveConfirm}
+          onReject={handleRejectConfirm}
+          onClose={()=>setApproveService(null)}
+        />
+      )}
+      {toast&&<Toast key={toast.id} message={toast.msg} type={toast.type} onDone={()=>setToast(null)}/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

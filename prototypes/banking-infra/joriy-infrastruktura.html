@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joriy IT Infrastruktura — Islamic Banking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810; --bg2:#0D0D18; --bg3:#12121F; --bg4:#181828;
+  --abs-bg:#0A2418; --abs-br:#16845E; --abs-glow:#16845E22;
+  --ch-bg:#09162A; --ch-br:#2E78C7;
+  --int-bg:#071F14; --int-br:#16845E;
+  --ext-bg:#1A1200; --ext-br:#9E6210;
+  --com-bg:#180606; --com-br:#8B2020;
+  --line:#1A1A2E; --line-bright:#252540;
+  --text:#E8E8F0; --text2:#7070A0; --text3:#404060;
+  --panel-bg:#0A0A16;
+  --green:#16845E; --green-l:#4DB893;
+  --blue:#2E78C7; --blue-l:#6BA8E0;
+  --amber:#9E6210; --amber-l:#D4944A;
+  --red:#8B2020; --red-l:#D06060;
+  --font-display:'Syne',sans-serif;
+  --font-mono:'DM Mono',monospace;
+}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:var(--font-display);
+  overflow:hidden; height:100vh; user-select:none;
+}
+body::before{
+  content:''; position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(208,96,96,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(208,96,96,.03) 1px,transparent 1px);
+  background-size:40px 40px; pointer-events:none; z-index:0;
+}
+
+/* TOPBAR */
+.topbar{
+  position:fixed; top:0; left:0; right:0; height:54px;
+  background:rgba(8,8,16,.92);
+  border-bottom:1px solid var(--line-bright);
+  display:flex; align-items:center; padding:0 24px;
+  z-index:100; backdrop-filter:blur(12px);
+}
+.logo{font-size:17px;font-weight:800;color:#fff;letter-spacing:-.03em}
+.logo span{color:var(--amber-l)}
+.logo-badge{
+  font-family:var(--font-mono); font-size:9px; font-weight:400;
+  padding:2px 8px; border-radius:20px;
+  background:rgba(158,98,16,.12); border:1px solid rgba(158,98,16,.35);
+  color:var(--amber-l); margin-left:10px; letter-spacing:.04em;
+}
+.logo-badge-btn{
+  font-family:var(--font-mono); font-size:9px; font-weight:400;
+  padding:2px 8px; border-radius:20px;
+  background:rgba(22,132,94,.12); border:1px solid rgba(22,132,94,.45);
+  color:#4DB893; margin-left:6px; letter-spacing:.04em;
+  cursor:pointer; transition:background .15s;
+  text-decoration:none; display:inline-block;
+  animation:pulse-green 2s ease-out infinite;
+}
+.logo-badge-btn:hover{background:rgba(22,132,94,.28);animation-play-state:paused;}
+@keyframes pulse-green{
+  0%  {box-shadow:0 0 0 0   rgba(77,184,147,.7)}
+  35% {box-shadow:0 0 0 6px rgba(77,184,147,0)}
+  65% {box-shadow:0 0 0 0   rgba(77,184,147,0)}
+  82% {box-shadow:0 0 0 3px rgba(77,184,147,.25)}
+  100%{box-shadow:0 0 0 0   rgba(77,184,147,0)}
+}
+.topbar-center{flex:1;display:flex;align-items:center;justify-content:center;gap:10px}
+.topbar-title{font-family:var(--font-mono);font-size:11px;color:var(--text3);letter-spacing:.06em}
+.status-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--red-l); box-shadow:0 0 6px var(--red-l);
+  animation:pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.filters{display:flex;gap:5px}
+.filter-btn{
+  font-family:var(--font-mono); font-size:10px; font-weight:400;
+  padding:5px 14px; border-radius:4px;
+  border:1px solid var(--line-bright);
+  background:transparent; color:var(--text2);
+  cursor:pointer; transition:all .15s; letter-spacing:.04em;
+}
+.filter-btn.active{background:rgba(208,96,96,.15);border-color:rgba(208,96,96,.5);color:var(--red-l)}
+.filter-btn[data-f="channel"]{border-color:rgba(46,120,199,.35);color:var(--blue-l)}
+.filter-btn[data-f="channel"].active{background:rgba(46,120,199,.15);border-color:rgba(46,120,199,.55)}
+.filter-btn[data-f="abs"]{border-color:rgba(22,132,94,.35);color:var(--green-l)}
+.filter-btn[data-f="abs"].active{background:rgba(22,132,94,.15);border-color:rgba(22,132,94,.55)}
+.filter-btn[data-f="external"]{border-color:rgba(158,98,16,.35);color:var(--amber-l)}
+.filter-btn[data-f="external"].active{background:rgba(158,98,16,.15);border-color:rgba(158,98,16,.55)}
+
+/* CANVAS */
+.canvas-wrap{
+  position:fixed; top:54px; left:0; right:0; bottom:32px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; z-index:1;
+}
+
+/* FOOTER */
+.site-footer{
+  position:fixed;bottom:0;left:0;right:0;height:32px;
+  background:rgba(8,8,16,.92);
+  border-top:1px solid var(--line-bright);
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  z-index:100;backdrop-filter:blur(12px);
+}
+.footer-by{font-family:var(--font-mono);font-size:9.5px;color:var(--text3);letter-spacing:.04em}
+.footer-sep{color:var(--text3);font-size:10px}
+.footer-link{
+  font-family:var(--font-mono);font-size:9.5px;font-weight:500;
+  letter-spacing:.04em;text-decoration:none;
+  padding:2px 8px;border-radius:3px;border:1px solid;
+  transition:all .15s;
+}
+.footer-tg{color:#5BB8F5;border-color:rgba(91,184,245,.35);background:rgba(91,184,245,.06)}
+.footer-tg:hover{background:rgba(91,184,245,.15);border-color:rgba(91,184,245,.7)}
+.footer-li{color:#6BA8E0;border-color:rgba(46,120,199,.35);background:rgba(46,120,199,.06)}
+.footer-li:hover{background:rgba(46,120,199,.15);border-color:rgba(46,120,199,.7)}
+#canvas{
+  width:1300px; height:640px;
+  position:relative; flex-shrink:0;
+  transform-origin:center center;
+}
+#svg-lines{
+  position:absolute; top:0; left:0;
+  width:1300px; height:640px;
+  pointer-events:none; z-index:1;
+}
+
+/* NODES */
+.node{
+  position:absolute; border-radius:6px; border:1px solid;
+  cursor:pointer; z-index:2;
+  transition:opacity .25s,border-color .15s,background .15s,transform .12s;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:7px 11px;
+}
+.node:hover{transform:translateY(-1px);filter:brightness(1.25)}
+.node.selected{box-shadow:0 0 0 2px currentColor}
+.node.dimmed{opacity:.12;pointer-events:none}
+.n-label{font-family:var(--font-display);font-size:11.5px;font-weight:600;color:var(--text);line-height:1.2}
+.n-sub{font-family:var(--font-mono);font-size:9px;font-weight:300;margin-top:3px;line-height:1.3;letter-spacing:.02em}
+
+/* ABS HUB */
+.abs-hub{
+  position:absolute;
+  left:200px; top:170px; width:680px; height:420px;
+  background:linear-gradient(180deg, rgba(22,132,94,.06), rgba(22,132,94,.02));
+  border:1.5px solid var(--abs-br);
+  border-radius:12px;
+  z-index:2; cursor:default;
+  display:flex; flex-direction:column;
+}
+.abs-header{
+  padding:14px 20px 10px;
+  border-bottom:1px dashed rgba(22,132,94,.3);
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+}
+.abs-title-block{display:flex;flex-direction:column;gap:4px}
+.abs-title{
+  font-family:var(--font-display); font-size:20px; font-weight:800;
+  color:#fff; letter-spacing:-.02em;
+}
+.abs-title em{font-style:normal;color:var(--green-l)}
+.abs-sub{
+  font-family:var(--font-mono); font-size:10px;
+  color:var(--green-l); letter-spacing:.05em;
+}
+.abs-tabs-row{display:flex;gap:6px}
+.abs-vendor-tab{
+  font-family:var(--font-mono); font-size:10px; font-weight:500;
+  padding:5px 14px; border-radius:4px;
+  border:1px solid rgba(22,132,94,.35);
+  background:transparent; color:var(--green-l);
+  cursor:pointer; letter-spacing:.05em;
+  transition:all .15s;
+}
+.abs-vendor-tab.active{background:rgba(22,132,94,.18);border-color:var(--green-l);color:#fff}
+.abs-vendor-tab:hover:not(.active){background:rgba(22,132,94,.08)}
+
+.abs-body{
+  flex:1; padding:14px 20px;
+  display:grid; grid-template-rows:auto 1fr auto 1fr;
+  gap:10px;
+}
+.abs-section-lbl{
+  font-family:var(--font-mono); font-size:9px;
+  color:var(--text3); letter-spacing:.12em;
+  text-transform:uppercase;
+  display:flex; align-items:center; gap:10px;
+}
+.abs-section-lbl::before,.abs-section-lbl::after{
+  content:''; flex:1; height:1px; background:var(--line);
+}
+.abs-section-lbl.int{color:var(--green-l)}
+.abs-section-lbl.com{color:var(--red-l)}
+.abs-section-lbl.int::before,.abs-section-lbl.int::after{background:rgba(22,132,94,.2)}
+.abs-section-lbl.com::before,.abs-section-lbl.com::after{background:rgba(139,32,32,.2)}
+
+.abs-grid-int{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.abs-grid-com{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.abs-card{
+  border-radius:5px; border:1px solid; padding:8px 10px;
+  cursor:pointer; transition:all .15s;
+  display:flex; flex-direction:column; gap:3px;
+  min-height:54px; justify-content:center;
+}
+.abs-card:hover{transform:translateY(-1px);filter:brightness(1.3)}
+.abs-card-int{background:var(--int-bg);border-color:var(--int-br)}
+.abs-card-com{background:var(--com-bg);border-color:var(--com-br)}
+.abs-card-label{font-family:var(--font-display);font-size:11.5px;font-weight:600;color:var(--text);line-height:1.15}
+.abs-card-sub{font-family:var(--font-mono);font-size:8.5px;line-height:1.3;letter-spacing:.02em}
+.abs-card-int .abs-card-sub{color:var(--green-l)}
+.abs-card-com .abs-card-sub{color:var(--red-l)}
+
+.abs-spaghetti-warn{
+  position:absolute; top:-12px; left:18px;
+  font-family:var(--font-mono); font-size:8.5px;
+  letter-spacing:.08em; padding:2px 8px;
+  background:var(--bg); color:var(--green-l);
+  border:1px solid var(--green); border-radius:3px;
+}
+
+/* WARNING TAG (spaghetti) */
+.legacy-tag{
+  position:absolute; top:-12px; right:18px;
+  font-family:var(--font-mono); font-size:8.5px;
+  letter-spacing:.08em; padding:2px 8px;
+  background:var(--bg); color:var(--red-l);
+  border:1px solid var(--red); border-radius:3px;
+}
+
+/* LEGEND */
+#legend{
+  position:absolute; bottom:8px; right:18px;
+  display:flex; flex-direction:column; gap:6px; z-index:10;
+}
+.leg-item{
+  display:flex; align-items:center; gap:6px;
+  font-family:var(--font-mono); font-size:9px;
+  color:var(--text3); letter-spacing:.04em;
+}
+.leg-dot{width:9px;height:9px;border-radius:2px;border:1px solid}
+
+/* PANEL */
+.panel{
+  position:fixed; top:54px; right:-400px;
+  width:380px; bottom:0;
+  background:var(--panel-bg);
+  border-left:1px solid var(--line-bright);
+  z-index:300;
+  transition:right .24s cubic-bezier(.4,0,.2,1);
+  display:flex; flex-direction:column;
+}
+.panel.open{right:0}
+.panel-top{padding:20px 20px 16px;border-bottom:1px solid var(--line);position:relative}
+.panel-close{
+  position:absolute; top:18px; right:18px;
+  width:26px; height:26px; border-radius:50%;
+  background:var(--bg3); border:1px solid var(--line-bright);
+  color:var(--text2); font-size:14px;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.panel-close:hover{background:var(--bg4);color:var(--text)}
+.panel-name{
+  font-family:var(--font-display); font-size:19px; font-weight:700;
+  color:#fff; letter-spacing:-.02em;
+  margin-bottom:8px; padding-right:36px; line-height:1.2;
+}
+.panel-cat{
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--font-mono); font-size:9px; font-weight:400;
+  padding:3px 10px; border-radius:3px;
+  border:1px solid; letter-spacing:.06em;
+}
+.panel-cat::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+.panel-body{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:16px}
+.panel-body::-webkit-scrollbar{width:3px}
+.panel-body::-webkit-scrollbar-thumb{background:var(--line-bright);border-radius:2px}
+.prow-lbl{
+  font-family:var(--font-mono); font-size:8.5px; font-weight:500;
+  color:var(--text3); text-transform:uppercase;
+  letter-spacing:.1em; margin-bottom:5px;
+}
+.prow-val{font-size:12.5px;color:var(--text);line-height:1.6}
+.prow-val.mono{font-family:var(--font-mono);font-size:11px}
+.feat-list{list-style:none;display:flex;flex-direction:column;gap:4px}
+.feat-list li{
+  font-family:var(--font-mono); font-size:10.5px;
+  color:var(--text2); line-height:1.5;
+  padding-left:14px; position:relative;
+}
+.feat-list li::before{content:'—';position:absolute;left:0;color:var(--text3)}
+.chip-row{display:flex;flex-wrap:wrap;gap:5px}
+.chip{
+  font-family:var(--font-mono); font-size:9.5px;
+  padding:3px 9px; border-radius:3px;
+  background:var(--bg3); border:1px solid var(--line-bright);
+  color:var(--text2); letter-spacing:.03em;
+}
+.divider{height:1px;background:var(--line);margin:0 -20px}
+.status-badge{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--font-mono); font-size:10px; font-weight:500;
+  padding:5px 12px; border-radius:4px;
+  border:1px solid; letter-spacing:.05em;
+}
+.warn-callout{
+  background:rgba(208,96,96,.08);
+  border:1px solid rgba(208,96,96,.3);
+  border-radius:5px;
+  padding:10px 12px;
+  font-family:var(--font-mono); font-size:10.5px;
+  color:var(--red-l); line-height:1.5;
+}
+/* NGINX BAR */
+#node-nginx{
+  left:232px;top:76px;width:326px;height:20px;
+  background:rgba(46,120,199,.05);
+  border-color:rgba(46,120,199,.38);
+  border-style:dashed;
+  flex-direction:row;justify-content:center;align-items:center;
+  padding:0;
+}
+#node-nginx::after{
+  content:'NGINX \B7  Reverse Proxy';
+  font-family:var(--font-mono);font-size:9px;
+  color:var(--blue-l);letter-spacing:.05em;
+}
+/* LANG SWITCHER */
+.lang-sw{display:flex;gap:3px;margin-left:10px}
+.lang-sw button{font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.06em;padding:4px 9px;border-radius:3px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s}
+.lang-sw button:hover{color:#fff;background:rgba(255,255,255,.1)}
+.lang-sw button.active{color:#fff;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4)}
+/* ESB NODE */
+#node-esb{
+  left:232px;top:106px;width:326px;height:54px;
+  background:rgba(158,98,16,.07);
+  border-color:rgba(158,98,16,.55);
+}
+.esb-limited-tag{
+  position:absolute;top:-10px;left:10px;
+  font-family:var(--font-mono);font-size:7.5px;
+  background:var(--bg);color:var(--amber-l);
+  border:1px solid var(--amber);padding:1px 6px;
+  border-radius:3px;letter-spacing:.07em;
+}
+</style>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo"><span>AS-IS</span> · IT INFRA<a class="logo-badge-btn" href="index.html">TO-BE ARCHITECTURE →</a></div>
+  <div class="topbar-center"></div>
+  <div class="filters">
+    <button class="filter-btn active" data-f="all" onclick="setFilter(this,'all')" id="fb-all">Hammasi</button>
+    <button class="filter-btn" data-f="channel" onclick="setFilter(this,'channel')" id="fb-channel">Kanallar</button>
+    <button class="filter-btn" data-f="abs" onclick="setFilter(this,'abs')" id="fb-abs">ABS</button>
+    <button class="filter-btn" data-f="external" onclick="setFilter(this,'external')" id="fb-external">Tashqi</button>
+  </div>
+  <div class="lang-sw">
+    <button onclick="setLang('uz')" data-lang="uz">UZ</button>
+    <button onclick="setLang('ru')" data-lang="ru">RU</button>
+    <button onclick="setLang('en')" data-lang="en">EN</button>
+  </div>
+</div>
+
+<div class="canvas-wrap" id="canvasWrap">
+  <div id="canvas">
+    <svg id="svg-lines" xmlns="http://www.w3.org/2000/svg"></svg>
+
+    <!-- NGINX BAR -->
+    <div class="node" id="node-nginx" data-id="nginx" data-cat="proxy"></div>
+
+    <!-- ESB -->
+    <div class="node" id="node-esb" data-id="esb" data-cat="esb">
+      <div class="esb-limited-tag">⚠ CHEKLANGAN</div>
+      <div class="n-label" style="color:#D4944A">ESB</div>
+      <div class="n-sub" style="color:#D4944A;font-size:8.5px">ABS API collection only · Middleware yo'q</div>
+    </div>
+
+    <!-- ABS HUB -->
+    <div class="abs-hub" id="absHub">
+      <div class="abs-header">
+        <div class="abs-title-block">
+          <div class="abs-title">Core Banking <em>ABS</em></div>
+          <div class="abs-sub">Markaziy va yagona tizim — barcha modullar shu yerda</div>
+          <div class="legacy-tag" style="position:static;display:inline-block;margin-top:5px">⚠ ESB CHEKLANGAN · MIDDLEWARE YO'Q</div>
+        </div>
+        <div class="abs-tabs-row">
+          <button class="abs-vendor-tab active" data-vendor="iABS" onclick="switchVendor('iABS')">iABS</button>
+          <button class="abs-vendor-tab" data-vendor="NCI" onclick="switchVendor('NCI')">NCI</button>
+        </div>
+      </div>
+      <div class="abs-body">
+        <div class="abs-section-lbl int">Ichki modullar · ABS ichida</div>
+        <div class="abs-grid-int" id="intGrid"></div>
+        <div class="abs-section-lbl com">Compliance modullar · ABS ichida</div>
+        <div class="abs-grid-com" id="comGrid"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="panel" id="panel">
+  <div class="panel-top">
+    <div class="panel-name" id="pName">—</div>
+    <span class="panel-cat" id="pCat">—</span>
+    <button class="panel-close" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-body" id="panelBody"></div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════
+   I18N
+════════════════════════════════════════════════════ */
+const L = localStorage.getItem('ib_lang') || 'uz';
+function t(v){return typeof v==='object'?(v[L]||v.uz||v):v;}
+function setLang(l){localStorage.setItem('ib_lang',l);location.reload();}
+const T={
+  uz:{
+    filterAll:'Hammasi',filterChannel:'Kanallar',filterAbs:'ABS',filterExternal:'Tashqi',
+    btnTobe:'TO-BE ARCHITECTURE →',
+    panelVendor:'Vendor',panelPurpose:'Maqsad',panelFeatures:'Asosiy xususiyatlar',
+    panelConnects:'Ulangan',panelStatus:'Holat',
+    catChannel:'Mijoz kanali',catAbs:'ABS moduli',catExternal:'Tashqi tizim',
+    statusLegacy:'Legacy',statusActive:'Faol',statusRisk:'Riskli',
+    footerBy:'Zokirov Bobur tomonidan',
+    pageTitle:'Joriy IT Infrastruktura — Islamic Banking',
+  },
+  ru:{
+    filterAll:'Все',filterChannel:'Каналы',filterAbs:'ABS',filterExternal:'Внешние',
+    btnTobe:'TO-BE ARCHITECTURE →',
+    panelVendor:'Вендор',panelPurpose:'Назначение',panelFeatures:'Основные функции',
+    panelConnects:'Подключено',panelStatus:'Статус',
+    catChannel:'Клиентский канал',catAbs:'Модуль ABS',catExternal:'Внешняя система',
+    statusLegacy:'Устаревший',statusActive:'Активный',statusRisk:'Рискованный',
+    footerBy:'Создано Зокировым Бобуром',
+    pageTitle:'Текущая IT-инфраструктура — Islamic Banking',
+  },
+  en:{
+    filterAll:'All',filterChannel:'Channels',filterAbs:'ABS',filterExternal:'External',
+    btnTobe:'TO-BE ARCHITECTURE →',
+    panelVendor:'Vendor',panelPurpose:'Purpose',panelFeatures:'Key Features',
+    panelConnects:'Connected',panelStatus:'Status',
+    catChannel:'Client Channel',catAbs:'ABS Module',catExternal:'External System',
+    statusLegacy:'Legacy',statusActive:'Active',statusRisk:'At Risk',
+    footerBy:'By Zokirov Bobur',
+    pageTitle:'Current IT Infrastructure — Islamic Banking',
+  }
+};
+
+/* ════════════════════════════════════════════════════
+   DATA
+════════════════════════════════════════════════════ */
+const ABS_INFO = {
+  iABS:{
+    name:'iABS 7',
+    vendor:"Fido-Biznes — Toshkent, O'zbekiston",
+    desc:"O'zbekistonda 30+ yillik tajribaga ega mahalliy lider ABS. Joriy arxitekturada barcha ichki modullar (CRM, DWH, Card Mgmt va h.k.) va compliance modullari (AML, Sharia Core va h.k.) shu tizim ichida joylashgan.",
+    modules:'40+ quyi tizim · 500+ dasturiy modul · 1000+ hisobot',
+    risk:'Modullar bir-biriga qattiq bog\'langan — bir modul yangilanishi butun tizimga ta\'sir qiladi.'
+  },
+  NCI:{
+    name:'Smart-Bank — Integrallashgan Bank Tizimi',
+    vendor:"Intelligent Solutions — Toshkent, O'zbekiston",
+    desc:"Zamonaviy bank operatsiyalarini moslashuvchan konfiguratsiya imkoniyatlari bilan avtomatlashtiruvchi integrallashgan bank tizimi. Oracle platformasida uch bosqichli mijoz-server arxitekturasi asosida ishlaydi. Ko'p filiallik va ko'p valyutali operatsiyalarni qo'llab-quvvatlaydi.",
+    modules:"Administrator · Operatsion kun boshqaruvi · Kreditlar va depozitlar · Xalqaro hisob-kitoblar · Valyuta konvertatsiyasi · Umumiy buxgalteriya · Qimmatli qog'ozlar · Naqd pul muomalasi · Elektron to'lovlar · Kommunal to'lovlar · Hisobotlar · Risk menejment · Likvidlik tahlili",
+    risk:"Oracle platformasiga qattiq bog'liqlik — infratuzilma xarajatlari yuqori. Islomiy moliya modullari standart tarkibda yo'q, alohida sozlash talab etiladi."
+  }
+};
+
+const NODES = {
+  /* CHANNELS — top */
+  mobile:{label:'Mobile App',sub:'iOS · Android',x:240,y:20,w:140,h:48,cat:'channel',
+    purpose:{
+      uz:"Mijozlarning mobil banking ilovasi. NGINX reverse proxy → ESB orqali ABS bilan bog'lanadi. ESB ichida faqat ABS API collection mavjud — to'liq Middleware imkoniyatlari yo'q. Ba'zi tashqi tizimlar (Uzcard/Humo) bilan alohida SDK orqali to'g'ridan-to'g'ri ulanadi.",
+      ru:"Мобильное банковское приложение клиентов. Подключается к ABS через NGINX → ESB. ESB содержит только коллекцию ABS API — полных возможностей Middleware нет. Некоторые внешние системы (Uzcard/Humo) подключаются напрямую через отдельный SDK.",
+      en:"Client mobile banking app. Connects to ABS via NGINX → ESB. ESB has only ABS API collection — no full Middleware capabilities. Some external systems (Uzcard/Humo) connect directly via separate SDK."
+    },
+    features:{
+      uz:["NGINX → ESB → ABS yo'li","ESB faqat ABS API wrapper",'Uzcard/Humo SDK alohida integratsiya','Push notifikatsiyalar',"SAF/STIP, BPM yo'q"],
+      ru:['Маршрут NGINX → ESB → ABS','ESB — только ABS API wrapper','Отдельная интеграция Uzcard/Humo SDK','Push-уведомления','SAF/STIP, BPM отсутствуют'],
+      en:['Route NGINX → ESB → ABS','ESB is ABS API wrapper only','Uzcard/Humo SDK separate integration','Push notifications','SAF/STIP, BPM absent']
+    }
+  },
+  web:{label:'Web Portal',sub:'Internet banking',x:410,y:20,w:140,h:48,cat:'channel',
+    purpose:{
+      uz:"Internet banking portali. NGINX reverse proxy → ESB orqali ABS bilan ulanadi. ESB faqat ABS API collection — SWIFT, Didox uchun alohida adapter kerak.",
+      ru:"Портал интернет-банкинга. Подключается к ABS через NGINX → ESB. ESB — только коллекция ABS API; для SWIFT, Didox нужны отдельные адаптеры.",
+      en:"Internet banking portal. Connects to ABS via NGINX → ESB. ESB is ABS API collection only — separate adapter needed for SWIFT, Didox."
+    },
+    features:{
+      uz:["NGINX → ESB → ABS yo'li","ESB faqat ABS API wrapper","SWIFT/Didox alohida bog'lanish",'MT940 statement eksport','Server-side SOAP wrappers'],
+      ru:['Маршрут NGINX → ESB → ABS','ESB — только ABS API wrapper','Отдельное подключение SWIFT/Didox','Экспорт выписки MT940','Server-side SOAP wrappers'],
+      en:['Route NGINX → ESB → ABS','ESB is ABS API wrapper only','SWIFT/Didox separate connection','MT940 statement export','Server-side SOAP wrappers']
+    }
+  },
+  atm_ch:{label:'ATM/POS ch.',sub:'ISO 8583',x:620,y:20,w:140,h:48,cat:'channel',
+    purpose:{
+      uz:"ATM va POS terminallari ISO 8583 protokoli bilan to'g'ridan-to'g'ri ABS va Uzcard/Humo switchi bilan ulanadi. Middleware yo'q — ABS off-line bo'lsa to'lov to'xtaydi.",
+      ru:"Банкоматы и POS-терминалы подключаются напрямую к ABS и Uzcard/Humo switch по протоколу ISO 8583. Middleware отсутствует — при отключении ABS платежи останавливаются.",
+      en:"ATMs and POS terminals connect directly to ABS and Uzcard/Humo switch via ISO 8583. No Middleware — if ABS goes offline, payments stop."
+    },
+    features:{
+      uz:['ISO 8583 native','Uzcard/Humo bilan direct switching',"ABS off-line → tranzaksiya rad etiladi","SAF/STIP rejimi yo'q"],
+      ru:['ISO 8583 native','Прямое switching с Uzcard/Humo','ABS offline → транзакция отклонена','Режим SAF/STIP отсутствует'],
+      en:['ISO 8583 native','Direct switching with Uzcard/Humo','ABS offline → transaction rejected','SAF/STIP mode absent']
+    }
+  },
+
+  /* NGINX / ESB — oraliq qatlam */
+  nginx:{label:'NGINX · Reverse Proxy',sub:'',x:232,y:76,w:326,h:20,cat:'proxy',
+    purpose:{
+      uz:"Oddiy reverse proxy — Mobile App va Web Portal so'rovlarini qabul qilib ESB ga yo'naltiradi. SSL termination va basic routing mavjud. WAF, OAuth2, rate limiting, DDoS himoya va monitoring imkoniyatlari yo'q.",
+      ru:"Простой reverse proxy — принимает запросы Mobile App и Web Portal, направляет в ESB. Есть SSL termination и базовая маршрутизация. WAF, OAuth2, rate limiting, защита от DDoS и мониторинг отсутствуют.",
+      en:"Simple reverse proxy — receives Mobile App and Web Portal requests, forwards to ESB. Has SSL termination and basic routing. WAF, OAuth2, rate limiting, DDoS protection and monitoring absent."
+    },
+    features:{
+      uz:["Reverse proxy — request forwarding","SSL/TLS termination","Basic load balancing","WAF, OAuth2, Rate limiting YO'Q","Monitoring / tracing YO'Q"],
+      ru:['Reverse proxy — переадресация запросов','SSL/TLS termination','Базовая балансировка нагрузки','WAF, OAuth2, Rate limiting ОТСУТСТВУЮТ','Monitoring / tracing ОТСУТСТВУЕТ'],
+      en:['Reverse proxy — request forwarding','SSL/TLS termination','Basic load balancing','WAF, OAuth2, Rate limiting ABSENT','Monitoring / tracing ABSENT']
+    }
+  },
+  esb:{label:'ESB',sub:'ABS API collection only',x:232,y:106,w:326,h:54,cat:'esb',
+    purpose:{
+      uz:"Enterprise Service Bus — ichida faqat ABS modullariga mo'ljallangan API collection joylashgan. To'liq Middleware imkoniyatlari (Kafka message queue, BPM/Saga pattern, SAF/STIP offline rejim, DR/Failover, APM monitoring) mavjud emas.",
+      ru:"Enterprise Service Bus — содержит только коллекцию API для модулей ABS. Полные возможности Middleware (Kafka message queue, паттерн BPM/Saga, офлайн-режим SAF/STIP, DR/Failover, APM мониторинг) отсутствуют.",
+      en:"Enterprise Service Bus — contains only ABS module API collection. Full Middleware capabilities (Kafka message queue, BPM/Saga pattern, SAF/STIP offline mode, DR/Failover, APM monitoring) are absent."
+    },
+    features:{
+      uz:["ABS REST/SOAP API collection","Basic request routing","Kafka / Message Queue YO'Q","BPM / Saga pattern YO'Q","SAF/STIP (offline rejim) YO'Q","DR/Failover YO'Q","APM monitoring YO'Q"],
+      ru:['ABS REST/SOAP API collection','Базовая маршрутизация запросов','Kafka / Message Queue ОТСУТСТВУЕТ','BPM / Saga pattern ОТСУТСТВУЕТ','SAF/STIP (офлайн-режим) ОТСУТСТВУЕТ','DR/Failover ОТСУТСТВУЕТ','APM monitoring ОТСУТСТВУЕТ'],
+      en:['ABS REST/SOAP API collection','Basic request routing','Kafka / Message Queue ABSENT','BPM / Saga pattern ABSENT','SAF/STIP (offline mode) ABSENT','DR/Failover ABSENT','APM monitoring ABSENT']
+    }
+  },
+
+  /* INTERNAL — inside ABS */
+  crm:{label:'CRM',sub:'',cat:'internal',
+    purpose:{uz:"Mijoz munosabatlari moduli — ABS ichida joylashgan. KYC, lead va complaint workflow.",ru:"Модуль управления клиентскими отношениями — расположен внутри ABS. KYC, lead и complaint workflow.",en:"Customer relationship module — located inside ABS. KYC, lead and complaint workflow."},
+    features:{uz:['Lead funnel','KYC workflow','360° mijoz profili','Branch tarmog\'i'],ru:['Воронка лидов','KYC workflow','Профиль клиента 360°','Сеть филиалов'],en:['Lead funnel','KYC workflow','360° client profile','Branch network']},
+    inside:'ABS · iABS/NCI'
+  },
+  dwh:{label:'DWH & BI',sub:'OLAP · Reports',cat:'internal',
+    purpose:{uz:"Tarixiy ma'lumotlar va boshqaruv hisobotlari. ABS DB ustidan to'g'ridan-to'g'ri ETL ishlaydi.",ru:"Исторические данные и управленческие отчёты. ETL работает напрямую поверх базы ABS.",en:"Historical data and management reports. ETL runs directly on top of ABS DB."},
+    features:{uz:['Kunlik ETL ABS DB dan','CBU XBRL eksport','OLAP cube','Manual report builder'],ru:['Ежедневный ETL из ABS DB','Экспорт CBU XBRL','OLAP cube','Ручной построитель отчётов'],en:['Daily ETL from ABS DB','CBU XBRL export','OLAP cube','Manual report builder']},
+    inside:'ABS · iABS/NCI'
+  },
+  card_mgmt:{label:'Card Mgmt',sub:'Uzcard · Humo · Visa',cat:'internal',
+    purpose:{uz:"Kartalarni boshqarish moduli — chiqarish, bloklash, limitlar. Uzcard/Humo bilan direct integration.",ru:"Модуль управления картами — выпуск, блокировка, лимиты. Прямая интеграция с Uzcard/Humo.",en:"Card management module — issuance, blocking, limits. Direct integration with Uzcard/Humo."},
+    features:{uz:['Karta hayoti boshqaruvi','PIN management','EMV personalizatsiya','3D Secure ABS ichida'],ru:['Управление жизненным циклом карты','PIN management','EMV персонализация','3D Secure внутри ABS'],en:['Card lifecycle management','PIN management','EMV personalization','3D Secure inside ABS']},
+    inside:'ABS · iABS/NCI'
+  },
+  cash_mgmt:{label:'Cash Mgmt',sub:'Multicurrency',cat:'internal',
+    purpose:{uz:"Naqd pul va kassir operatsiyalari moduli — ABS yadrosida.",ru:"Модуль кассовых и наличных операций — в ядре ABS.",en:"Cash and teller operations module — in ABS core."},
+    features:{uz:['Multi-currency: UZS, USD, EUR','Teller / kassir tizimi','Vault management','FX kurs boshqaruvi'],ru:['Мультивалютность: UZS, USD, EUR','Teller / кассирская система','Vault management','Управление FX-курсами'],en:['Multi-currency: UZS, USD, EUR','Teller system','Vault management','FX rate management']},
+    inside:'ABS · iABS/NCI'
+  },
+  billing:{label:'Billing',sub:'Prepaid · P2P',cat:'internal',
+    purpose:{uz:"To'lov va billing moduli — Paynet/Billz bilan direct integration.",ru:"Модуль платежей и биллинга — прямая интеграция с Paynet/Billz.",en:"Payment and billing module — direct integration with Paynet/Billz."},
+    features:{uz:["Kommunal to'lovlar","P2P o'tkazma",'Prepaid karta top-up','QR payment'],ru:['Коммунальные платежи','P2P переводы','Пополнение prepaid карты','QR payment'],en:['Utility payments','P2P transfers','Prepaid card top-up','QR payment']},
+    inside:'ABS · iABS/NCI'
+  },
+  intl_transfer:{label:"Int'l Transfer",sub:'SWIFT · RIA',cat:'internal',
+    purpose:{uz:"Xalqaro o'tkazmalar moduli — SWIFT bilan to'g'ridan-to'g'ri ulanadi.",ru:"Модуль международных переводов — прямое подключение к SWIFT.",en:"International transfers module — direct connection to SWIFT."},
+    features:{uz:['SWIFT MT103/MT202','RIA / Western Union','Correspondent banking','FATCA/CRS'],ru:['SWIFT MT103/MT202','RIA / Western Union','Корреспондентский банкинг','FATCA/CRS'],en:['SWIFT MT103/MT202','RIA / Western Union','Correspondent banking','FATCA/CRS']},
+    inside:'ABS · iABS/NCI'
+  },
+
+  /* COMPLIANCE — inside ABS */
+  aml:{label:'AML / CFT',sub:'FATF · Sanctions',cat:'compliance',
+    purpose:{uz:"Pul yuvishga qarshi nazorat moduli — ABS ichida batch rejimida ishlaydi (real-time emas).",ru:"Модуль AML — работает в пакетном режиме внутри ABS (не в реальном времени).",en:"AML monitoring module — runs in batch mode inside ABS (not real-time)."},
+    features:{uz:['Kunlik batch screening','OFAC/UN sanctions list','PEP check','SAR ekport — manual'],ru:['Ежедневная пакетная проверка','Санкционные списки OFAC/ООН','Проверка ПЭЛ','Экспорт SAR — вручную'],en:['Daily batch screening','OFAC/UN sanctions list','PEP check','SAR export — manual']},
+    inside:'ABS · iABS/NCI'
+  },
+  sharia_core:{label:'Sharia Core',sub:'Manual rules',cat:'compliance',
+    purpose:{uz:"Sharia muvofiqlik nazorati — ABS ichida manual qoidalar bilan, post-transaction audit.",ru:"Контроль соответствия шариату — ручные правила внутри ABS, пост-транзакционный аудит.",en:"Sharia compliance control — manual rules inside ABS, post-transaction audit."},
+    features:{uz:['Post-transaction audit','Manual AAOIFI checklist','Murabaha/Ijara templates','Sharia board oylik audit'],ru:['Постранзакционный аудит','Ручной чеклист AAOIFI','Шаблоны Мурабаха/Иджара','Ежемесячный аудит Sharia board'],en:['Post-transaction audit','Manual AAOIFI checklist','Murabaha/Ijara templates','Monthly Sharia board audit']},
+    inside:'ABS · iABS/NCI'
+  },
+  atm_mgmt:{label:'ATM/POS Mgmt',sub:'Health · Monitor',cat:'compliance',
+    purpose:{uz:"Terminallarni monitoring qiluvchi modul — ABS ichidagi loglar asosida ishlaydi.",ru:"Модуль мониторинга терминалов — работает на основе логов внутри ABS.",en:"Terminal monitoring module — works based on logs inside ABS."},
+    features:{uz:['Terminal uptime','Cash level monitoring','Manual ticket','SLA report — kunlik'],ru:['Uptime терминала','Мониторинг уровня наличных','Ручная заявка','Отчёт SLA — ежедневный'],en:['Terminal uptime','Cash level monitoring','Manual ticket','SLA report — daily']},
+    inside:'ABS · iABS/NCI'
+  },
+  incident:{label:'Incident',sub:'ITIL · SLA',cat:'compliance',
+    purpose:{uz:"IT incident boshqaruvi — ABS log va e-mail asosida.",ru:"Управление IT-инцидентами — на основе логов ABS и электронной почты.",en:"IT incident management — based on ABS logs and email."},
+    features:{uz:['Email-based ticket','Manual escalation','Kunlik SLA report','PIR — Word fayl'],ru:['Тикет на основе email','Ручная эскалация','Ежедневный отчёт SLA','PIR — файл Word'],en:['Email-based ticket','Manual escalation','Daily SLA report','PIR — Word file']},
+    inside:'ABS · iABS/NCI'
+  },
+
+  /* EXTERNAL — right */
+  uzcard:{label:'Uzcard / Humo',sub:'National switch',x:980,y:164,w:180,h:54,cat:'external',
+    purpose:{uz:"Milliy to'lov tizimlari. Mobile, ATM, Card Mgmt — har biri alohida konnektor bilan bog'lanadi.",ru:"Национальные платёжные системы. Mobile, ATM, Card Mgmt — каждый подключается отдельным коннектором.",en:"National payment systems. Mobile, ATM, Card Mgmt — each connects with a separate connector."},
+    features:{uz:['Real-time authorization','Settlement T+0','Dispute / chargeback','3 ta alohida integratsiya'],ru:['Авторизация в реальном времени','Расчёт T+0','Dispute / chargeback','3 отдельные интеграции'],en:['Real-time authorization','Settlement T+0','Dispute / chargeback','3 separate integrations']}
+  },
+  swift:{label:'SWIFT / Remit.',sub:'MT103 · RIA',x:980,y:236,w:180,h:54,cat:'external',
+    purpose:{uz:"Xalqaro o'tkazma tarmog'i. Web Portal va Int'l Transfer moduli bilan alohida ulanish.",ru:"Сеть международных переводов. Web Portal и модуль Int'l Transfer подключаются отдельно.",en:"International transfer network. Web Portal and Int'l Transfer module connect separately."},
+    features:{uz:['SWIFT BIC','MT103 / MT202','RIA Money Transfer API','Sanctions screening manual'],ru:['SWIFT BIC','MT103 / MT202','API RIA Money Transfer','Ручная проверка санкций'],en:['SWIFT BIC','MT103 / MT202','RIA Money Transfer API','Sanctions screening manual']}
+  },
+  cbu:{label:'CBU Regulator',sub:'CERBER · XBRL',x:980,y:308,w:180,h:54,cat:'external',
+    purpose:{uz:"Markaziy Bank hisobotlari. DWH dan kunlik file upload orqali.",ru:"Отчётность Центрального банка. Ежедневная загрузка файлов из DWH.",en:"Central Bank reporting. Daily file upload from DWH."},
+    features:{uz:['CERBER reporting','XBRL eksport','Law 1126','Manual file upload — kunlik'],ru:['CERBER reporting','Экспорт XBRL','Закон 1126','Ручная загрузка файлов — ежедневно'],en:['CERBER reporting','XBRL export','Law 1126','Manual file upload — daily']}
+  },
+  paynet:{label:'Paynet / Billz',sub:'Bill payment',x:980,y:380,w:180,h:54,cat:'external',
+    purpose:{uz:"Kommunal to'lov aggregatori. Billing moduli va Mobile App — ikkita alohida ulanish.",ru:"Агрегатор коммунальных платежей. Модуль Billing и Mobile App подключаются отдельно.",en:"Utility payment aggregator. Billing module and Mobile App connect separately."},
+    features:{uz:['200+ provayder','Real-time confirmation','REST + SOAP','Bevosita Mobile App va ABS ulanishi'],ru:['200+ провайдеров','Подтверждение в реальном времени','REST + SOAP','Прямое подключение Mobile App и ABS'],en:['200+ providers','Real-time confirmation','REST + SOAP','Direct Mobile App and ABS connection']}
+  },
+  didox:{label:'Didox / Soliq.uz',sub:'E-invoice · Tax',x:980,y:452,w:180,h:54,cat:'external',
+    purpose:{uz:"E-faktura va soliq tizimi. Web Portal va Int'l Transfer alohida ulanadi.",ru:"Система электронных счетов-фактур и налогов. Web Portal и Int'l Transfer подключаются отдельно.",en:"E-invoice and tax system. Web Portal and Int'l Transfer connect separately."},
+    features:{uz:['E-invoice (Murabaha)','Soliq.uz API','E-imzo PKCS#7','VAT calc'],ru:['E-invoice (Мурабаха)','API Soliq.uz','E-imzo PKCS#7','Расчёт НДС'],en:['E-invoice (Murabaha)','Soliq.uz API','E-imzo PKCS#7','VAT calc']}
+  },
+  tifc:{label:'TIFC / E-imzo',sub:'0% VAT · E-sign',x:980,y:524,w:180,h:54,cat:'external',
+    purpose:{uz:"TIFC rezidentligi va E-imzo. Corp API va ABS bilan alohida bog'lanish.",ru:"Резидентство TIFC и E-imzo. Corp API и ABS подключаются отдельно.",en:"TIFC residency and E-imzo. Corp API and ABS connect separately."},
+    features:{uz:['Decree 48 · TIFC','0% VAT','E-imzo PKCS#7','MLETR flow'],ru:['Декрет 48 · TIFC','0% НДС','E-imzo PKCS#7','MLETR flow'],en:['Decree 48 · TIFC','0% VAT','E-imzo PKCS#7','MLETR flow']}
+  }
+};
+
+const COLORS = {
+  channel:    {bg:'#09162A',br:'#2E78C7',text:'#6BA8E0',get meta(){return T[L].catChannel},brCol:'rgba(46,120,199,.4)',bgCol:'rgba(46,120,199,.08)'},
+  proxy:      {bg:'rgba(46,120,199,.04)',br:'rgba(46,120,199,.38)',text:'#6BA8E0',meta:'Reverse Proxy',brCol:'rgba(46,120,199,.5)',bgCol:'rgba(46,120,199,.06)'},
+  esb:        {bg:'rgba(158,98,16,.07)',br:'rgba(158,98,16,.55)',text:'#D4944A',meta:'ESB',brCol:'rgba(158,98,16,.5)',bgCol:'rgba(158,98,16,.09)'},
+  internal:   {bg:'#071F14',br:'#16845E',text:'#4DB893',get meta(){return T[L].catAbs},brCol:'rgba(22,132,94,.4)',bgCol:'rgba(22,132,94,.08)'},
+  external:   {bg:'#1A1200',br:'#9E6210',text:'#D4944A',get meta(){return T[L].catExternal},brCol:'rgba(158,98,16,.4)',bgCol:'rgba(158,98,16,.08)'},
+  compliance: {bg:'#180606',br:'#8B2020',text:'#D06060',get meta(){return T[L].catAbs},brCol:'rgba(139,32,32,.4)',bgCol:'rgba(139,32,32,.08)'}
+};
+
+/* ════════════════════════════════════════════════════
+   BUILD
+════════════════════════════════════════════════════ */
+const canvas = document.getElementById('canvas');
+const svg = document.getElementById('svg-lines');
+
+function buildNodes(){
+  Object.entries(NODES).forEach(([id,d])=>{
+    if(d.cat==='internal'||d.cat==='compliance') return;
+    if(id==='nginx'||id==='esb') return; // static HTML elements
+    const c = COLORS[d.cat];
+    const el = document.createElement('div');
+    el.className = 'node';
+    el.id = 'node-'+id;
+    el.dataset.id = id;
+    el.dataset.cat = d.cat;
+    el.style.cssText = `left:${d.x}px;top:${d.y}px;width:${d.w}px;height:${d.h}px;background:${c.bg};border-color:${c.br}`;
+    el.innerHTML = `<div class="n-label">${d.label}</div><div class="n-sub" style="color:${c.text}">${d.sub}</div>`;
+    el.addEventListener('click',()=>openPanel(id));
+    canvas.appendChild(el);
+  });
+  document.getElementById('node-nginx').addEventListener('click',()=>openPanel('nginx'));
+  document.getElementById('node-esb').addEventListener('click',()=>openPanel('esb'));
+  // ABS internal modules
+  const intGrid = document.getElementById('intGrid');
+  ['crm','card_mgmt','cash_mgmt','billing','intl_transfer'].forEach(id=>{
+    const d = NODES[id];
+    const el = document.createElement('div');
+    el.className = 'abs-card abs-card-int';
+    el.dataset.id = id;
+    el.innerHTML = `<div class="abs-card-label">${d.label}</div><div class="abs-card-sub">${d.sub}</div>`;
+    el.addEventListener('click',()=>openPanel(id));
+    intGrid.appendChild(el);
+  });
+  // pad to 4 cols × 2 rows
+  const intGridSpacer = document.createElement('div');
+  intGrid.style.gridTemplateColumns = 'repeat(3,1fr)';
+
+  const comGrid = document.getElementById('comGrid');
+  ['aml','atm_mgmt','incident'].forEach(id=>{
+    const d = NODES[id];
+    const el = document.createElement('div');
+    el.className = 'abs-card abs-card-com';
+    el.dataset.id = id;
+    el.innerHTML = `<div class="abs-card-label">${d.label}</div><div class="abs-card-sub">${d.sub}</div>`;
+    el.addEventListener('click',()=>openPanel(id));
+    comGrid.appendChild(el);
+  });
+}
+
+/* SVG arrowheads */
+function setupDefs(){
+  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+  defs.innerHTML = `
+    <marker id="arr-blue" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M1,1 L7,4 L1,7" fill="none" stroke="#2E78C7" stroke-width="1.5" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M1,1 L7,4 L1,7" fill="none" stroke="#9E6210" stroke-width="1.5" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M1,1 L7,4 L1,7" fill="none" stroke="#16845E" stroke-width="1.5" stroke-linejoin="round"/>
+    </marker>
+    `;
+  svg.appendChild(defs);
+}
+
+function addLine(d, col, w=1.5, marker='', dash=false){
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d', d);
+  p.setAttribute('stroke', col);
+  p.setAttribute('stroke-width', String(w));
+  p.setAttribute('fill', 'none');
+  p.setAttribute('stroke-opacity', '.85');
+  if (marker) p.setAttribute('marker-end', `url(#${marker})`);
+  if (dash) p.setAttribute('stroke-dasharray', '4 3');
+  svg.appendChild(p);
+  return p;
+}
+
+function buildConnectors(){
+  const absTop   = 170;
+  const absRight = 880;
+  const blue     = '#2E78C7';
+  const green    = '#16845E';
+  const amber    = '#9E6210';
+
+  // Channel bottoms: y:20 + h:48 = 68
+  const mobileCx   = 310; // x:240 + 70
+  const webCx      = 480; // x:410 + 70
+  const atmCx      = 690; // x:620 + 70
+  const chanBottom = 68;
+
+  // nginx: top:76, bottom:96, center-x:395
+  const nginxTop    = 76;
+  const nginxBottom = 96;
+  const nginxCx     = 395;
+
+  // ESB: top:106, bottom:160
+  const esbTop    = 106;
+  const esbBottom = 160;
+
+  // External y near-top (y+14) and mid (y+27)
+  const yBlue  = [178, 250, 322, 394, 466, 538];
+  const yAmber = [191, 263, 335, 407, 479, 551];
+
+  // === 1) Mobile / Web → nginx top ===
+  addLine(`M${mobileCx},${chanBottom} L${mobileCx},${nginxTop}`, blue, 2);
+  addLine(`M${webCx},${chanBottom} L${webCx},${nginxTop}`, blue, 2);
+
+  // === 2) nginx bottom → ESB top ===
+  addLine(`M${nginxCx},${nginxBottom} L${nginxCx},${esbTop}`, blue, 2, 'arr-blue');
+
+  // === 3) ESB → ABS (amber dashed — cheklangan) ===
+  addLine(`M${nginxCx},${esbBottom} L${nginxCx},${absTop}`, amber, 2, 'arr-amber', true);
+
+  // === 4) ATM → ABS (to'g'ridan-to'g'ri, nginx/ESB yo'q) ===
+  addLine(`M${atmCx},${chanBottom} L${atmCx},${absTop}`, blue, 2.4, 'arr-blue');
+
+  // === 5) Mobile → External spine (Uzcard SDK va boshqa to'g'ridan-to'g'ri) ===
+  const mSpineX = 888;
+  addLine(`M${mobileCx},${chanBottom} L${mSpineX},${chanBottom} L${mSpineX},${yBlue[5]}`, blue, 1.6);
+  yBlue.forEach(ty => addLine(`M${mSpineX},${ty} L980,${ty}`, blue, 1.9, 'arr-blue'));
+
+  // === 6) ABS → External ===
+  yAmber.forEach(ty => {
+    addLine(`M${absRight},${ty} L980,${ty}`, green, 2.4, 'arr-green');
+  });
+}
+
+function buildLegend(){
+  const items = [
+    {label:T[L].filterChannel,  color:'#2E78C7'},
+    {label:T[L].filterAbs,      color:'#16845E'},
+    {label:T[L].catAbs,         color:'#8B2020'},
+    {label:T[L].filterExternal, color:'#9E6210'}
+  ];
+  const leg = document.getElementById('legend');
+  leg.innerHTML = items.map(it=>
+    `<div class="leg-item">
+       <div class="leg-dot" style="border-color:${it.color};background:${it.color}33"></div>
+       <span>${it.label}</span>
+     </div>`).join('');
+}
+
+/* SCALE */
+function scaleCanvas(){
+  const wrap = document.getElementById('canvasWrap');
+  const sx = wrap.clientWidth / 1300;
+  const sy = wrap.clientHeight / 640;
+  const sc = Math.min(sx, sy) * 0.97;
+  canvas.style.transform = `scale(${sc})`;
+}
+
+/* PANEL */
+function openPanel(id){
+  const d = NODES[id];
+  if (!d) return;
+  const c = COLORS[d.cat];
+  document.getElementById('pName').textContent = d.label;
+  const pc = document.getElementById('pCat');
+  pc.textContent = c.meta;
+  pc.style.color = c.text;
+  pc.style.borderColor = c.brCol;
+  pc.style.background = c.bgCol;
+
+  const body = document.getElementById('panelBody');
+  let html = '';
+  if (d.inside){
+    html += `<div class="warn-callout">📦 Joylashuvi: <b>${d.inside}</b> — alohida microservice emas, ABS yadrosining bir qismi.</div>`;
+  } else if (d.cat==='esb'){
+    html += `<div class="warn-callout">⚠ ESB ichida faqat <b>ABS API collection</b> mavjud — Kafka, BPM, SAF/STIP, DR/Failover kabi to'liq Middleware imkoniyatlari yo'q.</div>`;
+  } else if (d.cat==='proxy'){
+    html += `<div class="warn-callout" style="background:rgba(46,120,199,.08);border-color:rgba(46,120,199,.3);color:#6BA8E0">ℹ Oddiy NGINX reverse proxy — WAF, OAuth2, rate limiting va monitoring imkoniyatlari yo'q.</div>`;
+  } else if (d.cat==='external'){
+    html += `<div class="warn-callout">⚠ Joriy holatda bu tashqi tizimga <b>kanal va ABS</b> alohida (point-to-point) ulanadi — Middleware orqali umumlashtirilmagan.</div>`;
+  } else if (d.cat==='channel'){
+    html += `<div class="warn-callout">⚠ Bu kanal ABS ga <b>NGINX → ESB</b> orqali ulanadi. ESB faqat ABS API collection — to'liq Middleware imkoniyatlari yo'q.</div>`;
+  }
+  html += `<div class="prow"><div class="prow-lbl">${T[L].panelPurpose}</div><div class="prow-val">${t(d.purpose)}</div></div>`;
+  html += `<div class="divider"></div>`;
+  html += `<div class="prow"><div class="prow-lbl">${T[L].panelFeatures}</div><ul class="feat-list">${t(d.features).map(f=>`<li>${f}</li>`).join('')}</ul></div>`;
+  document.getElementById('panelBody').innerHTML = html;
+  document.getElementById('panel').classList.add('open');
+}
+function closePanel(){
+  document.getElementById('panel').classList.remove('open');
+}
+
+/* FILTER */
+function setFilter(btn, f){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const all = document.querySelectorAll('.node');
+  all.forEach(n=>{
+    const cat = n.dataset.cat;
+    let show = f==='all' || cat===f;
+    if (f==='channel') show = show || cat==='proxy' || cat==='esb';
+    n.classList.toggle('dimmed', !show);
+  });
+  // ABS hub dim
+  const hub = document.getElementById('absHub');
+  if (f==='all' || f==='abs'){
+    hub.style.opacity = '1';
+  } else {
+    hub.style.opacity = '.25';
+  }
+  // SVG lines dim
+  svg.style.opacity = (f==='all') ? '.85' : '.18';
+}
+
+/* ABS vendor switch */
+function switchVendor(v){
+  document.querySelectorAll('.abs-vendor-tab').forEach(t=>t.classList.toggle('active', t.dataset.vendor===v));
+  // open the ABS panel
+  const info = ABS_INFO[v];
+  document.getElementById('pName').textContent = info.name + ' (ABS)';
+  const pc = document.getElementById('pCat');
+  pc.textContent = 'Core Banking ABS';
+  pc.style.color = '#4DB893';
+  pc.style.borderColor = 'rgba(22,132,94,.4)';
+  pc.style.background = 'rgba(22,132,94,.08)';
+  const html = `
+    <div class="warn-callout" style="background:rgba(22,132,94,.08);border-color:rgba(22,132,94,.3);color:#4DB893">
+      📦 Bu joriy arxitekturadagi <b>yagona markaziy tizim</b>. Barcha ichki modullar (CRM, DWH, Card Mgmt va h.k.) va compliance modullari (AML, Sharia Core va h.k.) shu yadro ichida joylashgan.
+    </div>
+    <div class="prow"><div class="prow-lbl">Vendor</div><div class="prow-val mono">${info.vendor}</div></div>
+    <div class="divider"></div>
+    <div class="prow"><div class="prow-lbl">Tavsif</div><div class="prow-val">${info.desc}</div></div>
+    <div class="divider"></div>
+    <div class="prow"><div class="prow-lbl">Modullar miqyosi</div><div class="prow-val mono">${info.modules}</div></div>
+    <div class="divider"></div>
+    <div class="prow"><div class="prow-lbl">Asosiy xavf</div>
+      <div class="warn-callout">${info.risk}</div>
+    </div>
+  `;
+  document.getElementById('panelBody').innerHTML = html;
+  document.getElementById('panel').classList.add('open');
+}
+
+/* ABS hub click → open ABS panel */
+document.getElementById('absHub').addEventListener('click', (e)=>{
+  // ignore inner cards / tabs
+  if (e.target.closest('.abs-card')) return;
+  if (e.target.closest('.abs-vendor-tab')) return;
+  const active = document.querySelector('.abs-vendor-tab.active');
+  switchVendor(active ? active.dataset.vendor : 'iABS');
+});
+
+function applyUI() {
+  const fa = document.getElementById('fb-all');      if (fa) fa.textContent = T[L].filterAll;
+  const fc = document.getElementById('fb-channel');  if (fc) fc.textContent = T[L].filterChannel;
+  const fab = document.getElementById('fb-abs');     if (fab) fab.textContent = T[L].filterAbs;
+  const fe = document.getElementById('fb-external'); if (fe) fe.textContent = T[L].filterExternal;
+  const fb = document.getElementById('footer-by');   if (fb) fb.textContent = T[L].footerBy;
+  document.title = T[L].pageTitle;
+  const tobe = document.querySelector('.logo-badge-btn');
+  if (tobe) tobe.textContent = T[L].btnTobe;
+  document.querySelectorAll('.lang-sw button').forEach(b => b.classList.toggle('active', b.dataset.lang === L));
+}
+
+/* INIT */
+setupDefs();
+buildNodes();
+buildConnectors();
+buildLegend();
+applyUI();
+scaleCanvas();
+window.addEventListener('resize', scaleCanvas);
+</script>
+
+<footer class="site-footer">
+  <span class="footer-by" id="footer-by">Zokirov Bobur tomonidan</span>
+  <span class="footer-sep">·</span>
+  <a href="https://t.me/zokirovbobur" target="_blank" class="footer-link footer-tg">Telegram</a>
+  <span class="footer-sep">·</span>
+  <a href="https://www.linkedin.com/in/zokirovbobur/" target="_blank" class="footer-link footer-li">LinkedIn</a>
+</footer>
+
+</body>
+</html>

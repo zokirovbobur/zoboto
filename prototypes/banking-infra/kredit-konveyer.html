@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trastbank — Кредитный конвейер</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ДИЗАЙН-СИСТЕМА — Trastbank Кредитный конвейер (MVP прототип)
+   Палитра: тёмно-синий navy + много белого, классический банкинг
+   ============================================================ */
+:root{
+  --navy:#1e3a8a; --navy-700:#1b327a; --navy-800:#16285f; --navy-900:#101d44;
+  --navy-50:#eef2fb; --navy-100:#dbe3f6;
+  --bg:#f4f6fb; --surface:#ffffff; --surface-2:#fafbfe;
+  --border:#e3e8f1; --border-strong:#cfd6e4;
+  --ink:#0f1729; --ink-2:#33415c; --muted:#67748c; --muted-2:#94a0b5;
+  --ok:#0f7a52; --ok-bg:#e6f4ee; --ok-bd:#bfe2d2;
+  --warn:#b45309; --warn-bg:#fcf2e3; --warn-bd:#f0dcb8;
+  --danger:#be2f2f; --danger-bg:#fbeaea; --danger-bd:#f0c9c9;
+  --info:#1e57c4; --info-bg:#e9f0fc; --info-bd:#c6d8f6;
+  --neutral-bg:#eef1f6; --neutral-bd:#dde3ec;
+  --r-lg:14px; --r:10px; --r-sm:8px; --r-pill:999px;
+  --sh-sm:0 1px 2px rgba(16,29,68,.06);
+  --sh:0 2px 8px rgba(16,29,68,.07),0 1px 2px rgba(16,29,68,.05);
+  --sh-md:0 8px 28px rgba(16,29,68,.12);
+  --sh-lg:0 20px 60px rgba(16,29,68,.22);
+  --sidebar-w:248px; --topbar-h:60px;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:"Golos Text",system-ui,-apple-system,Segoe UI,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:14px; line-height:1.45; -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:var(--mono);font-feature-settings:"tnum" 1}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:inherit;font-size:14px}
+::selection{background:var(--navy-100)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-thumb{background:#cdd5e3;border:3px solid var(--bg);border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:#b6c0d3}
+
+/* ---------- LOGIN ---------- */
+#login{position:fixed;inset:0;display:flex;background:var(--bg)}
+.login-art{flex:1;background:
+   radial-gradient(900px 500px at 80% -10%,rgba(255,255,255,.10),transparent 60%),
+   radial-gradient(700px 600px at -10% 110%,rgba(255,255,255,.07),transparent 60%),
+   linear-gradient(155deg,var(--navy) 0%,var(--navy-800) 55%,var(--navy-900) 100%);
+   color:#fff;padding:56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.login-art::after{content:"";position:absolute;inset:0;opacity:.05;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:38px 38px}
+.login-art > *{position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:13px;font-weight:700;font-size:19px;letter-spacing:-.2px}
+.brand .glyph{width:38px;height:38px;border-radius:10px;background:#fff;color:var(--navy);display:grid;place-items:center;font-weight:800;font-size:20px;box-shadow:var(--sh)}
+.login-art h1{font-size:46px;line-height:1.05;font-weight:800;letter-spacing:-1.2px;max-width:13ch;margin-bottom:18px}
+.login-art p{font-size:16px;color:rgba(255,255,255,.78);max-width:42ch;line-height:1.55}
+.flow-mini{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.flow-mini span{font-size:12.5px;padding:6px 12px;border-radius:var(--r-pill);background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.9)}
+.login-foot{font-size:13px;color:rgba(255,255,255,.55)}
+.login-panel{width:480px;max-width:46vw;display:flex;align-items:center;justify-content:center;padding:40px}
+.login-card{width:100%;max-width:360px}
+.login-card .eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin-bottom:8px}
+.login-card h2{font-size:25px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px}
+.login-card .sub{color:var(--muted);margin-bottom:28px;font-size:14px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:7px}
+.field input,.field select{width:100%;padding:11px 13px;border:1px solid var(--border-strong);border-radius:var(--r-sm);background:#fff;color:var(--ink);transition:.15s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px var(--navy-50)}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:6px}
+.role-opt{border:1px solid var(--border-strong);border-radius:var(--r-sm);padding:11px 12px;display:flex;flex-direction:column;gap:2px;text-align:left;transition:.13s;background:#fff}
+.role-opt:hover{border-color:var(--navy-100);background:var(--navy-50)}
+.role-opt.on{border-color:var(--navy);background:var(--navy-50);box-shadow:0 0 0 2px var(--navy-50)}
+.role-opt .rn{font-weight:600;font-size:13px}
+.role-opt .rd{font-size:11.5px;color:var(--muted)}
+.btn-primary{width:100%;padding:12px;background:var(--navy);color:#fff;border-radius:var(--r-sm);font-weight:600;font-size:14.5px;transition:.15s;box-shadow:var(--sh-sm)}
+.btn-primary:hover{background:var(--navy-700)}
+.btn-primary:active{transform:translateY(1px)}
+
+/* ---------- APP SHELL ---------- */
+#app{display:none;min-height:100vh}
+.app-shell{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
+.sidebar{background:var(--navy-900);color:#fff;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.sb-brand{display:flex;align-items:center;gap:11px;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08);font-weight:700;font-size:16px}
+.sb-brand .glyph{width:32px;height:32px;border-radius:9px;background:#fff;color:var(--navy-900);display:grid;place-items:center;font-weight:800;font-size:17px}
+.sb-brand small{display:block;font-size:10.5px;font-weight:500;color:rgba(255,255,255,.5);letter-spacing:.04em}
+.sb-nav{flex:1;overflow-y:auto;padding:14px 12px}
+.sb-section{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.38);padding:14px 12px 7px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:var(--r-sm);color:rgba(255,255,255,.74);font-size:13.5px;font-weight:500;width:100%;text-align:left;transition:.13s;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-item.on{background:var(--navy);color:#fff;font-weight:600}
+.nav-item .ic{width:18px;height:18px;flex-shrink:0;opacity:.9}
+.nav-item .badge-num{margin-left:auto;font-size:11px;font-weight:600;background:rgba(255,255,255,.14);padding:1px 7px;border-radius:var(--r-pill);min-width:20px;text-align:center}
+.nav-item.on .badge-num{background:rgba(255,255,255,.22)}
+.sb-foot{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
+.sb-user{display:flex;align-items:center;gap:11px;padding:8px;border-radius:var(--r-sm)}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--navy);display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
+.sb-user .nm{font-size:13px;font-weight:600;line-height:1.2}
+.sb-user .rl{font-size:11.5px;color:rgba(255,255,255,.55)}
+
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{height:var(--topbar-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 26px;position:sticky;top:0;z-index:20}
+.crumbs{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;min-width:0}
+.crumbs b{color:var(--ink);font-weight:600}
+.crumbs .sep{color:var(--border-strong)}
+.topbar .spacer{flex:1}
+.top-search{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-pill);padding:7px 14px;width:280px}
+.top-search input{border:none;background:none;outline:none;width:100%;font-size:13px}
+.icon-btn{width:38px;height:38px;border-radius:var(--r-sm);display:grid;place-items:center;color:var(--muted);position:relative}
+.icon-btn:hover{background:var(--bg);color:var(--ink)}
+.icon-btn .dot{position:absolute;top:8px;right:9px;width:7px;height:7px;background:var(--danger);border-radius:50%;border:2px solid var(--surface)}
+.role-switch{position:relative}
+.role-switch-btn{display:flex;align-items:center;gap:10px;padding:5px 8px 5px 6px;border:1px solid var(--border);border-radius:var(--r-pill);background:#fff;transition:.13s}
+.role-switch-btn:hover{border-color:var(--border-strong);background:var(--surface-2)}
+.role-switch-btn .nm{font-size:13px;font-weight:600;line-height:1.15;text-align:left}
+.role-switch-btn .rl{font-size:11px;color:var(--muted);text-align:left}
+.role-menu{position:absolute;right:0;top:48px;background:#fff;border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh-md);width:268px;padding:7px;z-index:60;display:none}
+.role-menu.open{display:block}
+.role-menu .mh{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 10px 5px}
+.role-menu button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border-radius:var(--r-sm);text-align:left;transition:.1s}
+.role-menu button:hover{background:var(--bg)}
+.role-menu button.on{background:var(--navy-50)}
+.role-menu .nm{font-size:13px;font-weight:600}
+.role-menu .rl{font-size:11.5px;color:var(--muted)}
+.role-menu .divider{height:1px;background:var(--border);margin:6px 4px}
+.role-menu .danger{color:var(--danger)}
+
+.content{flex:1;overflow-y:auto;padding:26px 30px 60px}
+.page-head{display:flex;align-items:flex-start;gap:16px;margin-bottom:22px}
+.page-head h1{font-size:24px;font-weight:700;letter-spacing:-.5px}
+.page-head .ph-sub{color:var(--muted);font-size:13.5px;margin-top:3px}
+.page-head .spacer{flex:1}
+
+/* ---------- BUTTONS ---------- */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:var(--r-sm);font-size:13.5px;font-weight:600;transition:.14s;border:1px solid transparent;white-space:nowrap}
+.btn .ic{width:16px;height:16px}
+.btn-nav{background:var(--navy);color:#fff;box-shadow:var(--sh-sm)}
+.btn-nav:hover{background:var(--navy-700)}
+.btn-ghost{background:#fff;color:var(--ink-2);border-color:var(--border-strong)}
+.btn-ghost:hover{background:var(--bg);border-color:var(--muted-2)}
+.btn-ok{background:var(--ok);color:#fff}.btn-ok:hover{filter:brightness(1.06)}
+.btn-danger{background:#fff;color:var(--danger);border-color:var(--danger-bd)}.btn-danger:hover{background:var(--danger-bg)}
+.btn-warn{background:#fff;color:var(--warn);border-color:var(--warn-bd)}.btn-warn:hover{background:var(--warn-bg)}
+.btn-sm{padding:6px 11px;font-size:12.5px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ---------- BADGES ---------- */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:var(--r-pill);border:1px solid transparent;white-space:nowrap;line-height:1.5}
+.badge .bd{width:6px;height:6px;border-radius:50%}
+.b-neutral{background:var(--neutral-bg);color:var(--ink-2);border-color:var(--neutral-bd)}
+.b-info{background:var(--info-bg);color:var(--info);border-color:var(--info-bd)}
+.b-ok{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-bd)}
+.b-warn{background:var(--warn-bg);color:var(--warn);border-color:var(--warn-bd)}
+.b-danger{background:var(--danger-bg);color:var(--danger);border-color:var(--danger-bd)}
+.b-navy{background:var(--navy-50);color:var(--navy);border-color:var(--navy-100)}
+.chip-urgent{background:var(--danger-bg);color:var(--danger);border-color:var(--danger-bd);animation:pulseUrgent 2s infinite}
+@keyframes pulseUrgent{0%,100%{box-shadow:0 0 0 0 rgba(190,47,47,.0)}50%{box-shadow:0 0 0 3px rgba(190,47,47,.12)}}
+
+/* ---------- CARDS ---------- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh-sm)}
+.card-pad{padding:20px}
+.card-h{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.card-h h3{font-size:15px;font-weight:700}
+.card-h .spacer{flex:1}
+.card-h .hint{font-size:12.5px;color:var(--muted)}
+
+/* stat cards */
+.stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:15px 16px;text-align:left;transition:.15s;position:relative;overflow:hidden}
+.stat:hover{border-color:var(--border-strong);box-shadow:var(--sh);transform:translateY(-1px)}
+.stat .sv{font-size:27px;font-weight:800;letter-spacing:-1px;line-height:1;font-family:var(--mono)}
+.stat .sl{font-size:12px;color:var(--muted);margin-top:7px;font-weight:500;line-height:1.3}
+.stat .accent{position:absolute;left:0;top:0;bottom:0;width:3px}
+.stat.s-active{box-shadow:0 0 0 2px var(--navy-50);border-color:var(--navy-100)}
+
+/* ---------- TABLE ---------- */
+.tbl-wrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl thead th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:11px 16px;border-bottom:1px solid var(--border);background:var(--surface-2);position:sticky;top:0;white-space:nowrap}
+.tbl tbody td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
+.tbl tbody tr{transition:.1s}
+.tbl tbody tr:hover{background:var(--surface-2);cursor:pointer}
+.tbl tbody tr:last-child td{border-bottom:none}
+.tbl .co{font-weight:600;color:var(--ink)}
+.tbl .sub{font-size:11.5px;color:var(--muted)}
+.tbl .num{font-family:var(--mono);font-weight:500}
+.tbl .right{text-align:right}
+
+/* filters bar */
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.filters select,.filters input{padding:8px 11px;border:1px solid var(--border-strong);border-radius:var(--r-sm);background:#fff;font-size:13px;color:var(--ink-2)}
+.filters select:focus,.filters input:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px var(--navy-50)}
+.filters .grow{flex:1;min-width:160px}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:3px}
+.seg button{padding:6px 12px;border-radius:6px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--navy);box-shadow:var(--sh-sm)}
+
+/* ---------- DETAIL LAYOUT ---------- */
+.detail-grid{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+.kv{display:grid;grid-template-columns:1fr;gap:0}
+.kv .row{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px dashed var(--border)}
+.kv .row:last-child{border-bottom:none}
+.kv .k{color:var(--muted);font-size:13px}
+.kv .v{font-weight:600;text-align:right}
+.info-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 32px}
+.section-title{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+
+/* scoring checks */
+.score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.check{border:1px solid var(--border);border-radius:var(--r);padding:13px 14px;display:flex;gap:12px;align-items:flex-start;background:var(--surface-2);transition:.2s}
+.check .cic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex-shrink:0}
+.check .cn{font-weight:600;font-size:13px}
+.check .cd{font-size:11.5px;color:var(--muted);margin-top:2px}
+.check .cs{margin-top:7px}
+.check.st-passed .cic{background:var(--ok-bg);color:var(--ok)}
+.check.st-failed .cic{background:var(--danger-bg);color:var(--danger)}
+.check.st-warning .cic{background:var(--warn-bg);color:var(--warn)}
+.check.st-pending .cic{background:var(--neutral-bg);color:var(--muted)}
+.check.running{border-color:var(--navy-100);box-shadow:0 0 0 3px var(--navy-50)}
+.spinner{width:16px;height:16px;border:2px solid var(--navy-100);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.limit-box{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-800) 100%);color:#fff;border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;gap:18px}
+.limit-box .ll{font-size:12px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.limit-box .lv{font-size:28px;font-weight:800;font-family:var(--mono);letter-spacing:-.5px;margin-top:2px}
+.limit-box .spacer{flex:1}
+
+/* timeline */
+.tl{position:relative;padding-left:6px}
+.tl-item{display:flex;gap:13px;position:relative;padding-bottom:4px}
+.tl-rail{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.tl-node{width:20px;height:20px;border-radius:50%;border:2px solid var(--border-strong);background:#fff;display:grid;place-items:center;z-index:1;flex-shrink:0}
+.tl-line{width:2px;flex:1;background:var(--border);min-height:14px}
+.tl-item:last-child .tl-line{display:none}
+.tl-item.done .tl-node{background:var(--ok);border-color:var(--ok);color:#fff}
+.tl-item.done .tl-line{background:var(--ok-bd)}
+.tl-item.current .tl-node{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 0 0 4px var(--navy-50)}
+.tl-item.rejected .tl-node{background:var(--danger);border-color:var(--danger);color:#fff}
+.tl-body{padding-bottom:14px;min-width:0}
+.tl-body .tt{font-size:13px;font-weight:600}
+.tl-item.pending .tt{color:var(--muted-2);font-weight:500}
+.tl-body .ts{font-size:11.5px;color:var(--muted);font-family:var(--mono)}
+
+/* decisions / comments */
+.decision{border:1px solid var(--border);border-left-width:3px;border-radius:var(--r-sm);padding:12px 14px;margin-bottom:10px;background:var(--surface-2)}
+.decision.d-approve{border-left-color:var(--ok)}
+.decision.d-reject{border-left-color:var(--danger)}
+.decision.d-return{border-left-color:var(--warn)}
+.decision.d-comment{border-left-color:var(--info)}
+.decision.d-doc{border-left-color:var(--navy)}
+.decision .dh{display:flex;align-items:center;gap:9px;margin-bottom:5px}
+.decision .da{width:26px;height:26px;border-radius:50%;background:var(--navy-50);color:var(--navy);display:grid;place-items:center;font-weight:700;font-size:11px}
+.decision .dn{font-weight:600;font-size:13px}
+.decision .dl{font-size:11.5px;color:var(--muted)}
+.decision .dt{font-size:11.5px;color:var(--muted);margin-left:auto;font-family:var(--mono)}
+.decision .dc{font-size:13px;color:var(--ink-2);line-height:1.5}
+
+/* documents */
+.doc-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.doc-row:last-child{border-bottom:none}
+.doc-ic{width:34px;height:40px;border-radius:5px;background:var(--navy-50);color:var(--navy);display:grid;place-items:center;flex-shrink:0;font-size:10px;font-weight:700;font-family:var(--mono)}
+.doc-row .dn{font-size:13px;font-weight:600}
+.doc-row .dm{font-size:11.5px;color:var(--muted)}
+
+/* ABS steps */
+.abs-step{display:flex;gap:16px;align-items:flex-start;padding:18px;border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px;transition:.2s;background:#fff}
+.abs-step.locked{opacity:.55}
+.abs-step.done-step{border-color:var(--ok-bd);background:var(--ok-bg)}
+.abs-num{width:38px;height:38px;border-radius:50%;background:var(--navy-50);color:var(--navy);display:grid;place-items:center;font-weight:800;flex-shrink:0;font-size:16px}
+.abs-step.done-step .abs-num{background:var(--ok);color:#fff}
+.abs-step .at{font-weight:700;font-size:15px}
+.abs-step .ad{font-size:12.5px;color:var(--muted);margin-top:2px;max-width:54ch}
+.abs-ref{margin-top:9px;font-family:var(--mono);font-size:12.5px;background:#fff;border:1px dashed var(--ok-bd);color:var(--ok);padding:5px 10px;border-radius:6px;display:inline-flex;gap:8px;align-items:center;font-weight:600}
+
+/* ---------- MODAL ---------- */
+.overlay{position:fixed;inset:0;background:rgba(16,29,68,.45);backdrop-filter:blur(2px);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:.18s}
+.overlay.open{opacity:1;pointer-events:auto}
+.modal{background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-lg);width:480px;max-width:100%;max-height:90vh;overflow:auto;transform:translateY(10px) scale(.99);transition:.18s}
+.overlay.open .modal{transform:none}
+.modal-h{padding:20px 22px 0}
+.modal-h .mt{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.modal-h .ms{font-size:13px;color:var(--muted);margin-top:4px}
+.modal-b{padding:18px 22px}
+.modal-b textarea{width:100%;min-height:90px;padding:11px 13px;border:1px solid var(--border-strong);border-radius:var(--r-sm);resize:vertical;line-height:1.5}
+.modal-b textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px var(--navy-50)}
+.modal-b label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:7px}
+.modal-f{padding:14px 22px 20px;display:flex;gap:10px;justify-content:flex-end}
+.modal-callout{padding:12px 14px;border-radius:var(--r-sm);font-size:13px;line-height:1.5;margin-bottom:14px}
+.mc-ok{background:var(--ok-bg);color:#0b5c3e;border:1px solid var(--ok-bd)}
+.mc-warn{background:var(--warn-bg);color:#8a4308;border:1px solid var(--warn-bd)}
+.mc-danger{background:var(--danger-bg);color:#8f2424;border:1px solid var(--danger-bd)}
+.mc-info{background:var(--info-bg);color:#163f8f;border:1px solid var(--info-bd)}
+
+/* toast */
+#toasts{position:fixed;bottom:24px;right:24px;z-index:200;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.toast{background:var(--navy-900);color:#fff;padding:12px 16px;border-radius:var(--r);box-shadow:var(--sh-md);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;animation:toastIn .25s ease;max-width:380px}
+.toast .ti{width:20px;height:20px;flex-shrink:0}
+.toast.ok{background:#0b5c3e}.toast.warn{background:#8a4308}.toast.danger{background:#8f2424}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+
+/* misc */
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty .ei{width:46px;height:46px;margin:0 auto 12px;color:var(--border-strong)}
+.banner{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:var(--r);margin-bottom:20px;font-size:13.5px}
+.banner .bi{width:20px;height:20px;flex-shrink:0}
+.banner.warn{background:var(--warn-bg);color:#8a4308;border:1px solid var(--warn-bd)}
+.banner.info{background:var(--info-bg);color:#163f8f;border:1px solid var(--info-bd)}
+.banner.ok{background:var(--ok-bg);color:#0b5c3e;border:1px solid var(--ok-bd)}
+.banner.danger{background:var(--danger-bg);color:#8f2424;border:1px solid var(--danger-bd)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.stack{display:flex;flex-direction:column;gap:20px}
+.muted{color:var(--muted)}
+.mb0{margin-bottom:0}
+.flex{display:flex;align-items:center;gap:10px}
+.wrap{flex-wrap:wrap}
+.setting-row{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-row .si{flex:1}
+.setting-row .si .sn{font-weight:600;font-size:13.5px}
+.setting-row .si .sd{font-size:12px;color:var(--muted);margin-top:2px}
+.switch{width:44px;height:25px;border-radius:999px;background:var(--border-strong);position:relative;transition:.2s;flex-shrink:0}
+.switch.on{background:var(--ok)}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:#fff;transition:.2s;box-shadow:var(--sh-sm)}
+.switch.on::after{left:21px}
+.num-input{width:90px;padding:8px 11px;border:1px solid var(--border-strong);border-radius:var(--r-sm);font-family:var(--mono);text-align:right}
+.pill-status{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:var(--r-pill)}
+
+@media(max-width:1100px){
+  .stat-grid{grid-template-columns:repeat(3,1fr)}
+  .detail-grid{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .app-shell{grid-template-columns:1fr}.sidebar{display:none}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}.score-grid{grid-template-columns:1fr}
+  .login-art{display:none}.login-panel{width:100%;max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== LOGIN ===================== -->
+<div id="login">
+  <div class="login-art">
+    <div class="brand"><span class="glyph">T</span> Trastbank</div>
+    <div>
+      <h1>Кредитный конвейер</h1>
+      <p>Внутренняя система обработки кредитных заявок, поступающих из TadbirCore: скоринг, андеррайтинг, финальное одобрение и операции АБС.</p>
+      <div class="flow-mini">
+        <span>TadbirCore</span><span>Скоринг</span><span>SOLIQ · E-GOV · KATM</span><span>Андеррайтинг</span><span>Финал</span><span>АБС</span><span>Выдача</span>
+      </div>
+    </div>
+    <div class="login-foot">MVP-прототип · Демо-данные · v1.0</div>
+  </div>
+  <div class="login-panel">
+    <div class="login-card">
+      <div class="eyebrow">Вход в систему</div>
+      <h2>Авторизация</h2>
+      <div class="sub">Выберите роль для входа в рабочее пространство.</div>
+      <div class="field">
+        <label>Логин</label>
+        <input type="text" id="login-user" value="operator@trastbank.uz" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Пароль</label>
+        <input type="password" id="login-pass" value="••••••••">
+      </div>
+      <div class="field" style="margin-bottom:22px">
+        <label>Роль</label>
+        <div class="role-grid" id="role-grid"></div>
+      </div>
+      <button class="btn-primary" id="login-btn">Войти в систему</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== APP ===================== -->
+<div id="app">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <span class="glyph">T</span>
+        <div>Trastbank<small>Кредитный конвейер</small></div>
+      </div>
+      <nav class="sb-nav" id="sb-nav"></nav>
+      <div class="sb-foot">
+        <div class="sb-user">
+          <div class="avatar" id="sb-avatar">—</div>
+          <div><div class="nm" id="sb-uname">—</div><div class="rl" id="sb-urole">—</div></div>
+        </div>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <div class="crumbs" id="crumbs"></div>
+        <div class="spacer"></div>
+        <div class="top-search">
+          <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Поиск заявки, ИНН, компании…" id="global-search">
+        </div>
+        <button class="icon-btn" title="Уведомления"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot"></span></button>
+        <div class="role-switch">
+          <button class="role-switch-btn" id="role-switch-btn">
+            <div class="avatar" id="tb-avatar" style="width:32px;height:32px;font-size:13px">—</div>
+            <div><div class="nm" id="tb-uname">—</div><div class="rl" id="tb-urole">—</div></div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted)"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="role-menu" id="role-menu"></div>
+        </div>
+      </header>
+      <main class="content" id="content"></main>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+<div id="toasts"></div>
+
+<script>
+/* ============================================================
+   TRASTBANK — КРЕДИТНЫЙ КОНВЕЙЕР · MVP прототип (vanilla JS)
+   Весь стейт — в памяти + localStorage. Бэкенда нет.
+   Бизнес-логика помечена комментариями [BL].
+   ============================================================ */
+
+/* ---------- Справочники ролей ---------- */
+const ROLES = {
+  admin:   {name:'Администратор',        short:'Админ',          person:'И. Собиров'},
+  u1:      {name:'Андеррайтер 1',        short:'Андеррайтер 1',  person:'А. Каримов'},
+  u2:      {name:'Андеррайтер 2',        short:'Андеррайтер 2',  person:'Д. Юсупова'},
+  u3:      {name:'Андеррайтер 3',        short:'Андеррайтер 3',  person:'Р. Алиев'},
+  senior:  {name:'Старший андеррайтер',  short:'Ст. андеррайтер',person:'Н. Рахимова'},
+  abs:     {name:'Оператор АБС',         short:'Оператор АБС',   person:'С. Назаров'},
+};
+const ROLE_DESC = {
+  admin:'Настройки конвейера', u1:'Первичный андеррайтинг', u2:'Второй уровень',
+  u3:'Третий уровень', senior:'Финальное решение', abs:'Бэк-офис / АБС'
+};
+
+/* ---------- Статусы заявок ---------- */
+const STATUS = {
+  new_tadbircore:{label:'Новая (TadbirCore)', cls:'b-info'},
+  in_scoring:    {label:'Скоринг',            cls:'b-navy'},
+  auto_rejected: {label:'Автоотказ',          cls:'b-danger'},
+  waiting_u1:    {label:'Ожидает Андеррайтера 1', cls:'b-warn'},
+  waiting_u2:    {label:'Ожидает Андеррайтера 2', cls:'b-warn'},
+  waiting_u3:    {label:'Ожидает Андеррайтера 3', cls:'b-warn'},
+  waiting_final: {label:'Ожидает фин. решения',   cls:'b-warn'},
+  approved:      {label:'Одобрено · ожидает АБС', cls:'b-navy'},
+  disbursed:     {label:'Выдано / Завершено',     cls:'b-ok'},
+  rejected:      {label:'Отказано',               cls:'b-danger'},
+  returned:      {label:'Возврат на уточнение',   cls:'b-warn'},
+};
+const RISK = {
+  low:   {label:'Низкий риск',  cls:'b-ok'},
+  medium:{label:'Средний риск', cls:'b-warn'},
+  high:  {label:'Высокий риск', cls:'b-danger'},
+};
+
+/* ---------- Этапы процесса (timeline, как в BPMN) ---------- */
+const TL = [
+  ['received','Получена из TadbirCore'],
+  ['scoring_start','Начало скоринга'],
+  ['soliq','Запрос в SOLIQ'],
+  ['egov','Запрос в E-GOV'],
+  ['katm','Запрос в KATM (просрочки)'],
+  ['limit','Расчёт кредитного лимита'],
+  ['sent_u1','Передано Андеррайтеру 1'],
+  ['appr_u1','Одобрено Андеррайтером 1'],
+  ['sent_u2','Передано Андеррайтеру 2'],
+  ['appr_u2','Одобрено Андеррайтером 2'],
+  ['sent_u3','Передано Андеррайтеру 3'],
+  ['appr_u3','Одобрено Андеррайтером 3'],
+  ['final','Финальное одобрение'],
+  ['abs_acc','Счёт открыт в АБС'],
+  ['abs_loan','Кредит создан в АБС'],
+  ['disbursed','Средства выданы'],
+  ['completed','Завершено'],
+];
+const TL_ORDER = TL.map(t=>t[0]);
+const TL_LABEL = Object.fromEntries(TL);
+
+/* [BL] для каждого статуса — последний пройденный этап процесса */
+const STATUS_STEP = {
+  new_tadbircore:'received', in_scoring:'scoring_start', auto_rejected:'katm',
+  waiting_u1:'sent_u1', waiting_u2:'sent_u2', waiting_u3:'sent_u3',
+  waiting_final:'appr_u3', approved:'final', disbursed:'completed', rejected:null,
+};
+function stepsUpTo(key){ const i=TL_ORDER.indexOf(key); return i<0?[]:TL_ORDER.slice(0,i+1); }
+
+/* ---------- Определения скоринговых проверок ---------- */
+const SCORE_DEFS = [
+  {key:'soliq',   name:'Проверка SOLIQ',           desc:'Налоговый статус, активность ИНН'},
+  {key:'egov',    name:'Проверка E-GOV',           desc:'Госреестр, учредительные данные'},
+  {key:'katm',    name:'KATM — просроченные кредиты', desc:'Кредитное бюро, история просрочек'},
+  {key:'age6m',   name:'Возраст компании > 6 мес.', desc:'Дата регистрации юр. лица'},
+  {key:'fin3m',   name:'Положит. фин. показатели (3 мес.)', desc:'Баланс и отчётность за квартал'},
+  {key:'debt1bln',name:'Задолженность < 1 млрд сум', desc:'Совокупный долг по всем банкам'},
+  {key:'amount50',name:'Запрос ≤ 50% чистого дохода', desc:'Соотношение суммы к доходу'},
+];
+
+/* ---------- Утилиты ---------- */
+const fmtUZS = n => n==null?'—':new Intl.NumberFormat('ru-RU').format(Math.round(n))+' сум';
+const fmtShort = n => { if(n==null)return'—'; if(n>=1e9)return (n/1e9).toFixed(n%1e9?1:0)+' млрд'; if(n>=1e6)return (n/1e6).toFixed(0)+' млн'; return new Intl.NumberFormat('ru-RU').format(n); };
+const fmtDate = s => s ? new Date(s).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+const fmtDay = s => s ? new Date(s).toLocaleDateString('ru-RU',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+const initials = nm => nm.split(/\s+/).map(w=>w.replace(/\./,'')[0]).filter(Boolean).slice(0,2).join('').toUpperCase();
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ago = mins => { const d=new Date(Date.now()-mins*60000); return d.toISOString(); };
+const refNo = (pfx) => pfx+'-'+Math.random().toString(36).slice(2,8).toUpperCase()+Math.floor(Math.random()*900+100);
+
+/* ============================================================
+   МОК-ДАННЫЕ — ~12 заявок по всем статусам
+   ============================================================ */
+function mkScore(result){
+  // result: 'pass' | 'pending' | объект с проваленными ключами
+  const o={};
+  SCORE_DEFS.forEach(d=>{
+    if(result==='pending') o[d.key]={status:'pending'};
+    else if(result&&result.fail&&result.fail.includes(d.key)) o[d.key]={status:'failed'};
+    else if(result&&result.warn&&result.warn.includes(d.key)) o[d.key]={status:'warning'};
+    else o[d.key]={status:'passed'};
+  });
+  return o;
+}
+function decision(level, action, comment, minsAgo){
+  return {level, actor:ROLES[level].person, action, comment, ts:ago(minsAgo)};
+}
+
+let APPS = [
+  { id:'APP-2026-0148', company:'ООО «Olmazor Textile»', inn:'304218756', purpose:'Пополнение оборотных средств, закупка сырья (хлопок)',
+    requested:850_000_000, limit:780_000_000, ageMonths:54, netIncome:2_300_000_000, totalDebt:340_000_000,
+    creditHistory:'Положительная, 3 закрытых кредита', overdue:'Нет', risk:'low', status:'disbursed', level:null, urgent:false,
+    created:ago(60*72), score:mkScore('pass'),
+    abs:{accountRef:'UZ48 0014 0099 1102 3344', loanRef:'LN-2026-008841', disburseRef:'DSB-77120934'},
+    decisions:[ decision('u1','approve','Скоринг чистый, обороты подтверждены банковской выпиской. Согласовано.',60*60),
+                decision('u2','approve','Залоговое обеспечение проверено. Лимит в норме.',60*52),
+                decision('u3','approve','Риск-профиль низкий. Поддерживаю.',60*46),
+                decision('senior','approve','Финально одобрено. Передано в АБС.',60*40) ] },
+
+  { id:'APP-2026-0149', company:'ЧП «Samarqand Agro»', inn:'301455902', purpose:'Приобретение сельхозтехники',
+    requested:420_000_000, limit:400_000_000, ageMonths:28, netIncome:980_000_000, totalDebt:120_000_000,
+    creditHistory:'Положительная', overdue:'Нет', risk:'low', status:'approved', level:null, urgent:false,
+    created:ago(60*40), score:mkScore('pass'), abs:{},
+    decisions:[ decision('u1','approve','Без замечаний.',60*30), decision('u2','approve','Согласовано.',60*24),
+                decision('u3','approve','Одобряю.',60*18), decision('senior','approve','Финально одобрено. Готово к выдаче через АБС.',60*5) ] },
+
+  { id:'APP-2026-0150', company:'ООО «Toshkent Logistics»', inn:'302998114', purpose:'Расширение автопарка',
+    requested:1_200_000_000, limit:950_000_000, ageMonths:71, netIncome:3_100_000_000, totalDebt:610_000_000,
+    creditHistory:'Положительная', overdue:'Нет', risk:'medium', status:'waiting_final', level:'senior', urgent:true,
+    created:ago(60*30), score:mkScore({warn:['debt1bln']}), abs:{},
+    decisions:[ decision('u1','approve','Крупная сумма, но обороты позволяют.',60*20),
+                decision('u2','approve','Рекомендую запросить доп. залог при выдаче.',60*14),
+                decision('u3','approve','Согласовано с условием по залогу.',60*6) ] },
+
+  { id:'APP-2026-0151', company:'ООО «Buxoro Foods»', inn:'305671230', purpose:'Строительство складского комплекса',
+    requested:680_000_000, limit:620_000_000, ageMonths:39, netIncome:1_450_000_000, totalDebt:210_000_000,
+    creditHistory:'Положительная', overdue:'Нет', risk:'medium', status:'waiting_u3', level:'u3', urgent:false,
+    created:ago(60*22), score:mkScore('pass'), abs:{},
+    decisions:[ decision('u1','approve','Проверено, всё в порядке.',60*16),
+                decision('u2','approve','Передаю на третий уровень.',60*9) ] },
+
+  { id:'APP-2026-0152', company:'СП «Andijan Motors»', inn:'303120567', purpose:'Закупка комплектующих',
+    requested:540_000_000, limit:500_000_000, ageMonths:33, netIncome:1_120_000_000, totalDebt:180_000_000,
+    creditHistory:'Положительная', overdue:'Нет', risk:'medium', status:'waiting_u2', level:'u2', urgent:false,
+    created:ago(60*14), score:mkScore('pass'), abs:{},
+    decisions:[ decision('u1','approve','Согласовано, передаю дальше.',60*8) ] },
+
+  { id:'APP-2026-0153', company:'ООО «Navoiy Stroy»', inn:'304778201', purpose:'Оборотные средства',
+    requested:310_000_000, limit:300_000_000, ageMonths:19, netIncome:760_000_000, totalDebt:90_000_000,
+    creditHistory:'Короткая, без просрочек', overdue:'Нет', risk:'low', status:'waiting_u1', level:'u1', urgent:false,
+    created:ago(60*9), score:mkScore('pass'), abs:{}, decisions:[] },
+
+  { id:'APP-2026-0158', company:'ООО «Jizzax Pharm»', inn:'306004415', purpose:'Закупка фармацевтического сырья',
+    requested:495_000_000, limit:460_000_000, ageMonths:26, netIncome:1_050_000_000, totalDebt:140_000_000,
+    creditHistory:'Положительная', overdue:'Нет', risk:'medium', status:'waiting_u1', level:'u1', urgent:true,
+    created:ago(60*5), score:mkScore('pass'), abs:{}, decisions:[] },
+
+  { id:'APP-2026-0154', company:'ЧП «Fergana Silk»', inn:'302556189', purpose:'Модернизация производства',
+    requested:730_000_000, limit:null, ageMonths:44, netIncome:1_600_000_000, totalDebt:260_000_000,
+    creditHistory:'Положительная', overdue:'Нет', risk:'medium', status:'in_scoring', level:null, urgent:false,
+    created:ago(60*2), score:mkScore('pending'), abs:{}, decisions:[] },
+
+  { id:'APP-2026-0155', company:'ООО «Qarshi Trade»', inn:'305889043', purpose:'Импорт товаров',
+    requested:260_000_000, limit:null, ageMonths:15, netIncome:540_000_000, totalDebt:70_000_000,
+    creditHistory:'—', overdue:'—', risk:'low', status:'new_tadbircore', level:null, urgent:false,
+    created:ago(45), score:mkScore('pending'), abs:{}, decisions:[] },
+
+  { id:'APP-2026-0159', company:'ООО «Termiz Export»', inn:'304330921', purpose:'Финансирование экспортного контракта',
+    requested:910_000_000, limit:null, ageMonths:62, netIncome:2_050_000_000, totalDebt:300_000_000,
+    creditHistory:'—', overdue:'—', risk:'medium', status:'new_tadbircore', level:null, urgent:false,
+    created:ago(18), score:mkScore('pending'), abs:{}, decisions:[] },
+
+  { id:'APP-2026-0156', company:'ООО «Nukus Agro Invest»', inn:'301207765', purpose:'Оборотные средства',
+    requested:1_500_000_000, limit:null, ageMonths:8, netIncome:1_100_000_000, totalDebt:1_350_000_000,
+    creditHistory:'Есть просрочки', overdue:'Да, 2 активных просрочки', risk:'high', status:'auto_rejected', level:null, urgent:false,
+    created:ago(60*6), score:mkScore({fail:['katm','debt1bln']}), abs:{},
+    decisions:[ {level:'system', actor:'Система скоринга', action:'reject',
+      comment:'Автоматический отказ: обнаружены активные просрочки в KATM, совокупная задолженность превышает 1 млрд сум.', ts:ago(60*6-3)} ] },
+
+  { id:'APP-2026-0157', company:'ООО «Chirchiq Cement»', inn:'303441288', purpose:'Расширение производства',
+    requested:1_100_000_000, limit:980_000_000, ageMonths:51, netIncome:2_400_000_000, totalDebt:520_000_000,
+    creditHistory:'Положительная', overdue:'Нет', risk:'high', status:'rejected', level:null, urgent:false,
+    created:ago(60*28), score:mkScore({warn:['amount50']}), abs:{},
+    decisions:[ decision('u1','approve','Передано на второй уровень.',60*24),
+                decision('u2','reject','Отказ: высокая концентрация долга, отрасль под давлением. Сумма превышает комфортный риск-аппетит банка.',60*20) ] },
+];
+
+/* ---------- Стейт приложения ---------- */
+let S = {
+  role:null, view:'dashboard', selected:null,
+  filters:{status:'all', level:'all', risk:'all', q:''},
+  settings:{
+    levels:3, sla:24, autoReject:true, slaWarn:true,
+    abs:{ host:'abs.trastbank.uz', mode:'mock', autoRef:true },
+    sources:{ soliq:true, egov:true, katm:true },
+    routeAmount:1_000_000_000,
+  },
+};
+const PERSIST_KEY='trastbank_cc_v1';
+function save(){ try{ localStorage.setItem(PERSIST_KEY, JSON.stringify({APPS,S:{settings:S.settings}})); }catch(e){} }
+function load(){ try{ const d=JSON.parse(localStorage.getItem(PERSIST_KEY)); if(d&&d.APPS){APPS=d.APPS; if(d.S&&d.S.settings)S.settings=d.S.settings;} }catch(e){} }
+function resetData(){ localStorage.removeItem(PERSIST_KEY); location.reload(); }
+
+/* ---------- helpers для заявок ---------- */
+const getApp = id => APPS.find(a=>a.id===id);
+function badge(text,cls){ return `<span class="badge ${cls}"><span class="bd" style="background:currentColor"></span>${text}</span>`; }
+function statusBadge(s){ const m=STATUS[s]; return badge(m.label,m.cls); }
+function riskBadge(r){ const m=RISK[r]; return m?badge(m.label,m.cls):''; }
+function countBy(fn){ return APPS.filter(fn).length; }
+
+/* очередь для текущей роли */
+function queueFor(role){
+  if(role==='u1') return APPS.filter(a=>a.status==='waiting_u1');
+  if(role==='u2') return APPS.filter(a=>a.status==='waiting_u2');
+  if(role==='u3') return APPS.filter(a=>a.status==='waiting_u3');
+  if(role==='senior') return APPS.filter(a=>a.status==='waiting_final');
+  if(role==='abs') return APPS.filter(a=>a.status==='approved'||a.status==='disbursed');
+  return APPS;
+}
+</script>
+<script>
+/* ============================================================
+   НАВИГАЦИЯ ПО РОЛЯМ
+   ============================================================ */
+const NAV = {
+  admin:[
+    {v:'dashboard', t:'Дашборд', ic:'grid'},
+    {v:'apps',      t:'Все заявки', ic:'list', count:()=>APPS.length},
+    {v:'scoring',   t:'Скоринг', ic:'scan', count:()=>countBy(a=>a.status==='in_scoring'||a.status==='new_tadbircore')},
+    {v:'settings',  t:'Настройки', ic:'cog'},
+  ],
+  u1:[
+    {v:'dashboard', t:'Дашборд', ic:'grid'},
+    {v:'queue',     t:'Моя очередь', ic:'inbox', count:()=>queueFor('u1').length},
+    {v:'apps',      t:'Все заявки', ic:'list'},
+  ],
+  u2:[
+    {v:'dashboard', t:'Дашборд', ic:'grid'},
+    {v:'queue',     t:'Моя очередь', ic:'inbox', count:()=>queueFor('u2').length},
+    {v:'apps',      t:'Все заявки', ic:'list'},
+  ],
+  u3:[
+    {v:'dashboard', t:'Дашборд', ic:'grid'},
+    {v:'queue',     t:'Моя очередь', ic:'inbox', count:()=>queueFor('u3').length},
+    {v:'apps',      t:'Все заявки', ic:'list'},
+  ],
+  senior:[
+    {v:'dashboard', t:'Дашборд', ic:'grid'},
+    {v:'queue',     t:'Финальное одобрение', ic:'shield', count:()=>queueFor('senior').length},
+    {v:'apps',      t:'Все заявки', ic:'list'},
+  ],
+  abs:[
+    {v:'dashboard', t:'Дашборд', ic:'grid'},
+    {v:'queue',     t:'Операции АБС', ic:'bank', count:()=>queueFor('abs').filter(a=>a.status==='approved').length},
+    {v:'apps',      t:'Все заявки', ic:'list'},
+  ],
+};
+const ICONS = {
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  list:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/>',
+  inbox:'<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.4 5.5 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.4-6.5A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.8 1.5z"/>',
+  scan:'<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
+  bank:'<line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
+  cog:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+};
+const svgIc = (n,extra='') => `<svg class="ic ${extra}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]||''}</svg>`;
+</script>
+<script>
+/* ============================================================
+   РЕНДЕР: каркас (sidebar, topbar)
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const content = ()=>$('#content');
+
+function renderShell(){
+  const r = ROLES[S.role];
+  // sidebar nav
+  const nav = NAV[S.role].map(item=>{
+    const c = item.count ? item.count() : null;
+    const on = S.view===item.v ? 'on' : '';
+    return `<button class="nav-item ${on}" data-nav="${item.v}">${svgIc(item.ic)}<span>${item.t}</span>${c!=null?`<span class="badge-num">${c}</span>`:''}</button>`;
+  }).join('');
+  $('#sb-nav').innerHTML = `<div class="sb-section">Рабочее пространство</div>${nav}`;
+  // sidebar user
+  $('#sb-avatar').textContent = initials(r.person);
+  $('#sb-uname').textContent = r.person;
+  $('#sb-urole').textContent = r.name;
+  // topbar
+  $('#tb-avatar').textContent = initials(r.person);
+  $('#tb-uname').textContent = r.person;
+  $('#tb-urole').textContent = r.name;
+  // role menu
+  $('#role-menu').innerHTML = `<div class="mh">Сменить роль</div>`+
+    Object.keys(ROLES).map(k=>`<button data-role="${k}" class="${k===S.role?'on':''}">
+      <div class="avatar" style="width:30px;height:30px;font-size:12px;background:var(--navy-50);color:var(--navy)">${initials(ROLES[k].person)}</div>
+      <div><div class="nm">${ROLES[k].name}</div><div class="rl">${ROLE_DESC[k]}</div></div></button>`).join('')+
+    `<div class="divider"></div><button class="danger" data-action="logout">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <div class="nm" style="color:var(--danger)">Выйти из системы</div></button>`;
+}
+
+function crumb(parts){ $('#crumbs').innerHTML = parts.map((p,i)=> i? `<span class="sep">/</span>${p.b?`<b>${p.t}</b>`:p.t}` : `${p.b?`<b>${p.t}</b>`:p.t}`).join(' '); }
+
+/* ============================================================
+   РОУТЕР
+   ============================================================ */
+function go(view, id){ S.view=view; if(id!==undefined)S.selected=id; renderShell(); render(); content().scrollTop=0; }
+
+function render(){
+  const v=S.view;
+  if(v==='dashboard') return renderDashboard();
+  if(v==='apps')      return renderApps();
+  if(v==='queue')     return renderQueue();
+  if(v==='scoring')   return renderScoringList();
+  if(v==='detail')    return renderDetail();
+  if(v==='settings')  return renderSettings();
+  renderDashboard();
+}
+</script>
+<script>
+/* ============================================================
+   ЭКРАН: ДАШБОРД
+   ============================================================ */
+const DASH_CARDS = [
+  {st:'new_tadbircore', label:'Новые из TadbirCore', color:'var(--info)'},
+  {st:'in_scoring',     label:'На скоринге',          color:'var(--navy)'},
+  {st:'auto_rejected',  label:'Автоотказ',            color:'var(--danger)'},
+  {st:'waiting_u1',     label:'Ожидают Андеррайтера 1',color:'var(--warn)'},
+  {st:'waiting_u2',     label:'Ожидают Андеррайтера 2',color:'var(--warn)'},
+  {st:'waiting_u3',     label:'Ожидают Андеррайтера 3',color:'var(--warn)'},
+  {st:'waiting_final',  label:'Ожидают фин. решения', color:'var(--warn)'},
+  {st:'approved',       label:'Одобрено · ожидает АБС',color:'var(--navy)'},
+  {st:'disbursed',      label:'Выдано / завершено',   color:'var(--ok)'},
+  {st:'rejected',       label:'Отказано',             color:'var(--danger)'},
+];
+function renderDashboard(){
+  crumb([{t:'Дашборд',b:true}]);
+  const r=ROLES[S.role];
+  const cards = DASH_CARDS.map(c=>{
+    const n = countBy(a=>a.status===c.st);
+    return `<button class="stat" data-card="${c.st}"><span class="accent" style="background:${c.color}"></span>
+      <div class="sv" style="color:${n?'var(--ink)':'var(--muted-2)'}">${n}</div><div class="sl">${c.label}</div></button>`;
+  }).join('');
+
+  // последние заявки (или очередь роли)
+  const isUw = ['u1','u2','u3','senior','abs'].includes(S.role);
+  const list = (isUw ? queueFor(S.role) : [...APPS]).slice().sort((a,b)=>new Date(b.created)-new Date(a.created)).slice(0,7);
+  const rows = list.map(a=>appRow(a)).join('') || emptyRow();
+
+  const total = APPS.reduce((s,a)=>s+a.requested,0);
+  const approvedSum = APPS.filter(a=>['approved','disbursed'].includes(a.status)).reduce((s,a)=>s+(a.limit||0),0);
+
+  content().innerHTML = `
+    <div class="page-head">
+      <div><h1>Добро пожаловать, ${r.person.split(' ')[1]||r.person}</h1>
+      <div class="ph-sub">${r.name} · обзор кредитного конвейера на ${fmtDay(new Date().toISOString())}</div></div>
+      <div class="spacer"></div>
+      ${S.role==='admin'?`<button class="btn btn-ghost" data-action="reset">${svgIc('cog')} Сбросить демо-данные</button>`:''}
+      <button class="btn btn-nav" data-nav="${isUw?'queue':'apps'}">${svgIc('list')} ${isUw?'Моя очередь':'Все заявки'}</button>
+    </div>
+
+    <div class="grid-2" style="grid-template-columns:1fr 1fr;margin-bottom:24px">
+      <div class="card card-pad flex" style="gap:18px">
+        <div style="width:46px;height:46px;border-radius:12px;background:var(--navy-50);color:var(--navy);display:grid;place-items:center">${svgIc('list')}</div>
+        <div><div class="muted" style="font-size:12.5px">Всего заявок в конвейере</div>
+        <div style="font-size:26px;font-weight:800;font-family:var(--mono);letter-spacing:-1px">${APPS.length}</div></div>
+        <div class="spacer"></div>
+        <div style="text-align:right"><div class="muted" style="font-size:12.5px">Запрошено всего</div>
+        <div style="font-size:18px;font-weight:700;font-family:var(--mono)">${fmtShort(total)} сум</div></div>
+      </div>
+      <div class="card card-pad flex" style="gap:18px">
+        <div style="width:46px;height:46px;border-radius:12px;background:var(--ok-bg);color:var(--ok);display:grid;place-items:center">${svgIc('shield')}</div>
+        <div><div class="muted" style="font-size:12.5px">Одобренный объём (лимиты)</div>
+        <div style="font-size:26px;font-weight:800;font-family:var(--mono);letter-spacing:-1px;color:var(--ok)">${fmtShort(approvedSum)}</div></div>
+        <div class="spacer"></div>
+        <div style="text-align:right"><div class="muted" style="font-size:12.5px">Срочных в работе</div>
+        <div style="font-size:18px;font-weight:700;font-family:var(--mono);color:var(--danger)">${countBy(a=>a.urgent&&!['disbursed','rejected','auto_rejected'].includes(a.status))}</div></div>
+      </div>
+    </div>
+
+    <div class="stat-grid">${cards}</div>
+
+    <div class="card">
+      <div class="card-h"><h3>${isUw?'Заявки в моей очереди':'Последние заявки'}</h3><div class="spacer"></div>
+        <span class="hint">Нажмите на строку, чтобы открыть заявку</span></div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>ID заявки</th><th>Компания</th><th class="right">Запрошено</th><th class="right">Лимит</th><th>Статус</th><th>Риск</th><th>Создана</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+    </div>`;
+}
+function appRow(a){
+  return `<tr data-open="${a.id}">
+    <td><span class="mono co">${a.id}</span> ${a.urgent?'<span class="badge chip-urgent" style="margin-left:6px;padding:1px 8px;font-size:10.5px">СРОЧНО</span>':''}<div class="sub">TadbirCore · ИНН ${a.inn}</div></td>
+    <td><div class="co">${esc(a.company)}</div><div class="sub">${esc(a.purpose).slice(0,42)}${a.purpose.length>42?'…':''}</div></td>
+    <td class="right num">${fmtShort(a.requested)}</td>
+    <td class="right num">${a.limit?fmtShort(a.limit):'—'}</td>
+    <td>${statusBadge(a.status)}</td>
+    <td>${riskBadge(a.risk)}</td>
+    <td class="sub mono">${fmtDay(a.created)}</td>
+  </tr>`;
+}
+function emptyRow(){ return `<tr><td colspan="7"><div class="empty">В этой очереди сейчас нет заявок.</div></td></tr>`; }
+</script>
+<script>
+/* ============================================================
+   ЭКРАН: СПИСОК ЗАЯВОК (с фильтрами)
+   ============================================================ */
+function renderApps(){
+  crumb([{t:'Все заявки',b:true}]);
+  renderListView({title:'Все заявки', sub:'Заявки, поступившие из TadbirCore', source:[...APPS], showFilters:true});
+}
+function renderScoringList(){
+  crumb([{t:'Скоринг',b:true}]);
+  const src = APPS.filter(a=>['new_tadbircore','in_scoring','auto_rejected'].includes(a.status));
+  renderListView({title:'Очередь скоринга', sub:'Новые заявки и заявки на автоматическом скоринге', source:src, showFilters:true});
+}
+function renderQueue(){
+  const titles={u1:'Андеррайтер 1 — моя очередь',u2:'Андеррайтер 2 — моя очередь',u3:'Андеррайтер 3 — моя очередь',senior:'Финальное одобрение',abs:'Операции АБС'};
+  crumb([{t:titles[S.role]||'Очередь',b:true}]);
+  const subs={u1:'Заявки, ожидающие вашего решения (1-й уровень)',u2:'Заявки, переданные после 1-го уровня',u3:'Заявки, переданные после 2-го уровня',
+    senior:'Заявки, прошедшие всех андеррайтеров — финальное решение',abs:'Одобренные заявки для открытия счёта, создания и выдачи кредита'};
+  renderListView({title:titles[S.role], sub:subs[S.role], source:queueFor(S.role), showFilters:false, queue:true});
+}
+
+function renderListView({title,sub,source,showFilters,queue}){
+  const f=S.filters;
+  let rows = source;
+  if(showFilters){
+    if(f.status!=='all') rows=rows.filter(a=>a.status===f.status);
+    if(f.level!=='all')  rows=rows.filter(a=>a.level===f.level);
+    if(f.risk!=='all')   rows=rows.filter(a=>a.risk===f.risk);
+    if(f.q){ const q=f.q.toLowerCase(); rows=rows.filter(a=>(a.id+a.company+a.inn).toLowerCase().includes(q)); }
+  }
+  rows = rows.slice().sort((a,b)=>new Date(b.created)-new Date(a.created));
+
+  const filterBar = showFilters ? `
+    <div class="filters">
+      <input class="grow" type="text" id="f-q" placeholder="Поиск по ID, компании, ИНН…" value="${esc(f.q)}">
+      <select id="f-status"><option value="all">Все статусы</option>${Object.keys(STATUS).map(k=>`<option value="${k}" ${f.status===k?'selected':''}>${STATUS[k].label}</option>`).join('')}</select>
+      <select id="f-level"><option value="all">Все уровни</option><option value="u1" ${f.level==='u1'?'selected':''}>Андеррайтер 1</option><option value="u2" ${f.level==='u2'?'selected':''}>Андеррайтер 2</option><option value="u3" ${f.level==='u3'?'selected':''}>Андеррайтер 3</option><option value="senior" ${f.level==='senior'?'selected':''}>Старший</option></select>
+      <select id="f-risk"><option value="all">Любой риск</option><option value="low" ${f.risk==='low'?'selected':''}>Низкий</option><option value="medium" ${f.risk==='medium'?'selected':''}>Средний</option><option value="high" ${f.risk==='high'?'selected':''}>Высокий</option></select>
+      ${(f.status!=='all'||f.level!=='all'||f.risk!=='all'||f.q)?`<button class="btn btn-ghost btn-sm" data-action="clear-filters">Сбросить</button>`:''}
+    </div>` : '';
+
+  const tbody = rows.length ? rows.map(a=>`<tr data-open="${a.id}">
+      <td><span class="mono co">${a.id}</span>${a.urgent?' <span class="badge chip-urgent" style="padding:1px 7px;font-size:10px">СРОЧНО</span>':''}<div class="sub">Источник: TadbirCore</div></td>
+      <td><div class="co">${esc(a.company)}</div><div class="sub mono">ИНН ${a.inn}</div></td>
+      <td class="right num">${fmtUZS(a.requested).replace(' сум','')}</td>
+      <td class="right num">${a.limit?fmtUZS(a.limit).replace(' сум',''):'—'}</td>
+      <td>${statusBadge(a.status)}</td>
+      <td>${a.level?ROLES[a.level].short:'<span class="muted">—</span>'}</td>
+      <td>${riskBadge(a.risk)}</td>
+      <td class="sub mono">${fmtDay(a.created)}</td>
+      <td class="right"><button class="btn btn-ghost btn-sm" data-open="${a.id}">Открыть</button></td>
+    </tr>`).join('')
+    : `<tr><td colspan="9"><div class="empty"><svg class="ei" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Заявок не найдено по выбранным условиям.</div></td></tr>`;
+
+  content().innerHTML = `
+    <div class="page-head"><div><h1>${title}</h1><div class="ph-sub">${sub}</div></div>
+      <div class="spacer"></div>
+      <div class="badge b-neutral" style="font-size:13px">Найдено: ${rows.length}</div>
+    </div>
+    ${filterBar}
+    <div class="card"><div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>ID / источник</th><th>Компания / ИНН</th><th class="right">Запрошено, сум</th><th class="right">Лимит, сум</th><th>Статус</th><th>Андеррайтер</th><th>Риск</th><th>Создана</th><th></th></tr></thead>
+      <tbody>${tbody}</tbody>
+    </table></div></div>`;
+
+  if(showFilters){
+    const q=$('#f-q'); q && q.addEventListener('input',e=>{S.filters.q=e.target.value; clearTimeout(window.__qt); window.__qt=setTimeout(()=>render(),250);});
+    ['status','level','risk'].forEach(k=>{ const el=$('#f-'+k); el&&el.addEventListener('change',e=>{S.filters[k]=e.target.value; render();}); });
+  }
+}
+</script>
+<script>
+/* ============================================================
+   ЭКРАН: ДЕТАЛИ ЗАЯВКИ
+   ============================================================ */
+function renderDetail(){
+  const a=getApp(S.selected);
+  if(!a){ go('apps'); return; }
+  crumb([{t:'Заявки'},{t:a.id,b:true}]);
+
+  content().innerHTML = `
+    <div class="page-head">
+      <button class="btn btn-ghost btn-sm" data-nav="apps" style="margin-top:4px">← Назад</button>
+      <div>
+        <div class="flex wrap" style="gap:10px">
+          <h1 style="font-size:22px">${esc(a.company)}</h1>
+          ${statusBadge(a.status)} ${riskBadge(a.risk)} ${a.urgent?'<span class="badge chip-urgent">СРОЧНО · SLA</span>':''}
+        </div>
+        <div class="ph-sub"><span class="mono">${a.id}</span> · Источник: <b>TadbirCore</b> · ИНН <span class="mono">${a.inn}</span> · Создана ${fmtDate(a.created)}</div>
+      </div>
+      <div class="spacer"></div>
+    </div>
+    ${actionBanner(a)}
+    <div class="detail-grid">
+      <div class="stack">
+        ${cardClientInfo(a)}
+        ${cardScoring(a)}
+        ${cardActions(a)}
+        ${cardDocuments(a)}
+        ${cardDecisions(a)}
+      </div>
+      <div class="stack">
+        ${cardLimitSummary(a)}
+        ${cardTimeline(a)}
+      </div>
+    </div>`;
+}
+
+/* баннер действия для текущей роли */
+function actionBanner(a){
+  const role=S.role;
+  const map={
+    u1:['waiting_u1','Эта заявка ожидает вашего решения как Андеррайтера 1.'],
+    u2:['waiting_u2','Эта заявка передана вам после 1-го уровня андеррайтинга.'],
+    u3:['waiting_u3','Эта заявка передана вам после 2-го уровня андеррайтинга.'],
+    senior:['waiting_final','Заявка прошла всех андеррайтеров и ожидает вашего финального решения.'],
+    abs:['approved','Заявка финально одобрена. Выполните операции АБС: открытие счёта, создание и выдачу кредита.'],
+  };
+  const m=map[role];
+  if(m && a.status===m[0]) return `<div class="banner info"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>${m[1]}</div>`;
+  if(a.status==='auto_rejected') return `<div class="banner danger"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Автоматический отказ по результатам скоринга. Заявка не передавалась андеррайтерам.</div>`;
+  if(a.status==='rejected') return `<div class="banner danger"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Заявка отклонена андеррайтером. См. решения ниже.</div>`;
+  if(a.status==='disbursed') return `<div class="banner ok"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Кредит выдан. Конвейер по заявке завершён.</div>`;
+  if(a.status==='returned') return `<div class="banner warn"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>Заявка возвращена на уточнение. Ожидаются дополнительные данные из TadbirCore.</div>`;
+  return '';
+}
+
+function cardClientInfo(a){
+  const rows=[
+    ['Цель кредита', esc(a.purpose)],
+    ['Запрашиваемая сумма', `<span class="mono">${fmtUZS(a.requested)}</span>`],
+    ['Возраст компании', a.ageMonths+' мес. ('+(a.ageMonths>=6?'> 6 мес.':'< 6 мес.')+')'],
+    ['Чистый доход (год)', `<span class="mono">${fmtUZS(a.netIncome)}</span>`],
+    ['Совокупная задолженность', `<span class="mono">${fmtUZS(a.totalDebt)}</span>`],
+    ['Кредитная история', esc(a.creditHistory)],
+    ['Просроченные кредиты', a.overdue==='Нет'?'<span style="color:var(--ok);font-weight:600">Нет</span>':`<span style="color:var(--danger);font-weight:600">${esc(a.overdue)}</span>`],
+  ];
+  return `<div class="card"><div class="card-h"><h3>Информация о клиенте</h3><div class="spacer"></div>
+      <span class="badge b-info">Источник: TadbirCore</span></div>
+    <div class="card-pad"><div class="kv">${rows.map(r=>`<div class="row"><div class="k">${r[0]}</div><div class="v">${r[1]}</div></div>`).join('')}</div></div></div>`;
+}
+
+function cardLimitSummary(a){
+  const ratio = a.limit ? Math.round(a.limit/a.requested*100) : 0;
+  return `<div class="card card-pad">
+    <div class="section-title">Кредитное предложение</div>
+    ${a.limit ? `<div class="limit-box" style="margin:10px 0 4px">
+      <div><div class="ll">Расчётный лимит</div><div class="lv">${fmtShort(a.limit)}</div><div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:3px">${ratio}% от запрошенной суммы</div></div>
+    </div>` : `<div class="banner info mb0" style="margin-top:10px">Лимит ещё не рассчитан — заявка не прошла скоринг.</div>`}
+    <div class="kv" style="margin-top:14px">
+      <div class="row"><div class="k">Запрошено</div><div class="v mono">${fmtUZS(a.requested)}</div></div>
+      <div class="row"><div class="k">Текущий статус</div><div class="v">${STATUS[a.status].label}</div></div>
+      <div class="row"><div class="k">Назначен</div><div class="v">${a.level?ROLES[a.level].name:'—'}</div></div>
+    </div></div>`;
+}
+
+function cardTimeline(a){
+  const done = new Set(stepsUpTo(STATUS_STEP[a.status]||'received'));
+  // динамически добавляем АБС-этапы, если есть refs
+  if(a.abs.accountRef) done.add('abs_acc');
+  if(a.abs.loanRef) done.add('abs_loan');
+  if(a.abs.disburseRef){ done.add('disbursed'); done.add('completed'); }
+  const rejected = (a.status==='auto_rejected'||a.status==='rejected');
+  const currentKey = STATUS_STEP[a.status];
+
+  let items = TL.map(([key,label])=>{
+    const isDone=done.has(key);
+    const isCurrent = key===currentKey && !isDone && !rejected;
+    let cls = isDone?'done':(isCurrent?'current':'pending');
+    return {key,label,cls,isDone};
+  });
+  // обрезаем хвост после авто/ручного отказа
+  if(rejected){
+    const cut = a.status==='auto_rejected' ? TL_ORDER.indexOf('katm') : TL_ORDER.indexOf(STATUS_STEP['waiting_'+(a.level||'u1')]||'sent_u1');
+    items = items.slice(0, Math.max(cut+1, 6));
+    items.push({key:'_rej',label:a.status==='auto_rejected'?'Автоматический отказ':'Отказ андеррайтера',cls:'rejected',isDone:true});
+  }
+  const inner = items.map((it,i)=>{
+    const ic = it.cls==='done'?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>'
+      : it.cls==='rejected'?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+      : it.cls==='current'?'<span style="width:7px;height:7px;border-radius:50%;background:#fff"></span>':'';
+    return `<div class="tl-item ${it.cls}"><div class="tl-rail"><div class="tl-node">${ic}</div><div class="tl-line"></div></div>
+      <div class="tl-body"><div class="tt">${it.label}</div>${it.cls==='current'?'<div class="ts">текущий этап</div>':''}</div></div>`;
+  }).join('');
+  return `<div class="card"><div class="card-h"><h3>Процесс по заявке</h3><div class="spacer"></div>
+      <span class="hint">${done.size}/${TL.length}</span></div>
+    <div class="card-pad"><div class="tl">${inner}</div></div></div>`;
+}
+
+function cardDocuments(a){
+  const docs=[
+    ['SVOD','Финансовая отчётность за 3 мес.','PDF · 1.2 МБ'],
+    ['INN','Свидетельство о регистрации','PDF · 340 КБ'],
+    ['BANK','Банковская выписка','XLSX · 880 КБ'],
+    ['CHRT','Устав компании','PDF · 2.1 МБ'],
+  ];
+  if(a._extraDocs) a._extraDocs.forEach(d=>docs.push(['DOC',d,'Запрошен']));
+  return `<div class="card"><div class="card-h"><h3>Документы</h3><div class="spacer"></div><span class="hint">${docs.length} файлов</span></div>
+    <div class="card-pad" style="padding-top:6px;padding-bottom:6px">${docs.map(d=>`
+      <div class="doc-row"><div class="doc-ic">${d[0]}</div>
+        <div style="flex:1"><div class="dn">${esc(d[1])}</div><div class="dm">${d[2]}</div></div>
+        <button class="btn btn-ghost btn-sm">Открыть</button></div>`).join('')}</div></div>`;
+}
+
+function cardDecisions(a){
+  if(!a.decisions.length) return '';
+  const items=a.decisions.map(d=>{
+    const labels={approve:'Одобрено',reject:'Отказ',return:'Возврат на уточнение',comment:'Комментарий',doc:'Запрос документа'};
+    const cls={approve:'d-approve',reject:'d-reject',return:'d-return',comment:'d-comment',doc:'d-doc'}[d.action]||'d-comment';
+    const roleName = d.level==='system'?'Система': (ROLES[d.level]?ROLES[d.level].name:'');
+    return `<div class="decision ${cls}"><div class="dh"><div class="da">${d.level==='system'?'⚙':initials(d.actor)}</div>
+      <div><div class="dn">${esc(d.actor)}</div><div class="dl">${roleName} · ${labels[d.action]||''}</div></div>
+      <div class="dt">${fmtDate(d.ts)}</div></div>
+      ${d.comment?`<div class="dc">${esc(d.comment)}</div>`:''}</div>`;
+  }).join('');
+  return `<div class="card"><div class="card-h"><h3>Решения и комментарии</h3><div class="spacer"></div><span class="hint">${a.decisions.length} записей</span></div>
+    <div class="card-pad">${items}</div></div>`;
+}
+</script>
+<script>
+/* ============================================================
+   БЛОК СКОРИНГА (карточки проверок + симуляция)
+   ============================================================ */
+function scoreIcon(st){
+  if(st==='passed') return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>';
+  if(st==='failed') return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  if(st==='warning')return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+  return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+}
+const SCORE_LABEL={passed:['Пройдено','b-ok'],failed:['Не пройдено','b-danger'],warning:['Внимание','b-warn'],pending:['Ожидает','b-neutral']};
+function cardScoring(a){
+  const running = a._scoring; // во время симуляции
+  const checks = SCORE_DEFS.map(d=>{
+    const st = a.score[d.key]?a.score[d.key].status:'pending';
+    const isRun = running && running.current===d.key;
+    const lbl=SCORE_LABEL[st];
+    return `<div class="check st-${st} ${isRun?'running':''}" data-check="${d.key}">
+      <div class="cic">${isRun?'<div class="spinner"></div>':scoreIcon(st)}</div>
+      <div style="flex:1"><div class="cn">${d.name}</div><div class="cd">${d.desc}</div>
+        <div class="cs">${isRun?'<span class="badge b-navy">Выполняется…</span>':badge(lbl[0],lbl[1])}</div></div>
+    </div>`;
+  }).join('');
+
+  const allPending = SCORE_DEFS.every(d=>(a.score[d.key]||{}).status==='pending');
+  const canRun = ['new_tadbircore','in_scoring'].includes(a.status) && !running;
+  const limitBlock = a.limit ? `<div class="limit-box" style="margin-top:14px">
+      <div><div class="ll">Рассчитанный кредитный лимит</div><div class="lv">${fmtUZS(a.limit)}</div></div>
+      <div class="spacer"></div>
+      <div style="text-align:right"><div class="ll">Решение скоринга</div><div style="font-weight:700;font-size:16px;margin-top:4px">✓ Передано андеррайтеру</div></div>
+    </div>` : '';
+
+  let sourcesNote = '';
+  const off=Object.keys(S.settings.sources).filter(k=>!S.settings.sources[k]);
+  if(off.length) sourcesNote=`<div class="banner warn mb0" style="margin-top:12px;font-size:12.5px">Внимание: источник(и) ${off.map(s=>s.toUpperCase()).join(', ')} отключены в настройках — проверки будут пропущены.</div>`;
+
+  return `<div class="card"><div class="card-h"><h3>Результаты скоринга</h3>
+      <div class="spacer"></div>
+      ${canRun?`<button class="btn btn-nav btn-sm" data-action="run-scoring" data-id="${a.id}">${svgIc('scan')} Запустить симуляцию скоринга</button>`:''}
+      ${running?`<span class="badge b-navy">Скоринг выполняется…</span>`:''}
+    </div>
+    <div class="card-pad">
+      ${allPending&&!running?`<div class="banner info" style="margin-bottom:14px">Скоринг ещё не запускался. Нажмите «Запустить симуляцию скоринга», чтобы отправить запросы в SOLIQ, E-GOV и KATM.</div>`:''}
+      <div class="score-grid">${checks}</div>
+      ${limitBlock}${sourcesNote}
+    </div></div>`;
+}
+
+/* [BL] Симуляция скоринга: последовательно прогоняем проверки,
+   при провале -> автоотказ, иначе -> расчёт лимита и передача U1 */
+function runScoring(id){
+  const a=getApp(id); if(!a||a._scoring) return;
+  a.status='in_scoring';
+  a._scoring={current:null};
+  // план симуляции: для демо все проверки проходят (заявка валидная)
+  const seq=SCORE_DEFS.map(d=>d.key);
+  // источники, отключённые в настройках — пропускаем (warning)
+  go('detail',id);
+  let i=0;
+  const tick=()=>{
+    if(i>0){ // зафиксировать предыдущую
+      const prev=seq[i-1]; const def=SCORE_DEFS.find(d=>d.key===prev);
+      const srcMap={soliq:'soliq',egov:'egov',katm:'katm'};
+      if(srcMap[prev]&&!S.settings.sources[prev]) a.score[prev]={status:'warning'};
+      else a.score[prev]={status:'passed'};
+    }
+    if(i>=seq.length){
+      a._scoring=null;
+      // [BL] все проверки пройдены -> расчёт лимита (консервативно ~92% от запроса, не выше)
+      a.limit=Math.round(a.requested*0.92/1e6)*1e6;
+      a.status='waiting_u1'; a.level='u1';
+      a.decisions.unshift({level:'system',actor:'Система скоринга',action:'comment',
+        comment:`Скоринг пройден. Рассчитан кредитный лимит ${fmtUZS(a.limit)}. Заявка передана Андеррайтеру 1.`,ts:new Date().toISOString()});
+      save(); go('detail',id);
+      toast('Скоринг пройден. Заявка передана Андеррайтеру 1.','ok');
+      return;
+    }
+    a._scoring.current=seq[i];
+    renderDetail();
+    i++;
+    setTimeout(tick,720);
+  };
+  setTimeout(tick,400);
+}
+</script>
+<script>
+/* ============================================================
+   ДЕЙСТВИЯ АНДЕРРАЙТЕРА / ФИНАЛ / АБС
+   ============================================================ */
+function cardActions(a){
+  const role=S.role;
+  // Андеррайтеры
+  const uwActive = (role==='u1'&&a.status==='waiting_u1')||(role==='u2'&&a.status==='waiting_u2')||(role==='u3'&&a.status==='waiting_u3');
+  if(uwActive){
+    const nextName = role==='u3' ? 'Старшему андеррайтеру (финал)' : 'Андеррайтеру '+(role==='u1'?'2':'3');
+    return `<div class="card"><div class="card-h"><h3>Решение андеррайтера — ${ROLES[role].name}</h3></div>
+      <div class="card-pad">
+        <div class="muted" style="font-size:13px;margin-bottom:14px">Проверьте скоринг и документы выше, затем примите решение. Одобрение передаст заявку ${nextName}.</div>
+        <div class="flex wrap">
+          <button class="btn btn-ok" data-act="approve" data-id="${a.id}">${svgIc('shield')} Одобрить и передать далее</button>
+          <button class="btn btn-warn" data-act="return" data-id="${a.id}">Вернуть на уточнение</button>
+          <button class="btn btn-danger" data-act="reject" data-id="${a.id}">Отказать</button>
+          <button class="btn btn-ghost" data-act="comment" data-id="${a.id}">Комментарий</button>
+          <button class="btn btn-ghost" data-act="doc" data-id="${a.id}">Запросить документ</button>
+        </div></div></div>`;
+  }
+  // Старший андеррайтер — финал
+  if(role==='senior'&&a.status==='waiting_final'){
+    return `<div class="card"><div class="card-h"><h3>Финальное решение — Старший андеррайтер</h3></div>
+      <div class="card-pad">
+        <div class="banner ok" style="font-size:12.5px">Заявка одобрена Андеррайтерами 1, 2 и 3. Проверьте их решения ниже перед финальным одобрением.</div>
+        <div class="flex wrap">
+          <button class="btn btn-ok" data-act="final-approve" data-id="${a.id}">${svgIc('shield')} Финально одобрить</button>
+          <button class="btn btn-warn" data-act="return-prev" data-id="${a.id}">Вернуть Андеррайтеру 3</button>
+          <button class="btn btn-danger" data-act="reject" data-id="${a.id}">Отказать</button>
+        </div></div></div>`;
+  }
+  // АБС оператор
+  if(role==='abs'&&(a.status==='approved'||a.status==='disbursed')) return cardABS(a);
+  return '';
+}
+
+/* ---------- АБС: 3 последовательных шага ---------- */
+function cardABS(a){
+  const accDone=!!a.abs.accountRef, loanDone=!!a.abs.loanRef, disbDone=!!a.abs.disburseRef;
+  const step=(num,title,desc,doneFlag,ref,refLabel,actLabel,actKey,locked)=>`
+    <div class="abs-step ${doneFlag?'done-step':''} ${locked?'locked':''}">
+      <div class="abs-num">${doneFlag?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>':num}</div>
+      <div style="flex:1"><div class="at">${title}</div><div class="ad">${desc}</div>
+        ${doneFlag?`<div class="abs-ref">${refLabel}: ${ref}</div>`:''}</div>
+      <div>${doneFlag?'<span class="badge b-ok">Выполнено</span>':locked?'<span class="badge b-neutral">Ожидает шага выше</span>':`<button class="btn btn-nav btn-sm" data-act="${actKey}" data-id="${a.id}">${actLabel}</button>`}</div>
+    </div>`;
+  const allDone=accDone&&loanDone&&disbDone;
+  return `<div class="card"><div class="card-h"><h3>Операции АБС</h3><div class="spacer"></div>
+      <span class="hint">Хост: ${S.settings.abs.host} · режим: ${S.settings.abs.mode==='mock'?'мок':'боевой'}</span></div>
+    <div class="card-pad">
+      ${allDone?`<div class="banner ok">Все операции АБС выполнены. Кредит выдан, заявка завершена.</div>`:`<div class="muted" style="font-size:13px;margin-bottom:14px">Выполните три операции последовательно. Каждая операция возвращает референс из АБС.</div>`}
+      ${step('1','Открыть счёт в АБС','Открытие расчётного счёта клиента в банковской системе АБС.',accDone,a.abs.accountRef,'Счёт','Открыть счёт','abs-acc',false)}
+      ${step('2','Создать кредит в АБС','Регистрация кредитного договора на сумму лимита '+fmtUZS(a.limit)+'.',loanDone,a.abs.loanRef,'Договор','Создать кредит','abs-loan',!accDone)}
+      ${step('3','Выдать средства','Перечисление одобренной суммы на открытый счёт клиента.',disbDone,a.abs.disburseRef,'Транзакция','Выдать кредит','abs-disb',!loanDone)}
+    </div></div>`;
+}
+</script>
+<script>
+/* ============================================================
+   ЭКРАН: НАСТРОЙКИ (Админ)
+   ============================================================ */
+function renderSettings(){
+  crumb([{t:'Настройки',b:true}]);
+  const s=S.settings;
+  const toggle=(on,key)=>`<div class="switch ${on?'on':''}" data-toggle="${key}"></div>`;
+  content().innerHTML = `
+    <div class="page-head"><div><h1>Настройки конвейера</h1><div class="ph-sub">Конфигурация маршрутизации, SLA, скоринга и интеграции с АБС</div></div></div>
+    <div class="grid-2">
+      <div class="stack">
+        <div class="card"><div class="card-h"><h3>Уровни андеррайтинга</h3></div><div class="card-pad">
+          <div class="setting-row"><div class="si"><div class="sn">Количество уровней андеррайтеров</div><div class="sd">Сколько последовательных уровней проходит заявка</div></div>
+            <select class="num-input" style="width:70px" data-set="levels"><option ${s.levels===2?'selected':''}>2</option><option ${s.levels===3?'selected':''}>3</option><option ${s.levels===4?'selected':''}>4</option></select></div>
+          <div class="setting-row"><div class="si"><div class="sn">Финальное одобрение старшим андеррайтером</div><div class="sd">Обязательный финальный этап после всех уровней</div></div>${toggle(true,'_seniorlock')}</div>
+        </div></div>
+
+        <div class="card"><div class="card-h"><h3>Маршрутизация и SLA</h3></div><div class="card-pad">
+          <div class="setting-row"><div class="si"><div class="sn">Порог суммы для усиленной проверки</div><div class="sd">Заявки выше этой суммы маркируются как «срочные»</div></div>
+            <input class="num-input" style="width:150px" value="${fmtShort(s.routeAmount)}" data-set="routeAmount" readonly></div>
+          <div class="setting-row"><div class="si"><div class="sn">SLA на этап (часов)</div><div class="sd">Время на решение андеррайтера до эскалации</div></div>
+            <input class="num-input" type="number" value="${s.sla}" data-set="sla"></div>
+          <div class="setting-row"><div class="si"><div class="sn">Предупреждать о нарушении SLA</div><div class="sd">Показывать индикатор «СРОЧНО» при риске просрочки</div></div>${toggle(s.slaWarn,'slaWarn')}</div>
+        </div></div>
+
+        <div class="card"><div class="card-h"><h3>Автоотказ (правила скоринга)</h3></div><div class="card-pad">
+          <div class="setting-row"><div class="si"><div class="sn">Автоматический отказ по скорингу</div><div class="sd">Отклонять заявки при критичных проверках без андеррайтера</div></div>${toggle(s.autoReject,'autoReject')}</div>
+          <div class="muted" style="font-size:12.5px;margin-top:6px;line-height:1.7">Критичные правила автоотказа:<br>
+            • Активные просрочки в KATM<br>• Совокупная задолженность &gt; 1 млрд сум<br>• Компания младше 6 месяцев<br>• Сумма запроса &gt; 50% чистого дохода<br>• Отрицательные фин. показатели за 3 мес.</div>
+        </div></div>
+      </div>
+
+      <div class="stack">
+        <div class="card"><div class="card-h"><h3>Источники скоринга</h3></div><div class="card-pad">
+          <div class="setting-row"><div class="si"><div class="sn">SOLIQ <span class="badge b-ok" style="margin-left:6px">онлайн</span></div><div class="sd">Налоговый комитет — статус и активность ИНН</div></div>${toggle(s.sources.soliq,'src-soliq')}</div>
+          <div class="setting-row"><div class="si"><div class="sn">E-GOV <span class="badge b-ok" style="margin-left:6px">онлайн</span></div><div class="sd">Единый портал госуслуг — реестр юр. лиц</div></div>${toggle(s.sources.egov,'src-egov')}</div>
+          <div class="setting-row"><div class="si"><div class="sn">KATM <span class="badge b-ok" style="margin-left:6px">онлайн</span></div><div class="sd">Кредитное бюро — просрочки и долговая нагрузка</div></div>${toggle(s.sources.katm,'src-katm')}</div>
+        </div></div>
+
+        <div class="card"><div class="card-h"><h3>Интеграция с АБС (мок)</h3></div><div class="card-pad">
+          <div class="setting-row"><div class="si"><div class="sn">Хост АБС</div><div class="sd">Адрес банковской системы для операций</div></div>
+            <input class="num-input" style="width:180px" value="${s.abs.host}" data-set="abs.host"></div>
+          <div class="setting-row"><div class="si"><div class="sn">Режим работы</div><div class="sd">Мок генерирует тестовые референсы</div></div>
+            <select class="num-input" style="width:110px" data-set="abs.mode"><option value="mock" ${s.abs.mode==='mock'?'selected':''}>Мок</option><option value="live" ${s.abs.mode==='live'?'selected':''}>Боевой</option></select></div>
+          <div class="setting-row"><div class="si"><div class="sn">Автогенерация референсов</div><div class="sd">Создавать номера счёта/договора/транзакции</div></div>${toggle(s.abs.autoRef,'abs-autoRef')}</div>
+        </div></div>
+
+        <div class="card"><div class="card-h"><h3>Данные прототипа</h3></div><div class="card-pad">
+          <div class="muted" style="font-size:13px;margin-bottom:14px">Прототип хранит состояние в браузере (localStorage). Сбросьте данные, чтобы вернуть демо в исходное состояние.</div>
+          <button class="btn btn-danger" data-action="reset">Сбросить демо-данные</button>
+        </div></div>
+      </div>
+    </div>`;
+}
+</script>
+<script>
+/* ============================================================
+   МОДАЛКИ ПОДТВЕРЖДЕНИЯ
+   ============================================================ */
+function openModal(html){ $('#modal').innerHTML=html; $('#overlay').classList.add('open'); }
+function closeModal(){ $('#overlay').classList.remove('open'); }
+$('#overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeModal(); });
+
+const ACTION_MODALS={
+  approve:{title:'Одобрить заявку', call:'Заявка будет одобрена и передана на следующий уровень андеррайтинга.', cl:'mc-ok', btn:'Одобрить и передать', btnCls:'btn-ok', need:false, ph:'Комментарий к решению (необязательно)'},
+  reject:{title:'Отклонить заявку', call:'Внимание: отказ завершает обработку заявки. Действие необратимо в рамках конвейера.', cl:'mc-danger', btn:'Отклонить заявку', btnCls:'btn-danger', need:true, ph:'Укажите причину отказа (обязательно)'},
+  return:{title:'Вернуть на уточнение', call:'Заявка вернётся в статус уточнения. Потребуются дополнительные данные из TadbirCore.', cl:'mc-warn', btn:'Вернуть', btnCls:'btn-warn', need:true, ph:'Что требуется уточнить?'},
+  comment:{title:'Добавить комментарий', call:'Комментарий будет виден другим андеррайтерам в истории заявки.', cl:'mc-info', btn:'Добавить', btnCls:'btn-nav', need:true, ph:'Текст комментария'},
+  doc:{title:'Запросить документ', call:'Запрос будет отправлен клиенту через TadbirCore и добавлен в раздел документов.', cl:'mc-info', btn:'Запросить', btnCls:'btn-nav', need:true, ph:'Например: Справка о доходах за последние 6 мес.'},
+  'final-approve':{title:'Финальное одобрение', call:'Заявка получит статус «Одобрено» и поступит к оператору АБС для открытия счёта, создания и выдачи кредита.', cl:'mc-ok', btn:'Финально одобрить', btnCls:'btn-ok', need:false, ph:'Комментарий (необязательно)'},
+  'return-prev':{title:'Вернуть Андеррайтеру 3', call:'Заявка вернётся на 3-й уровень андеррайтинга для повторного рассмотрения.', cl:'mc-warn', btn:'Вернуть', btnCls:'btn-warn', need:true, ph:'Причина возврата'},
+};
+function actionModal(act,id){
+  const a=getApp(id); const m=ACTION_MODALS[act]; if(!m)return;
+  openModal(`<div class="modal-h"><div class="mt">${m.title}</div><div class="ms"><span class="mono">${a.id}</span> · ${esc(a.company)}</div></div>
+    <div class="modal-b">
+      <div class="modal-callout ${m.cl}">${m.call}</div>
+      <label>${m.need?'Комментарий *':'Комментарий'}</label>
+      <textarea id="modal-comment" placeholder="${m.ph}"></textarea>
+    </div>
+    <div class="modal-f"><button class="btn btn-ghost" data-action="close-modal">Отмена</button>
+      <button class="btn ${m.btnCls}" data-confirm="${act}" data-id="${id}">${m.btn}</button></div>`);
+  setTimeout(()=>{const t=$('#modal-comment');t&&t.focus();},50);
+}
+
+/* выполнение подтверждённого действия [BL — переходы статусов] */
+function applyAction(act,id){
+  const a=getApp(id); if(!a)return;
+  const comment=($('#modal-comment')?$('#modal-comment').value:'').trim();
+  const m=ACTION_MODALS[act];
+  if(m&&m.need&&!comment){ const t=$('#modal-comment'); if(t){t.style.borderColor='var(--danger)';t.focus();} return; }
+  const now=new Date().toISOString();
+  const rec=(level,action,c)=>a.decisions.push({level,actor:ROLES[level].person,action,comment:c,ts:now});
+
+  if(act==='approve'){
+    rec(S.role,'approve',comment||'Одобрено без комментариев.');
+    if(S.role==='u1'){a.status='waiting_u2';a.level='u2';}
+    else if(S.role==='u2'){a.status='waiting_u3';a.level='u3';}
+    else if(S.role==='u3'){a.status='waiting_final';a.level='senior';}
+    toast('Заявка одобрена и передана далее.','ok');
+  } else if(act==='final-approve'){
+    rec('senior','approve',comment||'Финально одобрено.');
+    a.status='approved'; a.level=null;
+    toast('Заявка финально одобрена. Передана в АБС.','ok');
+  } else if(act==='reject'){
+    rec(S.role,'reject',comment); a.status='rejected'; a.level=null;
+    toast('Заявка отклонена.','danger');
+  } else if(act==='return'){
+    rec(S.role,'return',comment); a.status='returned';
+    toast('Заявка возвращена на уточнение.','warn');
+  } else if(act==='return-prev'){
+    rec('senior','return',comment); a.status='waiting_u3'; a.level='u3';
+    toast('Заявка возвращена Андеррайтеру 3.','warn');
+  } else if(act==='comment'){
+    rec(S.role,'comment',comment); toast('Комментарий добавлен.','ok');
+  } else if(act==='doc'){
+    rec(S.role,'doc',comment); (a._extraDocs=a._extraDocs||[]).push(comment); toast('Запрос документа отправлен.','ok');
+  }
+  save(); closeModal(); renderShell(); render();
+}
+
+/* ---------- АБС операции ---------- */
+function absRun(step,id){
+  const a=getApp(id); if(!a)return;
+  const btn=document.querySelector(`[data-act="${step}"][data-id="${id}"]`);
+  if(btn){ btn.disabled=true; btn.innerHTML='<span class="spinner" style="border-top-color:#fff;border-color:rgba(255,255,255,.4)"></span> Обработка…'; }
+  setTimeout(()=>{
+    const now=new Date().toISOString();
+    if(step==='abs-acc'){ a.abs.accountRef=mkAcc(); toast('Счёт в АБС открыт: '+a.abs.accountRef,'ok'); }
+    else if(step==='abs-loan'){ a.abs.loanRef=refNo('LN-2026'); toast('Кредитный договор создан: '+a.abs.loanRef,'ok'); }
+    else if(step==='abs-disb'){
+      a.abs.disburseRef=refNo('DSB'); a.status='disbursed'; a.level=null;
+      a.decisions.push({level:'senior',actor:'Система АБС',action:'comment',comment:`Средства выданы. Транзакция ${a.abs.disburseRef}. Конвейер завершён.`,ts:now});
+      toast('Средства выданы. Заявка завершена!','ok');
+    }
+    save(); renderShell(); render();
+  },1300);
+}
+function mkAcc(){ const g=()=>Math.floor(1000+Math.random()*9000); return `UZ${Math.floor(10+Math.random()*89)} 0014 ${g()} ${g()} ${g()}`; }
+
+/* ---------- TOAST ---------- */
+function toast(msg,type=''){
+  const el=document.createElement('div'); el.className='toast '+type;
+  const ic={ok:'<path d="M20 6 9 17l-5-5"/>',danger:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',warn:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/>'}[type]||'<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>';
+  el.innerHTML=`<svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">${ic}</svg><span>${esc(msg)}</span>`;
+  $('#toasts').appendChild(el);
+  setTimeout(()=>{el.style.transition='.3s';el.style.opacity='0';el.style.transform='translateX(20px)';setTimeout(()=>el.remove(),300);},3400);
+}
+</script>
+<script>
+/* ============================================================
+   ВХОД / СМЕНА РОЛИ / ГЛОБАЛЬНЫЕ ОБРАБОТЧИКИ
+   ============================================================ */
+function buildLoginRoles(){
+  $('#role-grid').innerHTML = Object.keys(ROLES).map((k,i)=>`<button class="role-opt ${i===0?'on':''}" data-lrole="${k}">
+    <span class="rn">${ROLES[k].name}</span><span class="rd">${ROLE_DESC[k]}</span></button>`).join('');
+}
+let LOGIN_ROLE='admin';
+function login(role){
+  S.role=role; S.view='dashboard'; S.selected=null;
+  $('#login').style.display='none'; $('#app').style.display='block';
+  renderShell(); render();
+}
+
+/* делегирование кликов */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-lrole],[data-login],[data-nav],[data-open],[data-card],[data-role],[data-action],[data-act],[data-confirm],[data-toggle],[data-set]');
+  // login role pick
+  const lr=e.target.closest('[data-lrole]');
+  if(lr){ document.querySelectorAll('.role-opt').forEach(x=>x.classList.remove('on')); lr.classList.add('on'); LOGIN_ROLE=lr.dataset.lrole; return; }
+  if(e.target.closest('#login-btn')){ login(LOGIN_ROLE); return; }
+
+  // role switch toggle
+  if(e.target.closest('#role-switch-btn')){ $('#role-menu').classList.toggle('open'); e.stopPropagation(); return; }
+  if(!e.target.closest('.role-switch')) $('#role-menu').classList.remove('open');
+
+  if(!t) return;
+  const d=t.dataset;
+  if(d.role){ S.role=d.role; S.view='dashboard'; S.selected=null; $('#role-menu').classList.remove('open'); renderShell(); render(); toast('Роль изменена: '+ROLES[d.role].name); return; }
+  if(d.nav){ S.filters={status:'all',level:'all',risk:'all',q:''}; go(d.nav); return; }
+  if(d.open){ go('detail',d.open); return; }
+  if(d.card){ S.filters={status:d.card,level:'all',risk:'all',q:''}; go('apps'); return; }
+
+  if(d.action){
+    const A=d.action;
+    if(A==='logout'){ S.role=null; $('#app').style.display='none'; $('#login').style.display='flex'; $('#role-menu').classList.remove('open'); return; }
+    if(A==='reset'){ if(confirm('Сбросить все демо-данные прототипа?')) resetData(); return; }
+    if(A==='clear-filters'){ S.filters={status:'all',level:'all',risk:'all',q:''}; render(); return; }
+    if(A==='close-modal'){ closeModal(); return; }
+    if(A==='run-scoring'){ runScoring(d.id); return; }
+    return;
+  }
+  if(d.act){
+    if(d.act.startsWith('abs-')){ absRun(d.act,d.id); return; }
+    actionModal(d.act,d.id); return;
+  }
+  if(d.confirm){ applyAction(d.confirm,d.id); return; }
+  if(d.toggle){ handleToggle(d.toggle,t); return; }
+});
+
+function handleToggle(key,el){
+  const s=S.settings;
+  if(key==='_seniorlock'){ toast('Финальное одобрение обязательно и не отключается.','warn'); return; }
+  if(key==='slaWarn'){ s.slaWarn=!s.slaWarn; el.classList.toggle('on',s.slaWarn); }
+  else if(key==='autoReject'){ s.autoReject=!s.autoReject; el.classList.toggle('on',s.autoReject); }
+  else if(key.startsWith('src-')){ const k=key.slice(4); s.sources[k]=!s.sources[k]; el.classList.toggle('on',s.sources[k]); }
+  else if(key==='abs-autoRef'){ s.abs.autoRef=!s.abs.autoRef; el.classList.toggle('on',s.abs.autoRef); }
+  save();
+}
+// настройки: change на select/input
+document.addEventListener('change',e=>{
+  const el=e.target.closest('[data-set]'); if(!el)return;
+  const key=el.dataset.set, v=el.value, s=S.settings;
+  if(key==='levels') s.levels=+v;
+  else if(key==='sla') s.sla=+v;
+  else if(key==='abs.host') s.abs.host=v;
+  else if(key==='abs.mode') s.abs.mode=v;
+  save(); toast('Настройка сохранена.','ok');
+});
+// глобальный поиск
+$('#global-search').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ const q=e.target.value.trim(); if(!q)return;
+    S.filters={status:'all',level:'all',risk:'all',q}; if(S.role) go('apps'); e.target.value=''; }
+});
+
+/* ---------- INIT ---------- */
+load();
+buildLoginRoles();
+</script>
+</body>
+</html>

@@ -223,8 +223,11 @@ img{max-width:100%;display:block;}
 .badge--demo{color:#9a6b1f;border-color:#e4cda0;}
 .badge--public{color:#1f7a52;border-color:#aedcc6;}
 .badge--private{color:var(--muted);}
+.badge--soon{color:#7c5cbf;border-color:#c4b0e8;background:rgba(124,92,191,.08);}
 [data-theme="dark"] .badge--demo{color:#e6c073;border-color:#5a4a26;}
 [data-theme="dark"] .badge--public{color:#6cd6a0;border-color:#2a5340;}
+[data-theme="dark"] .badge--soon{color:#b89ee8;border-color:#4a3470;background:rgba(124,92,191,.15);}
+.proto-card--soon .btn{opacity:.4;pointer-events:none;cursor:not-allowed;}
 .proto-card h3{font-size:19px;}
 .proto-product{font-size:12.5px;color:var(--muted);}
 .proto-desc{font-size:14px;color:var(--ink-soft);line-height:1.6;flex:1;}

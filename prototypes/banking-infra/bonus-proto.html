@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trastbank Front Office Bonus Prototype</title>
+  <style>
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --blue:#1d4ed8;
+      --blue2:#0ea5e9;
+      --green:#059669;
+      --green-bg:#ecfdf5;
+      --red:#e11d48;
+      --red-bg:#fff1f2;
+      --amber:#d97706;
+      --amber-bg:#fffbeb;
+      --slate:#334155;
+      --shadow:0 10px 25px rgba(15,23,42,.06);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    button{font-family:inherit}
+    .layout{min-height:100vh;display:flex}
+    .sidebar{
+      width:280px;
+      background:rgba(255,255,255,.96);
+      border-right:1px solid var(--line);
+      position:fixed;
+      top:0;left:0;bottom:0;
+      padding:22px;
+      z-index:5;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand-logo{
+      width:46px;height:46px;border-radius:16px;
+      background:linear-gradient(135deg,var(--blue),var(--blue2));
+      color:white;display:flex;align-items:center;justify-content:center;font-size:23px;
+      box-shadow:var(--shadow);
+    }
+    .brand small{display:block;color:var(--muted);font-size:13px}
+    .brand b{display:block;font-size:18px}
+    .employee{
+      margin-top:32px;
+      padding:16px;
+      border-radius:18px;
+      background:#f8fafc;
+      border:1px solid #edf2f7;
+    }
+    .employee .label{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em}
+    .employee strong{display:block;margin-top:6px}
+    .employee span{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+    .nav{margin-top:28px;display:flex;flex-direction:column;gap:8px}
+    .nav button{
+      border:0;background:transparent;color:#475569;
+      width:100%;text-align:left;
+      border-radius:14px;padding:13px 14px;
+      font-weight:650;cursor:pointer;
+      display:flex;gap:11px;align-items:center;
+      transition:.2s;
+    }
+    .nav button:hover{background:#f1f5f9}
+    .nav button.active{background:var(--blue);color:white;box-shadow:var(--shadow)}
+    .side-help{
+      position:absolute;left:22px;right:22px;bottom:22px;
+      padding:15px;border-radius:18px;
+      background:#eff6ff;color:#1e3a8a;
+      border:1px solid #dbeafe;font-size:13px;line-height:1.45;
+    }
+    .main{margin-left:280px;width:calc(100% - 280px)}
+    .topbar{
+      position:sticky;top:0;z-index:3;
+      background:rgba(255,255,255,.84);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--line);
+      padding:18px 32px;
+    }
+    .topbar-inner{max-width:1320px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .period{font-size:12px;color:#94a3b8;text-transform:uppercase;font-weight:800;letter-spacing:.08em}
+    h1,h2,h3,p{margin:0}
+    h1{font-size:25px;line-height:1.2}
+    .top-actions{display:flex;gap:10px;align-items:center}
+    .btn{
+      border:1px solid var(--line);
+      background:white;color:#334155;
+      border-radius:14px;padding:10px 14px;
+      font-size:14px;font-weight:700;cursor:pointer;
+      display:inline-flex;gap:8px;align-items:center;
+      box-shadow:0 2px 8px rgba(15,23,42,.03);
+      transition:.2s;
+    }
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(15,23,42,.06)}
+    .btn.primary{background:var(--blue);color:white;border-color:var(--blue)}
+    .btn.danger{background:var(--red-bg);color:var(--red);border-color:#fecdd3}
+    .content{max-width:1320px;margin:auto;padding:28px 32px 46px}
+    .page{display:none;animation:fade .22s ease}
+    .page.active{display:block}
+    @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .grid{display:grid;gap:16px}
+    .grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .metric{padding:20px}
+    .metric-row{display:flex;justify-content:space-between;gap:12px}
+    .metric-title{font-size:14px;color:var(--muted)}
+    .metric-value{font-size:27px;font-weight:900;letter-spacing:-.03em;margin-top:8px}
+    .metric-hint{font-size:12px;color:var(--muted);margin-top:4px}
+    .icon-box{
+      width:46px;height:46px;border-radius:15px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;flex-shrink:0;
+    }
+    .tone-green{background:var(--green-bg);color:var(--green)}
+    .tone-red{background:var(--red-bg);color:var(--red)}
+    .tone-blue{background:#eff6ff;color:var(--blue)}
+    .tone-slate{background:#f1f5f9;color:#475569}
+    .section{padding:22px}
+    .flex{display:flex}
+    .between{justify-content:space-between}
+    .center{align-items:center}
+    .gap{gap:14px}
+    .muted{color:var(--muted)}
+    .small{font-size:13px}
+    .title{font-size:20px;font-weight:900;letter-spacing:-.02em}
+    .badge{
+      display:inline-flex;align-items:center;
+      border-radius:999px;padding:5px 10px;
+      font-size:12px;font-weight:800;
+      border:1px solid transparent;white-space:nowrap;
+    }
+    .badge.green{background:var(--green-bg);color:var(--green);border-color:#bbf7d0}
+    .badge.blue{background:#eff6ff;color:var(--blue);border-color:#bfdbfe}
+    .badge.red{background:var(--red-bg);color:var(--red);border-color:#fecdd3}
+    .badge.amber{background:var(--amber-bg);color:var(--amber);border-color:#fde68a}
+    .badge.slate{background:#f1f5f9;color:#475569;border-color:#e2e8f0}
+    .progress-wrap{height:16px;background:#eef2f7;border-radius:999px;overflow:hidden;margin-top:20px}
+    .progress{
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--blue),var(--green));
+      width:0;
+      transition:width .8s ease;
+    }
+    .info-cards{margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .info-card{background:#f8fafc;border-radius:15px;padding:13px}
+    .info-card span{display:block;font-size:12px;color:var(--muted)}
+    .info-card b{display:block;margin-top:4px}
+    .dash-grid{display:grid;grid-template-columns:4fr 2fr;gap:16px}
+    .table-wrap{overflow:auto;margin-top:18px}
+    table{width:100%;border-collapse:separate;border-spacing:0 8px;font-size:14px;min-width:900px}
+    th{
+      text-align:left;color:#94a3b8;
+      font-size:11px;text-transform:uppercase;letter-spacing:.07em;
+      padding:8px 12px;
+    }
+    td{padding:14px 12px;background:#f8fafc;border-top:1px solid #edf2f7;border-bottom:1px solid #edf2f7}
+    td:first-child{border-left:1px solid #edf2f7;border-radius:14px 0 0 14px;font-weight:800}
+    td:last-child{border-right:1px solid #edf2f7;border-radius:0 14px 14px 0}
+    tr:hover td{background:#f1f5f9}
+    .link-btn{
+      border:0;background:transparent;color:var(--blue);
+      font-weight:850;cursor:pointer;padding:0;
+    }
+    .link-btn:hover{text-decoration:underline}
+    .share-row{display:flex;justify-content:space-between;gap:12px;margin:8px 0}
+    .bar{height:8px;background:#eef2f7;border-radius:999px;overflow:hidden;margin-top:8px}
+    .bar span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--blue2))}
+    .service-item{
+      display:block;width:100%;text-align:left;border:0;background:white;
+      border-radius:16px;padding:12px;cursor:pointer;
+    }
+    .service-item:hover{background:#f8fafc}
+    .hero{
+      color:white;padding:24px;border-radius:20px 20px 0 0;
+      background:linear-gradient(135deg,var(--blue),var(--blue2));
+    }
+    .hero.emerald{background:linear-gradient(135deg,#059669,#14b8a6)}
+    .hero.cyan{background:linear-gradient(135deg,#0891b2,#38bdf8)}
+    .hero.violet{background:linear-gradient(135deg,#7c3aed,#d946ef)}
+    .hero.amber{background:linear-gradient(135deg,#d97706,#fb923c)}
+    .hero.slate{background:linear-gradient(135deg,#334155,#64748b)}
+    .formula{
+      background:#020617;color:white;border-radius:15px;
+      padding:17px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      overflow:auto;
+    }
+    .formula-chip{
+      display:inline-block;background:#e2e8f0;color:#334155;border-radius:10px;
+      padding:6px 8px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;
+    }
+    .operations-table{border-collapse:collapse;border-spacing:0;min-width:1050px}
+    .operations-table th{border-bottom:1px solid var(--line);padding:13px 12px}
+    .operations-table td{background:white;border:0;border-bottom:1px solid #f1f5f9;border-radius:0}
+    .operations-table tr:hover td{background:#f8fafc}
+    .calc-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px;padding:22px}
+    .step{display:flex;gap:13px;border:1px solid var(--line);border-radius:18px;padding:15px;margin-top:12px}
+    .step-no{width:36px;height:36px;border-radius:999px;background:var(--blue);color:white;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .kv{border:1px solid var(--line);border-radius:18px;overflow:hidden}
+    .kv-row{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid #f1f5f9;font-size:13px}
+    .kv-row:last-child{border-bottom:0}
+    .kv-row span:first-child{color:var(--muted)}
+    .final-box{margin-top:16px;background:var(--green-bg);border:1px solid #bbf7d0;color:#064e3b;border-radius:18px;padding:16px}
+    .quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+    .quick{border:1px solid var(--line);border-radius:14px;background:white;padding:13px;font-weight:700;font-size:14px}
+    .empty{
+      max-width:760px;margin:40px auto;text-align:center;padding:44px;
+    }
+    .empty-icon{width:70px;height:70px;border-radius:22px;margin:0 auto;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:32px}
+    .mobile-nav{display:none}
+    .back-top{margin-bottom:18px}
+    @media(max-width:1100px){
+      .grid-4{grid-template-columns:repeat(2,1fr)}
+      .dash-grid,.calc-grid{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .main{margin-left:0;width:100%}
+      .mobile-nav{display:flex;gap:8px;overflow:auto;padding:10px 16px;background:white;border-bottom:1px solid var(--line)}
+      .mobile-nav button{white-space:nowrap}
+    }
+    @media(max-width:720px){
+      .topbar{padding:16px}
+      .topbar-inner{align-items:flex-start;flex-direction:column}
+      .content{padding:18px 16px 96px}
+      .grid-4,.grid-3,.grid-2,.info-cards,.quick-grid{grid-template-columns:1fr}
+      .top-actions{width:100%;overflow:auto}
+      .metric-value{font-size:23px}
+      h1{font-size:22px}
+      .title{font-size:18px}
+    }
+  </style>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">∑</div>
+        <div><small>Trastbank</small><b>Bonus System</b></div>
+      </div>
+
+      <div class="employee">
+        <div class="label">Hodim</div>
+        <strong id="employeeName">Sobirov Akmal</strong>
+        <span>ID: 168654</span>
+        <span>Toshkent shahar filiali</span>
+      </div>
+
+      <nav class="nav">
+        <button class="active" data-page="dashboard"><span>📊</span> Dashboard</button>
+        <button data-page="antibonus"><span>➖</span> Antibonus</button>
+        <button data-page="error"><span>🛡️</span> Xatolik holati</button>
+      </nav>
+
+      <div class="side-help">
+        <b>Eslatma:</b><br/>
+        Har bir raqam ustiga bosib, hisob-kitob izohini ko‘rish mumkin.
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div>
+            <div class="period">Aprel 2025</div>
+            <h1>Front office bonus kabineti</h1>
+          </div>
+          <div class="top-actions">
+            <button class="btn">📅 Aprel 2025</button>
+            <button class="btn primary">⬇ Excelga yuklab olish</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="mobile-nav">
+        <button class="btn primary" data-page="dashboard">Dashboard</button>
+        <button class="btn" data-page="antibonus">Antibonus</button>
+        <button class="btn" data-page="error">Xatolik</button>
+      </div>
+
+      <section class="content">
+        <div id="dashboard" class="page active">
+          <div class="grid grid-4">
+            <div class="card metric">
+              <div class="metric-row">
+                <div>
+                  <div class="metric-title">Jami hisoblangan bonus</div>
+                  <div class="metric-value" id="grossBonus">0 so‘m</div>
+                  <div class="metric-hint">Aprel oyi bo‘yicha brutto bonus</div>
+                </div>
+                <div class="icon-box tone-green">↗</div>
+              </div>
+            </div>
+            <div class="card metric clickable" data-page="antibonus">
+              <div class="metric-row">
+                <div>
+                  <div class="metric-title">Antibonus / ushlab qolish</div>
+                  <div class="metric-value" id="antiBonus">0 so‘m</div>
+                  <div class="metric-hint">Universallik jarimasi</div>
+                </div>
+                <div class="icon-box tone-red">−</div>
+              </div>
+            </div>
+            <div class="card metric">
+              <div class="metric-row">
+                <div>
+                  <div class="metric-title">To‘lanishi kutilayotgan bonus</div>
+                  <div class="metric-value" id="netBonus">0 so‘m</div>
+                  <div class="metric-hint">Bonus - antibonus</div>
+                </div>
+                <div class="icon-box tone-blue">✓</div>
+              </div>
+            </div>
+            <div class="card metric">
+              <div class="metric-row">
+                <div>
+                  <div class="metric-title">Bugungi bonus</div>
+                  <div class="metric-value" id="todayBonus">0 so‘m</div>
+                  <div class="metric-hint">04.04.25 holatiga</div>
+                </div>
+                <div class="icon-box tone-slate">💳</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card section" style="margin-top:18px">
+            <div class="flex between center gap">
+              <div>
+                <div class="flex center gap">
+                  <h2 class="title">Oylik reja bajarilishi</h2>
+                  <span class="badge amber">Rejaga yaqin</span>
+                </div>
+                <p class="muted small" id="planText" style="margin-top:6px"></p>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:34px;font-weight:950;color:var(--blue)" id="planPct">0%</div>
+                <div class="muted small">oylik plan</div>
+              </div>
+            </div>
+            <div class="progress-wrap"><div class="progress" id="planProgress"></div></div>
+            <div class="info-cards">
+              <div class="info-card"><span>Status</span><b>Rejaga yaqin</b></div>
+              <div class="info-card"><span>Eng katta bonus yo‘nalishi</span><b>Kredit - UZS</b></div>
+              <div class="info-card"><span>Tavsiya</span><b>Omonat va karta emissiyani oshirish</b></div>
+            </div>
+          </div>
+
+          <div class="dash-grid" style="margin-top:18px">
+            <div class="card section">
+              <div class="flex between center gap">
+                <div>
+                  <h2 class="title">Kunlik yig‘ilgan bonuslar</h2>
+                  <p class="muted small" style="margin-top:5px">Yo‘nalish nomi yoki summa ustiga bosib batafsil tarixga o‘ting.</p>
+                </div>
+                <div class="top-actions">
+                  <button class="btn">☰ Filter</button>
+                  <button class="btn">🔎 Qidirish</button>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead id="dailyHead"></thead>
+                  <tbody id="dailyBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card section">
+              <h2 class="title">Yo‘nalishlar bo‘yicha ulush</h2>
+              <div id="serviceShare" style="margin-top:16px"></div>
+            </div>
+          </div>
+
+          <div class="card section" style="margin-top:18px">
+            <div class="flex between center">
+              <div>
+                <h2 class="title">Tezkor savollar</h2>
+                <p class="muted small" style="margin-top:5px">Hodim 10 soniyada javob olishi kerak bo‘lgan savollar.</p>
+              </div>
+              <div style="font-size:24px;color:var(--blue)">?</div>
+            </div>
+            <div class="quick-grid">
+              <div class="quick">Bu oy qancha bonus yig‘dim?</div>
+              <div class="quick">Qancha antibonus bor?</div>
+              <div class="quick">Qaysi xizmatdan qancha bonus oldim?</div>
+              <div class="quick">Har bir bonus qanday formula bilan hisoblandi?</div>
+              <div class="quick">Rejamning necha foizi bajarildi?</div>
+              <div class="quick">Bonusni oshirish uchun qayerga e’tibor beraman?</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="service" class="page">
+          <button class="btn back-top" data-page="dashboard">← Dashboardga qaytish</button>
+          <div class="card" id="serviceCard"></div>
+          <div class="card section" style="margin-top:18px">
+            <div class="flex between center gap">
+              <div>
+                <h2 class="title">Operatsiyalar ro‘yxati</h2>
+                <p class="muted small" style="margin-top:5px">Bonus summasini bosib, hisob-kitob izohini oching.</p>
+              </div>
+              <div class="top-actions">
+                <button class="btn">Sana: 01-04 Aprel</button>
+                <button class="btn">Status: Barchasi</button>
+                <button class="btn">Filial: Barchasi</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="operations-table">
+                <thead>
+                  <tr>
+                    <th>Sana</th><th>ID</th><th>Operatsiya ma’lumoti</th><th>Baza summa</th><th>Formula</th><th>Bonus</th><th>Status</th><th>Batafsil</th>
+                  </tr>
+                </thead>
+                <tbody id="operationBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="calc" class="page">
+          <button class="btn back-top" onclick="openService(selectedService)">← Operatsiyalar tarixiga qaytish</button>
+          <div class="card" id="calcCard"></div>
+        </div>
+
+        <div id="antibonus" class="page">
+          <button class="btn back-top" data-page="dashboard">← Dashboardga qaytish</button>
+          <div class="card section">
+            <div class="flex between gap" style="align-items:flex-start">
+              <div>
+                <p class="muted small">Universallik antibonusi</p>
+                <h2 class="title" style="font-size:27px;margin-top:5px" id="antiTitle">Nega ushlab qolindi?</h2>
+                <p class="muted small" style="max-width:780px;margin-top:8px">
+                  Xodim oy davomida front office xizmatlarining yetarli turida operatsiya bajarmaganda, umumiy bonusdan jarima ushlab qolinadi.
+                </p>
+              </div>
+              <div style="background:var(--red-bg);border:1px solid #fecdd3;border-radius:18px;padding:16px;text-align:right;color:var(--red)">
+                <div class="small" style="font-weight:800">Qo‘llangan jarima</div>
+                <div style="font-size:34px;font-weight:950">-6%</div>
+                <div id="antiBoxAmount" class="small"></div>
+              </div>
+            </div>
+            <div class="grid grid-3" style="margin-top:22px">
+              <div class="info-card"><span>Bajarilgan xizmat turi</span><b style="font-size:34px">6</b></div>
+              <div class="info-card"><span>Talab qilinadigan xizmat turi</span><b style="font-size:34px">9</b></div>
+              <div class="info-card"><span>Yetishmayotgan yo‘nalish</span><b style="font-size:34px">3</b></div>
+            </div>
+            <div style="margin-top:22px;border:1px solid var(--line);border-radius:18px;padding:18px">
+              <h3>Jarima formulasi</h3>
+              <div class="formula" style="margin-top:12px">Antibonus = Jami bonus × (N - x) × 2%</div>
+              <p class="muted small" style="margin-top:12px" id="antiFormulaText"></p>
+            </div>
+            <div class="grid grid-2" style="margin-top:18px">
+              <div style="border:1px solid var(--line);border-radius:18px;padding:18px">
+                <h3>Yetishmayotgan xizmatlar</h3>
+                <div style="margin-top:12px">
+                  <div class="missing">Kredit karta →</div>
+                  <div class="missing">Online konversiya →</div>
+                  <div class="missing">VISA karta emissiyasi →</div>
+                </div>
+              </div>
+              <div style="background:#eff6ff;border:1px solid #dbeafe;border-radius:18px;padding:18px;color:#172554">
+                <h3>Tavsiya</h3>
+                <p class="small" style="margin-top:10px;line-height:1.55">
+                  Antibonusni kamaytirish uchun oy tugashidan oldin yetishmayotgan xizmat yo‘nalishlarida kamida bittadan operatsiya bajaring.
+                  Tizim keyingi hisob-kitobda jarima foizini avtomatik qayta hisoblaydi.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="error" class="page">
+          <div class="card empty">
+            <div class="empty-icon" style="background:var(--red-bg);color:var(--red)">×</div>
+            <h2 style="margin-top:18px">Ma’lumotlarni yuklashda xatolik</h2>
+            <p class="muted" style="margin-top:10px;line-height:1.55">
+              ABS yoki bonus hisoblash moduli bilan aloqa vaqtincha uzildi.
+              So‘nggi muvaffaqiyatli hisob-kitob 04.04.25 18:00 holatiga saqlangan.
+            </p>
+            <div style="margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+              <button class="btn">Qayta urinish</button>
+              <button class="btn primary" data-page="dashboard">Saqlangan natijani ko‘rish</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+const fmt = n => new Intl.NumberFormat("uz-UZ").format(Math.round(n || 0));
+const fmtPct = n => `${Number(n || 0).toFixed(n % 1 === 0 ? 0 : 1)}%`;
+
+const serviceMeta = {
+  kredit: {
+    title:"Kredit - UZS", fullTitle:"Milliy valyutadagi kreditlar", hero:"", formula:"S = D × ((f - r) / 100) × 0.05",
+    coefficient:"5% marjadan", rule:"Berilgan kreditning asosiy qarz qoldig‘i va foiz marjasi asosida hisoblanadi."
+  },
+  omonatUzs: {
+    title:"Omonat - UZS", fullTitle:"Milliy valyutadagi omonatlar", hero:"emerald", formula:"S = (D - T - V - U - A) × 0.0005",
+    coefficient:"0.05%", rule:"Istisno omonat turlari chiqarib tashlanadi, qolgan jalb qilingan summa bo‘yicha bonus hisoblanadi."
+  },
+  omonatUsd: {
+    title:"Omonat - USD", fullTitle:"Xorijiy valyutadagi omonatlar", hero:"cyan", formula:"S = (D - T - T2) × USD kursi × 0.0003",
+    coefficient:"0.03%", rule:"USD omonatlar kunlik kurs orqali so‘mga aylantiriladi va istisno turlar chiqarib tashlanadi."
+  },
+  transfers: {
+    title:"Pul o‘tkazmalari", fullTitle:"Pul o‘tkazmalari", hero:"violet", formula:"S = (n / N) × filial daromadi × 0.07",
+    coefficient:"7% daromaddan", rule:"Hodim bajargan o‘tkazmalar soni filialdagi umumiy o‘tkazmalar soniga nisbatan ulush sifatida olinadi."
+  },
+  payments: {
+    title:"To‘lovlar", fullTitle:"To‘lovlar / provodka", hero:"amber", formula:"S = (D - F - C - U) × 0.07",
+    coefficient:"7% daromaddan", rule:"Inson omili bo‘lmagan yoki boshqa bo‘limda hisoblangan daromadlar chiqarib tashlanadi."
+  },
+  cards: {
+    title:"Karta emissiya", fullTitle:"Plastik karta emissiyasi", hero:"slate", formula:"S = s × N",
+    coefficient:"UZCARD 2 000 / Cobadge 1 000 so‘m", rule:"Har bir chiqarilgan karta uchun belgilangan qat’iy mukofot summasi hisoblanadi."
+  }
+};
+
+const dailyRows = [
+  { date:"01.04.25", kredit:209936, omonatUzs:16815, omonatUsd:19331, transfers:400688, payments:11951, cards:6000 },
+  { date:"02.04.25", kredit:431973, omonatUzs:32381, omonatUsd:17221, transfers:240954, payments:10593, cards:10000 },
+  { date:"03.04.25", kredit:720399, omonatUzs:0, omonatUsd:17992, transfers:106196, payments:8041, cards:7000 },
+  { date:"04.04.25", kredit:453788, omonatUzs:15838, omonatUsd:2852, transfers:263150, payments:8534, cards:5000 }
+];
+
+const operationData = {
+  kredit: [
+    { date:"01.04.25", time:"09:16", id:"KRD-3687893", amount:94906186, debt:28112308, annual:30, resource:20, margin:10, bonus:140562, status:"Hisoblandi" },
+    { date:"01.04.25", time:"15:22", id:"KRD-5407854", amount:36817306, debt:17343589, annual:26, resource:18, margin:8, bonus:69374, status:"Hisoblandi" },
+    { date:"02.04.25", time:"10:04", id:"KRD-3080806", amount:37563260, debt:17412805, annual:28, resource:20, margin:8, bonus:69651, status:"Hisoblandi" },
+    { date:"02.04.25", time:"16:40", id:"KRD-4537952", amount:45858225, debt:30053461, annual:28, resource:20, margin:8, bonus:120214, status:"Hisoblandi" },
+    { date:"03.04.25", time:"11:11", id:"KRD-7253461", amount:76604577, debt:50447269, annual:24, resource:16, margin:8, bonus:201789, status:"Hisoblandi" },
+    { date:"04.04.25", time:"13:45", id:"KRD-2043966", amount:97980368, debt:68075354, annual:24, resource:16, margin:8, bonus:272301, status:"To‘lovga tayyor" }
+  ],
+  omonatUzs: [
+    { date:"01.04.25", time:"09:41", id:"DEP-8959482", amount:16487983, type:"Oddiy omonat", bonus:8244, status:"Hisoblandi" },
+    { date:"01.04.25", time:"12:05", id:"DEP-8564157", amount:17142064, type:"Oddiy omonat", bonus:8571, status:"Hisoblandi" },
+    { date:"02.04.25", time:"10:19", id:"DEP-1250447", amount:34940361, type:"Oddiy omonat", bonus:17470, status:"Hisoblandi" },
+    { date:"02.04.25", time:"15:08", id:"DEP-7874264", amount:29841127, type:"Oddiy omonat", bonus:14911, status:"Hisoblandi" },
+    { date:"04.04.25", time:"11:03", id:"DEP-9982983", amount:31675720, type:"Oddiy omonat", bonus:15838, status:"Hisoblandi" },
+    { date:"03.04.25", time:"16:55", id:"DEP-5743676", amount:4565682, type:"V", bonus:0, status:"Istisno" }
+  ],
+  omonatUsd: [
+    { date:"01.04.25", time:"10:21", id:"USD-7067498", usd:4995, rate:12900, type:"Oddiy", amount:64435500, bonus:19331, status:"Hisoblandi" },
+    { date:"02.04.25", time:"14:33", id:"USD-8389324", usd:1847, rate:12900, type:"Oddiy", amount:23826300, bonus:7139, status:"Hisoblandi" },
+    { date:"02.04.25", time:"17:26", id:"USD-1424554", usd:1748, rate:12900, type:"Oddiy", amount:22549200, bonus:6747, status:"Hisoblandi" },
+    { date:"03.04.25", time:"12:46", id:"USD-3603537", usd:3036, rate:12900, type:"Oddiy", amount:39164400, bonus:11737, status:"Hisoblandi" },
+    { date:"04.04.25", time:"16:18", id:"USD-5538665", usd:4073, rate:12900, type:"Oddiy", amount:52541700, bonus:15769, status:"Hisoblandi" },
+    { date:"04.04.25", time:"17:10", id:"USD-8035715", usd:1723, rate:12900, type:"T2", amount:22226700, bonus:0, status:"Istisno" }
+  ],
+  transfers: [
+    { date:"01.04.25", time:"09:03", id:"TRF-8185184", count:27, totalCount:219, branchRevenue:7934045, k:0.1233, bonus:68472, status:"Hisoblandi" },
+    { date:"01.04.25", time:"11:45", id:"TRF-4944188", count:37, totalCount:219, branchRevenue:7934045, k:0.1689, bonus:93832, status:"Hisoblandi" },
+    { date:"02.04.25", time:"12:12", id:"TRF-5011444", count:48, totalCount:286, branchRevenue:6114715, k:0.1678, bonus:71837, status:"Hisoblandi" },
+    { date:"03.04.25", time:"10:48", id:"TRF-6701973", count:42, totalCount:289, branchRevenue:3914610, k:0.1453, bonus:39823, status:"Hisoblandi" },
+    { date:"04.04.25", time:"15:01", id:"TRF-9933273", count:50, totalCount:206, branchRevenue:5652645, k:0.2427, bonus:96040, status:"Hisoblandi" }
+  ],
+  payments: [
+    { date:"01.04.25", time:"09:25", id:"PAY-145884", revenue:14065, f:0, c:0, u:0, bonus:985, status:"Hisoblandi" },
+    { date:"01.04.25", time:"12:36", id:"PAY-1234502", revenue:42747, f:2638, c:0, u:0, bonus:2808, status:"Hisoblandi" },
+    { date:"02.04.25", time:"13:19", id:"PAY-8802033", revenue:43773, f:0, c:3177, u:3623, bonus:2588, status:"Hisoblandi" },
+    { date:"03.04.25", time:"16:22", id:"PAY-5462558", revenue:21278, f:2313, c:0, u:2309, bonus:1166, status:"Hisoblandi" },
+    { date:"04.04.25", time:"10:04", id:"PAY-6382957", revenue:47133, f:4615, c:0, u:1160, bonus:2895, status:"Hisoblandi" }
+  ],
+  cards: [
+    { date:"01.04.25", time:"09:10", id:"CARD-6690459", cardType:"UZCARD", quantity:1, tariff:2000, bonus:2000, status:"Hisoblandi" },
+    { date:"01.04.25", time:"10:30", id:"CARD-1872765", cardType:"Cobadge", quantity:1, tariff:1000, bonus:1000, status:"Hisoblandi" },
+    { date:"02.04.25", time:"11:45", id:"CARD-5460226", cardType:"UZCARD", quantity:1, tariff:2000, bonus:2000, status:"Hisoblandi" },
+    { date:"03.04.25", time:"16:02", id:"CARD-3483360", cardType:"UZCARD", quantity:1, tariff:2000, bonus:2000, status:"Hisoblandi" },
+    { date:"04.04.25", time:"15:14", id:"CARD-2199754", cardType:"Cobadge", quantity:1, tariff:1000, bonus:1000, status:"Hisoblandi" }
+  ]
+};
+
+const keys = Object.keys(serviceMeta);
+const serviceTotals = keys.reduce((acc,k)=>{acc[k]=dailyRows.reduce((s,r)=>s+(r[k]||0),0);return acc;},{});
+const grossBonus = Object.values(serviceTotals).reduce((s,v)=>s+v,0);
+const antiBonus = 120633;
+const netBonus = grossBonus - antiBonus;
+const planTarget = 4500000;
+const planProgress = Math.round(grossBonus / planTarget * 100);
+let selectedService = "kredit";
+let selectedOperation = null;
+
+function statusBadge(status){
+  const map = {
+    "Hisoblandi":"green",
+    "To‘lovga tayyor":"blue",
+    "Tasdiqlanishi kutilmoqda":"amber",
+    "Antibonus qo‘llandi":"red",
+    "Istisno":"slate"
+  };
+  return `<span class="badge ${map[status]||"green"}">${status}</span>`;
+}
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function initNav(){
+  document.querySelectorAll("[data-page]").forEach(el=>{
+    el.addEventListener("click",()=>showPage(el.dataset.page));
+  });
+}
+
+function renderDashboard(){
+  document.getElementById("grossBonus").textContent = fmt(grossBonus) + " so‘m";
+  document.getElementById("antiBonus").textContent = fmt(antiBonus) + " so‘m";
+  document.getElementById("netBonus").textContent = fmt(netBonus) + " so‘m";
+  const last = dailyRows[dailyRows.length-1];
+  const todayTotal = keys.reduce((s,k)=>s+(last[k]||0),0);
+  document.getElementById("todayBonus").textContent = fmt(todayTotal) + " so‘m";
+  document.getElementById("planPct").textContent = planProgress + "%";
+  document.getElementById("planText").textContent = `Reja: ${fmt(planTarget)} so‘m. Hozirgi natija: ${fmt(grossBonus)} so‘m. Qolgan: ${fmt(Math.max(planTarget-grossBonus,0))} so‘m.`;
+  setTimeout(()=>document.getElementById("planProgress").style.width = Math.min(planProgress,100)+"%",100);
+
+  document.getElementById("dailyHead").innerHTML = `
+    <tr><th>Sana</th>${keys.map(k=>`<th>${serviceMeta[k].title}</th>`).join("")}<th>Kun jami</th></tr>
+  `;
+  let body = "";
+  dailyRows.forEach(row=>{
+    const sum = keys.reduce((s,k)=>s+(row[k]||0),0);
+    body += `<tr><td>${row.date}</td>${keys.map(k=>`<td><button class="link-btn" onclick="openService('${k}')">${fmt(row[k])}</button></td>`).join("")}<td><b>${fmt(sum)}</b></td></tr>`;
+  });
+  body += `<tr><td>Umumiy</td>${keys.map(k=>`<td><button class="link-btn" onclick="openService('${k}')">${fmt(serviceTotals[k])}</button></td>`).join("")}<td><b>${fmt(grossBonus)}</b></td></tr>`;
+  document.getElementById("dailyBody").innerHTML = body;
+
+  document.getElementById("serviceShare").innerHTML = keys.map(k=>{
+    const pct = serviceTotals[k] / grossBonus * 100;
+    return `<button class="service-item" onclick="openService('${k}')">
+      <div class="share-row"><b>${serviceMeta[k].title}</b><b>${fmt(serviceTotals[k])}</b></div>
+      <div class="bar"><span style="width:${pct}%"></span></div>
+      <div class="muted small" style="margin-top:5px">${fmtPct(pct)} umumiy bonusdan</div>
+    </button>`;
+  }).join("");
+}
+
+function baseAmount(k,r){
+  return r.debt || r.amount || r.branchRevenue || r.revenue || (r.usd ? r.usd*r.rate : (r.quantity||0)*(r.tariff||0));
+}
+function operationInfo(k,r){
+  if(k==="kredit") return `${r.annual}% - ${r.resource}% = ${r.margin}% marja`;
+  if(k==="transfers") return `${r.count}/${r.totalCount} = k ${r.k}`;
+  if(k==="cards") return `${r.cardType} × ${r.quantity}`;
+  if(k==="omonatUsd") return `${fmt(r.usd)} USD × ${fmt(r.rate)}`;
+  if(k==="payments") return `D ${fmt(r.revenue)} - istisnolar`;
+  return r.type || "Operatsiya";
+}
+
+function openService(k){
+  selectedService = k;
+  const meta = serviceMeta[k];
+  const rows = operationData[k] || [];
+  const totalBonus = rows.reduce((s,r)=>s+(r.bonus||0),0);
+  const totalAmount = rows.reduce((s,r)=>s+baseAmount(k,r),0);
+  document.getElementById("serviceCard").innerHTML = `
+    <div class="hero ${meta.hero}">
+      <p style="opacity:.82;font-size:14px">Yo‘nalish bo‘yicha bonus tarixi</p>
+      <h2 style="font-size:27px;margin-top:5px">${meta.fullTitle}</h2>
+      <p style="opacity:.82;font-size:14px;margin-top:8px;max-width:820px;line-height:1.5">${meta.rule}</p>
+    </div>
+    <div class="grid grid-4 section">
+      <div class="info-card"><span>Operatsiyalar soni</span><b style="font-size:22px">${rows.length}</b></div>
+      <div class="info-card"><span>Operatsiya / baza summasi</span><b style="font-size:22px">${fmt(totalAmount)}</b></div>
+      <div class="info-card"><span>Koeffitsiyent</span><b style="font-size:22px">${meta.coefficient}</b></div>
+      <div class="info-card"><span>Hisoblangan bonus</span><b style="font-size:22px;color:var(--blue)">${fmt(totalBonus)}</b></div>
+    </div>
+  `;
+  document.getElementById("operationBody").innerHTML = rows.map((r,i)=>`
+    <tr>
+      <td>${r.date}<br><span class="muted small">${r.time}</span></td>
+      <td><b>${r.id}</b></td>
+      <td>${operationInfo(k,r)}</td>
+      <td>${fmt(baseAmount(k,r))}</td>
+      <td><span class="formula-chip">${meta.formula}</span></td>
+      <td><button class="link-btn" onclick="openCalc('${k}',${i})">${fmt(r.bonus)}</button></td>
+      <td>${statusBadge(r.status)}</td>
+      <td><button class="btn" onclick="openCalc('${k}',${i})">👁 Ko‘rish</button></td>
+    </tr>
+  `).join("");
+  showPage("service");
+}
+
+function calcSteps(k,op){
+  if(k==="kredit"){
+    const coef=(op.annual-op.resource)/100;
+    const m=op.debt*coef;
+    return [
+      ["1","Kredit operatsiyasi tanlandi",`${op.id} bo‘yicha asosiy qarz qoldig‘i: ${fmt(op.debt)} so‘m`],
+      ["2","Marja koeffitsiyenti hisoblandi",`(${op.annual}% - ${op.resource}%) / 100 = ${coef}`],
+      ["3","Marja summasi topildi",`${fmt(op.debt)} × ${coef} = ${fmt(m)} so‘m`],
+      ["4","Bonus koeffitsiyenti qo‘llandi",`${fmt(m)} × 5% = ${fmt(op.bonus)} so‘m`]
+    ];
+  }
+  if(k==="transfers"){
+    return [
+      ["1","Hodim ulushi aniqlandi",`${op.count} / ${op.totalCount} = ${op.k}`],
+      ["2","Filial daromadi olindi",`${fmt(op.branchRevenue)} so‘m`],
+      ["3","7% bonus koeffitsiyenti qo‘llandi",`${op.k} × ${fmt(op.branchRevenue)} × 7% = ${fmt(op.bonus)} so‘m`]
+    ];
+  }
+  if(k==="payments"){
+    const exc=(op.f||0)+(op.c||0)+(op.u||0);
+    const base=op.revenue-exc;
+    return [
+      ["1","Jami daromad olindi",`D = ${fmt(op.revenue)} so‘m`],
+      ["2","Istisnolar chiqarildi",`F ${fmt(op.f)} + C ${fmt(op.c)} + U ${fmt(op.u)}`],
+      ["3","Bonus bazasi topildi",`${fmt(op.revenue)} - ${fmt(exc)} = ${fmt(base)} so‘m`],
+      ["4","7% koeffitsiyent qo‘llandi",`${fmt(base)} × 7% = ${fmt(op.bonus)} so‘m`]
+    ];
+  }
+  if(k==="cards"){
+    return [
+      ["1","Karta turi tanlandi",`${op.cardType} uchun mukofot: ${fmt(op.tariff)} so‘m`],
+      ["2","Chiqarilgan karta soni olindi",`N = ${op.quantity}`],
+      ["3","Qat’iy mukofot hisoblandi",`${fmt(op.tariff)} × ${op.quantity} = ${fmt(op.bonus)} so‘m`]
+    ];
+  }
+  if(k==="omonatUsd"){
+    const base=op.usd*op.rate;
+    return [
+      ["1","USD omonat summasi olindi",`${fmt(op.usd)} USD`],
+      ["2","So‘mga aylantirildi",`${fmt(op.usd)} × ${fmt(op.rate)} = ${fmt(base)} so‘m`],
+      ["3","0.03% koeffitsiyent qo‘llandi",`${fmt(base)} × 0.03% = ${fmt(op.bonus)} so‘m`]
+    ];
+  }
+  return [
+    ["1","Bonus bazasi tanlandi",`${fmt(op.amount)} so‘m`],
+    ["2","Koeffitsiyent qo‘llandi",`${serviceMeta[k].coefficient}`],
+    ["3","Yakuniy bonus hisoblandi",`${fmt(op.bonus)} so‘m`]
+  ];
+}
+
+function openCalc(k,index){
+  selectedService = k;
+  const op = operationData[k][index];
+  selectedOperation = op;
+  const meta = serviceMeta[k];
+  const steps = calcSteps(k,op).map(s=>`
+    <div class="step">
+      <div class="step-no">${s[0]}</div>
+      <div><b>${s[1]}</b><p class="muted small" style="margin-top:5px">${s[2]}</p></div>
+    </div>
+  `).join("");
+  const kv = Object.entries(op).map(([key,val])=>`
+    <div class="kv-row"><span>${key}</span><b>${typeof val==="number"?fmt(val):val}</b></div>
+  `).join("");
+  document.getElementById("calcCard").innerHTML = `
+    <div class="hero ${meta.hero}">
+      <p style="opacity:.82;font-size:14px">Hisob-kitob izohi</p>
+      <h2 style="font-size:27px;margin-top:5px">${fmt(op.bonus)} so‘m bonus qanday hisoblandi?</h2>
+      <p style="opacity:.82;font-size:14px;margin-top:8px">${op.id} | ${op.date} ${op.time} | ${meta.fullTitle}</p>
+    </div>
+    <div class="calc-grid">
+      <div>
+        <h3>Formula</h3>
+        <div class="formula" style="margin-top:12px">${meta.formula}</div>
+        <h3 style="margin-top:22px">Bosqichma-bosqich hisoblash</h3>
+        ${steps}
+      </div>
+      <div>
+        <h3>Operatsiya ma’lumotlari</h3>
+        <div class="kv" style="margin-top:12px">
+          <div class="kv-row"><span>Hodim</span><b>Sobirov Akmal</b></div>
+          <div class="kv-row"><span>Filial</span><b>Toshkent shahar filiali</b></div>
+          <div class="kv-row"><span>Status</span>${statusBadge(op.status)}</div>
+        </div>
+        <h3 style="margin-top:22px">Kirish parametrlari</h3>
+        <div class="kv" style="margin-top:12px;max-height:330px;overflow:auto">${kv}</div>
+        <div class="final-box">
+          <div class="small" style="font-weight:850">Yakuniy natija</div>
+          <div style="font-size:28px;font-weight:950;margin-top:4px">${fmt(op.bonus)} so‘m</div>
+          <div class="small" style="margin-top:4px">Ushbu summa joriy oy bonusiga qo‘shildi.</div>
+        </div>
+      </div>
+    </div>
+  `;
+  showPage("calc");
+}
+
+function renderAnti(){
+  document.getElementById("antiTitle").textContent = `Nega ${fmt(antiBonus)} so‘m ushlab qolindi?`;
+  document.getElementById("antiBoxAmount").textContent = fmt(antiBonus) + " so‘m";
+  document.getElementById("antiFormulaText").textContent = `N = 9, x = 6. Demak: ${fmt(grossBonus)} × (9 - 6) × 2% = ${fmt(antiBonus)} so‘m.`;
+}
+document.head.insertAdjacentHTML("beforeend",`<style>.clickable{cursor:pointer}.clickable:hover{transform:translateY(-2px)}.missing{display:flex;justify-content:space-between;background:var(--red-bg);color:#9f1239;border-radius:14px;padding:13px 14px;margin-top:8px;font-weight:750}</style>`);
+
+initNav();
+renderDashboard();
+renderAnti();
+openService("kredit");
+showPage("dashboard");
+</script>
+</body>
+</html>
