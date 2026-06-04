@@ -165,9 +165,9 @@ const PROTOTYPES = [
     title: "Finport — Investment Portfolio",
     product: "Finport",
     type: "External",
-    status: "Public",
+    status: "Demo",
     url: "https://finport.uz/",
-    description: "Investment portfolio management platform — live product."
+    description: "Investment portfolio management platform — public demo prototype."
   },
   {
     title: "Trastpay Product Dashboard",
