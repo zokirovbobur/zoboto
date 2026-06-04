@@ -295,13 +295,10 @@ const PROTOTYPES = [
         ? '<button class="btn btn--ghost btn--sm" data-case="' + i + '">View Case Study</button>' : "";
       const cjmBtn = p.cjmUrl
         ? '<a class="btn btn--text btn--sm" href="' + p.cjmUrl + '" target="_blank" rel="noopener">Open CJM ↗</a>' : "";
-      const thumb = p.image
-        ? '<img src="' + p.image + '" alt="' + p.title + '" style="width:100%;height:100%;object-fit:cover;display:block;">'
-        : '<span>project visual</span>';
       return '' +
         '<article class="pf-card reveal">' +
-          '<div class="pf-thumb"><span class="pf-cat">' + p.category + '</span>' + thumb + '</div>' +
           '<div class="pf-body">' +
+            '<span class="pf-cat">' + p.category + '</span>' +
             '<h3>' + p.title + '</h3>' +
             '<p class="pf-role"><b>Role:</b> ' + p.role + '</p>' +
             '<p class="pf-desc">' + p.description + '</p>' +
@@ -473,6 +470,20 @@ const PROTOTYPES = [
         btn.textContent = "Send message";
         console.error("EmailJS error:", err);
       });
+    });
+  }
+
+  /* ---------- Experience expand ---------- */
+  var tlBtn  = document.getElementById("tlExpandBtn");
+  var tlMore = document.getElementById("tlMore");
+  if (tlBtn && tlMore) {
+    tlBtn.addEventListener("click", function () {
+      var isOpen = tlMore.classList.toggle("open");
+      tlBtn.classList.toggle("open", isOpen);
+      tlBtn.setAttribute("aria-expanded", String(isOpen));
+      tlBtn.innerHTML = isOpen
+        ? '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 10l-4-4-4 4"/></svg> Hide previous experience'
+        : '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg> Show previous experience · 7 positions';
     });
   }
 
