@@ -323,40 +323,6 @@ const I18N = {
   }
 };
 
-function applyLang(lang) {
-  LANG = lang;
-  localStorage.setItem("lang", lang);
-  var tr = I18N[lang] || I18N.en;
-  // Static elements
-  document.querySelectorAll("[data-i18n]").forEach(function (el) {
-    var key = el.dataset.i18n;
-    if (tr[key] !== undefined) el.textContent = tr[key];
-  });
-  // Placeholders
-  document.querySelectorAll("[data-i18n-ph]").forEach(function (el) {
-    var key = el.dataset.i18nPh;
-    if (tr[key] !== undefined) el.placeholder = tr[key];
-  });
-  // Lang select value
-  var sel = document.getElementById("langSelect");
-  if (sel) sel.value = lang;
-  // Expand button text (set by JS)
-  var tlBtn = document.getElementById("tlExpandBtn");
-  if (tlBtn) {
-    var isOpen = tlBtn.classList.contains("open");
-    var arrow = isOpen
-      ? '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 10l-4-4-4 4"/></svg>'
-      : '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>';
-    tlBtn.innerHTML = arrow + " " + (isOpen ? tr.tl_collapse : tr.tl_expand);
-  }
-  // Re-render dynamic sections
-  var pfWrap = document.getElementById("portfolioGrid");
-  if (pfWrap) renderPortfolio(pfWrap);
-  var protoWrap = document.getElementById("protoGrid");
-  if (protoWrap) renderProtos("All", protoWrap);
-  document.documentElement.lang = lang;
-}
-
 /* ====================== RENDER & INTERACTIONS ======================= */
 (function () {
   "use strict";
@@ -514,6 +480,38 @@ function applyLang(lang) {
         renderProtos(f.dataset.filter);
       });
     });
+  }
+
+  /* ---------- applyLang (defined here to access renderPortfolio/renderProtos) ---------- */
+  function applyLang(lang) {
+    LANG = lang;
+    localStorage.setItem("lang", lang);
+    var tr = I18N[lang] || I18N.en;
+    // Static elements
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      var key = el.dataset.i18n;
+      if (tr[key] !== undefined) el.textContent = tr[key];
+    });
+    // Placeholders
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) {
+      var key = el.dataset.i18nPh;
+      if (tr[key] !== undefined) el.placeholder = tr[key];
+    });
+    // Lang select value
+    var sel = document.getElementById("langSelect");
+    if (sel) sel.value = lang;
+    // Expand button text
+    var tlBtn = document.getElementById("tlExpandBtn");
+    if (tlBtn) {
+      var isOpen = tlBtn.classList.contains("open");
+      var arrowD = isOpen ? "M12 10l-4-4-4 4" : "M4 6l4 4 4-4";
+      tlBtn.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="' + arrowD + '"/></svg> '
+        + (isOpen ? tr.tl_collapse : tr.tl_expand);
+    }
+    // Re-render dynamic sections with new lang
+    if (pfWrap) renderPortfolio(pfWrap);
+    if (protoWrap) renderProtos(currentFilter);
+    document.documentElement.lang = lang;
   }
 
   /* ---------- Lang select ---------- */
