@@ -169,46 +169,6 @@ const PROTOTYPES = [
     url: "https://finport.uz/",
     description: "Investment portfolio management platform — public demo prototype."
   },
-  {
-    title: "Trastpay Product Dashboard",
-    product: "Trastpay",
-    type: "Internal",
-    status: "Coming Soon",
-    url: "prototypes/trastpay-dashboard/index.html",
-    description: "Interactive prototype for product KPI monitoring and the executive dashboard."
-  },
-  {
-    title: "Islamic Banking Mobile Concept",
-    product: "Islamic Banking",
-    type: "Internal",
-    status: "Coming Soon",
-    url: "prototypes/islamic-banking/index.html",
-    description: "Concept prototype for a Shariah-compliant digital-banking customer journey."
-  },
-  {
-    title: "BNPL Broker Flow",
-    product: "Mediapark",
-    type: "Internal",
-    status: "Coming Soon",
-    url: "prototypes/bnpl-broker/index.html",
-    description: "Onboarding, identification, and installment-plan execution across financial partners."
-  },
-  {
-    title: "OneUP Pro — Agent CRM",
-    product: "Mediapark",
-    type: "Internal",
-    status: "Coming Soon",
-    url: "prototypes/oneup-pro/index.html",
-    description: "Mobile CRM flow: client creation, lead conversion, and KPI tracking for sales agents."
-  },
-  {
-    title: "Geomotive DSP Planner",
-    product: "Geomotive",
-    type: "Internal",
-    status: "Coming Soon",
-    url: "prototypes/geomotive-dsp/index.html",
-    description: "DOOH campaign planning by location, audience, and inventory."
-  }
 ];
 
 /* ====================== RENDER & INTERACTIONS ======================= */
@@ -295,7 +255,6 @@ const PROTOTYPES = [
           '<div class="proto-top">' +
             '<div>' +
               '<h3>' + p.title + '</h3>' +
-              '<p class="proto-product">' + p.product + '</p>' +
             '</div>' +
             '<div class="proto-badges">' +
               '<span class="badge ' + (isInternal ? "badge--int" : "badge--ext") + '">' + p.type + '</span>' +
