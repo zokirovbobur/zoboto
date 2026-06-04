@@ -183,6 +183,52 @@ const PROTOTYPES = [
 (function () {
   "use strict";
 
+  /* ---------- Gate (entry screen) ---------- */
+  var gate = document.getElementById("gate");
+  function hideGate(targetHash) {
+    if (!gate) return;
+    gate.classList.add("hidden");
+    if (targetHash) {
+      setTimeout(function () {
+        var el = document.getElementById(targetHash.replace("#", ""));
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 120);
+    }
+  }
+
+  if (gate) {
+    // Skip gate if URL already has a hash (direct link e.g. zoboto.uz/#prototypes)
+    var hash = window.location.hash;
+    if (hash && hash !== "#top") {
+      gate.classList.add("hidden");
+      setTimeout(function () {
+        var el = document.getElementById(hash.replace("#", ""));
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 80);
+    }
+
+    var gateAbout  = document.getElementById("gateAbout");
+    var gateProtos = document.getElementById("gateProtos");
+
+    if (gateAbout) {
+      gateAbout.addEventListener("click", function (e) {
+        e.preventDefault();
+        hideGate("#about");
+      });
+    }
+    if (gateProtos) {
+      gateProtos.addEventListener("click", function (e) {
+        e.preventDefault();
+        hideGate("#prototypes");
+      });
+    }
+
+    // Escape key also dismisses gate
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") hideGate();
+    });
+  }
+
   /* ---------- Theme (system default + manual toggle) ---------- */
   const root = document.documentElement;
   const saved = localStorage.getItem("theme");
