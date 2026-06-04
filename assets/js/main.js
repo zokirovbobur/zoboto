@@ -327,6 +327,8 @@ const I18N = {
 (function () {
   "use strict";
 
+  var protosFull = window.location.hash === "#prototypes";
+
   /* ---------- Gate (entry screen) ---------- */
   var gate = document.getElementById("gate");
   function hideGate(targetHash) {
@@ -365,7 +367,9 @@ const I18N = {
     if (gateProtos) {
       gateProtos.addEventListener("click", function (e) {
         e.preventDefault();
+        protosFull = true;
         hideGate("#prototypes");
+        renderProtos(currentFilter);
       });
     }
 
@@ -411,7 +415,7 @@ const I18N = {
     var tr = I18N[LANG] || I18N.en;
     var prevWrap = document.getElementById("pfExpandWrap");
     if (prevWrap) prevWrap.remove();
-    var LIMIT = 3;
+    var LIMIT = 1;
     var arrow = function (d) { return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="' + d + '"/></svg>'; };
     var down = "M4 6l4 4 4-4", up = "M12 10l-4-4-4 4";
     var allCards = PORTFOLIO.map(function (p, i) {
@@ -438,7 +442,7 @@ const I18N = {
       btnWrap.className = "section-expand-wrap";
       btnWrap.id = "pfExpandWrap";
       btnWrap.innerHTML = '<button class="btn--expand" id="pfExpandBtn" aria-expanded="false">'
-        + arrow(down) + ' Show more projects · ' + hidden + ' more</button>';
+        + arrow(down) + ' Show all projects · ' + hidden + ' more</button>';
       wrap.insertAdjacentElement("afterend", btnWrap);
       var pfBtn = document.getElementById("pfExpandBtn");
       var pfMore = document.getElementById("pfMore");
@@ -448,7 +452,7 @@ const I18N = {
         pfBtn.setAttribute("aria-expanded", String(isOpen));
         pfBtn.innerHTML = isOpen
           ? arrow(up) + ' Show fewer projects'
-          : arrow(down) + ' Show more projects · ' + hidden + ' more';
+          : arrow(down) + ' Show all projects · ' + hidden + ' more';
       });
     } else {
       wrap.innerHTML = allCards.join("");
@@ -476,7 +480,7 @@ const I18N = {
     const list = currentFilter && currentFilter !== "All"
       ? PROTOTYPES.filter(function (p) { return p.type === currentFilter; })
       : PROTOTYPES;
-    var LIMIT = 3;
+    var LIMIT = protosFull ? Infinity : 1;
     var allCards = list.map(function (p) {
       const isInternal = p.type === "Internal";
       const isSoon = p.status === "Coming Soon";
@@ -512,7 +516,7 @@ const I18N = {
       btnWrap.className = "section-expand-wrap";
       btnWrap.id = "protoExpandWrap";
       btnWrap.innerHTML = '<button class="btn--expand" id="protoExpandBtn" aria-expanded="false">'
-        + arrow(down) + ' Show more prototypes · ' + hidden + ' more</button>';
+        + arrow(down) + ' Show all prototypes · ' + hidden + ' more</button>';
       w.insertAdjacentElement("afterend", btnWrap);
       var protoBtn = document.getElementById("protoExpandBtn");
       var protoMore = document.getElementById("protoMore");
@@ -522,7 +526,7 @@ const I18N = {
         protoBtn.setAttribute("aria-expanded", String(isOpen));
         protoBtn.innerHTML = isOpen
           ? arrow(up) + ' Show fewer prototypes'
-          : arrow(down) + ' Show more prototypes · ' + hidden + ' more';
+          : arrow(down) + ' Show all prototypes · ' + hidden + ' more';
       });
     } else {
       w.innerHTML = allCards.join("");
@@ -708,6 +712,22 @@ const I18N = {
       tlBtn.innerHTML = isOpen
         ? '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 10l-4-4-4 4"/></svg> Hide previous experience'
         : '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg> Show previous experience · 7 positions';
+    });
+  }
+
+  /* ---------- About expand ---------- */
+  var aboutBtn  = document.getElementById("aboutExpandBtn");
+  var aboutGrid = document.getElementById("aboutGrid");
+  if (aboutBtn && aboutGrid) {
+    aboutGrid.classList.add("about--collapsed");
+    aboutBtn.addEventListener("click", function () {
+      var collapsed = aboutGrid.classList.toggle("about--collapsed");
+      var isOpen = !collapsed;
+      aboutBtn.classList.toggle("open", isOpen);
+      aboutBtn.setAttribute("aria-expanded", String(isOpen));
+      aboutBtn.innerHTML = isOpen
+        ? '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 10l-4-4-4 4"/></svg> Show less'
+        : '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg> Read more about me';
     });
   }
 

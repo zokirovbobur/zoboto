@@ -443,3 +443,5 @@ img{max-width:100%;display:block;}
 .cert-list.cert-more.open{display:flex;}
 .section-expand-wrap{padding:20px 0 0;}
 .expertise-grid--collapsed{grid-template-columns:repeat(2,1fr);}
+.about--collapsed{grid-template-columns:1fr;}
+.about--collapsed #aboutMore{display:none;}

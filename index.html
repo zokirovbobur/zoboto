@@ -121,9 +121,9 @@
     <section class="section" id="about">
       <div class="wrap">
         <div class="section-head reveal"><span class="eyebrow" data-i18n="about_eyebrow">About</span></div>
-        <div class="about">
+        <div class="about" id="aboutGrid">
           <p class="about__lead reveal" data-i18n="about_lead">Product leadership built on an engineer's foundation — turning strategy into shipped products and measurable growth.</p>
-          <div class="about__body reveal">
+          <div class="about__body reveal" id="aboutMore">
             <p data-i18n="about_p1">Bobur Zokirov is an experienced Product Manager and Chief Product Officer with a background in software engineering, fintech, digital banking, BNPL, retail technology, AdTech, and product transformation.</p>
             <p data-i18n="about_p2">He has led MVP launches, product roadmaps, cross-functional teams, process transformation, and investor-ready initiatives — pairing executive clarity with hands-on delivery.</p>
             <div class="about__companies">
@@ -136,6 +136,12 @@
               <span class="chip">Colibrisoft</span>
             </div>
           </div>
+        </div>
+        <div class="section-expand-wrap">
+          <button class="btn--expand" id="aboutExpandBtn" aria-expanded="false">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>
+            Read more about me
+          </button>
         </div>
       </div>
     </section>
