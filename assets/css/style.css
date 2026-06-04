@@ -435,3 +435,11 @@ img{max-width:100%;display:block;}
   .cs-hero,.cs-body{padding-left:26px;padding-right:26px;}
   .tl-meta{text-align:left;}
 }
+
+/* ---------------------- Section expand/collapse --------------------- */
+.section-more{display:none;}
+.section-more.open{display:contents;}
+.cert-list.cert-more{display:none;flex-direction:column;gap:11px;margin-top:11px;}
+.cert-list.cert-more.open{display:flex;}
+.section-expand-wrap{padding:20px 0 0;}
+.expertise-grid--collapsed{grid-template-columns:repeat(2,1fr);}

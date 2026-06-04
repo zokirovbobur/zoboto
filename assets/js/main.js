@@ -409,7 +409,12 @@ const I18N = {
   /* ---------- Render portfolio ---------- */
   function renderPortfolio(wrap) {
     var tr = I18N[LANG] || I18N.en;
-    wrap.innerHTML = PORTFOLIO.map(function (p, i) {
+    var prevWrap = document.getElementById("pfExpandWrap");
+    if (prevWrap) prevWrap.remove();
+    var LIMIT = 3;
+    var arrow = function (d) { return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="' + d + '"/></svg>'; };
+    var down = "M4 6l4 4 4-4", up = "M12 10l-4-4-4 4";
+    var allCards = PORTFOLIO.map(function (p, i) {
       const caseBtn = p.caseStudy
         ? '<button class="btn btn--ghost btn--sm" data-case="' + i + '">' + tr.pf_btn_case + '</button>' : "";
       const cjmBtn = p.cjmUrl
@@ -424,7 +429,30 @@ const I18N = {
             '<div class="pf-actions">' + caseBtn + cjmBtn + '</div>' +
           '</div>' +
         '</article>';
-    }).join("");
+    });
+    if (allCards.length > LIMIT) {
+      var hidden = allCards.length - LIMIT;
+      wrap.innerHTML = allCards.slice(0, LIMIT).join("")
+        + '<div class="section-more" id="pfMore">' + allCards.slice(LIMIT).join("") + '</div>';
+      var btnWrap = document.createElement("div");
+      btnWrap.className = "section-expand-wrap";
+      btnWrap.id = "pfExpandWrap";
+      btnWrap.innerHTML = '<button class="btn--expand" id="pfExpandBtn" aria-expanded="false">'
+        + arrow(down) + ' Show more projects · ' + hidden + ' more</button>';
+      wrap.insertAdjacentElement("afterend", btnWrap);
+      var pfBtn = document.getElementById("pfExpandBtn");
+      var pfMore = document.getElementById("pfMore");
+      pfBtn.addEventListener("click", function () {
+        var isOpen = pfMore.classList.toggle("open");
+        pfBtn.classList.toggle("open", isOpen);
+        pfBtn.setAttribute("aria-expanded", String(isOpen));
+        pfBtn.innerHTML = isOpen
+          ? arrow(up) + ' Show fewer projects'
+          : arrow(down) + ' Show more projects · ' + hidden + ' more';
+      });
+    } else {
+      wrap.innerHTML = allCards.join("");
+    }
     wrap.querySelectorAll("[data-case]").forEach(function (btn) {
       btn.addEventListener("click", function () { openCase(PORTFOLIO[+btn.dataset.case]); });
     });
@@ -440,11 +468,16 @@ const I18N = {
     var w = wrap || protoWrap;
     if (!w) return;
     if (filter) currentFilter = filter;
+    var prevWrap = document.getElementById("protoExpandWrap");
+    if (prevWrap) prevWrap.remove();
     var tr = I18N[LANG] || I18N.en;
+    var arrow = function (d) { return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="' + d + '"/></svg>'; };
+    var down = "M4 6l4 4 4-4", up = "M12 10l-4-4-4 4";
     const list = currentFilter && currentFilter !== "All"
       ? PROTOTYPES.filter(function (p) { return p.type === currentFilter; })
       : PROTOTYPES;
-    w.innerHTML = list.map(function (p) {
+    var LIMIT = 3;
+    var allCards = list.map(function (p) {
       const isInternal = p.type === "Internal";
       const isSoon = p.status === "Coming Soon";
       const stClass = p.status === "Demo" ? "badge--demo"
@@ -470,7 +503,30 @@ const I18N = {
           '<p class="proto-desc">' + p.description + '</p>' +
           '<div class="pf-actions">' + action + '</div>' +
         '</article>';
-    }).join("");
+    });
+    if (allCards.length > LIMIT) {
+      var hidden = allCards.length - LIMIT;
+      w.innerHTML = allCards.slice(0, LIMIT).join("")
+        + '<div class="section-more" id="protoMore">' + allCards.slice(LIMIT).join("") + '</div>';
+      var btnWrap = document.createElement("div");
+      btnWrap.className = "section-expand-wrap";
+      btnWrap.id = "protoExpandWrap";
+      btnWrap.innerHTML = '<button class="btn--expand" id="protoExpandBtn" aria-expanded="false">'
+        + arrow(down) + ' Show more prototypes · ' + hidden + ' more</button>';
+      w.insertAdjacentElement("afterend", btnWrap);
+      var protoBtn = document.getElementById("protoExpandBtn");
+      var protoMore = document.getElementById("protoMore");
+      protoBtn.addEventListener("click", function () {
+        var isOpen = protoMore.classList.toggle("open");
+        protoBtn.classList.toggle("open", isOpen);
+        protoBtn.setAttribute("aria-expanded", String(isOpen));
+        protoBtn.innerHTML = isOpen
+          ? arrow(up) + ' Show fewer prototypes'
+          : arrow(down) + ' Show more prototypes · ' + hidden + ' more';
+      });
+    } else {
+      w.innerHTML = allCards.join("");
+    }
     revealObserve(w.querySelectorAll(".reveal"));
   }
   if (protoWrap) {
@@ -652,6 +708,37 @@ const I18N = {
       tlBtn.innerHTML = isOpen
         ? '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 10l-4-4-4 4"/></svg> Hide previous experience'
         : '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg> Show previous experience · 7 positions';
+    });
+  }
+
+  /* ---------- Expertise expand ---------- */
+  var expBtn  = document.getElementById("expExpandBtn");
+  var expMore = document.getElementById("expMore");
+  var expGrid = document.querySelector(".expertise-grid");
+  if (expBtn && expMore && expGrid) {
+    expGrid.classList.add("expertise-grid--collapsed");
+    expBtn.addEventListener("click", function () {
+      var isOpen = expMore.classList.toggle("open");
+      expGrid.classList.toggle("expertise-grid--collapsed", !isOpen);
+      expBtn.classList.toggle("open", isOpen);
+      expBtn.setAttribute("aria-expanded", String(isOpen));
+      expBtn.innerHTML = isOpen
+        ? '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 10l-4-4-4 4"/></svg> Show less expertise'
+        : '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg> Show all expertise · 4 areas';
+    });
+  }
+
+  /* ---------- Certifications expand ---------- */
+  var certBtn  = document.getElementById("certExpandBtn");
+  var certMore = document.getElementById("certMore");
+  if (certBtn && certMore) {
+    certBtn.addEventListener("click", function () {
+      var isOpen = certMore.classList.toggle("open");
+      certBtn.classList.toggle("open", isOpen);
+      certBtn.setAttribute("aria-expanded", String(isOpen));
+      certBtn.innerHTML = isOpen
+        ? '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 10l-4-4-4 4"/></svg> Show fewer certifications'
+        : '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg> Show all certifications · 5 more';
     });
   }
 
