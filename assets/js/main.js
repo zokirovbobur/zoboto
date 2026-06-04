@@ -343,12 +343,14 @@ const I18N = {
   if (gate) {
     // Skip gate if URL already has a hash (direct link e.g. zoboto.uz/#prototypes)
     var hash = window.location.hash;
-    if (hash && hash !== "#top") {
+    if (hash) {
       gate.classList.add("hidden");
-      setTimeout(function () {
-        var el = document.getElementById(hash.replace("#", ""));
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 80);
+      if (hash !== "#top") {
+        setTimeout(function () {
+          var el = document.getElementById(hash.replace("#", ""));
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 80);
+      }
     }
 
     var gateAbout  = document.getElementById("gateAbout");

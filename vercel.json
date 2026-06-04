@@ -1,5 +1,6 @@
 {
   "redirects": [
-    { "source": "/protos", "destination": "/#prototypes", "permanent": false }
+    { "source": "/protos", "destination": "/#prototypes", "permanent": false },
+    { "source": "/about", "destination": "/#top", "permanent": false }
   ]
 }
