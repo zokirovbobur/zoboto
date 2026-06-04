@@ -162,6 +162,14 @@ const PROTOTYPES = [
     description: "Interactive AS-IS / TO-BE architecture explorer: Core Banking ABS, Middleware layer, client channels, compliance modules and external integrations — with multilingual support (UZ/RU/EN)."
   },
   {
+    title: "Islamic Banking Mobile Concept",
+    product: "Islamic Banking",
+    type: "Internal",
+    status: "Coming Soon",
+    url: "prototypes/islamic-banking/index.html",
+    description: "Concept prototype for a Shariah-compliant digital-banking customer journey."
+  },
+  {
     title: "Finport — Investment Portfolio",
     product: "Finport",
     type: "External",
