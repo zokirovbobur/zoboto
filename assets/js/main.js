@@ -337,10 +337,9 @@ function applyLang(lang) {
     var key = el.dataset.i18nPh;
     if (tr[key] !== undefined) el.placeholder = tr[key];
   });
-  // Lang switcher active state
-  document.querySelectorAll(".lang-sw button").forEach(function (b) {
-    b.classList.toggle("active", b.dataset.lang === lang);
-  });
+  // Lang select value
+  var sel = document.getElementById("langSelect");
+  if (sel) sel.value = lang;
   // Expand button text (set by JS)
   var tlBtn = document.getElementById("tlExpandBtn");
   if (tlBtn) {
@@ -517,13 +516,11 @@ function applyLang(lang) {
     });
   }
 
-  /* ---------- Lang switcher ---------- */
-  var langSw = document.getElementById("langSw");
-  if (langSw) {
-    langSw.querySelectorAll("button").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        applyLang(btn.dataset.lang);
-      });
+  /* ---------- Lang select ---------- */
+  var langSelect = document.getElementById("langSelect");
+  if (langSelect) {
+    langSelect.addEventListener("change", function () {
+      applyLang(langSelect.value);
     });
   }
   // Apply saved/default lang on load
