@@ -124,6 +124,7 @@ img{max-width:100%;display:block;}
   letter-spacing:.04em;text-transform:uppercase;
 }
 [data-theme="dark"] .gate__card{background:var(--surface);}
+.gate__lang-select{position:absolute;top:24px;right:28px;}
 @media(max-width:600px){
   .gate__cards{grid-template-columns:1fr;max-width:400px;}
   .gate__card{padding:32px 28px;}

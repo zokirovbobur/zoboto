@@ -245,6 +245,10 @@ const I18N = {
     form_submit:"Send message", form_sending:"Sending…",
     form_success:"✓ Message sent! I'll get back to you soon.",
     form_error:"⚠ Something went wrong. Please email me directly at zokirovbobur93@gmail.com",
+    gate_about_h2:"About Me", gate_about_p:"Portfolio, experience, skills & background of Bobur Zokirov — Chief Product Officer.",
+    gate_about_cta:"Explore",
+    gate_protos_h2:"Protos", gate_protos_p:"Interactive prototypes & demos — fintech, banking, BNPL, and product concepts.",
+    gate_protos_cta:"View Prototypes",
     footer_loc:"Tashkent",
   },
   ru: {
@@ -282,6 +286,10 @@ const I18N = {
     form_submit:"Отправить", form_sending:"Отправка…",
     form_success:"✓ Сообщение отправлено! Свяжусь с вами в ближайшее время.",
     form_error:"⚠ Ошибка. Напишите напрямую: zokirovbobur93@gmail.com",
+    gate_about_h2:"Обо мне", gate_about_p:"Портфолио, опыт, навыки и биография Бобура Зокирова — Chief Product Officer.",
+    gate_about_cta:"Перейти",
+    gate_protos_h2:"Прототипы", gate_protos_p:"Интерактивные прототипы и демо — финтех, банкинг, BNPL и продуктовые концепции.",
+    gate_protos_cta:"Смотреть прототипы",
     footer_loc:"Ташкент",
   },
   uz: {
@@ -319,6 +327,10 @@ const I18N = {
     form_submit:"Xabar yuborish", form_sending:"Yuborilmoqda…",
     form_success:"✓ Xabar yuborildi! Tez orada javob beraman.",
     form_error:"⚠ Xatolik yuz berdi. Menga bevosita yozing: zokirovbobur93@gmail.com",
+    gate_about_h2:"Men haqimda", gate_about_p:"Bobur Zokirovning portfolio, tajriba, ko'nikmalar va biografiyasi — Chief Product Officer.",
+    gate_about_cta:"Ko'rish",
+    gate_protos_h2:"Prototiplar", gate_protos_p:"Interaktiv prototiplar va demolar — fintech, banking, BNPL va mahsulot kontseptsiyalari.",
+    gate_protos_cta:"Prototiplarni ko'rish",
     footer_loc:"Toshkent",
   }
 };
@@ -572,9 +584,11 @@ const I18N = {
       var key = el.dataset.i18nPh;
       if (tr[key] !== undefined) el.placeholder = tr[key];
     });
-    // Lang select value
+    // Lang select value (nav + gate)
     var sel = document.getElementById("langSelect");
     if (sel) sel.value = lang;
+    var gateSel = document.getElementById("gateLangSelect");
+    if (gateSel) gateSel.value = lang;
     // Expand button text
     var tlBtn = document.getElementById("tlExpandBtn");
     if (tlBtn) {
@@ -594,6 +608,12 @@ const I18N = {
   if (langSelect) {
     langSelect.addEventListener("change", function () {
       applyLang(langSelect.value);
+    });
+  }
+  var gateLangSelect = document.getElementById("gateLangSelect");
+  if (gateLangSelect) {
+    gateLangSelect.addEventListener("change", function () {
+      applyLang(gateLangSelect.value);
     });
   }
   // Apply saved/default lang on load

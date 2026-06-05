@@ -32,6 +32,11 @@
 
   <!-- ============================ GATE ============================ -->
   <div class="gate" id="gate" role="dialog" aria-label="Choose section">
+    <select class="lang-select gate__lang-select" id="gateLangSelect" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="ru">RU</option>
+      <option value="uz">UZ</option>
+    </select>
     <div class="gate__logo">Bobur <b>Zokirov</b></div>
     <div class="gate__cards">
       <a class="gate__card" id="gateAbout" href="#about">
@@ -40,9 +45,9 @@
             <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/>
           </svg>
         </div>
-        <h2>About Me</h2>
-        <p>Portfolio, experience, skills &amp; background of Bobur Zokirov — Chief Product Officer.</p>
-        <div class="gate__card-arrow">Explore <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+        <h2 data-i18n="gate_about_h2">About Me</h2>
+        <p data-i18n="gate_about_p">Portfolio, experience, skills &amp; background of Bobur Zokirov — Chief Product Officer.</p>
+        <div class="gate__card-arrow"><span data-i18n="gate_about_cta">Explore</span> <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
       </a>
       <a class="gate__card" id="gateProtos" href="#prototypes">
         <div class="gate__card-icon">
@@ -51,9 +56,9 @@
             <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
           </svg>
         </div>
-        <h2>Protos</h2>
-        <p>Interactive prototypes &amp; demos — fintech, banking, BNPL, and product concepts.</p>
-        <div class="gate__card-arrow">View Prototypes <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+        <h2 data-i18n="gate_protos_h2">Protos</h2>
+        <p data-i18n="gate_protos_p">Interactive prototypes &amp; demos — fintech, banking, BNPL, and product concepts.</p>
+        <div class="gate__card-arrow"><span data-i18n="gate_protos_cta">View Prototypes</span> <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
       </a>
     </div>
   </div>
