@@ -427,7 +427,8 @@ const I18N = {
     var tr = I18N[LANG] || I18N.en;
     var prevWrap = document.getElementById("pfExpandWrap");
     if (prevWrap) prevWrap.remove();
-    var LIMIT = 1;
+    var w = window.innerWidth;
+    var LIMIT = w > 1040 ? 3 : w > 600 ? 2 : 1;
     var arrow = function (d) { return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="' + d + '"/></svg>'; };
     var down = "M4 6l4 4 4-4", up = "M12 10l-4-4-4 4";
     var allCards = PORTFOLIO.map(function (p, i) {
@@ -492,7 +493,8 @@ const I18N = {
     const list = currentFilter && currentFilter !== "All"
       ? PROTOTYPES.filter(function (p) { return p.type === currentFilter; })
       : PROTOTYPES;
-    var LIMIT = protosFull ? Infinity : 1;
+    var pw = window.innerWidth;
+    var LIMIT = protosFull ? Infinity : (pw > 880 ? 2 : 1);
     var allCards = list.map(function (p) {
       const isInternal = p.type === "Internal";
       const isSoon = p.status === "Coming Soon";
@@ -618,6 +620,16 @@ const I18N = {
   }
   // Apply saved/default lang on load
   applyLang(LANG);
+
+  /* ---------- Re-render on resize (grid column count changes) ---------- */
+  var resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      if (pfWrap) renderPortfolio(pfWrap);
+      if (protoWrap) renderProtos(currentFilter);
+    }, 200);
+  });
 
   /* ---------- Case-study modal ---------- */
   const modal = document.getElementById("modal");
