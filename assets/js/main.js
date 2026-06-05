@@ -393,18 +393,26 @@ const I18N = {
 
   /* ---------- Theme (system default + manual toggle) ---------- */
   const root = document.documentElement;
+  const PHOTO_DARK  = "assets/img/headshot.jpg";
+  const PHOTO_LIGHT = "assets/img/headshot-light.jpg";
+  function applyThemePhoto(theme) {
+    var photo = document.querySelector(".hero__photo");
+    if (photo) photo.src = theme === "dark" ? PHOTO_DARK : PHOTO_LIGHT;
+  }
   const saved = localStorage.getItem("theme");
   if (saved) {
     root.setAttribute("data-theme", saved);
   } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
     root.setAttribute("data-theme", "dark");
   }
+  applyThemePhoto(root.getAttribute("data-theme") || "light");
   const toggle = document.getElementById("themeToggle");
   if (toggle) {
     toggle.addEventListener("click", function () {
       const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", next);
       localStorage.setItem("theme", next);
+      applyThemePhoto(next);
     });
   }
 
