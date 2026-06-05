@@ -549,6 +549,19 @@ const I18N = {
     LANG = lang;
     localStorage.setItem("lang", lang);
     var tr = I18N[lang] || I18N.en;
+    // Name: Cyrillic for Russian, Latin otherwise
+    var nameText  = lang === "ru" ? "Бобур Зокиров"            : "Bobur Zokirov";
+    var nameBold  = lang === "ru" ? "Бобур <b>Зокиров</b>"    : "Bobur <b>Zokirov</b>";
+    var heroName  = document.querySelector(".hero__name");
+    var brand     = document.querySelector(".brand");
+    var gateLogo  = document.querySelector(".gate__logo");
+    var ftBrand   = document.querySelector(".footer__brand");
+    var ftName    = document.getElementById("footerName");
+    if (heroName) heroName.textContent = nameText;
+    if (brand)    brand.innerHTML      = nameBold;
+    if (gateLogo) gateLogo.innerHTML   = nameBold;
+    if (ftBrand)  ftBrand.textContent  = nameText;
+    if (ftName)   ftName.textContent   = nameText;
     // Static elements
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
       var key = el.dataset.i18n;
