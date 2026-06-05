@@ -116,6 +116,8 @@ const PORTFOLIO = [
     role: "Product Manager",
     description: "Programmatic advertising platform for digital out-of-home media buying with location, audience, inventory, and campaign-planning features.",
     image: "assets/img/portfolio/geomotive.jpg",
+    liveUrl: "https://dsp.geomotive.io/app",
+    liveBtnLabel: "Open DSP ↗",
     caseStudy: {
       overview: "A demand-side platform for programmatic Digital-Out-Of-Home (DOOH) advertising — letting buyers plan campaigns by location, audience, and inventory.",
       problem: "DOOH buying was manual and opaque; advertisers needed programmatic targeting and transparent inventory.",
@@ -444,6 +446,8 @@ const I18N = {
         ? '<button class="btn btn--ghost btn--sm" data-case="' + i + '">' + tr.pf_btn_case + '</button>' : "";
       const cjmBtn = p.cjmUrl
         ? '<a class="btn btn--text btn--sm" href="' + p.cjmUrl + '" target="_blank" rel="noopener">' + tr.pf_btn_cjm + '</a>' : "";
+      const liveBtn = p.liveUrl
+        ? '<a class="btn btn--text btn--sm" href="' + p.liveUrl + '" target="_blank" rel="noopener">' + (p.liveBtnLabel || "Open ↗") + '</a>' : "";
       return '' +
         '<article class="pf-card reveal">' +
           '<div class="pf-body">' +
@@ -451,7 +455,7 @@ const I18N = {
             '<h3>' + p.title + '</h3>' +
             '<p class="pf-role"><b>Role:</b> ' + p.role + '</p>' +
             '<p class="pf-desc">' + p.description + '</p>' +
-            '<div class="pf-actions">' + caseBtn + cjmBtn + '</div>' +
+            '<div class="pf-actions">' + caseBtn + cjmBtn + liveBtn + '</div>' +
           '</div>' +
         '</article>';
     });
