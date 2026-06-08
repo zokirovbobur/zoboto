@@ -95,6 +95,76 @@ body::before{
 .filter-btn[data-f="external"]{border-color:rgba(158,98,16,.35);color:var(--amber-l)}
 .filter-btn[data-f="external"].active{background:rgba(158,98,16,.15);border-color:rgba(158,98,16,.55)}
 
+.topbar-action{
+  font-family:var(--font-mono); font-size:10px; font-weight:500;
+  padding:5px 12px; border-radius:4px;
+  border:1px solid rgba(208,96,96,.45);
+  background:rgba(208,96,96,.12); color:var(--red-l);
+  cursor:pointer; transition:all .15s; letter-spacing:.04em; margin-left:10px;
+}
+.topbar-action:hover{background:rgba(208,96,96,.22);border-color:rgba(208,96,96,.75);color:#fff}
+.executive-summary{
+  position:fixed; left:16px; bottom:46px; width:306px;
+  z-index:90; padding:13px 14px 12px; border-radius:8px;
+  border:1px solid rgba(208,96,96,.42);
+  background:linear-gradient(180deg,rgba(13,13,24,.96),rgba(8,8,16,.92));
+  box-shadow:0 14px 38px rgba(0,0,0,.48),0 0 24px rgba(208,96,96,.12);
+  backdrop-filter:blur(14px); pointer-events:auto;
+}
+.executive-summary::before{
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:linear-gradient(180deg,var(--red-l),var(--amber-l));
+  border-radius:8px 0 0 8px;
+}
+.exec-kicker{font-family:var(--font-mono);font-size:8px;color:var(--amber-l);letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px}
+.exec-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:6px}
+.exec-body{font-size:10.5px;line-height:1.45;color:var(--text2);margin-bottom:8px}
+.exec-points{display:grid;gap:5px;list-style:none}
+.exec-points li{font-family:var(--font-mono);font-size:8.5px;line-height:1.35;color:var(--text);display:flex;gap:6px;align-items:flex-start}
+.exec-points li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--red-l);box-shadow:0 0 8px rgba(208,96,96,.55);margin-top:4px;flex-shrink:0}
+.arch-callout{
+  position:absolute; left:600px; top:104px; z-index:4;
+  width:278px; padding:12px 13px; border-radius:8px;
+  background:rgba(13,13,24,.94); border:1px solid rgba(212,148,74,.45);
+  box-shadow:0 10px 32px rgba(0,0,0,.5),0 0 18px rgba(208,96,96,.1);
+  backdrop-filter:blur(12px);
+}
+.arch-callout-title{font-family:var(--font-mono);font-size:10px;color:var(--amber-l);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.arch-callout-body{font-size:10px;line-height:1.45;color:var(--text2)}
+.comparison-modal{
+  position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center;
+  padding:70px 24px 54px; background:rgba(3,3,8,.68); backdrop-filter:blur(10px);
+}
+.comparison-modal.open{display:flex}
+.comparison-card{
+  width:min(1040px,100%); max-height:calc(100vh - 120px); overflow:auto;
+  border-radius:8px; border:1px solid rgba(208,96,96,.42);
+  background:linear-gradient(180deg,rgba(13,13,24,.98),rgba(8,8,16,.98));
+  box-shadow:0 26px 80px rgba(0,0,0,.72);
+}
+.comparison-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;background:rgba(13,13,24,.98);border-bottom:1px solid var(--line-bright)}
+.comparison-title{font-size:18px;font-weight:800;color:#fff}
+.comparison-sub{font-family:var(--font-mono);font-size:10px;color:var(--text2);margin-top:3px}
+.comparison-close{width:28px;height:28px;border-radius:5px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);color:var(--text2);cursor:pointer}
+.comparison-close:hover{color:#fff;border-color:rgba(255,255,255,.38)}
+.comparison-table{width:100%;border-collapse:collapse;font-size:12px}
+.comparison-table th{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-bright)}
+.comparison-table td{vertical-align:top;padding:12px 14px;line-height:1.45;border-bottom:1px solid rgba(37,37,64,.72);color:var(--text)}
+.comparison-table td:first-child{font-family:var(--font-mono);font-size:10px;color:var(--amber-l);width:170px}
+.comparison-table td:nth-child(2){color:#E0A0A0}
+.comparison-table td:nth-child(3){color:#AEE4C9}
+.footer-tip{font-family:var(--font-mono);font-size:9.5px;color:var(--text2);letter-spacing:.04em}
+@media (max-width:1100px){.topbar-action{display:none}}
+@media (max-width:900px){
+  .executive-summary{left:10px;right:10px;bottom:38px;width:auto;max-width:360px}
+  .exec-body{font-size:10px}
+  .arch-callout{display:none}
+  .comparison-modal{padding:64px 10px 42px}
+  .comparison-table{font-size:11px;min-width:760px}
+  .footer-tip{display:none}
+}
+@media (max-height:720px){.executive-summary{display:none}}
+
 /* CANVAS */
 .canvas-wrap{
   position:fixed; top:54px; left:0; right:0; bottom:32px;
@@ -485,12 +555,20 @@ body::before{
     <button class="filter-btn" data-f="abs" onclick="setFilter(this,'abs')" id="fb-abs">ABS</button>
     <button class="filter-btn" data-f="external" onclick="setFilter(this,'external')" id="fb-external">Tashqi</button>
   </div>
+  <button class="topbar-action" id="comparisonBtn" onclick="openComparison()">AS-IS vs TO-BE</button>
   <select class="lang-select" id="langSelect" onchange="setLang(this.value)">
     <option value="uz">UZ</option>
     <option value="ru">RU</option>
     <option value="en">EN</option>
   </select>
 </div>
+
+<aside class="executive-summary" id="execSummary" aria-label="Executive Summary">
+  <div class="exec-kicker" id="execKicker">Current architecture</div>
+  <div class="exec-title" id="execTitle">Executive Summary</div>
+  <div class="exec-body" id="execBody"></div>
+  <ul class="exec-points" id="execPoints"></ul>
+</aside>
 
 <div class="canvas-wrap" id="canvasWrap">
   <div id="canvas">
@@ -504,6 +582,11 @@ body::before{
       <div class="esb-limited-tag">⚠ CHEKLANGAN</div>
       <div class="n-label" style="color:#D4944A">ESB</div>
       <div class="n-sub" style="color:#D4944A;font-size:8.5px">ABS API collection only · Middleware yo'q</div>
+    </div>
+
+    <div class="arch-callout" id="esbCallout">
+      <div class="arch-callout-title" id="calloutTitle">ESB != Middleware</div>
+      <div class="arch-callout-body" id="calloutBody"></div>
     </div>
 
     <!-- ABS HUB -->
@@ -550,7 +633,8 @@ body::before{
             <button class="np-api-btn" id="npApiNew" onclick="npSetApi('new')">Yangi metod</button>
           </div>
           <div id="npVendorWarn" class="np-vendor-warn">
-            ⚠ ABS vendoriga murojat zarur<br>Kutish: <b>+2–6 oy</b> · Vendor bog'liq: <b>HA</b>
+            Yangi metod kerak bo'lsa: <b>+2-6 oy</b><br>Multiple integrations + vendor lock-in risk. Vendor dependency: <b>HIGH</b><br>
+            ABS vendoriga murojaat zarur.
           </div>
         </div>
       </div>
@@ -591,6 +675,28 @@ body::before{
       </defs>
     </svg>
 
+  </div>
+</div>
+
+<div class="comparison-modal" id="comparisonModal" role="dialog" aria-modal="true" aria-labelledby="comparisonTitle">
+  <div class="comparison-card">
+    <div class="comparison-head">
+      <div>
+        <div class="comparison-title" id="comparisonTitle">AS-IS vs TO-BE</div>
+        <div class="comparison-sub" id="comparisonSub">Transformation view for architecture decisions</div>
+      </div>
+      <button class="comparison-close" onclick="closeComparison()" aria-label="Close">x</button>
+    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th id="cmpArea">Area</th>
+          <th>AS-IS</th>
+          <th>TO-BE</th>
+        </tr>
+      </thead>
+      <tbody id="comparisonRows"></tbody>
+    </table>
   </div>
 </div>
 
@@ -662,6 +768,90 @@ const ABS_INFO = {
     risk:"Oracle platformasiga qattiq bog'liqlik — infratuzilma xarajatlari yuqori. Islomiy moliya modullari standart tarkibda yo'q, alohida sozlash talab etiladi."
   }
 };
+
+const EXEC_UI = {
+  uz:{
+    execKicker:'Current architecture',
+    execTitle:'Executive Summary',
+    execBody:"AS-IS arxitektura ABS markazida qurilgan. Kanallar va tashqi tizimlar ESB wrapper, to'g'ridan-to'g'ri SDK/adapters va ABS modullariga bog'langan. Natijada yangi platforma qo'shish murakkab, vendor dependency yuqori va time-to-market sekin.",
+    execPoints:["Point-to-point integratsiyalar ko'p","ESB != to'liq Middleware",'Yangi ABS metodlari vendor kutishiga bogliq','Monitoring va troubleshooting fragmentlangan'],
+    calloutTitle:'ESB != Middleware',
+    calloutBody:"Bu prototipdagi AS-IS ESB asosan ABS API wrapper/API collection sifatida ishlaydi. U orchestration, queue, monitoring, DR, API lifecycle va integration governance imkoniyatlarini to'liq bermaydi.",
+    comparisonBtn:'AS-IS vs TO-BE',
+    comparisonSub:'Architecture transformation decision view',
+    area:'Area',
+    footerTip:'Tip: node ustiga bosing - tafsilotlar paneli ochiladi.'
+  },
+  ru:{
+    execKicker:'Текущая архитектура',
+    execTitle:'Executive Summary',
+    execBody:'AS-IS архитектура построена вокруг ABS. Каналы и внешние системы завязаны на ESB wrapper, прямые SDK/adapters и модули ABS. Поэтому запуск новых платформ сложнее, vendor dependency выше, time-to-market медленнее.',
+    execPoints:['Много point-to-point интеграций','ESB != полноценный Middleware','Новые методы ABS зависят от вендора','Monitoring и troubleshooting фрагментированы'],
+    calloutTitle:'ESB != Middleware',
+    calloutBody:'В этом AS-IS прототипе ESB в основном работает как ABS API wrapper/API collection. Он не дает полный orchestration, queue, monitoring, DR, API lifecycle и integration governance.',
+    comparisonBtn:'AS-IS vs TO-BE',
+    comparisonSub:'Сравнение архитектур для принятия решений',
+    area:'Area',
+    footerTip:'Совет: нажмите на узел, чтобы открыть детали.'
+  },
+  en:{
+    execKicker:'Current architecture',
+    execTitle:'Executive Summary',
+    execBody:'The AS-IS architecture is ABS-centric. Channels and external systems depend on an ESB wrapper, direct SDK/adapters, and ABS modules. As a result, launching a new platform is complex, vendor dependency is high, and time-to-market is slow.',
+    execPoints:['Many point-to-point integrations','ESB is not full Middleware','New ABS methods depend on vendor waiting time','Monitoring and troubleshooting are fragmented'],
+    calloutTitle:'ESB != Middleware',
+    calloutBody:'In this AS-IS prototype, ESB mostly works as an ABS API wrapper/API collection. It does not fully provide orchestration, queue, monitoring, DR, API lifecycle, or integration governance.',
+    comparisonBtn:'AS-IS vs TO-BE',
+    comparisonSub:'Architecture transformation decision view',
+    area:'Area',
+    footerTip:'Tip: click a node to open details.'
+  }
+};
+
+const COMPARISON_ROWS = [
+  ['Integration model','Point-to-point, ABS/ESB/direct SDK mix','Centralized through Middleware'],
+  ['ESB/Middleware role','ESB mainly wraps ABS APIs','Middleware orchestrates APIs, queues, monitoring, DR, and reuse'],
+  ['New platform launch','Multiple integrations and vendor coordination','One primary integration to Middleware'],
+  ['Vendor dependency','High, especially for new ABS methods','Lower; bank specialists can create/reuse methods in Middleware'],
+  ['Time-to-market','Slower, often dependent on vendor timeline','Faster due to reusable APIs and integration hub'],
+  ['Monitoring','Fragmented by system/vendor','Centralized APM/tracing through Middleware'],
+  ['PCI DSS scope','Can become unclear or spread across components','More controllable through gateway and Middleware boundaries'],
+  ['Operational risk','High coupling and change impact','Lower coupling and clearer integration governance']
+];
+
+function renderExecUI(){
+  const copy = EXEC_UI[L] || EXEC_UI.uz;
+  const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+  setText('execKicker', copy.execKicker);
+  setText('execTitle', copy.execTitle);
+  setText('execBody', copy.execBody);
+  setText('calloutTitle', copy.calloutTitle);
+  setText('calloutBody', copy.calloutBody);
+  setText('comparisonBtn', copy.comparisonBtn);
+  setText('comparisonSub', copy.comparisonSub);
+  setText('cmpArea', copy.area);
+  setText('footer-tip', copy.footerTip);
+  const points = document.getElementById('execPoints');
+  if (points) points.innerHTML = copy.execPoints.map(item => '<li>' + item + '</li>').join('');
+  renderComparisonRows();
+}
+
+function renderComparisonRows(){
+  const body = document.getElementById('comparisonRows');
+  if (!body) return;
+  body.innerHTML = COMPARISON_ROWS.map(row => '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>').join('');
+}
+
+function openComparison(){
+  renderComparisonRows();
+  const modal = document.getElementById('comparisonModal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeComparison(){
+  const modal = document.getElementById('comparisonModal');
+  if (modal) modal.classList.remove('open');
+}
 
 const NODES = {
   /* CHANNELS — top */
@@ -1008,6 +1198,13 @@ function closePanel(){
   document.getElementById('panel').classList.remove('open');
 }
 
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape'){
+    closeComparison();
+    closePanel();
+  }
+});
+
 /* FILTER */
 function setFilter(btn, f){
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
@@ -1079,6 +1276,7 @@ function applyUI() {
   if (tobe) tobe.textContent = T[L].btnTobe;
   const sel = document.getElementById('langSelect');
   if (sel) sel.value = L;
+  renderExecUI();
 }
 
 /* INIT */
@@ -1232,6 +1430,8 @@ document.addEventListener('click', function(e){
 
 <footer class="site-footer">
   <span class="footer-by" id="footer-by">Zokirov Bobur tomonidan</span>
+  <span class="footer-sep">·</span>
+  <span class="footer-tip" id="footer-tip">Tip: node ustiga bosing - tafsilotlar paneli ochiladi.</span>
   <span class="footer-sep">·</span>
   <a href="https://t.me/zokirovbobur" target="_blank" class="footer-link footer-tg">Telegram</a>
   <span class="footer-sep">·</span>

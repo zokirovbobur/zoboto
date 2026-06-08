@@ -215,6 +215,126 @@ body::before{
   color:var(--blue-l);
 }
 
+.topbar-action{
+  font-family:var(--font-mono);
+  font-size:10px;font-weight:500;
+  padding:5px 12px;border-radius:4px;
+  border:1px solid rgba(108,99,212,.45);
+  background:rgba(108,99,212,.12);
+  color:var(--purple-l);
+  cursor:pointer;transition:all .15s;
+  letter-spacing:.04em;
+  margin-left:10px;
+}
+.topbar-action:hover{background:rgba(108,99,212,.22);border-color:rgba(108,99,212,.75);color:#fff;}
+
+.executive-summary{
+  position:fixed;left:16px;bottom:46px;width:306px;
+  z-index:90;
+  padding:13px 14px 12px;
+  border-radius:8px;
+  border:1px solid rgba(108,99,212,.42);
+  background:linear-gradient(180deg,rgba(13,13,24,.96),rgba(8,8,16,.92));
+  box-shadow:0 14px 38px rgba(0,0,0,.48),0 0 24px rgba(108,99,212,.12);
+  backdrop-filter:blur(14px);
+  pointer-events:auto;
+}
+.executive-summary::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--purple-l),var(--green-l));
+  border-radius:8px 0 0 8px;
+}
+.exec-kicker{
+  font-family:var(--font-mono);font-size:8px;
+  color:var(--green-l);letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:5px;
+}
+.exec-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:6px;}
+.exec-body{font-size:10.5px;line-height:1.45;color:var(--text2);margin-bottom:8px;}
+.exec-points{display:grid;gap:5px;list-style:none;}
+.exec-points li{
+  font-family:var(--font-mono);font-size:8.5px;line-height:1.35;color:var(--text);
+  display:flex;gap:6px;align-items:flex-start;
+}
+.exec-points li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green-l);box-shadow:0 0 8px rgba(77,184,147,.55);margin-top:4px;flex-shrink:0;}
+
+.arch-callout{
+  position:absolute;z-index:4;
+  width:278px;padding:12px 13px;
+  border-radius:8px;
+  background:rgba(13,13,24,.94);
+  border:1px solid rgba(77,184,147,.42);
+  box-shadow:0 10px 32px rgba(0,0,0,.5),0 0 18px rgba(108,99,212,.1);
+  backdrop-filter:blur(12px);
+}
+.arch-callout.to-be{left:1010px;top:500px;}
+.arch-callout-title{
+  font-family:var(--font-mono);font-size:10px;color:var(--green-l);
+  letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;
+}
+.arch-callout-body{font-size:10px;line-height:1.45;color:var(--text2);}
+
+.comparison-modal{
+  position:fixed;inset:0;z-index:300;
+  display:none;align-items:center;justify-content:center;
+  padding:70px 24px 54px;
+  background:rgba(3,3,8,.68);
+  backdrop-filter:blur(10px);
+}
+.comparison-modal.open{display:flex;}
+.comparison-card{
+  width:min(1040px,100%);
+  max-height:calc(100vh - 120px);
+  overflow:auto;
+  border-radius:8px;
+  border:1px solid rgba(108,99,212,.42);
+  background:linear-gradient(180deg,rgba(13,13,24,.98),rgba(8,8,16,.98));
+  box-shadow:0 26px 80px rgba(0,0,0,.72);
+}
+.comparison-head{
+  position:sticky;top:0;z-index:1;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:16px 18px;
+  background:rgba(13,13,24,.98);
+  border-bottom:1px solid var(--line-bright);
+}
+.comparison-title{font-size:18px;font-weight:800;color:#fff;}
+.comparison-sub{font-family:var(--font-mono);font-size:10px;color:var(--text2);margin-top:3px;}
+.comparison-close{
+  width:28px;height:28px;border-radius:5px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.04);
+  color:var(--text2);cursor:pointer;
+}
+.comparison-close:hover{color:#fff;border-color:rgba(255,255,255,.38);}
+.comparison-table{width:100%;border-collapse:collapse;font-size:12px;}
+.comparison-table th{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text2);text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-bright);
+}
+.comparison-table td{
+  vertical-align:top;padding:12px 14px;line-height:1.45;
+  border-bottom:1px solid rgba(37,37,64,.72);
+  color:var(--text);
+}
+.comparison-table td:first-child{font-family:var(--font-mono);font-size:10px;color:var(--purple-l);width:170px;}
+.comparison-table td:nth-child(2){color:#E0A0A0;}
+.comparison-table td:nth-child(3){color:#AEE4C9;}
+.footer-tip{
+  font-family:var(--font-mono);font-size:9.5px;color:var(--text2);letter-spacing:.04em;
+}
+
+@media (max-width:1100px){.topbar-action{display:none;}}
+@media (max-width:900px){
+  .executive-summary{left:10px;right:10px;bottom:38px;width:auto;max-width:360px;}
+  .exec-body{font-size:10px;}
+  .arch-callout{display:none;}
+  .comparison-modal{padding:64px 10px 42px;}
+  .comparison-table{font-size:11px;min-width:760px;}
+  .footer-tip{display:none;}
+}
+@media (max-height:720px){.executive-summary{display:none;}}
+
 /* ── CANVAS WRAP ────────────────────────────────── */
 .canvas-wrap{
   position:fixed;top:54px;left:0;right:0;bottom:32px;
@@ -223,13 +343,13 @@ body::before{
   z-index:1;
 }
 #canvas{
-  width:1300px;height:630px;
+  width:1500px;height:630px;
   position:relative;flex-shrink:0;
   transform-origin:center center;
 }
 #svg-lines{
   position:absolute;top:0;left:0;
-  width:1300px;height:630px;
+  width:1500px;height:630px;
   pointer-events:none;z-index:1;
   overflow:visible;filter:url(#line-glow);
 }
@@ -628,7 +748,7 @@ body::before{
 .np-mw-note b{color:#7FDAB0;font-weight:600;}
 /* Integration picker */
 .np-picker{
-  position:absolute;left:200px;top:0;bottom:auto;width:192px;max-height:255px;overflow-y:auto;
+  position:absolute;left:0;top:116px;bottom:auto;width:186px;max-height:255px;overflow-y:auto;
   border:1px solid rgba(208,96,96,.28);border-radius:8px;
   background:rgba(7,7,14,.97);backdrop-filter:blur(16px);
   box-shadow:0 6px 28px rgba(0,0,0,.75);
@@ -669,12 +789,20 @@ body::before{
     <button class="filter-btn" data-f="compliance" onclick="setFilter(this,'compliance')" id="fb-compliance">Compliance</button>
     <button class="filter-btn" data-f="channel" onclick="setFilter(this,'channel')" id="fb-channel">Kanallar</button>
   </div>
+  <button class="topbar-action" id="comparisonBtn" onclick="openComparison()">AS-IS vs TO-BE</button>
   <select class="lang-select" id="langSelect" onchange="setLang(this.value)">
     <option value="uz">UZ</option>
     <option value="ru">RU</option>
     <option value="en">EN</option>
   </select>
 </div>
+
+<aside class="executive-summary" id="execSummary" aria-label="Executive Summary">
+  <div class="exec-kicker" id="execKicker">Target architecture</div>
+  <div class="exec-title" id="execTitle">Executive Summary</div>
+  <div class="exec-body" id="execBody"></div>
+  <ul class="exec-points" id="execPoints"></ul>
+</aside>
 
 <div class="canvas-wrap" id="canvasWrap">
   <div id="canvas" style="transform: scale(0.922992);">
@@ -708,7 +836,7 @@ body::before{
     <div class="pci-tag" id="pciTag" style="left: 786px; top: 210px;">PCI DSS SCOPE</div>
   <div class="node node-hub" id="node-middleware" data-id="middleware" data-cat="hub" style="left: 470px; top: 228px; width: 320px; height: 220px; background: rgb(22, 14, 53); border-color: rgb(108, 99, 212); --sel-col: #6C63D4;">
         <div class="n-label" style="font-size:15px">Middleware</div>
-        <div class="n-sub" style="color:#9D98E8;font-size:10px;margin-top:3px">Rendezvous · Velmie · Kinective</div>
+        <div class="n-sub" style="color:#9D98E8;font-size:10px;margin-top:3px">Options: Rendezvous · Velmie · Kinective</div>
         <div class="hub-tags" style="margin-top:6px">
           <span class="hub-tag" style="border-color:#16845E;color:#4DB893;background:rgba(22,132,94,.1)">PCI DSS</span>
           <span class="hub-tag" style="border-color:#16845E;color:#4DB893;background:rgba(22,132,94,.1)">PADSS</span>
@@ -770,6 +898,11 @@ body::before{
         <div class="n-label">Incident ITIL</div>
         <div class="n-sub" style="color:#D06060">SLA · Alerting</div></div>
 
+<div class="arch-callout to-be" id="mwCallout">
+  <div class="arch-callout-title" id="calloutTitle">Middleware = Integration Control Layer</div>
+  <div class="arch-callout-body" id="calloutBody"></div>
+</div>
+
 <!-- ═══ NEW PLATFORM WIDGET (TO-BE) ═══ -->
 <div id="npWidget" class="np-widget">
   <div class="np-init" id="npInit" onclick="npActivate()">
@@ -792,7 +925,7 @@ body::before{
           <button class="np-api-btn" id="npApiNew" onclick="npSetApi('new')">Yangi metod</button>
         </div>
         <div id="npMwNote" class="np-mw-note">
-          <b>✓ Middleware orqali</b><br>Bank mutaxassislari Middleware ichidagi mavjud API lar yordamida yangi metod yaratadilar. ABS vendoriga murojat <b>KERAK EMAS</b>.
+          <b>Middleware orqali bitta ulanish</b><br>Mavjud API'lar reuse qilinadi. Yangi metod bank jamoasi tomonidan Middleware ichida orchestration qilinadi. ABS vendor dependency kamayadi.
         </div>
       </div>
     </div>
@@ -825,7 +958,7 @@ body::before{
     <div class="np-pi" data-id="tifc" onclick="npSelect('tifc')"><span class="np-pi-dot" style="background:#D4944A"></span>TIFC / E-imzo</div>
   </div>
 </div>
-<svg id="svg-np" style="position:absolute;left:0;top:0;width:1300px;height:630px;pointer-events:none;z-index:6;overflow:visible;">
+<svg id="svg-np" style="position:absolute;left:0;top:0;width:1500px;height:630px;pointer-events:none;z-index:6;overflow:visible;">
   <defs>
     <marker id="np-arr-mw" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
       <path d="M0,0 L7,3.5 L0,7 Z" fill="#9D98E8"/>
@@ -833,6 +966,28 @@ body::before{
   </defs>
 </svg>
 </div>
+</div>
+
+<div class="comparison-modal" id="comparisonModal" role="dialog" aria-modal="true" aria-labelledby="comparisonTitle">
+  <div class="comparison-card">
+    <div class="comparison-head">
+      <div>
+        <div class="comparison-title" id="comparisonTitle">AS-IS vs TO-BE</div>
+        <div class="comparison-sub" id="comparisonSub">Transformation view for architecture decisions</div>
+      </div>
+      <button class="comparison-close" onclick="closeComparison()" aria-label="Close">x</button>
+    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th id="cmpArea">Area</th>
+          <th>AS-IS</th>
+          <th>TO-BE</th>
+        </tr>
+      </thead>
+      <tbody id="comparisonRows"></tbody>
+    </table>
+  </div>
 </div>
 
 <div class="panel" id="panel">
@@ -933,11 +1088,95 @@ const T={
 /* ════════════════════════════════════════════════════════════
    NODE DATA
 ════════════════════════════════════════════════════════════ */
+const EXEC_UI = {
+  uz:{
+    execKicker:'Target architecture',
+    execTitle:'Executive Summary',
+    execBody:"TO-BE arxitekturada Middleware markaziy integration va orchestration layer vazifasini bajaradi. Yangi platformalar bitta predictable integration point orqali ulanadi, API reuse kuchayadi, monitoring markazlashadi va ABS vendor dependency kamayadi.",
+    execPoints:['1 ta asosiy integration point','API orchestration va reuse','Monitoring/APM/DR markazlashadi','ABS vendor dependency kamayadi'],
+    calloutTitle:'Middleware = Integration Control Layer',
+    calloutBody:"Middleware API orchestration, queue, monitoring, DR, API lifecycle va reusable integration pattern'larni markazlashtiradi.",
+    comparisonBtn:'AS-IS vs TO-BE',
+    comparisonSub:'Architecture transformation decision view',
+    area:'Area',
+    footerTip:'Tip: node ustiga bosing - tafsilotlar paneli ochiladi.'
+  },
+  ru:{
+    execKicker:'Целевая архитектура',
+    execTitle:'Executive Summary',
+    execBody:'В TO-BE архитектуре Middleware становится центральным слоем интеграции и оркестрации. Новые платформы подключаются через одну предсказуемую точку, API переиспользуются, мониторинг централизуется, зависимость от ABS-вендора снижается.',
+    execPoints:['Одна основная точка интеграции','API orchestration и reuse','Централизация Monitoring/APM/DR','Меньше зависимости от ABS-вендора'],
+    calloutTitle:'Middleware = Integration Control Layer',
+    calloutBody:'Middleware централизует API orchestration, queue, monitoring, DR, API lifecycle и reusable integration patterns.',
+    comparisonBtn:'AS-IS vs TO-BE',
+    comparisonSub:'Сравнение архитектур для принятия решений',
+    area:'Area',
+    footerTip:'Совет: нажмите на узел, чтобы открыть детали.'
+  },
+  en:{
+    execKicker:'Target architecture',
+    execTitle:'Executive Summary',
+    execBody:'In the TO-BE architecture, Middleware becomes the central integration and orchestration layer. New platforms connect through one predictable integration point, API reuse grows, monitoring is centralized, and ABS vendor dependency decreases.',
+    execPoints:['One primary integration point','API orchestration and reuse','Centralized Monitoring/APM/DR','Lower ABS vendor dependency'],
+    calloutTitle:'Middleware = Integration Control Layer',
+    calloutBody:'Middleware centralizes API orchestration, queue, monitoring, DR, API lifecycle, and reusable integration patterns.',
+    comparisonBtn:'AS-IS vs TO-BE',
+    comparisonSub:'Architecture transformation decision view',
+    area:'Area',
+    footerTip:'Tip: click a node to open details.'
+  }
+};
+
+const COMPARISON_ROWS = [
+  ['Integration model','Point-to-point, ABS/ESB/direct SDK mix','Centralized through Middleware'],
+  ['ESB/Middleware role','ESB mainly wraps ABS APIs','Middleware orchestrates APIs, queues, monitoring, DR, and reuse'],
+  ['New platform launch','Multiple integrations and vendor coordination','One primary integration to Middleware'],
+  ['Vendor dependency','High, especially for new ABS methods','Lower; bank specialists can create/reuse methods in Middleware'],
+  ['Time-to-market','Slower, often dependent on vendor timeline','Faster due to reusable APIs and integration hub'],
+  ['Monitoring','Fragmented by system/vendor','Centralized APM/tracing through Middleware'],
+  ['PCI DSS scope','Can become unclear or spread across components','More controllable through gateway and Middleware boundaries'],
+  ['Operational risk','High coupling and change impact','Lower coupling and clearer integration governance']
+];
+
+function renderExecUI(){
+  const copy = EXEC_UI[L] || EXEC_UI.uz;
+  const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+  setText('execKicker', copy.execKicker);
+  setText('execTitle', copy.execTitle);
+  setText('execBody', copy.execBody);
+  setText('calloutTitle', copy.calloutTitle);
+  setText('calloutBody', copy.calloutBody);
+  setText('comparisonBtn', copy.comparisonBtn);
+  setText('comparisonSub', copy.comparisonSub);
+  setText('cmpArea', copy.area);
+  setText('footer-tip', copy.footerTip);
+  const points = document.getElementById('execPoints');
+  if (points) points.innerHTML = copy.execPoints.map(item => '<li>' + item + '</li>').join('');
+  renderComparisonRows();
+}
+
+function renderComparisonRows(){
+  const body = document.getElementById('comparisonRows');
+  if (!body) return;
+  body.innerHTML = COMPARISON_ROWS.map(row => '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>').join('');
+}
+
+function openComparison(){
+  renderComparisonRows();
+  const modal = document.getElementById('comparisonModal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeComparison(){
+  const modal = document.getElementById('comparisonModal');
+  if (modal) modal.classList.remove('open');
+}
+
 const N = {
   middleware:{
-    label:'Middleware',sub:'Rendezvous · Velmie · Kinective',
-    x:470,y:228,w:320,h:220,cat:'hub',
-    vendor:'Avanza Rendezvous · Velmie · Kinective — 3 ta variant',
+    label:'Middleware',sub:'Options: Rendezvous · Velmie · Kinective',
+    x:670,y:228,w:320,h:220,cat:'hub',
+    vendor:'Example options: Avanza Rendezvous · Velmie · Kinective — 3 ta variant',
     purpose:{
       uz:"Markaziy hub — barcha tizimlar faqat Middleware orqali muloqot qiladi. Hech bir tizim boshqasi bilan to'g'ridan-to'g'ri gaplashmaydi. PCI DSS sertifikatlangan. SAF/STIP rejimi Core Banking offline bo'lganda ham tizimni to'xtatmaydi.",
       ru:"Центральный хаб — все системы взаимодействуют исключительно через Middleware. Ни одна система не общается с другой напрямую. Сертифицирован по PCI DSS. Режим SAF/STIP обеспечивает работу даже при недоступности Core Banking.",
@@ -955,7 +1194,7 @@ const N = {
   },
   gateway:{
     label:'API Gateway',sub:'WAF · OAuth2 · mTLS · Rate Limiting · DDoS',
-    x:276,y:70,w:698,h:28,cat:'gateway',
+    x:476,y:70,w:698,h:28,cat:'gateway',
     vendor:'Kong Enterprise · AWS API Gateway · NGINX Plus — 3 ta variant',
     purpose:{
       uz:"Barcha kanallardan keluvchi trafikni filtrlaydi, autentifikatsiya va himoyani bajarib, Middleware ga xavfsiz holda yo'naltiradi. Uchta platforma mavjud.",
@@ -974,7 +1213,7 @@ const N = {
   },
   mobile:{
     label:'Mobile App',sub:'iOS · Android',
-    x:276,y:10,w:130,h:48,cat:'channel',
+    x:476,y:10,w:130,h:48,cat:'channel',
     vendor:"Avanza Symmetry · Tune Consulting · Inhouse — 3 ta variant",
     purpose:{
       uz:"Retail va korporativ mijozlar uchun mobil banking — balans, o'tkazmalar, financing ariza. Uchta yo'nalish mavjud: tayyor banking platforma, mahalliy outsource yoki o'z jamoasi bilan yaratish.",
@@ -993,7 +1232,7 @@ const N = {
   },
   web:{
     label:'Web Portal',sub:'Internet banking',
-    x:418,y:10,w:130,h:48,cat:'channel',
+    x:618,y:10,w:130,h:48,cat:'channel',
     vendor:'Avanza Symmetry · Tune Consulting · Inhouse — 3 ta variant',
     purpose:{
       uz:"To'liq funksional internet banking — korporativ uchun bulk payment va hisobotlar. Uchta yo'nalish: tayyor banking web platforma, mahalliy outsource yoki o'z jamoasi bilan yaratish.",
@@ -1012,7 +1251,7 @@ const N = {
   },
   atm_ch:{
     label:'ATM/POS ch.',sub:'ISO 8583 channel',
-    x:560,y:10,w:130,h:48,cat:'channel',
+    x:760,y:10,w:130,h:48,cat:'channel',
     vendor:'NCR · Diebold Nixdorf — 2 ta variant',
     purpose:{
       uz:"ATM va POS terminallaridan keluvchi ISO 8583 tranzaksiyalar Middleware ga tunnel qilinadi. Ikkita yetakchi xalqaro vendor o'rtasida tanlash mumkin.",
@@ -1031,7 +1270,7 @@ const N = {
   },
   corp_api:{
     label:'Corp API',sub:'Open banking · B2B',
-    x:702,y:10,w:130,h:48,cat:'channel',
+    x:902,y:10,w:130,h:48,cat:'channel',
     vendor:'Kong Enterprise · AWS API Gateway · Maverick — 3 ta variant',
     purpose:{
       uz:"Korporativ mijozlar va fintech hamkorlar uchun Open Banking API — ERP va 1C bilan integratsiya. Uchta platforma o'rtasida tanlash mumkin.",
@@ -1050,7 +1289,7 @@ const N = {
   },
   chat:{
     label:'Chat / USSD',sub:'Chatbot · SuperApp',
-    x:844,y:10,w:130,h:48,cat:'channel',
+    x:1044,y:10,w:130,h:48,cat:'channel',
     vendor:'Telegram Bot · USSD Gateway · Conversational AI — 3 ta variant',
     purpose:{
       uz:"USSD va chatbot kanali — oddiy balans so'rov, mini-tranzaksiyalar, xizmat ko'rsatish. Uchta yondashuv mavjud.",
@@ -1069,7 +1308,7 @@ const N = {
   },
   core_banking:{
     label:'Core Banking ABS',sub:'iABS · NCI · B2',
-    x:10,y:120,w:220,h:42,cat:'internal',
+    x:210,y:120,w:220,h:42,cat:'internal',
     vendor:'iABS · NCI · B2 — 3 ta variant',
     purpose:{
       uz:"Islomiy bank uchun uchta ABS varianti mavjud. Har bir variant o'zining ustunligi bilan ajralib turadi: mahalliy tajriba, narx moslashuvchanligi yoki O'zbekiston bozori adaptatsiyasi.",
@@ -1087,7 +1326,7 @@ const N = {
   },
   crm:{
     label:'CRM',sub:'Unison Ace · Bitrix24 · Fido',
-    x:10,y:166,w:220,h:42,cat:'internal',
+    x:210,y:166,w:220,h:42,cat:'internal',
     vendor:'Avanza Unison Ace · Bitrix24 · Fido Biznes CRM — 3 ta variant',
     purpose:{
       uz:"Mijoz munosabatlari boshqaruvi: lead management, KYC workflow, Front/Back Office va 360° mijoz profili. Uchta variant mavjud — banking-native, universal va mahalliy yechim.",
@@ -1106,7 +1345,7 @@ const N = {
   },
   dwh:{
     label:'DWH & BI',sub:'ClickHouse · Snowflake · BI',
-    x:10,y:212,w:220,h:42,cat:'internal',
+    x:210,y:212,w:220,h:42,cat:'internal',
     vendor:'ClickHouse · Snowflake · Metabase · Power BI — 2 ta variant',
     purpose:{
       uz:"Tarixiy ma'lumotlar ombori, Sharia KPI dashboard, CBU uchun OLAP hisobotlar va ML pipeline. On-premise yoki cloud yo'nalishda ikki xil arxitektura mavjud.",
@@ -1125,7 +1364,7 @@ const N = {
   },
   card_mgmt:{
     label:'Card Mgmt',sub:'Uzcard · Humo · Visa',
-    x:10,y:258,w:220,h:42,cat:'internal',
+    x:210,y:258,w:220,h:42,cat:'internal',
     vendor:'Avanza Vision · OpenWay WAY4 · TS2 — 3 ta variant',
     purpose:{
       uz:"Barcha karta turlarini boshqarish: chiqarish, bloklash, limitlar, PIN management. Uchta yetakchi platforma o'rtasida tanlash mumkin.",
@@ -1144,7 +1383,7 @@ const N = {
   },
   cash_mgmt:{
     label:'Cash Mgmt',sub:'Multicurrency',
-    x:10,y:304,w:220,h:42,cat:'internal',
+    x:210,y:304,w:220,h:42,cat:'internal',
     vendor:'iMAL Cash Mgmt · IBS Group CMS — 2 ta variant',
     purpose:{
       uz:"Naqd pul operatsiyalari, kassir tizimi, valyuta konvertatsiyasi, vault management. Ikki xil yondashuv: islomiy banking-specific yoki universal CMS.",
@@ -1163,7 +1402,7 @@ const N = {
   },
   billing:{
     label:'Billing',sub:'Prepaid · P2P',
-    x:10,y:350,w:220,h:42,cat:'internal',
+    x:210,y:350,w:220,h:42,cat:'internal',
     vendor:'Avanza Novus · Compass Plus · Inhouse — 3 ta variant',
     purpose:{
       uz:"Kommunal to'lovlar, prepaid kartalar, P2P o'tkazmalar. Banking-native switch, xalqaro platforma yoki inhouse yaratish o'rtasida tanlash mumkin.",
@@ -1182,7 +1421,7 @@ const N = {
   },
   intl_transfer:{
     label:"Int'l Transfer",sub:'SWIFT · SEPA · RIA',
-    x:10,y:396,w:220,h:42,cat:'internal',
+    x:210,y:396,w:220,h:42,cat:'internal',
     vendor:'SWIFT Alliance · Finastra Global PAYplus — 2 ta variant',
     purpose:{
       uz:"Xalqaro pul o'tkazmalari — SWIFT, RIA, Western Union, korrespondent banklar. Ikkita yondashuv: klassik SWIFT Alliance yoki zamonaviy Finastra bulutli platforma.",
@@ -1201,7 +1440,7 @@ const N = {
   },
   hrms:{
     label:'HRMS',sub:'Avanza · Workday · Inhouse',
-    x:10,y:442,w:220,h:42,cat:'internal',
+    x:210,y:442,w:220,h:42,cat:'internal',
     vendor:"Avanza HRMS · Workday HCM · Inhouse — 3 ta variant",
     purpose:{
       uz:"Xodimlar resurslarini boshqarish tizimi — ish haqi, KPI, ta'til, onboarding, mehnat shartnomasi. Bank-spesifik bonus moduli bilan to'ldirilgan. Uchta yo'nalish: banking-native vendor, global lider yoki inhouse qurilgan tizim.",
@@ -1220,7 +1459,7 @@ const N = {
   },
   uzcard:{
     label:'Uzcard / Humo',sub:'National switch',
-    x:1020,y:188,w:158,h:42,cat:'external',
+    x:1220,y:188,w:158,h:42,cat:'external',
     vendor:'Uzcard JSC · Humo Processing Center',
     purpose:{
       uz:"O'zbekiston milliy to'lov tizimlari — barcha mahalliy karta tranzaksiyalari.",
@@ -1237,7 +1476,7 @@ const N = {
   },
   swift:{
     label:'SWIFT / Remit.',sub:'MT103 · RIA · WU',
-    x:1020,y:238,w:158,h:42,cat:'external',
+    x:1220,y:238,w:158,h:42,cat:'external',
     vendor:'SWIFT Alliance · RIA Money Transfer · Western Union',
     purpose:{
       uz:"Xalqaro pul o'tkazmalari uchun tashqi operator va korrespondent bank tarmog'i.",
@@ -1254,7 +1493,7 @@ const N = {
   },
   cbu:{
     label:'CBU Regulator',sub:'Law 1126 · XBRL',
-    x:1020,y:288,w:158,h:42,cat:'external',
+    x:1220,y:288,w:158,h:42,cat:'external',
     vendor:"O'zbekiston Markaziy Banki — CBU",
     purpose:{
       uz:"CBU ga majburiy regulyator hisobotlar, islomiy bank bo'yicha nazorat.",
@@ -1271,7 +1510,7 @@ const N = {
   },
   paynet:{
     label:'Paynet / Billz',sub:'Bill payment',
-    x:1020,y:338,w:158,h:42,cat:'external',
+    x:1220,y:338,w:158,h:42,cat:'external',
     vendor:"Paynet O'zbekiston · Billz Processing Center",
     purpose:{
       uz:"O'zbekistondagi kommunal to'lovlar aggregatori.",
@@ -1288,7 +1527,7 @@ const N = {
   },
   didox:{
     label:'Didox / Soliq.uz',sub:'E-invoice · Tax',
-    x:1020,y:388,w:158,h:42,cat:'external',
+    x:1220,y:388,w:158,h:42,cat:'external',
     vendor:"Didox (e-invoice) · Davlat soliq qo'mitasi API",
     purpose:{
       uz:"Elektron hisob-faktura va soliq organlari integratsiyasi — Murabaha uchun majburiy.",
@@ -1305,7 +1544,7 @@ const N = {
   },
   tifc:{
     label:'TIFC / E-imzo',sub:'0% VAT · E-sign',
-    x:1020,y:438,w:158,h:42,cat:'external',
+    x:1220,y:438,w:158,h:42,cat:'external',
     vendor:'TIFC (Toshkent xalqaro moliya markazi) · UZINFOCOM E-imzo',
     purpose:{
       uz:"TIFC rezidentligi — 0% QQS imtiyozi va elektron shartnomalar uchun E-imzo.",
@@ -1322,7 +1561,7 @@ const N = {
   },
   aml:{
     label:'AML / CFT',sub:'FATF · Sanctions',
-    x:262,y:564,w:158,h:44,cat:'compliance',
+    x:462,y:564,w:158,h:44,cat:'compliance',
     vendor:'NICE Actimize · Oracle FCCM — 2 ta variant',
     purpose:{
       uz:"Real-time pul yuvish va terrorizmni moliyalashtirish nazorati — har bir tranzaksiya bajarilishida tekshiriladi. Ikkita yetakchi vendor o'rtasida tanlash mumkin.",
@@ -1341,7 +1580,7 @@ const N = {
   },
   sharia_core:{
     label:'Sharia Core',sub:'Real-time · Inline',
-    x:444,y:564,w:158,h:44,cat:'compliance',
+    x:644,y:564,w:158,h:44,cat:'compliance',
     vendor:'iMAL Engine · RetainX · Inhouse Rules — 3 ta variant',
     purpose:{
       uz:"Har bir financing tranzaksiyasi bajarilishidan OLDIN Sharia qoidasiga muvofiqligini tekshiradi — proactive, reactive emas. Uchta variant mavjud.",
@@ -1360,7 +1599,7 @@ const N = {
   },
   atm_mgmt:{
     label:'ATM/POS Mgmt',sub:'Health · Monitor',
-    x:626,y:564,w:158,h:44,cat:'compliance',
+    x:826,y:564,w:158,h:44,cat:'compliance',
     vendor:'Avanza Vision · NCR Activate — 2 ta variant',
     purpose:{
       uz:"ATM va POS terminallarining real-time holat monitoringi, naqd pul rejimi boshqaruvi. Ikkita platforma o'rtasida tanlash mumkin.",
@@ -1379,7 +1618,7 @@ const N = {
   },
   incident:{
     label:'Incident ITIL',sub:'SLA · Alerting',
-    x:808,y:564,w:158,h:44,cat:'compliance',
+    x:1008,y:564,w:158,h:44,cat:'compliance',
     vendor:'Jira Service Mgmt · ServiceNow · Freshservice — 3 ta variant',
     purpose:{
       uz:"IT incident boshqaruvi, SLA nazorat, real-time alerting — ITIL v4 metodologiyasi asosida. Uchta yondashuv: developer-centric, enterprise yoki arzon bulut.",
@@ -4175,7 +4414,10 @@ document.getElementById('canvasWrap').addEventListener('click', e => {
    KEYBOARD
 ════════════════════════════════════════════════════════════ */
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closePanel();
+  if (e.key === 'Escape') {
+    closeComparison();
+    closePanel();
+  }
 });
 
 /* ════════════════════════════════════════════════════════════
@@ -4210,6 +4452,7 @@ function applyUI() {
   // Lang switcher active
   const sel = document.getElementById('langSelect');
   if (sel) sel.value = L;
+  renderExecUI();
 }
 
 buildNodes();
@@ -4225,24 +4468,24 @@ document.addEventListener('DOMContentLoaded', applyUI);
    NEW PLATFORM WIDGET — TO-BE (all → Middleware)
 ═══════════════════════════════════════════ */
 var NP_CFG = {
-  mobile:        {lbl:'Mobile App',        ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C333,18 333,232 470,232'},
-  web:           {lbl:'Web Portal',        ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C333,18 333,244 470,244'},
-  atm_ch:        {lbl:'ATM/POS ch.',       ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C333,18 333,256 470,256'},
-  corp_api:      {lbl:'Corp API',          ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C333,18 333,268 470,268'},
-  chat:          {lbl:'Chat / USSD',       ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C333,18 333,280 470,280'},
-  core_banking:  {lbl:'Core Banking ABS',  ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,292 470,292'},
-  crm:           {lbl:'CRM',               ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,304 470,304'},
-  dwh:           {lbl:'DWH & BI',          ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,316 470,316'},
-  card_mgmt:     {lbl:'Card Mgmt',         ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,328 470,328'},
-  cash_mgmt:     {lbl:'Cash Mgmt',         ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,340 470,340'},
-  billing:       {lbl:'Billing',           ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,352 470,352'},
-  intl_transfer: {lbl:"Int'l Transfer",    ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,364 470,364'},
-  uzcard:        {lbl:'Uzcard / Humo',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,376 470,376'},
-  swift:         {lbl:'SWIFT / Remit.',    ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,388 470,388'},
-  cbu:           {lbl:'CBU Regulator',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,400 470,400'},
-  paynet:        {lbl:'Paynet / Billz',    ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,412 470,412'},
-  didox:         {lbl:'Didox / Soliq.uz',  ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,424 470,424'},
-  tifc:          {lbl:'TIFC / E-imzo',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,436 470,436'},
+  mobile:        {lbl:'Mobile App',        ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C433,18 433,232 670,232'},
+  web:           {lbl:'Web Portal',        ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C433,18 433,244 670,244'},
+  atm_ch:        {lbl:'ATM/POS ch.',       ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C433,18 433,256 670,256'},
+  corp_api:      {lbl:'Corp API',          ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C433,18 433,268 670,268'},
+  chat:          {lbl:'Chat / USSD',       ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C433,18 433,280 670,280'},
+  core_banking:  {lbl:'Core Banking ABS',  ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C433,18 433,292 670,292'},
+  crm:           {lbl:'CRM',               ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C433,18 433,304 670,304'},
+  dwh:           {lbl:'DWH & BI',          ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C433,18 433,316 670,316'},
+  card_mgmt:     {lbl:'Card Mgmt',         ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C433,18 433,328 670,328'},
+  cash_mgmt:     {lbl:'Cash Mgmt',         ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C433,18 433,340 670,340'},
+  billing:       {lbl:'Billing',           ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C433,18 433,352 670,352'},
+  intl_transfer: {lbl:"Int'l Transfer",    ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C433,18 433,364 670,364'},
+  uzcard:        {lbl:'Uzcard / Humo',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C433,18 433,376 670,376'},
+  swift:         {lbl:'SWIFT / Remit.',    ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C433,18 433,388 670,388'},
+  cbu:           {lbl:'CBU Regulator',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C433,18 433,400 670,400'},
+  paynet:        {lbl:'Paynet / Billz',    ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C433,18 433,412 670,412'},
+  didox:         {lbl:'Didox / Soliq.uz',  ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C433,18 433,424 670,424'},
+  tifc:          {lbl:'TIFC / E-imzo',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C433,18 433,436 670,436'},
 };
 var _npSel = new Set();
 var _npApi = 'existing';
@@ -4348,6 +4591,8 @@ document.addEventListener('click', function(e) {
 
 <footer class="site-footer">
   <span class="footer-by" id="footer-by">Zokirov Bobur tomonidan</span>
+  <span class="footer-sep">·</span>
+  <span class="footer-tip" id="footer-tip">Tip: node ustiga bosing — tafsilotlar paneli ochiladi.</span>
   <span class="footer-sep">·</span>
   <a href="https://t.me/zokirovbobur" target="_blank" class="footer-link footer-tg">Telegram</a>
   <span class="footer-sep">·</span>
