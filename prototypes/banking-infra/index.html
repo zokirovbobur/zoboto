@@ -555,6 +555,102 @@ body::before{
   82% {box-shadow:0 0 0 3px rgba(77,184,147,.25)}
   100%{box-shadow:0 0 0 0   rgba(77,184,147,0)}
 }
+/* ═══════════════════════════════════════════
+   NEW PLATFORM WIDGET (TO-BE)
+═══════════════════════════════════════════ */
+.np-widget{position:absolute;left:14px;top:490px;width:182px;z-index:5;}
+.np-init{
+  width:182px;min-height:110px;border:2px dashed rgba(208,96,96,.32);border-radius:10px;
+  background:rgba(139,32,32,.04);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;cursor:pointer;transition:all .2s;padding:18px 0;
+}
+.np-init:hover{border-color:rgba(208,96,96,.62);background:rgba(139,32,32,.09);}
+.np-init-plus{font-size:30px;color:rgba(208,96,96,.6);line-height:1;font-weight:300;}
+.np-init-lbl{font-family:var(--font-mono);font-size:9px;color:rgba(208,96,96,.5);letter-spacing:.07em;text-transform:uppercase;}
+.np-card{
+  width:182px;border:1.5px solid rgba(208,96,96,.42);border-radius:10px;
+  background:rgba(12,4,4,.9);backdrop-filter:blur(8px);display:none;overflow:hidden;
+}
+.np-card-hd{
+  padding:8px 10px 7px;border-bottom:1px solid rgba(208,96,96,.14);
+  display:flex;align-items:center;gap:6px;
+}
+.np-reddot{width:7px;height:7px;border-radius:50%;background:#D06060;flex-shrink:0;}
+.np-name-inp{
+  flex:1;background:transparent;border:none;outline:none;min-width:0;
+  font-family:var(--font-display);font-size:11px;font-weight:600;color:#fff;
+}
+.np-name-inp::placeholder{color:rgba(208,96,96,.32);}
+.np-reset-x{
+  font-size:10px;color:rgba(208,96,96,.38);cursor:pointer;flex-shrink:0;
+  background:none;border:none;padding:0 1px;transition:color .12s;
+}
+.np-reset-x:hover{color:#D06060;}
+.np-card-bd{padding:7px 9px;display:flex;flex-direction:column;gap:5px;}
+.np-integ-btn{
+  display:none;width:100%;padding:5px 0;cursor:pointer;transition:all .15s;
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.04em;
+  color:#D06060;border:1px solid rgba(208,96,96,.32);border-radius:5px;
+  background:rgba(208,96,96,.05);
+}
+.np-integ-btn:hover{background:rgba(208,96,96,.13);border-color:rgba(208,96,96,.58);}
+.np-chips{display:flex;flex-wrap:wrap;gap:3px;}
+.np-chip{
+  display:inline-flex;align-items:center;gap:3px;
+  font-family:var(--font-mono);font-size:8px;padding:2px 7px;border-radius:20px;
+  border:1px solid rgba(208,96,96,.38);background:rgba(208,96,96,.08);color:#D06060;
+}
+.np-chip-x{opacity:.55;font-size:8px;cursor:pointer;}
+.np-chip-x:hover{opacity:1;}
+/* Middleware metod section — green (positive) */
+.np-mw-sec{
+  display:none;padding:8px 9px;border-top:1px solid rgba(77,184,147,.18);
+  background:rgba(22,132,94,.03);
+}
+.np-mw-lbl{
+  font-family:var(--font-mono);font-size:7.5px;color:rgba(77,184,147,.55);
+  letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;
+}
+.np-api-row{display:flex;border-radius:4px;overflow:hidden;border:1px solid rgba(77,184,147,.24);}
+.np-api-btn{
+  flex:1;padding:4px 2px;cursor:pointer;transition:all .15s;
+  font-family:var(--font-mono);font-size:8px;text-align:center;letter-spacing:.02em;
+  border:none;background:transparent;color:rgba(77,184,147,.5);
+}
+.np-api-btn:not(:first-child){border-left:1px solid rgba(77,184,147,.24);}
+.np-api-btn.on{background:rgba(77,184,147,.18);color:#4DB893;}
+.np-mw-note{
+  display:none;margin-top:6px;padding:6px 8px;
+  border:1px solid rgba(77,184,147,.38);border-radius:4px;
+  background:rgba(22,132,94,.07);
+  font-family:var(--font-mono);font-size:8px;line-height:1.55;color:#4DB893;
+}
+.np-mw-note b{color:#7FDAB0;font-weight:600;}
+/* Integration picker */
+.np-picker{
+  position:absolute;left:200px;bottom:145px;width:192px;max-height:255px;overflow-y:auto;
+  border:1px solid rgba(208,96,96,.28);border-radius:8px;
+  background:rgba(7,7,14,.97);backdrop-filter:blur(16px);
+  box-shadow:0 6px 28px rgba(0,0,0,.75);
+  display:none;overflow-x:hidden;z-index:50;
+}
+.np-picker.open{display:block;}
+.np-ph{
+  padding:7px 11px;border-bottom:1px solid rgba(208,96,96,.16);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:rgba(7,7,14,.97);z-index:1;
+}
+.np-ph-title{font-family:var(--font-mono);font-size:8px;color:rgba(208,96,96,.5);letter-spacing:.07em;}
+.np-ph-x{cursor:pointer;font-size:11px;color:rgba(208,96,96,.4);background:none;border:none;padding:0;transition:color .12s;}
+.np-ph-x:hover{color:#D06060;}
+.np-pg{font-family:var(--font-mono);font-size:7px;letter-spacing:.09em;color:var(--text3);padding:5px 11px 2px;text-transform:uppercase;}
+.np-pi{
+  padding:5px 11px;display:flex;align-items:center;gap:7px;cursor:pointer;
+  font-family:var(--font-display);font-size:10.5px;color:var(--text2);transition:background .12s;
+}
+.np-pi:hover{background:rgba(77,184,147,.07);color:var(--text);}
+.np-pi.done{opacity:.22;pointer-events:none;}
+.np-pi-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
 </style>
 <script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -672,7 +768,71 @@ body::before{
         <div class="n-label">ATM/POS Mgmt</div>
         <div class="n-sub" style="color:#D06060">Health · Monitor</div></div><div class="node" id="node-incident" data-id="incident" data-cat="compliance" style="left: 808px; top: 564px; width: 158px; height: 44px; background: rgb(24, 6, 6); border-color: rgb(139, 32, 32);">
         <div class="n-label">Incident ITIL</div>
-        <div class="n-sub" style="color:#D06060">SLA · Alerting</div></div></div>
+        <div class="n-sub" style="color:#D06060">SLA · Alerting</div></div>
+
+<!-- ═══ NEW PLATFORM WIDGET (TO-BE) ═══ -->
+<div id="npWidget" class="np-widget">
+  <div class="np-init" id="npInit" onclick="npActivate()">
+    <div class="np-init-plus">+</div>
+    <div class="np-init-lbl">Yangi platforma</div>
+  </div>
+  <div class="np-card" id="npCard">
+    <div class="np-card-hd">
+      <div class="np-reddot"></div>
+      <input class="np-name-inp" id="npNameInp" placeholder="Platforma nomi…" oninput="npOnInput(this.value)">
+      <button class="np-reset-x" onclick="npReset()">✕</button>
+    </div>
+    <div class="np-card-bd">
+      <button class="np-integ-btn" id="npIntegBtn" onclick="npTogglePicker()">+ Integratsiyalar</button>
+      <div class="np-chips" id="npChips"></div>
+      <div class="np-mw-sec" id="npMwSec">
+        <div class="np-mw-lbl">Middleware · Metod turi</div>
+        <div class="np-api-row">
+          <button class="np-api-btn on" id="npApiExist" onclick="npSetApi('existing')">Mavjud metod</button>
+          <button class="np-api-btn" id="npApiNew" onclick="npSetApi('new')">Yangi metod</button>
+        </div>
+        <div id="npMwNote" class="np-mw-note">
+          <b>✓ Middleware orqali</b><br>Bank mutaxassislari Middleware ichidagi mavjud API lar yordamida yangi metod yaratadilar. ABS vendoriga murojat <b>KERAK EMAS</b>.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="npPicker" class="np-picker">
+    <div class="np-ph">
+      <span class="np-ph-title">INTEGRATSIYALAR</span>
+      <button class="np-ph-x" onclick="npClosePicker()">✕</button>
+    </div>
+    <div class="np-pg">Kanallar</div>
+    <div class="np-pi" data-id="mobile" onclick="npSelect('mobile')"><span class="np-pi-dot" style="background:#6BA8E0"></span>Mobile App</div>
+    <div class="np-pi" data-id="web" onclick="npSelect('web')"><span class="np-pi-dot" style="background:#6BA8E0"></span>Web Portal</div>
+    <div class="np-pi" data-id="atm_ch" onclick="npSelect('atm_ch')"><span class="np-pi-dot" style="background:#6BA8E0"></span>ATM/POS ch.</div>
+    <div class="np-pi" data-id="corp_api" onclick="npSelect('corp_api')"><span class="np-pi-dot" style="background:#6BA8E0"></span>Corp API</div>
+    <div class="np-pi" data-id="chat" onclick="npSelect('chat')"><span class="np-pi-dot" style="background:#6BA8E0"></span>Chat / USSD</div>
+    <div class="np-pg">Ichki tizimlar</div>
+    <div class="np-pi" data-id="core_banking" onclick="npSelect('core_banking')"><span class="np-pi-dot" style="background:#4DB893"></span>Core Banking ABS</div>
+    <div class="np-pi" data-id="crm" onclick="npSelect('crm')"><span class="np-pi-dot" style="background:#4DB893"></span>CRM</div>
+    <div class="np-pi" data-id="dwh" onclick="npSelect('dwh')"><span class="np-pi-dot" style="background:#4DB893"></span>DWH &amp; BI</div>
+    <div class="np-pi" data-id="card_mgmt" onclick="npSelect('card_mgmt')"><span class="np-pi-dot" style="background:#4DB893"></span>Card Mgmt</div>
+    <div class="np-pi" data-id="cash_mgmt" onclick="npSelect('cash_mgmt')"><span class="np-pi-dot" style="background:#4DB893"></span>Cash Mgmt</div>
+    <div class="np-pi" data-id="billing" onclick="npSelect('billing')"><span class="np-pi-dot" style="background:#4DB893"></span>Billing</div>
+    <div class="np-pi" data-id="intl_transfer" onclick="npSelect('intl_transfer')"><span class="np-pi-dot" style="background:#4DB893"></span>Int'l Transfer</div>
+    <div class="np-pg">Tashqi tizimlar</div>
+    <div class="np-pi" data-id="uzcard" onclick="npSelect('uzcard')"><span class="np-pi-dot" style="background:#D4944A"></span>Uzcard / Humo</div>
+    <div class="np-pi" data-id="swift" onclick="npSelect('swift')"><span class="np-pi-dot" style="background:#D4944A"></span>SWIFT / Remit.</div>
+    <div class="np-pi" data-id="cbu" onclick="npSelect('cbu')"><span class="np-pi-dot" style="background:#D4944A"></span>CBU Regulator</div>
+    <div class="np-pi" data-id="paynet" onclick="npSelect('paynet')"><span class="np-pi-dot" style="background:#D4944A"></span>Paynet / Billz</div>
+    <div class="np-pi" data-id="didox" onclick="npSelect('didox')"><span class="np-pi-dot" style="background:#D4944A"></span>Didox / Soliq.uz</div>
+    <div class="np-pi" data-id="tifc" onclick="npSelect('tifc')"><span class="np-pi-dot" style="background:#D4944A"></span>TIFC / E-imzo</div>
+  </div>
+</div>
+<svg id="svg-np" style="position:absolute;left:0;top:0;width:1300px;height:630px;pointer-events:none;z-index:6;overflow:visible;">
+  <defs>
+    <marker id="np-arr-mw" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 Z" fill="#9D98E8"/>
+    </marker>
+  </defs>
+</svg>
+</div>
 </div>
 
 <div class="panel" id="panel">
@@ -1450,6 +1610,7 @@ function buildLegend() {
     {label:T[L].legMiddleware,  color:'#6C63D4'},
   ];
   const leg = document.getElementById('legend');
+  if (!leg) return;
   leg.innerHTML = items.map(it =>
     `<div class="leg-item">
        <div class="leg-dot" style="border-color:${it.color};background:${it.color}22"></div>
@@ -4059,6 +4220,130 @@ scaleCanvas();
 window.addEventListener('resize', scaleCanvas);
 // Footer script dan keyin DOM ga qo'shiladi — qayta chaqirish kerak
 document.addEventListener('DOMContentLoaded', applyUI);
+
+/* ═══════════════════════════════════════════
+   NEW PLATFORM WIDGET — TO-BE (all → Middleware)
+═══════════════════════════════════════════ */
+var NP_CFG = {
+  mobile:        {lbl:'Mobile App',        ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,509 C333,509 333,232 470,232'},
+  web:           {lbl:'Web Portal',        ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,509 C333,509 333,244 470,244'},
+  atm_ch:        {lbl:'ATM/POS ch.',       ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,509 C333,509 333,256 470,256'},
+  corp_api:      {lbl:'Corp API',          ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,509 C333,509 333,268 470,268'},
+  chat:          {lbl:'Chat / USSD',       ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,509 C333,509 333,280 470,280'},
+  core_banking:  {lbl:'Core Banking ABS',  ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,292 470,292'},
+  crm:           {lbl:'CRM',               ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,304 470,304'},
+  dwh:           {lbl:'DWH & BI',          ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,316 470,316'},
+  card_mgmt:     {lbl:'Card Mgmt',         ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,328 470,328'},
+  cash_mgmt:     {lbl:'Cash Mgmt',         ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,340 470,340'},
+  billing:       {lbl:'Billing',           ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,352 470,352'},
+  intl_transfer: {lbl:"Int'l Transfer",    ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,364 470,364'},
+  uzcard:        {lbl:'Uzcard / Humo',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,376 470,376'},
+  swift:         {lbl:'SWIFT / Remit.',    ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,388 470,388'},
+  cbu:           {lbl:'CBU Regulator',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,400 470,400'},
+  paynet:        {lbl:'Paynet / Billz',    ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,412 470,412'},
+  didox:         {lbl:'Didox / Soliq.uz',  ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,424 470,424'},
+  tifc:          {lbl:'TIFC / E-imzo',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,436 470,436'},
+};
+var _npSel = new Set();
+var _npApi = 'existing';
+
+function npActivate() {
+  document.getElementById('npInit').style.display = 'none';
+  document.getElementById('npCard').style.display = 'block';
+  document.getElementById('npNameInp').focus();
+}
+function npOnInput(val) {
+  document.getElementById('npIntegBtn').style.display = val.trim() ? 'block' : 'none';
+}
+function npReset() {
+  _npSel.clear();
+  _npApi = 'existing';
+  document.getElementById('npCard').style.display = 'none';
+  document.getElementById('npInit').style.display = '';
+  document.getElementById('npNameInp').value = '';
+  document.getElementById('npIntegBtn').style.display = 'none';
+  document.getElementById('npChips').innerHTML = '';
+  document.getElementById('npMwSec').style.display = 'none';
+  document.getElementById('npMwNote').style.display = 'none';
+  document.getElementById('npApiExist').classList.add('on');
+  document.getElementById('npApiNew').classList.remove('on');
+  npClosePicker();
+  document.querySelectorAll('#npPicker .np-pi').forEach(el => el.classList.remove('done'));
+  const svg = document.getElementById('svg-np');
+  if (svg) svg.querySelectorAll('path').forEach(p => p.remove());
+}
+function npTogglePicker() {
+  const p = document.getElementById('npPicker');
+  if (p.classList.contains('open')) { npClosePicker(); }
+  else { p.classList.add('open'); }
+}
+function npClosePicker() {
+  document.getElementById('npPicker').classList.remove('open');
+}
+function npSelect(id) {
+  if (_npSel.has(id)) return;
+  _npSel.add(id);
+  const cfg = NP_CFG[id];
+  npDrawLine(id, cfg);
+  const chip = document.createElement('div');
+  chip.className = 'np-chip';
+  chip.dataset.npid = id;
+  chip.style.borderColor = cfg.ec + '66';
+  chip.style.color = cfg.ec;
+  chip.style.background = cfg.ec + '14';
+  chip.innerHTML = cfg.lbl + '<span class="np-chip-x" onclick="npDeselect(\'' + id + '\')">✕</span>';
+  document.getElementById('npChips').appendChild(chip);
+  const row = document.querySelector('#npPicker .np-pi[data-id="' + id + '"]');
+  if (row) row.classList.add('done');
+  if (_npSel.size > 0) document.getElementById('npMwSec').style.display = 'block';
+}
+function npDeselect(id) {
+  _npSel.delete(id);
+  npRemoveLine(id);
+  const chip = document.querySelector('#npChips [data-npid="' + id + '"]');
+  if (chip) chip.remove();
+  const row = document.querySelector('#npPicker .np-pi[data-id="' + id + '"]');
+  if (row) row.classList.remove('done');
+  if (_npSel.size === 0) {
+    document.getElementById('npMwSec').style.display = 'none';
+    document.getElementById('npMwNote').style.display = 'none';
+    _npApi = 'existing';
+    document.getElementById('npApiExist').classList.add('on');
+    document.getElementById('npApiNew').classList.remove('on');
+  }
+}
+function npDrawLine(id, cfg) {
+  const svg = document.getElementById('svg-np');
+  if (!svg) return;
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('id','np-line-'+id);
+  path.setAttribute('d', cfg.d);
+  path.setAttribute('fill','none');
+  path.setAttribute('stroke', cfg.ec);
+  path.setAttribute('stroke-width','1.5');
+  path.setAttribute('stroke-dasharray','5 3');
+  path.setAttribute('marker-end','url(#'+cfg.mk+')');
+  path.setAttribute('opacity','0.75');
+  svg.appendChild(path);
+}
+function npRemoveLine(id) {
+  const p = document.getElementById('np-line-'+id);
+  if (p) p.remove();
+}
+function npSetApi(mode) {
+  _npApi = mode;
+  document.getElementById('npApiExist').classList.toggle('on', mode === 'existing');
+  document.getElementById('npApiNew').classList.toggle('on', mode === 'new');
+  document.getElementById('npMwNote').style.display = mode === 'new' ? 'block' : 'none';
+}
+document.addEventListener('click', function(e) {
+  const picker = document.getElementById('npPicker');
+  const btn = document.getElementById('npIntegBtn');
+  if (!picker || !btn) return;
+  if (!picker.contains(e.target) && e.target !== btn) {
+    npClosePicker();
+  }
+});
 </script>
 
 <footer class="site-footer">
