@@ -267,7 +267,7 @@ body::before{
   box-shadow:0 10px 32px rgba(0,0,0,.5),0 0 18px rgba(108,99,212,.1);
   backdrop-filter:blur(12px);
 }
-.arch-callout.to-be{left:800px;top:454px;display:none;}
+.arch-callout.to-be{left:800px;top:230px;display:none;}
 .arch-callout.to-be.visible{display:block;}
 .info-btn{
   position:absolute;top:8px;right:8px;
@@ -1875,10 +1875,22 @@ function buildLegend() {
 /* ════════════════════════════════════════════════════════════
    SCALE TO FIT
 ════════════════════════════════════════════════════════════ */
+function closeMwCallout(){
+  const c = document.getElementById('mwCallout');
+  if(c) c.classList.remove('visible');
+}
 function toggleMwCallout(){
   const c = document.getElementById('mwCallout');
   if(c) c.classList.toggle('visible');
 }
+document.addEventListener('click', function(e){
+  const callout = document.getElementById('mwCallout');
+  if(!callout) return;
+  if(!callout.classList.contains('visible')) return;
+  if(callout.contains(e.target)) return;
+  if(e.target.closest('.info-btn')) return;
+  closeMwCallout();
+});
 
 function scaleCanvas() {
   const wrap = document.getElementById('canvasWrap');
@@ -3887,6 +3899,7 @@ const MW_SUB_DATA = {
 
 function openSubPanel(subId) {
   event.stopPropagation();
+  closeMwCallout();
   const d = MW_SUB_DATA[subId];
   if (!d) return;
   const st = STATUS_META[d.status] || STATUS_META.required;
@@ -4011,6 +4024,7 @@ function switchAbsTab(key) {
 }
 
 function openPanel(id) {
+  closeMwCallout();
   const d = N[id];
   const cat = CAT_META[d.cat] || CAT_META.internal;
   const st  = STATUS_META[d.status] || STATUS_META.evaluate;

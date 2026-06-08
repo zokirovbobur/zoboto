@@ -1168,10 +1168,22 @@ function buildLegend(){
 }
 
 /* SCALE */
+function closeEsbCallout(){
+  const c = document.getElementById('esbCallout');
+  if(c) c.classList.remove('visible');
+}
 function toggleEsbCallout(){
   const c = document.getElementById('esbCallout');
   if(c) c.classList.toggle('visible');
 }
+document.addEventListener('click', function(e){
+  const callout = document.getElementById('esbCallout');
+  if(!callout) return;
+  if(!callout.classList.contains('visible')) return;
+  if(callout.contains(e.target)) return;
+  if(e.target.closest('.esb-info-btn')) return;
+  closeEsbCallout();
+});
 
 function scaleCanvas(){
   const wrap = document.getElementById('canvasWrap');
@@ -1183,6 +1195,7 @@ function scaleCanvas(){
 
 /* PANEL */
 function openPanel(id){
+  closeEsbCallout();
   const d = NODES[id];
   if (!d) return;
   const c = COLORS[d.cat];
