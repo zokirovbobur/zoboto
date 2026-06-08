@@ -558,7 +558,7 @@ body::before{
 /* ═══════════════════════════════════════════
    NEW PLATFORM WIDGET (TO-BE)
 ═══════════════════════════════════════════ */
-.np-widget{position:absolute;left:14px;top:490px;width:182px;z-index:5;}
+.np-widget{position:absolute;left:14px;top:5px;width:182px;z-index:5;}
 .np-init{
   width:182px;min-height:110px;border:2px dashed rgba(208,96,96,.32);border-radius:10px;
   background:rgba(139,32,32,.04);display:flex;flex-direction:column;align-items:center;
@@ -628,7 +628,7 @@ body::before{
 .np-mw-note b{color:#7FDAB0;font-weight:600;}
 /* Integration picker */
 .np-picker{
-  position:absolute;left:200px;bottom:145px;width:192px;max-height:255px;overflow-y:auto;
+  position:absolute;left:200px;top:0;bottom:auto;width:192px;max-height:255px;overflow-y:auto;
   border:1px solid rgba(208,96,96,.28);border-radius:8px;
   background:rgba(7,7,14,.97);backdrop-filter:blur(16px);
   box-shadow:0 6px 28px rgba(0,0,0,.75);
@@ -1069,7 +1069,7 @@ const N = {
   },
   core_banking:{
     label:'Core Banking ABS',sub:'iABS · NCI · B2',
-    x:10,y:106,w:220,h:42,cat:'internal',
+    x:10,y:120,w:220,h:42,cat:'internal',
     vendor:'iABS · NCI · B2 — 3 ta variant',
     purpose:{
       uz:"Islomiy bank uchun uchta ABS varianti mavjud. Har bir variant o'zining ustunligi bilan ajralib turadi: mahalliy tajriba, narx moslashuvchanligi yoki O'zbekiston bozori adaptatsiyasi.",
@@ -1087,7 +1087,7 @@ const N = {
   },
   crm:{
     label:'CRM',sub:'Unison Ace · Bitrix24 · Fido',
-    x:10,y:152,w:220,h:42,cat:'internal',
+    x:10,y:166,w:220,h:42,cat:'internal',
     vendor:'Avanza Unison Ace · Bitrix24 · Fido Biznes CRM — 3 ta variant',
     purpose:{
       uz:"Mijoz munosabatlari boshqaruvi: lead management, KYC workflow, Front/Back Office va 360° mijoz profili. Uchta variant mavjud — banking-native, universal va mahalliy yechim.",
@@ -1106,7 +1106,7 @@ const N = {
   },
   dwh:{
     label:'DWH & BI',sub:'ClickHouse · Snowflake · BI',
-    x:10,y:198,w:220,h:42,cat:'internal',
+    x:10,y:212,w:220,h:42,cat:'internal',
     vendor:'ClickHouse · Snowflake · Metabase · Power BI — 2 ta variant',
     purpose:{
       uz:"Tarixiy ma'lumotlar ombori, Sharia KPI dashboard, CBU uchun OLAP hisobotlar va ML pipeline. On-premise yoki cloud yo'nalishda ikki xil arxitektura mavjud.",
@@ -1125,7 +1125,7 @@ const N = {
   },
   card_mgmt:{
     label:'Card Mgmt',sub:'Uzcard · Humo · Visa',
-    x:10,y:244,w:220,h:42,cat:'internal',
+    x:10,y:258,w:220,h:42,cat:'internal',
     vendor:'Avanza Vision · OpenWay WAY4 · TS2 — 3 ta variant',
     purpose:{
       uz:"Barcha karta turlarini boshqarish: chiqarish, bloklash, limitlar, PIN management. Uchta yetakchi platforma o'rtasida tanlash mumkin.",
@@ -1144,7 +1144,7 @@ const N = {
   },
   cash_mgmt:{
     label:'Cash Mgmt',sub:'Multicurrency',
-    x:10,y:290,w:220,h:42,cat:'internal',
+    x:10,y:304,w:220,h:42,cat:'internal',
     vendor:'iMAL Cash Mgmt · IBS Group CMS — 2 ta variant',
     purpose:{
       uz:"Naqd pul operatsiyalari, kassir tizimi, valyuta konvertatsiyasi, vault management. Ikki xil yondashuv: islomiy banking-specific yoki universal CMS.",
@@ -1163,7 +1163,7 @@ const N = {
   },
   billing:{
     label:'Billing',sub:'Prepaid · P2P',
-    x:10,y:336,w:220,h:42,cat:'internal',
+    x:10,y:350,w:220,h:42,cat:'internal',
     vendor:'Avanza Novus · Compass Plus · Inhouse — 3 ta variant',
     purpose:{
       uz:"Kommunal to'lovlar, prepaid kartalar, P2P o'tkazmalar. Banking-native switch, xalqaro platforma yoki inhouse yaratish o'rtasida tanlash mumkin.",
@@ -1182,7 +1182,7 @@ const N = {
   },
   intl_transfer:{
     label:"Int'l Transfer",sub:'SWIFT · SEPA · RIA',
-    x:10,y:382,w:220,h:42,cat:'internal',
+    x:10,y:396,w:220,h:42,cat:'internal',
     vendor:'SWIFT Alliance · Finastra Global PAYplus — 2 ta variant',
     purpose:{
       uz:"Xalqaro pul o'tkazmalari — SWIFT, RIA, Western Union, korrespondent banklar. Ikkita yondashuv: klassik SWIFT Alliance yoki zamonaviy Finastra bulutli platforma.",
@@ -1201,7 +1201,7 @@ const N = {
   },
   hrms:{
     label:'HRMS',sub:'Avanza · Workday · Inhouse',
-    x:10,y:428,w:220,h:42,cat:'internal',
+    x:10,y:442,w:220,h:42,cat:'internal',
     vendor:"Avanza HRMS · Workday HCM · Inhouse — 3 ta variant",
     purpose:{
       uz:"Xodimlar resurslarini boshqarish tizimi — ish haqi, KPI, ta'til, onboarding, mehnat shartnomasi. Bank-spesifik bonus moduli bilan to'ldirilgan. Uchta yo'nalish: banking-native vendor, global lider yoki inhouse qurilgan tizim.",
@@ -4225,24 +4225,24 @@ document.addEventListener('DOMContentLoaded', applyUI);
    NEW PLATFORM WIDGET — TO-BE (all → Middleware)
 ═══════════════════════════════════════════ */
 var NP_CFG = {
-  mobile:        {lbl:'Mobile App',        ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,509 C333,509 333,232 470,232'},
-  web:           {lbl:'Web Portal',        ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,509 C333,509 333,244 470,244'},
-  atm_ch:        {lbl:'ATM/POS ch.',       ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,509 C333,509 333,256 470,256'},
-  corp_api:      {lbl:'Corp API',          ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,509 C333,509 333,268 470,268'},
-  chat:          {lbl:'Chat / USSD',       ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,509 C333,509 333,280 470,280'},
-  core_banking:  {lbl:'Core Banking ABS',  ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,292 470,292'},
-  crm:           {lbl:'CRM',               ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,304 470,304'},
-  dwh:           {lbl:'DWH & BI',          ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,316 470,316'},
-  card_mgmt:     {lbl:'Card Mgmt',         ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,328 470,328'},
-  cash_mgmt:     {lbl:'Cash Mgmt',         ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,340 470,340'},
-  billing:       {lbl:'Billing',           ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,352 470,352'},
-  intl_transfer: {lbl:"Int'l Transfer",    ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,509 C333,509 333,364 470,364'},
-  uzcard:        {lbl:'Uzcard / Humo',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,376 470,376'},
-  swift:         {lbl:'SWIFT / Remit.',    ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,388 470,388'},
-  cbu:           {lbl:'CBU Regulator',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,400 470,400'},
-  paynet:        {lbl:'Paynet / Billz',    ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,412 470,412'},
-  didox:         {lbl:'Didox / Soliq.uz',  ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,424 470,424'},
-  tifc:          {lbl:'TIFC / E-imzo',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,509 C333,509 333,436 470,436'},
+  mobile:        {lbl:'Mobile App',        ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C333,18 333,232 470,232'},
+  web:           {lbl:'Web Portal',        ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C333,18 333,244 470,244'},
+  atm_ch:        {lbl:'ATM/POS ch.',       ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C333,18 333,256 470,256'},
+  corp_api:      {lbl:'Corp API',          ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C333,18 333,268 470,268'},
+  chat:          {lbl:'Chat / USSD',       ct:'channel', ec:'#6BA8E0', mk:'np-arr-mw', d:'M196,18 C333,18 333,280 470,280'},
+  core_banking:  {lbl:'Core Banking ABS',  ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,292 470,292'},
+  crm:           {lbl:'CRM',               ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,304 470,304'},
+  dwh:           {lbl:'DWH & BI',          ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,316 470,316'},
+  card_mgmt:     {lbl:'Card Mgmt',         ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,328 470,328'},
+  cash_mgmt:     {lbl:'Cash Mgmt',         ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,340 470,340'},
+  billing:       {lbl:'Billing',           ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,352 470,352'},
+  intl_transfer: {lbl:"Int'l Transfer",    ct:'int',     ec:'#4DB893', mk:'np-arr-mw', d:'M196,18 C333,18 333,364 470,364'},
+  uzcard:        {lbl:'Uzcard / Humo',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,376 470,376'},
+  swift:         {lbl:'SWIFT / Remit.',    ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,388 470,388'},
+  cbu:           {lbl:'CBU Regulator',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,400 470,400'},
+  paynet:        {lbl:'Paynet / Billz',    ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,412 470,412'},
+  didox:         {lbl:'Didox / Soliq.uz',  ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,424 470,424'},
+  tifc:          {lbl:'TIFC / E-imzo',     ct:'ext',     ec:'#D4944A', mk:'np-arr-mw', d:'M196,18 C333,18 333,436 470,436'},
 };
 var _npSel = new Set();
 var _npApi = 'existing';
