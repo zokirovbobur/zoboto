@@ -267,7 +267,19 @@ body::before{
   box-shadow:0 10px 32px rgba(0,0,0,.5),0 0 18px rgba(108,99,212,.1);
   backdrop-filter:blur(12px);
 }
-.arch-callout.to-be{left:1010px;top:500px;}
+.arch-callout.to-be{left:800px;top:454px;display:none;}
+.arch-callout.to-be.visible{display:block;}
+.info-btn{
+  position:absolute;top:8px;right:8px;
+  width:20px;height:20px;border-radius:50%;
+  border:1px solid rgba(108,99,212,.5);
+  background:rgba(108,99,212,.12);color:#9D98E8;
+  font-family:var(--font-mono);font-size:11px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .15s;z-index:10;flex-shrink:0;
+  line-height:1;padding:0;
+}
+.info-btn:hover{background:rgba(108,99,212,.3);border-color:#9D98E8;color:#fff;}
 .arch-callout-title{
   font-family:var(--font-mono);font-size:10px;color:var(--green-l);
   letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;
@@ -337,7 +349,7 @@ body::before{
 
 /* ── CANVAS WRAP ────────────────────────────────── */
 .canvas-wrap{
-  position:fixed;top:54px;left:0;right:0;bottom:32px;
+  position:fixed;top:54px;left:0;right:0;bottom:0;
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
   z-index:1;
@@ -835,6 +847,7 @@ body::before{
     <div class="pci-scope" id="pciScope" style="left: 456px; top: 216px; width: 348px; height: 244px;"></div>
     <div class="pci-tag" id="pciTag" style="left: 786px; top: 210px;">PCI DSS SCOPE</div>
   <div class="node node-hub" id="node-middleware" data-id="middleware" data-cat="hub" style="left: 470px; top: 228px; width: 320px; height: 220px; background: rgb(22, 14, 53); border-color: rgb(108, 99, 212); --sel-col: #6C63D4;">
+        <button class="info-btn" onclick="event.stopPropagation();toggleMwCallout()" title="Middleware haqida">?</button>
         <div class="n-label" style="font-size:15px">Middleware</div>
         <div class="n-sub" style="color:#9D98E8;font-size:10px;margin-top:3px">Options: Rendezvous · Velmie · Kinective</div>
         <div class="hub-tags" style="margin-top:6px">
@@ -1861,9 +1874,14 @@ function buildLegend() {
 /* ════════════════════════════════════════════════════════════
    SCALE TO FIT
 ════════════════════════════════════════════════════════════ */
+function toggleMwCallout(){
+  const c = document.getElementById('mwCallout');
+  if(c) c.classList.toggle('visible');
+}
+
 function scaleCanvas() {
   const wrap = document.getElementById('canvasWrap');
-  const sx = wrap.clientWidth  / 1300;
+  const sx = wrap.clientWidth  / 1500;
   const sy = wrap.clientHeight / 630;
   const sc = Math.min(sx, sy) * 0.97;
   canvas.style.transform = `scale(${sc})`;

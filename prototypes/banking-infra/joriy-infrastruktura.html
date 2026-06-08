@@ -123,12 +123,24 @@ body::before{
 .exec-points li{font-family:var(--font-mono);font-size:8.5px;line-height:1.35;color:var(--text);display:flex;gap:6px;align-items:flex-start}
 .exec-points li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--red-l);box-shadow:0 0 8px rgba(208,96,96,.55);margin-top:4px;flex-shrink:0}
 .arch-callout{
-  position:absolute; left:600px; top:104px; z-index:4;
+  position:absolute; left:570px; top:104px; z-index:4;
   width:278px; padding:12px 13px; border-radius:8px;
   background:rgba(13,13,24,.94); border:1px solid rgba(212,148,74,.45);
   box-shadow:0 10px 32px rgba(0,0,0,.5),0 0 18px rgba(208,96,96,.1);
   backdrop-filter:blur(12px);
+  display:none;
 }
+.arch-callout.visible{display:block;}
+.esb-info-btn{
+  position:absolute;top:4px;right:6px;
+  width:18px;height:18px;border-radius:50%;
+  border:1px solid rgba(158,98,16,.5);
+  background:rgba(158,98,16,.12);color:#D4944A;
+  font-family:var(--font-mono);font-size:10px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .15s;z-index:10;padding:0;line-height:1;
+}
+.esb-info-btn:hover{background:rgba(158,98,16,.3);border-color:#D4944A;color:#fff;}
 .arch-callout-title{font-family:var(--font-mono);font-size:10px;color:var(--amber-l);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
 .arch-callout-body{font-size:10px;line-height:1.45;color:var(--text2)}
 .comparison-modal{
@@ -167,7 +179,7 @@ body::before{
 
 /* CANVAS */
 .canvas-wrap{
-  position:fixed; top:54px; left:0; right:0; bottom:32px;
+  position:fixed; top:54px; left:0; right:0; bottom:0;
   display:flex; align-items:center; justify-content:center;
   overflow:hidden; z-index:1;
 }
@@ -582,6 +594,7 @@ body::before{
       <div class="esb-limited-tag">⚠ CHEKLANGAN</div>
       <div class="n-label" style="color:#D4944A">ESB</div>
       <div class="n-sub" style="color:#D4944A;font-size:8.5px">ABS API collection only · Middleware yo'q</div>
+      <button class="esb-info-btn" onclick="event.stopPropagation();toggleEsbCallout()" title="ESB haqida">?</button>
     </div>
 
     <div class="arch-callout" id="esbCallout">
@@ -1155,6 +1168,11 @@ function buildLegend(){
 }
 
 /* SCALE */
+function toggleEsbCallout(){
+  const c = document.getElementById('esbCallout');
+  if(c) c.classList.toggle('visible');
+}
+
 function scaleCanvas(){
   const wrap = document.getElementById('canvasWrap');
   const sx = wrap.clientWidth / 1300;
