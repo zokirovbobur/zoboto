@@ -1698,6 +1698,7 @@ function buildNodes() {
 
     if (d.cat === 'hub') {
       el.innerHTML = `
+        <button class="info-btn" onclick="event.stopPropagation();toggleMwCallout()" title="Middleware haqida">?</button>
         <div class="n-label" style="font-size:15px">Middleware</div>
         <div class="n-sub" style="color:#9D98E8;font-size:10px;margin-top:3px">Rendezvous &middot; Velmie &middot; Kinective</div>
         <div class="hub-tags" style="margin-top:6px">
