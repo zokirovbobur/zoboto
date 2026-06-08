@@ -591,10 +591,10 @@ body::before{
 
     <!-- ESB -->
     <div class="node" id="node-esb" data-id="esb" data-cat="esb">
-      <div class="esb-limited-tag">⚠ CHEKLANGAN</div>
+      <div class="esb-limited-tag" id="esbLimitedTag">⚠ CHEKLANGAN</div>
       <div class="n-label" style="color:#D4944A">ESB</div>
-      <div class="n-sub" style="color:#D4944A;font-size:8.5px">ABS API collection only · Middleware yo'q</div>
-      <button class="esb-info-btn" onclick="event.stopPropagation();toggleEsbCallout()" title="ESB haqida">?</button>
+      <div class="n-sub" id="esbNodeSub" style="color:#D4944A;font-size:8.5px">ABS API collection only · Middleware yo'q</div>
+      <button class="esb-info-btn" id="esbInfoBtn" onclick="event.stopPropagation();toggleEsbCallout()" title="ESB haqida">?</button>
     </div>
 
     <div class="arch-callout" id="esbCallout">
@@ -607,8 +607,8 @@ body::before{
       <div class="abs-header">
         <div class="abs-title-block">
           <div class="abs-title">Core Banking <em>ABS</em></div>
-          <div class="abs-sub">Markaziy va yagona tizim — barcha modullar shu yerda</div>
-          <div class="legacy-tag" style="position:static;display:inline-block;margin-top:5px">⚠ ESB CHEKLANGAN · MIDDLEWARE YO'Q</div>
+          <div class="abs-sub" id="absSubTitle">Markaziy va yagona tizim — barcha modullar shu yerda</div>
+          <div class="legacy-tag" id="esbLegacyTag" style="position:static;display:inline-block;margin-top:5px">⚠ ESB CHEKLANGAN · MIDDLEWARE YO'Q</div>
         </div>
         <div class="abs-tabs-row">
           <button class="abs-vendor-tab active" data-vendor="iABS" onclick="switchVendor('iABS')">iABS</button>
@@ -616,9 +616,9 @@ body::before{
         </div>
       </div>
       <div class="abs-body">
-        <div class="abs-section-lbl int">Ichki modullar · ABS ichida</div>
+        <div class="abs-section-lbl int" id="absIntLabel">Ichki modullar · ABS ichida</div>
         <div class="abs-grid-int" id="intGrid"></div>
-        <div class="abs-section-lbl com">Compliance modullar · ABS ichida</div>
+        <div class="abs-section-lbl com" id="absComLabel">Compliance modullar · ABS ichida</div>
         <div class="abs-grid-com" id="comGrid"></div>
       </div>
     </div>
@@ -751,6 +751,23 @@ const T={
     npGroupChannels:'Kanallar',
     npGroupSystems:'Tizimlar',
     npGroupExternal:'Tashqi tizimlar',
+    esbLimited:'⚠ CHEKLANGAN',
+    esbNodeSub:"ABS API collection only · Middleware yo'q",
+    esbLegacyTag:"⚠ ESB CHEKLANGAN · MIDDLEWARE YO'Q",
+    esbInfoTitle:'ESB haqida',
+    absSubTitle:'Markaziy va yagona tizim — barcha modullar shu yerda',
+    absIntLabel:'Ichki modullar · ABS ichida',
+    absComLabel:'Compliance modullar · ABS ichida',
+    panelCalloutInside:"📦 Joylashuvi: <b>{inside}</b> — alohida microservice emas, ABS yadrosining bir qismi.",
+    panelCalloutEsb:"⚠ ESB ichida faqat <b>ABS API collection</b> mavjud — Kafka, BPM, SAF/STIP, DR/Failover kabi to'liq Middleware imkoniyatlari yo'q.",
+    panelCalloutProxy:"ℹ Oddiy NGINX reverse proxy — WAF, OAuth2, rate limiting va monitoring imkoniyatlari yo'q.",
+    panelCalloutExternal:"⚠ Joriy holatda bu tashqi tizimga <b>kanal va ABS</b> alohida (point-to-point) ulanadi — Middleware orqali umumlashtirilmagan.",
+    panelCalloutChannel:"⚠ Bu kanal ABS ga <b>NGINX → ESB</b> orqali ulanadi. ESB faqat ABS API collection — to'liq Middleware imkoniyatlari yo'q.",
+    absCoreBanking:'Core Banking ABS',
+    absCallout:"📦 Bu joriy arxitekturadagi <b>yagona markaziy tizim</b>. Barcha ichki modullar (CRM, DWH, Card Mgmt va h.k.) va compliance modullari (AML, Sharia Core va h.k.) shu yadro ichida joylashgan.",
+    panelDescLabel:'Tavsif',
+    panelModulesLabel:'Modullar miqyosi',
+    panelRiskLabel:'Asosiy xavf',
   },
   ru:{
     filterAll:'Все',filterChannel:'Каналы',filterAbs:'ABS',filterExternal:'Внешние',
@@ -772,6 +789,23 @@ const T={
     npGroupChannels:'Каналы',
     npGroupSystems:'Системы',
     npGroupExternal:'Внешние системы',
+    esbLimited:'⚠ ОГРАНИЧЕН',
+    esbNodeSub:'ABS API collection only · Middleware отсутствует',
+    esbLegacyTag:'⚠ ESB ОГРАНИЧЕН · MIDDLEWARE ОТСУТСТВУЕТ',
+    esbInfoTitle:'Об ESB',
+    absSubTitle:'Центральная и единая система — все модули здесь',
+    absIntLabel:'Внутренние модули · Внутри ABS',
+    absComLabel:'Compliance модули · Внутри ABS',
+    panelCalloutInside:"📦 Расположение: <b>{inside}</b> — не отдельный микросервис, часть ядра ABS.",
+    panelCalloutEsb:"⚠ ESB содержит только <b>ABS API collection</b> — полные возможности Middleware (Kafka, BPM, SAF/STIP, DR/Failover) отсутствуют.",
+    panelCalloutProxy:"ℹ Простой NGINX reverse proxy — WAF, OAuth2, rate limiting и monitoring отсутствуют.",
+    panelCalloutExternal:"⚠ В текущем состоянии к этой внешней системе <b>канал и ABS</b> подключаются отдельно (point-to-point) — не централизовано через Middleware.",
+    panelCalloutChannel:"⚠ Этот канал подключается к ABS через <b>NGINX → ESB</b>. ESB — только ABS API collection, полных возможностей Middleware нет.",
+    absCoreBanking:'Core Banking ABS',
+    absCallout:"📦 Это <b>единственная центральная система</b> текущей архитектуры. Все внутренние модули (CRM, DWH, Card Mgmt и др.) и compliance модули (AML, Sharia Core и др.) находятся внутри этого ядра.",
+    panelDescLabel:'Описание',
+    panelModulesLabel:'Масштаб модулей',
+    panelRiskLabel:'Основной риск',
   },
   en:{
     filterAll:'All',filterChannel:'Channels',filterAbs:'ABS',filterExternal:'External',
@@ -793,6 +827,23 @@ const T={
     npGroupChannels:'Channels',
     npGroupSystems:'Systems',
     npGroupExternal:'External systems',
+    esbLimited:'⚠ LIMITED',
+    esbNodeSub:'ABS API collection only · No Middleware',
+    esbLegacyTag:'⚠ ESB LIMITED · NO MIDDLEWARE',
+    esbInfoTitle:'About ESB',
+    absSubTitle:'Central and single system — all modules here',
+    absIntLabel:'Internal modules · Inside ABS',
+    absComLabel:'Compliance modules · Inside ABS',
+    panelCalloutInside:"📦 Location: <b>{inside}</b> — not a separate microservice, part of the ABS core.",
+    panelCalloutEsb:"⚠ ESB contains only <b>ABS API collection</b> — full Middleware capabilities (Kafka, BPM, SAF/STIP, DR/Failover) are absent.",
+    panelCalloutProxy:"ℹ Simple NGINX reverse proxy — WAF, OAuth2, rate limiting and monitoring are absent.",
+    panelCalloutExternal:"⚠ Currently this external system is connected separately (point-to-point) by <b>channel and ABS</b> — not centralized through Middleware.",
+    panelCalloutChannel:"⚠ This channel connects to ABS via <b>NGINX → ESB</b>. ESB is ABS API collection only — no full Middleware capabilities.",
+    absCoreBanking:'Core Banking ABS',
+    absCallout:"📦 This is the <b>single central system</b> in the current architecture. All internal modules (CRM, DWH, Card Mgmt etc.) and compliance modules (AML, Sharia Core etc.) are located inside this core.",
+    panelDescLabel:'Description',
+    panelModulesLabel:'Module scale',
+    panelRiskLabel:'Main risk',
   }
 };
 
@@ -1243,15 +1294,15 @@ function openPanel(id){
   const body = document.getElementById('panelBody');
   let html = '';
   if (d.inside){
-    html += `<div class="warn-callout">📦 Joylashuvi: <b>${d.inside}</b> — alohida microservice emas, ABS yadrosining bir qismi.</div>`;
+    html += `<div class="warn-callout">${T[L].panelCalloutInside.replace('{inside}', d.inside)}</div>`;
   } else if (d.cat==='esb'){
-    html += `<div class="warn-callout">⚠ ESB ichida faqat <b>ABS API collection</b> mavjud — Kafka, BPM, SAF/STIP, DR/Failover kabi to'liq Middleware imkoniyatlari yo'q.</div>`;
+    html += `<div class="warn-callout">${T[L].panelCalloutEsb}</div>`;
   } else if (d.cat==='proxy'){
-    html += `<div class="warn-callout" style="background:rgba(46,120,199,.08);border-color:rgba(46,120,199,.3);color:#6BA8E0">ℹ Oddiy NGINX reverse proxy — WAF, OAuth2, rate limiting va monitoring imkoniyatlari yo'q.</div>`;
+    html += `<div class="warn-callout" style="background:rgba(46,120,199,.08);border-color:rgba(46,120,199,.3);color:#6BA8E0">${T[L].panelCalloutProxy}</div>`;
   } else if (d.cat==='external'){
-    html += `<div class="warn-callout">⚠ Joriy holatda bu tashqi tizimga <b>kanal va ABS</b> alohida (point-to-point) ulanadi — Middleware orqali umumlashtirilmagan.</div>`;
+    html += `<div class="warn-callout">${T[L].panelCalloutExternal}</div>`;
   } else if (d.cat==='channel'){
-    html += `<div class="warn-callout">⚠ Bu kanal ABS ga <b>NGINX → ESB</b> orqali ulanadi. ESB faqat ABS API collection — to'liq Middleware imkoniyatlari yo'q.</div>`;
+    html += `<div class="warn-callout">${T[L].panelCalloutChannel}</div>`;
   }
   html += `<div class="prow"><div class="prow-lbl">${T[L].panelPurpose}</div><div class="prow-val">${t(d.purpose)}</div></div>`;
   html += `<div class="divider"></div>`;
@@ -1299,21 +1350,21 @@ function switchVendor(v){
   const info = ABS_INFO[v];
   document.getElementById('pName').textContent = info.name + ' (ABS)';
   const pc = document.getElementById('pCat');
-  pc.textContent = 'Core Banking ABS';
+  pc.textContent = T[L].absCoreBanking;
   pc.style.color = '#4DB893';
   pc.style.borderColor = 'rgba(22,132,94,.4)';
   pc.style.background = 'rgba(22,132,94,.08)';
   const html = `
     <div class="warn-callout" style="background:rgba(22,132,94,.08);border-color:rgba(22,132,94,.3);color:#4DB893">
-      📦 Bu joriy arxitekturadagi <b>yagona markaziy tizim</b>. Barcha ichki modullar (CRM, DWH, Card Mgmt va h.k.) va compliance modullari (AML, Sharia Core va h.k.) shu yadro ichida joylashgan.
+      ${T[L].absCallout}
     </div>
-    <div class="prow"><div class="prow-lbl">Vendor</div><div class="prow-val mono">${info.vendor}</div></div>
+    <div class="prow"><div class="prow-lbl">${T[L].panelVendor}</div><div class="prow-val mono">${info.vendor}</div></div>
     <div class="divider"></div>
-    <div class="prow"><div class="prow-lbl">Tavsif</div><div class="prow-val">${info.desc}</div></div>
+    <div class="prow"><div class="prow-lbl">${T[L].panelDescLabel}</div><div class="prow-val">${info.desc}</div></div>
     <div class="divider"></div>
-    <div class="prow"><div class="prow-lbl">Modullar miqyosi</div><div class="prow-val mono">${info.modules}</div></div>
+    <div class="prow"><div class="prow-lbl">${T[L].panelModulesLabel}</div><div class="prow-val mono">${info.modules}</div></div>
     <div class="divider"></div>
-    <div class="prow"><div class="prow-lbl">Asosiy xavf</div>
+    <div class="prow"><div class="prow-lbl">${T[L].panelRiskLabel}</div>
       <div class="warn-callout">${info.risk}</div>
     </div>
   `;
@@ -1355,6 +1406,15 @@ function applyUI() {
   if (ge('npPgChannels'))ge('npPgChannels').textContent= T[L].npGroupChannels;
   if (ge('npPgSystems')) ge('npPgSystems').textContent = T[L].npGroupSystems;
   if (ge('npPgExternal'))ge('npPgExternal').textContent= T[L].npGroupExternal;
+  // ESB node
+  if (ge('esbLimitedTag')) ge('esbLimitedTag').textContent = T[L].esbLimited;
+  if (ge('esbNodeSub'))    ge('esbNodeSub').textContent    = T[L].esbNodeSub;
+  if (ge('esbLegacyTag'))  ge('esbLegacyTag').textContent  = T[L].esbLegacyTag;
+  if (ge('esbInfoBtn'))    ge('esbInfoBtn').title           = T[L].esbInfoTitle;
+  // ABS section
+  if (ge('absSubTitle'))   ge('absSubTitle').textContent   = T[L].absSubTitle;
+  if (ge('absIntLabel'))   ge('absIntLabel').textContent   = T[L].absIntLabel;
+  if (ge('absComLabel'))   ge('absComLabel').textContent   = T[L].absComLabel;
 }
 
 /* INIT */
