@@ -424,16 +424,36 @@ body::before{
   color:var(--blue-l);letter-spacing:.05em;
 }
 /* LANG SWITCHER */
-.lang-select{
+.lang-select{display:none}
+.lang-picker{position:relative;margin-left:10px;flex-shrink:0;}
+.lang-trigger{
   font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.06em;
-  padding:4px 26px 4px 9px;border-radius:3px;
+  padding:4px 10px 4px 10px;border-radius:3px;
   border:1px solid rgba(255,255,255,.15);
-  background:rgba(255,255,255,.06) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 7px center;
-  color:rgba(255,255,255,.6);cursor:pointer;margin-left:10px;
-  appearance:none;-webkit-appearance:none;transition:all .15s;
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.6);cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+  transition:all .15s;white-space:nowrap;
 }
-.lang-select:hover,.lang-select:focus{color:#fff;border-color:rgba(255,255,255,.4);background-color:rgba(255,255,255,.1);outline:none;}
-.lang-select option{background:#12121F;color:#fff;}
+.lang-trigger:hover,.lang-trigger.open{color:#fff;border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.1);}
+.lang-trigger svg{flex-shrink:0;transition:transform .15s;}
+.lang-trigger.open svg{transform:rotate(180deg);}
+.lang-menu{
+  position:absolute;top:calc(100% + 5px);right:0;
+  background:#0D0D18;border:1px solid rgba(255,255,255,.15);
+  border-radius:4px;min-width:64px;
+  display:none;z-index:200;overflow:hidden;
+  box-shadow:0 6px 20px rgba(0,0,0,.6);
+}
+.lang-menu.open{display:block;}
+.lang-opt{
+  font-family:var(--font-mono);font-size:10px;font-weight:600;
+  padding:7px 14px;color:rgba(255,255,255,.55);
+  cursor:pointer;letter-spacing:.06em;
+  transition:background .1s,color .1s;
+}
+.lang-opt:hover{background:rgba(255,255,255,.07);color:#fff;}
+.lang-opt.active{color:#fff;background:rgba(255,255,255,.04);}
 /* ESB NODE */
 #node-esb{
   left:232px;top:106px;width:326px;height:54px;
@@ -568,11 +588,17 @@ body::before{
     <button class="filter-btn" data-f="external" onclick="setFilter(this,'external')" id="fb-external">Tashqi</button>
   </div>
   <button class="topbar-action" id="comparisonBtn" onclick="openComparison()">AS-IS vs TO-BE</button>
-  <select class="lang-select" id="langSelect" onchange="setLang(this.value)">
-    <option value="uz">UZ</option>
-    <option value="ru">RU</option>
-    <option value="en">EN</option>
-  </select>
+  <div class="lang-picker" id="langPicker">
+    <button class="lang-trigger" id="langTrigger" onclick="toggleLangMenu(event)">
+      <span id="langLabel">UZ</span>
+      <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <div class="lang-menu" id="langMenu">
+      <div class="lang-opt" data-lang="uz" onclick="setLang('uz')">UZ</div>
+      <div class="lang-opt" data-lang="ru" onclick="setLang('ru')">RU</div>
+      <div class="lang-opt" data-lang="en" onclick="setLang('en')">EN</div>
+    </div>
+  </div>
 </div>
 
 <aside class="executive-summary" id="execSummary" aria-label="Executive Summary">
@@ -730,6 +756,21 @@ body::before{
 const L = localStorage.getItem('ib_lang') || 'uz';
 function t(v){return typeof v==='object'?(v[L]||v.uz||v):v;}
 function setLang(l){localStorage.setItem('ib_lang',l);location.reload();}
+function toggleLangMenu(e){
+  e.stopPropagation();
+  const menu=document.getElementById('langMenu');
+  const trigger=document.getElementById('langTrigger');
+  const open=menu.classList.toggle('open');
+  trigger.classList.toggle('open',open);
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('#langPicker')){
+    const menu=document.getElementById('langMenu');
+    const trigger=document.getElementById('langTrigger');
+    if(menu){menu.classList.remove('open');}
+    if(trigger){trigger.classList.remove('open');}
+  }
+});
 const T={
   uz:{
     filterAll:'Hammasi',filterChannel:'Kanallar',filterAbs:'ABS',filterExternal:'Tashqi',
@@ -1390,8 +1431,11 @@ function applyUI() {
   document.title = T[L].pageTitle;
   const tobe = document.querySelector('.logo-badge-btn');
   if (tobe) tobe.textContent = T[L].btnTobe;
-  const sel = document.getElementById('langSelect');
-  if (sel) sel.value = L;
+  const lbl = document.getElementById('langLabel');
+  if (lbl) lbl.textContent = L.toUpperCase();
+  document.querySelectorAll('#langMenu .lang-opt').forEach(function(el){
+    el.classList.toggle('active', el.dataset.lang === L);
+  });
   renderExecUI();
   // NP widget
   const ge = id => document.getElementById(id);
