@@ -920,7 +920,7 @@ body::before{
 <div id="npWidget" class="np-widget">
   <div class="np-init" id="npInit" onclick="npActivate()">
     <div class="np-init-plus">+</div>
-    <div class="np-init-lbl">Yangi platforma</div>
+    <div class="np-init-lbl" id="npInitLbl">Yangi platforma</div>
   </div>
   <div class="np-card" id="npCard">
     <div class="np-card-hd">
@@ -932,7 +932,7 @@ body::before{
       <button class="np-integ-btn" id="npIntegBtn" onclick="npTogglePicker()">+ Integratsiyalar</button>
       <div class="np-chips" id="npChips"></div>
       <div class="np-mw-sec" id="npMwSec">
-        <div class="np-mw-lbl">Middleware · Metod turi</div>
+        <div class="np-mw-lbl" id="npMwLbl">Middleware · Metod turi</div>
         <div class="np-api-row">
           <button class="np-api-btn on" id="npApiExist" onclick="npSetApi('existing')">Mavjud metod</button>
           <button class="np-api-btn" id="npApiNew" onclick="npSetApi('new')">Yangi metod</button>
@@ -945,16 +945,16 @@ body::before{
   </div>
   <div id="npPicker" class="np-picker">
     <div class="np-ph">
-      <span class="np-ph-title">INTEGRATSIYALAR</span>
+      <span class="np-ph-title" id="npPhTitle">INTEGRATSIYALAR</span>
       <button class="np-ph-x" onclick="npClosePicker()">✕</button>
     </div>
-    <div class="np-pg">Kanallar</div>
+    <div class="np-pg" id="npPgChannels">Kanallar</div>
     <div class="np-pi" data-id="mobile" onclick="npSelect('mobile')"><span class="np-pi-dot" style="background:#6BA8E0"></span>Mobile App</div>
     <div class="np-pi" data-id="web" onclick="npSelect('web')"><span class="np-pi-dot" style="background:#6BA8E0"></span>Web Portal</div>
     <div class="np-pi" data-id="atm_ch" onclick="npSelect('atm_ch')"><span class="np-pi-dot" style="background:#6BA8E0"></span>ATM/POS ch.</div>
     <div class="np-pi" data-id="corp_api" onclick="npSelect('corp_api')"><span class="np-pi-dot" style="background:#6BA8E0"></span>Corp API</div>
     <div class="np-pi" data-id="chat" onclick="npSelect('chat')"><span class="np-pi-dot" style="background:#6BA8E0"></span>Chat / USSD</div>
-    <div class="np-pg">Ichki tizimlar</div>
+    <div class="np-pg" id="npPgInternal">Ichki tizimlar</div>
     <div class="np-pi" data-id="core_banking" onclick="npSelect('core_banking')"><span class="np-pi-dot" style="background:#4DB893"></span>Core Banking ABS</div>
     <div class="np-pi" data-id="crm" onclick="npSelect('crm')"><span class="np-pi-dot" style="background:#4DB893"></span>CRM</div>
     <div class="np-pi" data-id="dwh" onclick="npSelect('dwh')"><span class="np-pi-dot" style="background:#4DB893"></span>DWH &amp; BI</div>
@@ -962,7 +962,7 @@ body::before{
     <div class="np-pi" data-id="cash_mgmt" onclick="npSelect('cash_mgmt')"><span class="np-pi-dot" style="background:#4DB893"></span>Cash Mgmt</div>
     <div class="np-pi" data-id="billing" onclick="npSelect('billing')"><span class="np-pi-dot" style="background:#4DB893"></span>Billing</div>
     <div class="np-pi" data-id="intl_transfer" onclick="npSelect('intl_transfer')"><span class="np-pi-dot" style="background:#4DB893"></span>Int'l Transfer</div>
-    <div class="np-pg">Tashqi tizimlar</div>
+    <div class="np-pg" id="npPgExternal">Tashqi tizimlar</div>
     <div class="np-pi" data-id="uzcard" onclick="npSelect('uzcard')"><span class="np-pi-dot" style="background:#D4944A"></span>Uzcard / Humo</div>
     <div class="np-pi" data-id="swift" onclick="npSelect('swift')"><span class="np-pi-dot" style="background:#D4944A"></span>SWIFT / Remit.</div>
     <div class="np-pi" data-id="cbu" onclick="npSelect('cbu')"><span class="np-pi-dot" style="background:#D4944A"></span>CBU Regulator</div>
@@ -1061,6 +1061,17 @@ const T={
     legCompliance:'Compliance',legMiddleware:'Middleware',legGateway:'API Gateway',
     footerBy:'Zokirov Bobur tomonidan',catMwModule:'Middleware moduli',
     pageTitle:'Enterprise Banking — TO-BE Architecture Explorer',
+    npNewPlatform:'Yangi platforma',
+    npPlatformName:'Platforma nomi…',
+    npIntegrations:'+ Integratsiyalar',
+    npMwMethodType:'Middleware · Metod turi',
+    npExistingMethod:'Mavjud metod',
+    npNewMethod:'Yangi metod',
+    npMwNoteHtml:"<b>Middleware orqali bitta ulanish</b><br>Mavjud API'lar reuse qilinadi. Yangi metod bank jamoasi tomonidan Middleware ichida orchestration qilinadi. ABS vendor dependency kamayadi.",
+    npPickerTitle:'INTEGRATSIYALAR',
+    npGroupChannels:'Kanallar',
+    npGroupInternal:'Ichki tizimlar',
+    npGroupExternal:'Tashqi tizimlar',
   },
   ru:{
     filterAll:'Все',filterInternal:'Внутренние',filterExternal:'Внешние',
@@ -1078,6 +1089,17 @@ const T={
     legCompliance:'Compliance',legMiddleware:'Middleware',legGateway:'API Gateway',
     footerBy:'Создано Зокировым Бобуром',catMwModule:'Модуль Middleware',
     pageTitle:'Enterprise Banking — TO-BE Architecture Explorer',
+    npNewPlatform:'Новая платформа',
+    npPlatformName:'Название платформы…',
+    npIntegrations:'+ Интеграции',
+    npMwMethodType:'Middleware · Тип метода',
+    npExistingMethod:'Существующий метод',
+    npNewMethod:'Новый метод',
+    npMwNoteHtml:"<b>Единое подключение через Middleware</b><br>Существующие API переиспользуются. Новый метод оркестрируется командой банка внутри Middleware. Зависимость от ABS-вендора снижается.",
+    npPickerTitle:'ИНТЕГРАЦИИ',
+    npGroupChannels:'Каналы',
+    npGroupInternal:'Внутренние системы',
+    npGroupExternal:'Внешние системы',
   },
   en:{
     filterAll:'All',filterInternal:'Internal',filterExternal:'External',
@@ -1095,6 +1117,17 @@ const T={
     legCompliance:'Compliance',legMiddleware:'Middleware',legGateway:'API Gateway',
     footerBy:'By Zokirov Bobur',catMwModule:'Middleware Module',
     pageTitle:'Enterprise Banking — TO-BE Architecture Explorer',
+    npNewPlatform:'New platform',
+    npPlatformName:'Platform name…',
+    npIntegrations:'+ Integrations',
+    npMwMethodType:'Middleware · Method type',
+    npExistingMethod:'Existing method',
+    npNewMethod:'New method',
+    npMwNoteHtml:"<b>Single connection via Middleware</b><br>Existing APIs are reused. New methods are orchestrated by the bank team inside Middleware. ABS vendor dependency decreases.",
+    npPickerTitle:'INTEGRATIONS',
+    npGroupChannels:'Channels',
+    npGroupInternal:'Internal systems',
+    npGroupExternal:'External systems',
   }
 };
 
@@ -4486,6 +4519,19 @@ function applyUI() {
   const sel = document.getElementById('langSelect');
   if (sel) sel.value = L;
   renderExecUI();
+  // NP widget
+  const ge = id => document.getElementById(id);
+  if (ge('npInitLbl'))   ge('npInitLbl').textContent   = T[L].npNewPlatform;
+  if (ge('npNameInp'))   ge('npNameInp').placeholder   = T[L].npPlatformName;
+  if (ge('npIntegBtn'))  ge('npIntegBtn').textContent  = T[L].npIntegrations;
+  if (ge('npMwLbl'))     ge('npMwLbl').textContent     = T[L].npMwMethodType;
+  if (ge('npApiExist'))  ge('npApiExist').textContent  = T[L].npExistingMethod;
+  if (ge('npApiNew'))    ge('npApiNew').textContent    = T[L].npNewMethod;
+  if (ge('npMwNote'))    ge('npMwNote').innerHTML      = T[L].npMwNoteHtml;
+  if (ge('npPhTitle'))   ge('npPhTitle').textContent   = T[L].npPickerTitle;
+  if (ge('npPgChannels'))ge('npPgChannels').textContent= T[L].npGroupChannels;
+  if (ge('npPgInternal'))ge('npPgInternal').textContent= T[L].npGroupInternal;
+  if (ge('npPgExternal'))ge('npPgExternal').textContent= T[L].npGroupExternal;
 }
 
 buildNodes();

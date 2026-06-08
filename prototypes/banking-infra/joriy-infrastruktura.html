@@ -627,7 +627,7 @@ body::before{
     <div class="np-widget" id="npWidget">
       <div class="np-init" id="npInit" onclick="npActivate()">
         <div class="np-init-plus">+</div>
-        <div class="np-init-lbl">Yangi platforma</div>
+        <div class="np-init-lbl" id="npInitLbl">Yangi platforma</div>
       </div>
       <div class="np-card" id="npCard">
         <div class="np-card-hd">
@@ -637,10 +637,11 @@ body::before{
         </div>
         <div class="np-card-bd">
           <button id="npIntegBtn" class="np-integ-btn" onclick="npTogglePicker()">+ Integratsiyalar</button>
+
           <div id="npChips" class="np-chips"></div>
         </div>
         <div id="npEsbSec" class="np-esb-sec">
-          <div class="np-esb-lbl">ESB · Metod turi</div>
+          <div class="np-esb-lbl" id="npEsbLbl">ESB · Metod turi</div>
           <div class="np-api-row">
             <button class="np-api-btn on" id="npApiExist" onclick="npSetApi('existing')">Mavjud API</button>
             <button class="np-api-btn" id="npApiNew" onclick="npSetApi('new')">Yangi metod</button>
@@ -656,17 +657,17 @@ body::before{
     <!-- ── INTEGRATION PICKER ── -->
     <div id="npPicker" class="np-picker">
       <div class="np-ph">
-        <span class="np-ph-title">INTEGRATSIYALAR</span>
+        <span class="np-ph-title" id="npPhTitle">INTEGRATSIYALAR</span>
         <button class="np-ph-x" onclick="npClosePicker()">✕</button>
       </div>
-      <div class="np-pg">Kanallar</div>
+      <div class="np-pg" id="npPgChannels">Kanallar</div>
       <div class="np-pi" data-id="mobile"  onclick="npSelect('mobile')"><span class="np-pi-dot" style="background:#2E78C7"></span>Mobile App</div>
       <div class="np-pi" data-id="web"     onclick="npSelect('web')"><span class="np-pi-dot" style="background:#2E78C7"></span>Web Portal</div>
       <div class="np-pi" data-id="atm_ch"  onclick="npSelect('atm_ch')"><span class="np-pi-dot" style="background:#2E78C7"></span>ATM/POS ch.</div>
-      <div class="np-pg">Tizimlar</div>
+      <div class="np-pg" id="npPgSystems">Tizimlar</div>
       <div class="np-pi" data-id="esb"     onclick="npSelect('esb')"><span class="np-pi-dot" style="background:#9E6210"></span>ESB</div>
       <div class="np-pi" data-id="abs"     onclick="npSelect('abs')"><span class="np-pi-dot" style="background:#16845E"></span>ABS</div>
-      <div class="np-pg">Tashqi tizimlar</div>
+      <div class="np-pg" id="npPgExternal">Tashqi tizimlar</div>
       <div class="np-pi" data-id="uzcard"  onclick="npSelect('uzcard')"><span class="np-pi-dot" style="background:#9E6210"></span>Uzcard / Humo</div>
       <div class="np-pi" data-id="swift"   onclick="npSelect('swift')"><span class="np-pi-dot" style="background:#9E6210"></span>SWIFT / Remit.</div>
       <div class="np-pi" data-id="cbu"     onclick="npSelect('cbu')"><span class="np-pi-dot" style="background:#9E6210"></span>CBU Regulator</div>
@@ -739,6 +740,17 @@ const T={
     statusLegacy:'Legacy',statusActive:'Faol',statusRisk:'Riskli',
     footerBy:'Zokirov Bobur tomonidan',
     pageTitle:'Enterprise Banking — AS-IS IT Infrastructure',
+    npNewPlatform:'Yangi platforma',
+    npPlatformName:'Platforma nomi…',
+    npIntegrations:'+ Integratsiyalar',
+    npEsbMethodType:'ESB · Metod turi',
+    npExistingApi:'Mavjud API',
+    npNewMethod:'Yangi metod',
+    npVendorWarnHtml:"Yangi metod kerak boʼlsa: <b>+2-6 oy</b><br>Multiple integrations + vendor lock-in risk. Vendor dependency: <b>HIGH</b><br>ABS vendoriga murojaat zarur.",
+    npPickerTitle:'INTEGRATSIYALAR',
+    npGroupChannels:'Kanallar',
+    npGroupSystems:'Tizimlar',
+    npGroupExternal:'Tashqi tizimlar',
   },
   ru:{
     filterAll:'Все',filterChannel:'Каналы',filterAbs:'ABS',filterExternal:'Внешние',
@@ -749,6 +761,17 @@ const T={
     statusLegacy:'Устаревший',statusActive:'Активный',statusRisk:'Рискованный',
     footerBy:'Создано Зокировым Бобуром',
     pageTitle:'Enterprise Banking — AS-IS IT Infrastructure',
+    npNewPlatform:'Новая платформа',
+    npPlatformName:'Название платформы…',
+    npIntegrations:'+ Интеграции',
+    npEsbMethodType:'ESB · Тип метода',
+    npExistingApi:'Существующий API',
+    npNewMethod:'Новый метод',
+    npVendorWarnHtml:"Если нужен новый метод: <b>+2–6 мес.</b><br>Множество интеграций + риск vendor lock-in. Vendor dependency: <b>HIGH</b><br>Требуется обращение к ABS-вендору.",
+    npPickerTitle:'ИНТЕГРАЦИИ',
+    npGroupChannels:'Каналы',
+    npGroupSystems:'Системы',
+    npGroupExternal:'Внешние системы',
   },
   en:{
     filterAll:'All',filterChannel:'Channels',filterAbs:'ABS',filterExternal:'External',
@@ -759,6 +782,17 @@ const T={
     statusLegacy:'Legacy',statusActive:'Active',statusRisk:'At Risk',
     footerBy:'By Zokirov Bobur',
     pageTitle:'Enterprise Banking — AS-IS IT Infrastructure',
+    npNewPlatform:'New platform',
+    npPlatformName:'Platform name…',
+    npIntegrations:'+ Integrations',
+    npEsbMethodType:'ESB · Method type',
+    npExistingApi:'Existing API',
+    npNewMethod:'New method',
+    npVendorWarnHtml:"New method required: <b>+2–6 months</b><br>Multiple integrations + vendor lock-in risk. Vendor dependency: <b>HIGH</b><br>ABS vendor coordination required.",
+    npPickerTitle:'INTEGRATIONS',
+    npGroupChannels:'Channels',
+    npGroupSystems:'Systems',
+    npGroupExternal:'External systems',
   }
 };
 
@@ -1308,6 +1342,19 @@ function applyUI() {
   const sel = document.getElementById('langSelect');
   if (sel) sel.value = L;
   renderExecUI();
+  // NP widget
+  const ge = id => document.getElementById(id);
+  if (ge('npInitLbl'))   ge('npInitLbl').textContent   = T[L].npNewPlatform;
+  if (ge('npNameInp'))   ge('npNameInp').placeholder   = T[L].npPlatformName;
+  if (ge('npIntegBtn'))  ge('npIntegBtn').textContent  = T[L].npIntegrations;
+  if (ge('npEsbLbl'))    ge('npEsbLbl').textContent    = T[L].npEsbMethodType;
+  if (ge('npApiExist'))  ge('npApiExist').textContent  = T[L].npExistingApi;
+  if (ge('npApiNew'))    ge('npApiNew').textContent    = T[L].npNewMethod;
+  if (ge('npVendorWarn'))ge('npVendorWarn').innerHTML  = T[L].npVendorWarnHtml;
+  if (ge('npPhTitle'))   ge('npPhTitle').textContent   = T[L].npPickerTitle;
+  if (ge('npPgChannels'))ge('npPgChannels').textContent= T[L].npGroupChannels;
+  if (ge('npPgSystems')) ge('npPgSystems').textContent = T[L].npGroupSystems;
+  if (ge('npPgExternal'))ge('npPgExternal').textContent= T[L].npGroupExternal;
 }
 
 /* INIT */
