@@ -2061,6 +2061,34 @@ const MW_OPTIONS = {
       en:['High cost (enterprise licensing)','Limited Central Asia references','Deployment 6-9 months']
     },
     status:'evaluate'
+  },
+  inhouse:{
+    name:'Inhouse',
+    fullName:'Eventador — Inhouse Event-Driven Middleware Platform',
+    badge:{text:'INHOUSE BUILD', color:'#A78BFA', bg:'rgba(167,139,250,.12)'},
+    when:{
+      uz:"Bank o'z middleware'ini to'liq nazorat qilmoqchi bo'lganda, vendor lock-in'dan qochish muhim bo'lganda, event-driven arxitektura va gRPC asosida orchestration kerak bo'lganda.",
+      ru:"Когда банк хочет полного контроля над своим middleware, важно избежать vendor lock-in, и требуется event-driven архитектура с оркестрацией на основе gRPC.",
+      en:"When the bank wants full control over its middleware, avoiding vendor lock-in is critical, and event-driven architecture with gRPC-based orchestration is needed."
+    },
+    vendor:'Inhouse development — Trastbank IT team · Eventador open-source core',
+    features:{
+      uz:['Visual flow dizayner — DAG asosida orchestration','gRPC proto registry — OCI descriptor versioning','API Gateway — rate limiting, auth, route groups','Event-driven triggers: HTTP, Kafka, gRPC, Webhook, Cron','KEDA autoscaling — scale-to-zero support','Deployment pipeline — canary, rollback, approval gates','Monitoring, DLQ replay va real-time vizualizator'],
+      ru:['Визуальный дизайнер flow — оркестрация на основе DAG','gRPC proto registry — версионирование OCI дескрипторов','API Gateway — rate limiting, авторизация, route groups','Event-driven триггеры: HTTP, Kafka, gRPC, Webhook, Cron','KEDA autoscaling — поддержка scale-to-zero','Пайплайн деплоя — canary, rollback, approval gates','Мониторинг, DLQ replay и визуализатор в реальном времени'],
+      en:['Visual flow designer — DAG-based orchestration','gRPC proto registry — OCI descriptor versioning','API Gateway — rate limiting, auth, route groups','Event-driven triggers: HTTP, Kafka, gRPC, Webhook, Cron','KEDA autoscaling — scale-to-zero support','Deployment pipeline — canary, rollback, approval gates','Monitoring, DLQ replay and real-time visualizer']
+    },
+    pros:{
+      uz:["To'liq nazorat — vendor lock-in yo'q","Bank jamoasi tomonidan customize qilish imkoni","Narxi past — litsenziya to'lovi yo'q","gRPC va event-driven banking arxitekturasi uchun ideal"],
+      ru:['Полный контроль — нет vendor lock-in','Возможность кастомизации командой банка','Низкая стоимость — нет лицензионных платежей','Идеально для gRPC и event-driven банковской архитектуры'],
+      en:['Full control — no vendor lock-in','Customizable by the bank team','Low cost — no licensing fees','Ideal for gRPC and event-driven banking architecture']
+    },
+    cons:{
+      uz:["Ichki jamoadan katta texnik resurs talab qiladi","Tayyor banking connector kamroq","Dastlabki qurish vaqti: 6-12 oy"],
+      ru:['Требует значительных технических ресурсов внутренней команды','Меньше готовых банковских коннекторов','Начальное время разработки: 6-12 месяцев'],
+      en:['Requires significant internal team technical resources','Fewer ready-made banking connectors','Initial build time: 6-12 months']
+    },
+    status:'evaluate',
+    demoUrl:'../eventador/index.html'
   }
 };
 
@@ -4023,6 +4051,21 @@ let activeId = null;
 function renderMwPanel(optKey) {
   const opt = MW_OPTIONS[optKey];
   const st = STATUS_META[opt.status] || STATUS_META.evaluate;
+  const demoBtn = opt.demoUrl
+    ? `<div class="divider" style="margin:10px -20px"></div>
+       <div class="prow" style="padding-top:4px">
+         <a href="${opt.demoUrl}" target="_blank" rel="noopener"
+            style="display:inline-flex;align-items:center;gap:7px;padding:8px 16px;
+                   background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.5);
+                   border-radius:7px;color:#A78BFA;font-size:12px;font-weight:700;
+                   text-decoration:none;letter-spacing:.04em;transition:background .15s;"
+            onmouseover="this.style.background='rgba(167,139,250,.28)'"
+            onmouseout="this.style.background='rgba(167,139,250,.15)'">
+           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="5,3 13,8 5,13"/></svg>
+           Demo ochish →
+         </a>
+       </div>`
+    : '';
   return `
     <span class="abs-badge" style="color:${opt.badge.color};border-color:${opt.badge.color}55;background:${opt.badge.bg}">
       ${opt.badge.text}
@@ -4047,6 +4090,7 @@ function renderMwPanel(optKey) {
     <div class="prow"><div class="prow-lbl">${T[L].panelStatus}</div>
       <span class="status-badge" style="color:${st.light};border-color:${st.color}44;background:${st.bg}">${st.label}</span>
     </div>
+    ${demoBtn}
   `;
 }
 
@@ -4126,10 +4170,12 @@ function openPanel(id) {
          <button class="abs-tab mw-tab active" data-key="rendezvous" onclick="switchMwTab('rendezvous')">Rendezvous</button>
          <button class="abs-tab mw-tab" data-key="velmie"      onclick="switchMwTab('velmie')">Velmie</button>
          <button class="abs-tab mw-tab" data-key="kinective"   onclick="switchMwTab('kinective')">Kinective</button>
+         <button class="abs-tab mw-tab" data-key="inhouse"     onclick="switchMwTab('inhouse')" style="color:#A78BFA">Inhouse</button>
        </div>
        <div class="abs-panel mw-panel active" data-key="rendezvous" id="mw-content-rendezvous">${renderMwPanel('rendezvous')}</div>
        <div class="abs-panel mw-panel" data-key="velmie"      id="mw-content-velmie"></div>
-       <div class="abs-panel mw-panel" data-key="kinective"   id="mw-content-kinective"></div>`;
+       <div class="abs-panel mw-panel" data-key="kinective"   id="mw-content-kinective"></div>
+       <div class="abs-panel mw-panel" data-key="inhouse"     id="mw-content-inhouse"></div>`;
   } else if (d.crmOption) {
     // CRM multi-option rendering
     document.getElementById('pVendor').textContent = d.vendor;

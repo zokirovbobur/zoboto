@@ -1,0 +1,1318 @@
+/* eventador UI demo — design system (Vite + React). Non-functional mock. */
+:root{
+  --bg:#0b0f17; --panel:#121826; --panel2:#171e2e; --panel3:#1d2638;
+  --border:#27314a; --border2:#33405e;
+  --text:#e7edf6; --muted:#8a97ad; --faint:#5f6c83;
+  --accent:#18c2a6; --accent-d:#0e8f7c; --accent2:#6d8bff;
+  --ok:#3fb950; --warn:#f0a020; --danger:#f0506e; --info:#56a6ff;
+  --r:10px; --r-sm:7px; --gap:16px;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,system-ui,sans-serif;
+}
+/* Light theme — opt-in via <html data-theme="light">. Colours chosen for
+   comfortable contrast against white surfaces; accent stays the same. */
+html[data-theme="light"]{
+  --bg:#f4f6fa; --panel:#ffffff; --panel2:#f4f6fa; --panel3:#e7ecf3;
+  --border:#dde2eb; --border2:#c8d0dc;
+  --text:#0d1117; --muted:#5c6578; --faint:#9aa3b3;
+  --accent:#0e8f7c; --accent-d:#0a6b5d; --accent2:#3554d9;
+  --ok:#1f8c33; --warn:#b56a00; --danger:#c43050; --info:#0a6db5;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body,#root{height:100%}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+h1,h2,h3,h4{font-weight:650;letter-spacing:-.01em}
+button{font-family:inherit}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:6px}
+::-webkit-scrollbar-track{background:transparent}
+::selection{background:rgba(24,194,166,.3)}
+
+.shell{height:100vh;display:flex;flex-direction:column}
+.demobar{flex:0 0 auto;height:30px;background:var(--panel2);border-bottom:1px solid var(--border);
+  color:var(--muted);font-size:12px;display:flex;align-items:center;justify-content:center;gap:10px;position:relative}
+.demobar-x{position:absolute;right:12px;background:0;border:0;color:var(--faint);cursor:pointer;font-size:12px;padding:4px}
+.demobar-x:hover{color:var(--text)}
+
+/* layout */
+.app{flex:1;min-height:0;display:grid;grid-template-columns:264px 1fr;grid-template-rows:56px 1fr}
+.topbar{grid-column:1/3;display:flex;align-items:center;gap:14px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:9px;font-weight:750;font-size:16px;letter-spacing:-.02em}
+.brand .dot{width:14px;height:14px;border-radius:5px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 12px rgba(24,194,166,.5)}
+.spacer{flex:1}
+.iconbtn{width:32px;height:32px;display:grid;place-items:center;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--panel2);color:var(--muted);cursor:pointer;transition:.14s}
+.iconbtn:hover{color:var(--text);border-color:var(--accent)}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:grid;place-items:center;font-weight:700;color:#06121b;font-size:13px;cursor:pointer;border:0}
+.avatar.lg{width:60px;height:60px;border-radius:16px;font-size:24px}
+
+.sidebar{background:var(--panel);border-right:1px solid var(--border);overflow-y:auto;padding:0 0 16px}
+.navgroup{margin:8px 10px 2px}
+.navgroup .lbl{display:flex;align-items:center;gap:7px;width:100%;background:0;border:0;cursor:pointer;
+  font-family:inherit;font-weight:650;font-size:11px;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--faint);padding:7px 10px;border-radius:6px}
+.navgroup .lbl:hover{color:var(--muted);background:var(--panel2)}
+.lbl-chev{font-size:9px;transition:transform .15s ease;display:inline-block}
+.lbl-chev.off{transform:rotate(-90deg)}
+.nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-sm);color:var(--muted);
+  cursor:pointer;font-size:13.5px;font-weight:550;transition:.13s}
+.nav .ico{width:16px;text-align:center;opacity:.85}
+.nav:hover{background:var(--panel2);color:var(--text)}
+.navgroup .nav-pin{opacity:0}
+.navgroup div:hover > .nav-pin{opacity:1}
+.nav.active{background:linear-gradient(90deg,rgba(24,194,166,.16),transparent);color:var(--text);box-shadow:inset 2px 0 0 var(--accent)}
+.nav .tag{margin-left:auto;font-size:10px;background:var(--panel3);color:var(--muted);padding:1px 6px;border-radius:20px;border:1px solid var(--border)}
+
+main{overflow-y:auto;padding:24px 28px 70px}
+.page{animation:fade .2s ease;width:100%}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.crumb{font-size:12px;color:var(--faint);margin-bottom:6px}
+.head{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.head h1{font-size:22px}
+.head p{color:var(--muted);font-size:13px;margin-top:4px;max-width:720px}
+.head .actions{margin-left:auto;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.docref{font-size:11px;color:var(--faint);border:1px dashed var(--border2);border-radius:20px;padding:3px 10px;display:inline-block;margin-top:9px}
+
+/* primitives */
+.btn{background:var(--panel3);color:var(--text);border:1px solid var(--border2);padding:7px 13px;border-radius:var(--r-sm);font-size:13px;font-weight:600;cursor:pointer;transition:.14s;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:linear-gradient(135deg,var(--accent),var(--accent-d));border-color:transparent;color:#06121b}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.dng{border-color:var(--danger);color:var(--danger)}
+.btn.dng:hover{background:rgba(240,80,110,.12)}
+.btn.sm{padding:4px 9px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+/* inline select control — sized to match .btn exactly (same line-height/padding/border) */
+.select{background:var(--panel3);color:var(--text);border:1px solid var(--border2);
+  padding:7px 12px;border-radius:var(--r-sm);font-size:13px;font-weight:600;line-height:1.55;
+  font-family:inherit;cursor:pointer;transition:.14s}
+.select:hover{border-color:var(--accent)}
+.select:focus-visible{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,194,166,.15)}
+/* native checkboxes: accent-tinted, comfortable hit target */
+input[type="checkbox"]{accent-color:var(--accent);cursor:pointer;width:15px;height:15px;margin:0}
+.grid{display:grid;gap:var(--gap)}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}.app{grid-template-columns:1fr}.sidebar{display:none}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+.card h3{font-size:14px;margin-bottom:3px}
+.card .sub{color:var(--muted);font-size:12px;margin-bottom:13px}
+.metric{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:15px;transition:.14s}
+.metric:hover{border-color:var(--border2)}
+.metric .k{color:var(--muted);font-size:12px}
+.metric .v{font-size:25px;font-weight:700;margin-top:7px;letter-spacing:-.02em}
+.metric .d{font-size:12px;margin-top:4px}
+.up{color:var(--ok)}.down{color:var(--danger)}.flat{color:var(--muted)}
+.badge{font-size:11px;font-weight:650;padding:2px 8px;border-radius:20px;border:1px solid;display:inline-flex;gap:5px;align-items:center}
+.b-ok{color:var(--ok);border-color:rgba(63,185,80,.4);background:rgba(63,185,80,.1)}
+.b-warn{color:var(--warn);border-color:rgba(240,160,32,.4);background:rgba(240,160,32,.1)}
+.b-dng{color:var(--danger);border-color:rgba(240,80,110,.4);background:rgba(240,80,110,.1)}
+.b-info{color:var(--info);border-color:rgba(86,166,255,.4);background:rgba(86,166,255,.1)}
+.b-mut{color:var(--muted);border-color:var(--border2);background:var(--panel3)}
+.chip{font-size:11px;font-family:var(--mono);background:var(--panel3);border:1px solid var(--border2);padding:2px 7px;border-radius:5px;color:var(--text)}
+.tablecard{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;padding:10px 13px;border-bottom:1px solid var(--border)}
+td{padding:11px 13px;border-bottom:1px solid var(--border)}
+tbody tr{transition:.1s}
+tbody tr.clickable{cursor:pointer}
+tbody tr.clickable:hover td{background:var(--panel3)}
+tr:last-child td{border-bottom:0}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.kv:last-child{border:0}.kv>span:first-child{color:var(--muted)}
+.mono{font-family:var(--mono);font-size:12.5px}
+.hint{font-size:11.5px;color:var(--faint);margin-top:10px}
+.note{background:rgba(86,166,255,.08);border:1px solid rgba(86,166,255,.3);color:#bcd8ff;padding:10px 13px;border-radius:var(--r-sm);font-size:12.5px;margin-bottom:16px}
+.bar{height:7px;background:var(--panel3);border-radius:6px;overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.spark{display:flex;align-items:flex-end;gap:3px;height:48px;overflow:hidden}
+.spark i{flex:1;background:linear-gradient(180deg,var(--accent),var(--accent-d));border-radius:2px;opacity:.85;max-height:100%}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;background:var(--panel3);border:1px solid var(--border2);
+  color:var(--text);padding:8px 10px;border-radius:var(--r-sm);font-size:13px;font-family:inherit;transition:.14s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,194,166,.15)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap}
+.tab{background:0;border:0;border-bottom:2px solid transparent;padding:8px 14px;margin-bottom:-1px;
+  color:var(--muted);cursor:pointer;font:inherit;font-size:13px;font-weight:600;transition:.13s}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--text);border-bottom-color:var(--accent)}
+.tg{display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none;
+  background:0;border:0;padding:0;font:inherit;font-size:12px;color:var(--muted)}
+.tg .sw2{width:34px;height:18px;border-radius:20px;background:var(--border2);position:relative;transition:.15s;flex:0 0 auto}
+.tg .sw2:after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--text);transition:.15s}
+.tg.on .sw2{background:var(--accent)}.tg.on .sw2:after{left:18px;background:#06121b}
+.tg.on{color:var(--text)}
+.right{margin-left:auto}.flex{display:flex;align-items:center;gap:10px}.mt{margin-top:14px}.mb{margin-bottom:16px}
+
+/* login */
+.login{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(1200px 600px at 70% -10%,rgba(24,194,166,.16),transparent),var(--bg);padding:20px}
+.loginbox{width:380px;max-width:100%;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:30px}
+.loginbox .brand{font-size:22px;justify-content:center;margin-bottom:6px}
+.loginbox p{text-align:center;color:var(--muted);font-size:13px;margin-bottom:22px}
+.sso{display:flex;flex-direction:column;gap:9px;margin-bottom:14px}
+.sso .btn{justify-content:center;display:flex;width:100%}
+.divider{display:flex;align-items:center;gap:12px;color:var(--faint);font-size:12px;margin:14px 0}
+.divider:before,.divider:after{content:"";flex:1;height:1px;background:var(--border)}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(3,6,12,.55);z-index:60;animation:fade .15s ease}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:440px;max-width:100vw;background:var(--panel);
+  border-left:1px solid var(--border2);z-index:61;display:flex;flex-direction:column;animation:slide .22s ease;box-shadow:-24px 0 60px rgba(0,0,0,.45)}
+@keyframes slide{from{transform:translateX(40px);opacity:.5}to{transform:none;opacity:1}}
+.drawer header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.drawer header h3{font-size:15px}.drawer header .sub{font-size:12px;color:var(--muted)}
+.drawer .x{margin-left:auto;cursor:pointer;color:var(--muted);font-size:18px;background:0;border:0}
+.drawer .x:hover{color:var(--text)}
+.drawer .body{padding:16px 18px;overflow-y:auto;flex:1}
+.drawer footer{padding:13px 18px;border-top:1px solid var(--border);display:flex;gap:9px;align-items:center}
+.addf{font-size:12px;color:var(--accent);cursor:pointer;display:inline-block;margin:2px 0 6px}
+.addf:hover{text-decoration:underline}
+
+/* Key/Value list editor — Fn config */
+.kvlist{display:flex;flex-direction:column;gap:6px}
+.kvlist-head{display:grid;grid-template-columns:1fr 1fr 28px;gap:8px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding:0 2px}
+.kvlist-row{display:grid;grid-template-columns:1fr 1fr 28px;gap:8px;align-items:center}
+.kvlist-row input{width:100%;background:var(--panel3);border:1px solid var(--border2);border-radius:6px;padding:7px 9px;font-family:inherit;font-size:13px;color:var(--text)}
+.kvlist-row input:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,194,166,.15)}
+.kvlist-row .addf{margin:0;font-size:14px;color:var(--muted);text-align:center}
+.kvlist-row .addf:hover{color:var(--danger);text-decoration:none}
+
+/* Import opt-in row (Designer inspector + Function drawer — ADR-0023) */
+.import-row{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:12px;border:1px solid transparent}
+.import-row:hover{background:var(--panel3);border-color:var(--border)}
+.import-row input[type="checkbox"]{margin:0;cursor:pointer}
+.import-row .mono{font-size:12px}
+
+/* Flow references row (Designer empty state) — narrow inspector (~272px), must not overflow */
+.refrow{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;border:1px solid var(--border);background:var(--panel3);font-size:12px;min-width:0;overflow:hidden}
+.refrow > *{flex-shrink:0}                                                                        /* default: no shrink */
+.refrow .mono{font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1}  /* names + values truncate */
+.refrow > .badge{flex-shrink:0;font-size:10px;padding:1px 5px}                                     /* compact badges */
+.refrow .addf{margin:0;padding:2px 6px;font-size:13px;line-height:1.2;border-radius:4px;flex-shrink:0;color:var(--muted)}
+.refrow .addf:hover{background:var(--panel2);color:var(--text);text-decoration:none}
+/* tail mono (e.g. secret prefix, env value) — pushes right, truncates */
+.refrow-tail{margin-left:auto;font-size:11px;color:var(--faint);max-width:96px}
+
+/* Secrets list editor (Drawer secretslist field type) */
+.secretslist{display:flex;flex-direction:column;gap:4px}
+.secretslist-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;border:1px solid var(--border);background:var(--panel3);font-size:12px}
+.secretslist-row .addf{margin:0;font-size:11px;padding:2px 6px;border-radius:4px}
+.secretslist-row .addf:hover{background:var(--panel2)}
+.secretslist-add{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px dashed var(--border2);border-radius:6px}
+.secretslist-add input{flex:1;background:var(--panel3);border:1px solid var(--border2);border-radius:6px;padding:5px 8px;font-family:inherit;font-size:12px;color:var(--text)}
+.secretslist-add input:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,194,166,.15)}
+.secretslist-add .btn{padding:4px 10px;font-size:11px}
+
+/* Chipset — segmented filter for state/trigger on Flows page */
+.chipset{display:inline-flex;align-items:center;gap:4px;flex-wrap:wrap}
+.chipset-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-right:4px}
+.chip{background:var(--panel3);border:1px solid var(--border2);border-radius:14px;padding:3px 10px;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
+.chip:hover{border-color:var(--accent);color:var(--text)}
+.chip.on{background:rgba(24,194,166,.12);border-color:var(--accent);color:var(--accent)}
+.chip-n{background:var(--panel2);color:var(--muted);font-size:10px;padding:0 5px;border-radius:8px;line-height:1.6}
+.chip.on .chip-n{background:rgba(24,194,166,.18);color:var(--accent)}
+
+/* Sortable table headers */
+th.sortable{cursor:pointer;user-select:none}
+th.sortable:hover{color:var(--accent)}
+
+/* Workspace empty-state (DLQ, Flows, Deployments, etc. when scope.ws has no data) */
+.ws-empty{padding:36px 24px;text-align:center}
+.ws-empty-ico{font-size:42px;line-height:1;margin-bottom:10px}
+.ws-empty-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.ws-empty-ws{color:var(--accent);font-size:14px}
+.ws-empty-desc{margin:0 auto 4px;max-width:560px}
+.ws-empty-cta{margin-top:14px;display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.ws-empty-other-label{margin-top:18px;margin-bottom:8px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.ws-empty-switches{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.ws-empty-switches .btn{display:inline-flex;align-items:center;gap:6px}
+.ws-empty-footer{margin-top:18px;font-size:11px;margin-bottom:0;color:var(--faint)}
+
+/* Function reference summary card (Designer Custom Code inspector when linked) */
+.fn-summary{background:var(--panel3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-top:6px}
+.fn-summary-h{display:flex;align-items:center;gap:8px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.fn-summary .kv{padding:3px 0;font-size:12px}
+/* Custom Code node on canvas when not yet linked to a function */
+.fnode.unlinked{border-color:var(--warn);background:linear-gradient(180deg,var(--panel2),rgba(255,180,40,.04))}
+.fnode.unlinked .fnode-b{color:var(--warn)}
+
+/* toast */
+.toasts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:80;align-items:center}
+.toast{background:var(--panel3);border:1px solid var(--accent);color:var(--text);padding:10px 18px;
+  border-radius:9px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:fade .18s ease}
+
+/* flow canvas */
+.palette,.inspector{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:13px;overflow-y:auto}
+.palette h4,.inspector h4{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);margin:12px 0 7px}
+.palette h4:first-child,.inspector h4:first-child{margin-top:0}
+.pnode{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--r-sm);border:1px solid var(--border2);
+  width:100%;text-align:left;color:var(--text);font-family:inherit;
+  background:var(--panel2);font-size:12.5px;margin-bottom:6px;cursor:pointer;transition:.13s}
+.pnode:hover{border-color:var(--accent)}
+.pnode .sw{width:9px;height:9px;border-radius:3px}
+.sw.trig{background:var(--accent2)}.sw.inl{background:var(--accent)}.sw.cont{background:var(--warn)}.sw.sink{background:#c678dd}.sw.par{background:var(--info)}
+.canvas{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;
+  background-image:radial-gradient(var(--border) 1px,transparent 0);background-size:22px 22px}
+.canvas svg{width:100%;height:100%}
+.nd{cursor:pointer}
+.nd rect{stroke-width:1.4}
+.nd text{fill:var(--text);font:600 12px var(--sans)}
+.nd .st{fill:var(--muted);font:11px var(--sans)}
+.nd.trig rect{fill:#1b2440;stroke:var(--accent2)}
+.nd.inl rect{fill:#102a26;stroke:var(--accent)}
+.nd.cont rect{fill:#2e2410;stroke:var(--warn)}
+.nd.sink rect{fill:#241a2e;stroke:#c678dd}
+.nd.par rect{fill:#10212e;stroke:var(--info)}
+.nd.sel rect{stroke-width:3;filter:drop-shadow(0 0 8px var(--accent2))}
+.nd.hot rect{fill:#3a1620;stroke:var(--danger)}.nd.warm rect{fill:#3a2d12;stroke:var(--warn)}
+.nd.cool rect{fill:#13321d;stroke:var(--ok)}.nd.ping rect{stroke-width:3;filter:drop-shadow(0 0 7px var(--accent))}
+.wire{fill:none;stroke:var(--border2);stroke-width:2}
+.wire.flow{stroke:var(--accent);stroke-dasharray:6 5;animation:dash 1s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-22}}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(63,185,80,.6);animation:pl 1.6s infinite}
+@keyframes pl{70%{box-shadow:0 0 0 7px rgba(63,185,80,0)}100%{box-shadow:0 0 0 0 rgba(63,185,80,0)}}
+.stepper{display:flex;margin:6px 0 18px}
+.step{flex:1;text-align:center;position:relative;font-size:11.5px;color:var(--muted)}
+.step:before{content:"";position:absolute;top:13px;left:-50%;width:100%;height:2px;background:var(--border)}
+.step:first-child:before{display:none}
+.step .dot{width:26px;height:26px;border-radius:50%;background:var(--panel3);border:1px solid var(--border2);
+  display:grid;place-items:center;margin:0 auto 7px;position:relative;z-index:1;font-size:11px}
+.step.done .dot{background:var(--ok);border-color:var(--ok);color:#06121b}
+.step.done:before{background:var(--ok)}
+.step.active .dot{background:var(--accent);border-color:var(--accent);color:#06121b;box-shadow:0 0 0 4px rgba(24,194,166,.2)}
+.step.active{color:var(--text)}
+.pfhead{display:flex;align-items:center;gap:18px;background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:16px;flex-wrap:wrap}
+.pfhead .meta{flex:1;min-width:200px}
+.pfhead .meta h1{font-size:21px;margin-bottom:3px}
+.pfhead .meta .row{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px;margin-top:7px;flex-wrap:wrap}
+.logbox{background:#0a0d14;border:1px solid var(--border);border-radius:var(--r);padding:12px;font-family:var(--mono);font-size:12px;height:280px;overflow-y:auto}
+.logline{display:flex;gap:10px;padding:3px 0}
+.lv-INFO{color:var(--info)}.lv-WARN{color:var(--warn)}.lv-ERR{color:var(--danger)}.lv-OK{color:var(--ok)}
+.tspan{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;margin-bottom:7px}
+.tspan .nm{width:170px;color:var(--muted);text-align:right}
+.tspan .bw{flex:1;background:var(--panel3);border-radius:5px;height:18px;position:relative}
+.tspan .seg{position:absolute;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent2),var(--accent));
+  display:flex;align-items:center;padding-left:7px;font-size:10.5px;color:#06121b;font-weight:700}
+
+/* ---- best-practice polish: a11y, palette, menu, mobile ---- */
+.skip{position:fixed;top:-100px;left:8px;background:var(--accent);color:#06121b;padding:7px 12px;border-radius:6px;font-weight:650;z-index:300;transition:top .15s}
+.skip:focus{top:8px;outline:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* topbar search button */
+.search{display:flex;align-items:center;gap:8px;background:var(--panel3);border:1px solid var(--border);
+  border-radius:20px;padding:6px 10px 6px 14px;color:var(--muted);font-size:13px;min-width:240px;cursor:text;
+  font-family:inherit;transition:.13s}
+.search:hover{border-color:var(--border2);color:var(--text)}
+.search kbd{margin-left:auto;background:var(--panel);border:1px solid var(--border2);border-radius:5px;
+  padding:1px 6px;font-size:11px;color:var(--muted);font-family:var(--mono)}
+
+/* command palette */
+.cmdpal{position:fixed;top:90px;left:50%;transform:translateX(-50%);width:580px;max-width:calc(100vw - 32px);
+  background:var(--panel);border:1px solid var(--border2);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+  z-index:70;display:flex;flex-direction:column;max-height:70vh;animation:popin .14s ease}
+@keyframes popin{from{opacity:0;transform:translateX(-50%) translateY(-6px)}to{opacity:1;transform:translateX(-50%)}}
+.cmdpal input{background:transparent;border:0;border-bottom:1px solid var(--border);color:var(--text);
+  font-size:15px;padding:16px 18px;outline:0;font-family:inherit}
+.pl-list{overflow-y:auto;padding:6px}
+.pl-empty{padding:16px;color:var(--muted);font-size:13px;text-align:center}
+.pl-item{display:flex;align-items:center;gap:10px;width:100%;background:0;border:0;color:var(--text);
+  padding:9px 12px;border-radius:7px;cursor:pointer;font-size:13.5px;font-family:inherit;text-align:left}
+.pl-item:hover,.pl-item.on{background:var(--panel3)}
+.pl-item .ico{width:18px;text-align:center;color:var(--muted)}
+.pl-item .t{font-weight:600}
+.pl-item .g{color:var(--muted);font-size:12px}
+.pl-item .tag{margin-left:auto;font-size:10px;background:var(--panel2);color:var(--muted);padding:1px 6px;border-radius:20px;border:1px solid var(--border)}
+.pl-hint{padding:9px 14px;border-top:1px solid var(--border);font-size:11px;color:var(--faint)}
+
+/* avatar dropdown menu */
+.avatarwrap{position:relative}
+.menu{position:absolute;top:calc(100% + 8px);right:0;width:240px;background:var(--panel);border:1px solid var(--border2);
+  border-radius:10px;box-shadow:0 20px 50px rgba(0,0,0,.45);z-index:50;padding:6px;animation:popin .14s ease}
+.menu-h{display:flex;align-items:center;gap:10px;padding:10px 8px 12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.menu-i{display:flex;align-items:center;gap:8px;width:100%;background:0;border:0;color:var(--text);
+  padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13.5px;font-family:inherit;text-align:left}
+.menu-i:hover{background:var(--panel3)}
+.menu-i.danger{color:var(--danger)}
+.menu-d{height:1px;background:var(--border);margin:4px 0}
+
+.ctxmenu{min-width:200px;background:var(--panel);border:1px solid var(--border2);
+  border-radius:8px;padding:4px;box-shadow:0 14px 40px rgba(0,0,0,.5);font-size:13px}
+.ctxmenu-i{display:flex;align-items:center;gap:10px;width:100%;background:0;border:0;color:var(--text);
+  padding:7px 10px;text-align:left;cursor:pointer;border-radius:5px;font-size:13px}
+.ctxmenu-i:hover,.ctxmenu-i.is-active{background:var(--panel3)}
+.ctxmenu-i.is-danger{color:var(--danger)}
+.ctxmenu-i.is-danger:hover,.ctxmenu-i.is-danger.is-active{background:rgba(220,80,80,.12)}
+.ctxmenu-i.is-disabled{color:var(--faint);cursor:default}
+.ctxmenu-i.is-disabled:hover{background:transparent}
+.ctxmenu-ic{flex:0 0 16px;text-align:center;font-size:13px}
+.ctxmenu-lbl{flex:1;white-space:nowrap}
+.ctxmenu-kbd{font-size:11px;color:var(--faint);font-family:var(--mono);margin-left:14px;letter-spacing:.5px}
+.ctxmenu-div{height:1px;background:var(--border);margin:4px 0}
+
+/* hamburger (mobile only) */
+.hamburger{display:none;background:0;border:0;color:var(--text);font-size:20px;padding:0 6px;cursor:pointer}
+
+/* sidebar mobile slide */
+.sidescrim{display:none;position:fixed;inset:0;background:rgba(3,6,12,.5);z-index:30}
+.sidescrim.on{display:block}
+
+/* toast types */
+.toast.t-warn{border-color:var(--warn)}
+.toast.t-dng{border-color:var(--danger)}
+.toast.t-info{border-color:var(--info)}
+
+/* drawer button used as addf was a span — keep clickable area button-shaped */
+button.addf{background:0;border:0;cursor:pointer;font-family:inherit}
+
+/* responsive: tablet */
+@media (max-width:900px){
+  .tablecard{overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+/* responsive: mobile */
+@media (max-width:760px){
+  .hamburger{display:inline-block}
+  .search{display:none}
+  .brand,.topbar-sep{display:none}
+  .app{grid-template-columns:1fr}
+  .topbar{gap:8px;padding:0 12px}
+  .sidebar{position:fixed;top:0;left:0;bottom:0;width:min(286px,86vw);z-index:50;
+    transform:translateX(-100%);transition:transform .22s ease}
+  .sidebar.open{transform:none;box-shadow:8px 0 30px rgba(0,0,0,.5)}
+  .sidescrim{z-index:49}
+  main{padding:16px 14px 64px}
+  .head h1{font-size:18px}
+  .head .actions{margin-left:0;width:100%}
+  .pfhead{padding:16px;gap:14px}
+  .pfhead .actions{margin-top:8px}
+  .tablecard table{min-width:640px}
+  .dz-toolbar,.dz-foot{overflow-x:auto}
+  .studio{max-height:calc(100vh - 24px)}
+  .grid{gap:12px}
+}
+@media (min-width:761px){
+  .sidescrim{display:none !important}
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important}
+}
+
+/* ---- Sidebar scope selectors: Organization + Workspace (independent dropdowns) ---- */
+.wsswitcher{padding:10px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel);
+  z-index:6;display:flex;flex-direction:column;gap:8px}
+.scopesel{position:relative}
+.scopesel-lbl{font-size:9.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.07em;
+  font-weight:700;margin:0 0 3px 2px}
+.scopesel-btn{display:flex;align-items:center;gap:8px;width:100%;background:var(--panel3);
+  border:1px solid var(--border);border-radius:8px;padding:7px 9px;color:var(--text);cursor:pointer;
+  font-family:inherit;text-align:left;transition:.14s}
+.scopesel-btn:hover{border-color:var(--border2)}
+.scopesel-btn.open{border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,194,166,.15)}
+.scopesel-av{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:grid;place-items:center;font-weight:700;color:#06121b;font-size:12px;flex:0 0 auto}
+.scopesel-av.sm{width:20px;height:20px;border-radius:5px;font-size:11px}
+.scopesel-meta{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.scopesel-cur,.scopesel-name{font-size:13px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scopesel-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scopesel-chev{color:var(--muted);font-size:10px;transition:.14s}
+.scopesel-btn.open .scopesel-chev{transform:rotate(180deg);color:var(--accent)}
+.scopesel-menu{position:absolute;top:calc(100% + 5px);left:0;right:0;background:var(--panel);
+  border:1px solid var(--border2);border-radius:9px;box-shadow:0 22px 50px rgba(0,0,0,.5);
+  z-index:55;padding:5px;max-height:300px;overflow-y:auto;animation:popin .14s ease}
+.scopesel-opt{display:flex;align-items:center;gap:8px;width:100%;background:0;border:0;color:var(--text);
+  text-align:left;padding:7px 8px;border-radius:6px;cursor:pointer;font-family:inherit;transition:.12s}
+.scopesel-opt:hover{background:var(--panel3)}
+.scopesel-opt.on{background:rgba(24,194,166,.12);box-shadow:inset 2px 0 0 var(--accent)}
+.scopesel-tick{color:var(--accent);font-weight:700;font-size:12px}
+.scopesel-empty{padding:10px;color:var(--faint);font-size:12px;text-align:center}
+
+/* folder tree */
+.foldertree{padding:10px 6px 8px}
+.ft-head{display:flex;align-items:center;gap:6px;padding:4px 8px 8px}
+.ft-lbl{display:flex;align-items:center;gap:7px;flex:1;background:0;border:0;cursor:pointer;
+  font-family:inherit;font-weight:650;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--faint);padding:4px 6px;border-radius:6px;text-align:left}
+.ft-lbl:hover{color:var(--muted);background:var(--panel2)}
+.ft-add{margin-left:auto;background:0;border:1px solid var(--border);color:var(--muted);width:22px;height:22px;
+  border-radius:6px;cursor:pointer;font-size:14px;display:grid;place-items:center;transition:.13s}
+.ft-add:hover{border-color:var(--accent);color:var(--accent)}
+.ft-empty{padding:8px 12px;color:var(--muted);font-size:12px}
+.ft-row{display:flex;align-items:center;gap:6px;padding:4px 8px;border-radius:5px;cursor:pointer;
+  color:var(--muted);font-size:13px;position:relative;transition:.1s}
+.ft-row:hover{background:var(--panel2);color:var(--text)}
+.ft-row.active{background:rgba(24,194,166,.12);color:var(--text);box-shadow:inset 2px 0 0 var(--accent)}
+.ft-chev{width:12px;font-size:10px;color:var(--faint);text-align:center;flex:0 0 12px}
+.ft-ico{flex:0 0 16px;font-size:13px;opacity:.85}
+.ft-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:550}
+.ft-count{font-size:11px;background:var(--panel3);color:var(--muted);padding:1px 8px;border-radius:20px;
+  border:1px solid var(--border);font-weight:600;min-width:22px;text-align:center;flex:0 0 auto}
+.ft-more{display:none;background:0;border:0;color:var(--muted);width:22px;height:22px;border-radius:5px;
+  cursor:pointer;font-size:14px;place-items:center;transition:.1s;flex:0 0 auto}
+.ft-row:hover .ft-more,.ft-row:focus-within .ft-more{display:grid}
+.ft-row:hover .ft-count,.ft-row:focus-within .ft-count{display:none}
+.ft-more:hover{background:var(--panel3);color:var(--text)}
+
+.sidebar-sep{height:1px;background:var(--border);margin:6px 0 0}
+.sidebar-foot{padding:14px 16px 4px;font-size:11px;color:var(--faint)}
+
+/* ---- v2 refresh: calmer + more spacious ---- */
+main{padding:26px 34px 90px}
+.head{margin-bottom:22px}
+.head h1{font-size:20px}
+.head p{margin-top:5px}
+.card{padding:18px;border-radius:12px}
+.card h3{font-size:13.5px}
+.metric{padding:16px 18px;border-radius:12px}
+.metric .v{font-size:24px;margin-top:8px}
+.tablecard{border-radius:12px}
+th{padding:11px 15px;background:var(--panel2)}
+td{padding:12px 15px}
+.nav{padding:8px 10px;font-size:13px;margin:1px 0}
+.kv{padding:9px 0}
+.crumb{display:flex;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+
+/* empty state */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  padding:48px 20px;text-align:center;color:var(--muted)}
+.empty .e-ico{font-size:30px;opacity:.6}
+.empty .e-title{font-weight:650;color:var(--text);font-size:14px}
+.empty .e-sub{font-size:12.5px;max-width:360px}
+
+/* section header inside a drawer/card */
+.section-h{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);
+  font-weight:650;margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.section-h:first-child{margin-top:0}
+
+/* quick-action tile (dashboard) */
+.qa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:1100px){.qa-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.qa-grid{grid-template-columns:1fr}}
+.qa{display:flex;align-items:flex-start;gap:11px;background:var(--panel);border:1px solid var(--border);
+  border-radius:11px;padding:14px;cursor:pointer;text-align:left;font-family:inherit;color:var(--text);transition:.14s}
+.qa:hover{border-color:var(--accent);transform:translateY(-1px)}
+.qa .qa-ic{width:32px;height:32px;border-radius:8px;background:var(--panel3);display:grid;place-items:center;font-size:15px;flex:0 0 auto}
+.qa .qa-t{font-weight:650;font-size:13.5px}
+.qa .qa-d{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* attention list (dashboard) */
+.attn{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)}
+.attn:last-child{border:0}
+.attn .a-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.attn .a-main{flex:1;min-width:0}
+.attn .a-t{font-size:13px;font-weight:600}
+.attn .a-s{font-size:12px;color:var(--muted)}
+
+/* ---- Flow Designer (orchestration editor — matches reference image) ---- */
+.dz{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;background:var(--panel);height:calc(100vh - 150px);min-height:520px}
+/* Designer page — claim more vertical real estate by tightening main padding. */
+main:has(>.designer-page){padding:14px 22px 18px}
+.designer-page .dz{height:calc(100vh - 100px)}
+/* Fullscreen mode — Designer takes the whole viewport; sidebar, topbar,
+   breadcrumb and main padding all step aside. Exit with the toolbar button
+   or ESC. */
+body.dz-fullscreen .topbar,
+body.dz-fullscreen .sidebar{display:none}
+body.dz-fullscreen .app{grid-template-columns:1fr;grid-template-rows:1fr}
+body.dz-fullscreen main{padding:0!important;height:100vh;max-height:100vh}
+body.dz-fullscreen .designer-page > div:first-child{display:none} /* hide breadcrumb row */
+body.dz-fullscreen .designer-page .dz{height:100vh;border-radius:0;border:0;min-height:100vh}
+.dz-toolbar{display:flex;align-items:center;gap:8px;padding:0 14px;height:52px;
+  border-bottom:1px solid var(--border);flex:0 0 auto;overflow-x:auto;overflow-y:hidden;
+  scrollbar-width:thin}
+.dz-toolbar > *{flex:0 0 auto}
+.dz-toolbar > .dz-sp,.dz-foot > .dz-sp{flex:1 1 0}
+.dz-back{background:0;border:0;color:var(--muted);cursor:pointer;font-size:13px;font-family:inherit;padding:6px 4px;white-space:nowrap}
+.dz-back:hover{color:var(--text)}
+.dz-name{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
+.dz-ver{font-size:12px;color:var(--muted);font-family:var(--mono);white-space:nowrap}
+.dz-sp{flex:1 1 auto;min-width:0}
+.dz-body{display:grid;grid-template-columns:226px minmax(0,1fr) var(--dz-inspector-w,500px);
+  flex:1;min-height:0;position:relative}
+@media (max-width:1440px){.dz-body{grid-template-columns:210px minmax(0,1fr) var(--dz-inspector-w,460px)}}
+@media (max-width:1280px){.dz-body{grid-template-columns:200px minmax(0,1fr) var(--dz-inspector-w,420px)}}
+@media (max-width:1024px){.dz-body{grid-template-columns:180px minmax(0,1fr) var(--dz-inspector-w,360px)}}
+/* Resize handle — strip overlaid on the border between canvas and inspector.
+   Lives in .dz-body (not inside the inspector) so the inspector's overflow
+   scroll doesn't clip it. */
+.dz-resizer{position:absolute;top:0;bottom:0;width:8px;cursor:col-resize;
+  user-select:none;z-index:6;background:transparent;touch-action:none;
+  right:calc(var(--dz-inspector-w,500px) - 4px)}
+@media (max-width:1440px){.dz-resizer{right:calc(var(--dz-inspector-w,460px) - 4px)}}
+@media (max-width:1280px){.dz-resizer{right:calc(var(--dz-inspector-w,420px) - 4px)}}
+@media (max-width:1024px){.dz-resizer{right:calc(var(--dz-inspector-w,360px) - 4px)}}
+.dz-resizer::before{content:'';position:absolute;left:3px;top:0;bottom:0;width:2px;
+  background:transparent;transition:background .12s}
+.dz-resizer:hover::before,.dz-resizer.dragging::before{background:var(--accent)}
+.dz-resizer::after{content:'⋮⋮';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  color:var(--border2);font-size:12px;letter-spacing:-3px;opacity:0;transition:opacity .12s;
+  white-space:nowrap}
+.dz-resizer:hover::after,.dz-resizer.dragging::after{opacity:1;color:var(--accent)}
+body.dz-resizing{cursor:col-resize!important;user-select:none}
+body.dz-resizing *{cursor:col-resize!important}
+.dz-body > *{min-width:0;min-height:0}
+.dz-palette{border-right:1px solid var(--border);overflow-y:auto;padding:10px}
+.dz-search{width:100%;background:var(--panel3);border:1px solid var(--border);color:var(--text);
+  padding:8px 10px;border-radius:7px;font-size:12.5px;font-family:inherit;margin-bottom:4px}
+.dz-search:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,194,166,.15)}
+.dz-pal-grp{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);font-weight:700;margin:14px 0 5px}
+.dz-pal-item{display:flex;align-items:center;gap:9px;width:100%;background:0;border:0;color:var(--text);
+  padding:6px 7px;border-radius:7px;cursor:pointer;font-family:inherit;font-size:12.5px;text-align:left}
+.dz-pal-item:hover{background:var(--panel2)}
+.dz-pal-ic,.fnode-ic{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;
+  color:#fff;font-size:10px;font-weight:700;flex:0 0 auto}
+/* Wrapper that hosts the scroll container AND the overlays (zoom toolbar,
+   minimap, pan hint). Overlays sit at this layer so they stay anchored as
+   the user scrolls the canvas. */
+.dz-canvas-wrap{position:relative;min-width:0;min-height:0;display:flex;flex-direction:column}
+.dz-canvas-wrap > .dz-canvas{flex:1;min-height:0}
+.dz-canvas{overflow:auto;background:var(--bg);position:relative;
+  background-image:radial-gradient(var(--border) 1px,transparent 0);background-size:22px 22px}
+.dz-canvas-sizer{position:relative;min-width:100%;min-height:100%}
+.dz-canvas-inner{position:relative;min-width:100%;min-height:100%}
+/* Zoom toolbar — bottom-right floating pill */
+.dz-zoom{position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:2px;
+  background:var(--panel);border:1px solid var(--border2);border-radius:8px;padding:3px;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);z-index:20;font-family:inherit}
+.dz-zoom-btn{background:transparent;border:0;color:var(--text);cursor:pointer;
+  width:28px;height:28px;border-radius:5px;font-size:14px;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;padding:0}
+.dz-zoom-btn.wide{width:auto;padding:0 9px;font-size:12px;font-weight:500}
+.dz-zoom-btn:hover{background:var(--panel2);color:var(--accent)}
+.dz-zoom-pct{background:transparent;border:0;color:var(--muted);cursor:pointer;
+  min-width:48px;height:28px;border-radius:5px;font-family:var(--mono);font-size:11.5px;padding:0 6px}
+.dz-zoom-pct:hover{background:var(--panel2);color:var(--text)}
+.dz-zoom-div{width:1px;height:18px;background:var(--border);margin:0 4px}
+/* Minimap — bottom-left floating overview */
+.dz-minimap{position:absolute;left:14px;bottom:14px;background:rgba(13,17,23,.85);
+  border:1px solid var(--border2);border-radius:7px;z-index:20;cursor:crosshair;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);overflow:hidden;backdrop-filter:blur(4px)}
+.dz-minimap-node{position:absolute;background:var(--accent);border-radius:1px;opacity:.7;
+  pointer-events:none}
+.dz-minimap-node.sel{background:var(--warn);opacity:1;box-shadow:0 0 4px rgba(240,160,32,.8)}
+.dz-minimap-vp{position:absolute;border:1.5px solid var(--accent);background:rgba(24,194,166,.08);
+  border-radius:2px;pointer-events:none}
+/* Pan hint shown while space is held */
+.dz-pan-hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  background:rgba(13,17,23,.9);border:1px solid var(--accent);color:var(--accent);
+  padding:5px 12px;border-radius:6px;font-size:11.5px;font-weight:600;font-family:var(--mono);
+  z-index:20;letter-spacing:.5px;pointer-events:none;animation:popcenter .15s ease}
+.dz-wires{position:absolute;left:0;top:0;overflow:visible}
+.dz-wire-g{pointer-events:auto}
+.dz-wire{fill:none;stroke:var(--border2);stroke-width:2;pointer-events:none}
+.dz-wire-hit{fill:none;stroke:transparent;stroke-width:14;cursor:pointer}
+.dz-wire-g:hover .dz-wire{stroke:var(--danger);stroke-width:2.5}
+.dz-wire-preview{stroke:var(--accent);stroke-width:2.5;stroke-dasharray:5 4;pointer-events:none;opacity:.85}
+.dz-inspector{border-left:1px solid var(--border);overflow-y:auto;padding:18px 24px}
+.dz-inspector .empty{padding:40px 12px}
+.dz-inspector .field{margin-bottom:13px}
+.dz-inspector .field label{font-size:11.5px;display:inline-flex;align-items:center;gap:4px}
+/* Help tooltip ( ? ) next to field labels. CSS-only hover popover. */
+.helptip{position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:14px;height:14px;border-radius:50%;background:var(--panel2);border:1px solid var(--border);
+  color:var(--muted);font-size:10px;font-weight:700;font-family:var(--mono);cursor:help;
+  user-select:none;line-height:1;flex:0 0 auto;padding:0}
+.helptip:hover,.helptip:focus-visible{color:var(--accent);border-color:var(--accent);outline:0}
+/* Help popover is rendered into a portal at <body> with position: fixed,
+   so the inspector's overflow doesn't clip it. JS computes left/top/width. */
+.helptip-pop{position:fixed;padding:10px 12px;
+  background:var(--panel);border:1px solid var(--border2);border-radius:7px;
+  box-shadow:0 10px 28px rgba(0,0,0,.55);color:var(--text);font-size:12px;font-weight:400;
+  line-height:1.5;z-index:9999;white-space:normal;text-transform:none;letter-spacing:normal;
+  pointer-events:none;animation:helptipIn .12s ease}
+@keyframes helptipIn{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
+.helptip-arrow{position:absolute;width:0;height:0;border:5px solid transparent}
+.helptip-top  .helptip-arrow{top:100%;border-top-color:var(--border2)}
+.helptip-bottom .helptip-arrow{bottom:100%;border-bottom-color:var(--border2)}
+.dz-inspector input[readonly]{background:var(--panel2);color:var(--muted);font-size:12px;cursor:default}
+.field-ro{background:var(--panel2);border:1px solid var(--border2);border-radius:7px;padding:8px 10px;
+  color:var(--muted);font-size:12px;line-height:1.5;word-break:break-word;overflow-wrap:break-word}
+.dz-inspector .section-h{margin-top:14px}
+.dz-foot{display:flex;align-items:center;gap:12px;padding:0 14px;
+  height:48px;border-top:1px solid var(--border);flex:0 0 auto;overflow-x:auto;overflow-y:hidden;
+  scrollbar-width:thin}
+.dz-foot > *{flex:0 0 auto}
+.dz-div{width:1px;height:22px;background:var(--border);margin:0 2px;flex:0 0 auto}
+.dz-status{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);
+  white-space:nowrap;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+
+.fnode{position:absolute;width:188px;background:var(--panel);border:1px solid var(--border2);
+  border-radius:10px;cursor:grab;box-shadow:0 6px 18px rgba(0,0,0,.32);user-select:none}
+.fnode:hover{border-color:var(--border2)}
+.fnode:active{cursor:grabbing}
+.fnode.sel{border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,194,166,.22),0 8px 22px rgba(0,0,0,.42)}
+.fnode.fnode-err{border-color:var(--danger);box-shadow:0 0 0 1px rgba(220,80,80,.3),0 6px 18px rgba(0,0,0,.32)}
+.fnode.fnode-err.sel{box-shadow:0 0 0 3px rgba(220,80,80,.35),0 8px 22px rgba(0,0,0,.42)}
+.fnode.fnode-warn{border-color:var(--warn)}
+.fnode.fnode-warn.sel{box-shadow:0 0 0 3px rgba(240,160,32,.25),0 8px 22px rgba(0,0,0,.42)}
+.fnode-h{display:flex;align-items:center;gap:8px;padding:9px 10px}
+.fnode-meta{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.fnode-title{font-size:12.5px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fnode-type{font-size:10px;color:var(--muted)}
+.fnode-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);flex:0 0 auto;box-shadow:0 0 6px rgba(63,185,80,.6)}
+.fnode-kebab{flex:0 0 auto;width:22px;height:22px;border:0;background:transparent;color:var(--muted);
+  border-radius:4px;cursor:pointer;font-size:14px;line-height:1;margin-left:4px;opacity:0;transition:opacity .12s,background .12s}
+.fnode:hover .fnode-kebab,.fnode.sel .fnode-kebab{opacity:1}
+.fnode-kebab:hover{background:var(--panel3);color:var(--text)}
+.fnode-b{padding:7px 10px;border-top:1px solid var(--border);background:var(--panel2);
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);border-radius:0 0 9px 9px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fnode-port{position:absolute;width:11px;height:11px;border-radius:50%;background:var(--panel3);
+  border:1.5px solid var(--border2);top:30px;transition:transform .12s,background .12s,border-color .12s}
+.fnode-port.l{left:-6px}.fnode-port.r{right:-6px;cursor:crosshair}
+.fnode-port:hover{transform:scale(1.35);background:var(--accent);border-color:var(--accent)}
+.fnode-port.l:hover{cursor:cell}
+@media(max-width:1100px){
+  .dz-body{grid-template-columns:1fr}
+  .dz-palette,.dz-inspector{display:none}
+  .dz{height:calc(100vh - 180px)}
+}
+
+/* ---- Custom Code studio (compile · test · deploy) — centered ---- */
+.studio{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:1200px;max-width:calc(100vw - 32px);
+  height:92vh;max-height:92vh;background:var(--panel);border:1px solid var(--border2);border-radius:14px;z-index:75;
+  display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.55);animation:popcenter .15s ease;
+  transition:width .14s ease,height .14s ease,border-radius .14s ease}
+.studio.fullscreen{width:100vw;height:100vh;max-width:100vw;max-height:100vh;border-radius:0;border:0}
+.studio.fullscreen .studio-cm .cm-editor{height:calc(100vh - 240px)}
+.studio header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border)}
+.studio header h3{font-size:15px}
+.studio header .sub{font-size:12px;color:var(--muted)}
+.studio header select{margin-left:auto;background:var(--panel3);border:1px solid var(--border2);color:var(--text);
+  padding:6px 10px;border-radius:7px;font-size:13px;font-family:inherit}
+.studio .x{background:0;border:0;color:var(--muted);cursor:pointer;font-size:18px;
+  display:inline-flex;align-items:center;padding:4px 8px;border-radius:6px;
+  font-family:inherit;line-height:1}
+.studio .x:hover{color:var(--text);background:var(--panel2)}
+.studio-tabs .tabs{margin:0;padding:0 14px}
+.studio-body{padding:16px 18px;overflow-y:auto;flex:1}
+/* CodeMirror editor — code studio */
+.studio-cm-bar{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:11.5px;color:var(--muted)}
+.studio-cm-meta{font-family:var(--mono);font-size:11px;color:var(--faint)}
+.studio-cm-btn{background:var(--panel3);border:1px solid var(--border2);color:var(--muted);
+  font:inherit;font-size:11.5px;cursor:pointer;padding:4px 10px;border-radius:6px;transition:.13s}
+.studio-cm-btn:hover{border-color:var(--accent);color:var(--text)}
+.studio-cm{border:1px solid var(--border2);border-radius:9px;overflow:hidden;background:#0a0d14}
+.studio-cm:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,194,166,.15)}
+.studio-cm .cm-editor{font-family:var(--mono);font-size:13.5px;height:560px;line-height:1.55}
+.studio-cm .cm-scroller{font-family:inherit}
+.studio-cm .cm-gutters{background:#0a0d14;border-right:1px solid var(--border)}
+.studio-cm .cm-activeLineGutter,.studio-cm .cm-activeLine{background:rgba(24,194,166,.05)}
+.hint kbd{background:var(--panel3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;
+  font-family:var(--mono);font-size:10.5px;color:var(--muted);margin:0 1px}
+.studio footer{display:flex;align-items:center;gap:9px;padding:13px 18px;border-top:1px solid var(--border)}
+.studio-stat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.build-steps{display:flex;flex-direction:column;gap:2px;margin:8px 0}
+.build-step{display:flex;align-items:center;gap:11px;padding:8px 10px;border-radius:8px;font-size:13px;color:var(--muted)}
+.build-step.active{color:var(--text);background:var(--panel2)}
+.build-step.done{color:var(--text)}
+.bs-dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;
+  background:var(--panel3);border:1px solid var(--border2);flex:0 0 auto}
+.build-step.done .bs-dot{background:var(--ok);border-color:var(--ok);color:#06121b}
+.build-step.active .bs-dot{background:var(--accent);border-color:var(--accent);color:#06121b}
+
+/* ---- Inline proto editor modal — full-screen code-editor style ---- */
+.proto-editor-back{position:fixed;inset:0;background:rgba(2,5,10,.65);z-index:80;
+  display:grid;place-items:center;backdrop-filter:blur(2px);animation:fadein .12s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.proto-editor{width:min(1300px,calc(100vw - 32px));height:min(900px,calc(100vh - 32px));
+  background:var(--panel);border:1px solid var(--border2);border-radius:14px;
+  display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.55);
+  animation:popcenter .15s ease;overflow:hidden;transition:width .14s ease,height .14s ease,border-radius .14s ease}
+.proto-editor.fullscreen{width:100vw;height:100vh;max-width:100vw;max-height:100vh;
+  border-radius:0;border:0}
+.proto-editor.fullscreen .proto-editor-code{font-size:14.5px;line-height:1.65}
+.proto-editor > header{display:flex;align-items:flex-start;gap:12px;padding:14px 20px;
+  border-bottom:1px solid var(--border)}
+.proto-editor > header h3{font-size:15px;margin:0 0 3px}
+.proto-editor > header .sub{font-size:12px;color:var(--muted)}
+.proto-editor > header .x{background:0;border:0;color:var(--muted);
+  cursor:pointer;font-size:18px;padding:4px 8px;border-radius:6px;
+  display:inline-flex;align-items:center;font-family:inherit;line-height:1}
+.proto-editor > header .x:hover{color:var(--text);background:var(--panel2)}
+/* Fullscreen toggle gets the auto-margin; close button hugs it. */
+.proto-editor > header .x:first-of-type{margin-left:auto}
+.proto-editor-body{flex:1;display:flex;flex-direction:column;min-height:0;padding:14px 18px;gap:14px}
+.proto-editor-meta{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
+.proto-editor-meta .field{margin:0;min-width:160px}
+.proto-editor-meta .field input{width:100%}
+.proto-editor-split{display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;min-height:0}
+.proto-editor-pane{display:flex;flex-direction:column;background:var(--panel2);
+  border:1px solid var(--border);border-radius:9px;overflow:hidden;min-height:0}
+.proto-editor-pane-h{display:flex;align-items:center;justify-content:space-between;
+  padding:9px 12px;border-bottom:1px solid var(--border);font-size:11px;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--faint);font-weight:700;
+  background:var(--panel3)}
+.proto-editor-code{flex:1;width:100%;background:#0a0d14;border:0;color:var(--text);
+  padding:14px 16px;font-family:var(--mono);font-size:13.5px;line-height:1.6;resize:none;
+  outline:0;white-space:pre;overflow:auto;tab-size:2}
+.proto-editor-code:focus{box-shadow:inset 0 0 0 2px rgba(24,194,166,.25)}
+.proto-editor-preview{flex:1;overflow-y:auto;padding:12px 14px}
+.proto-svc{margin-bottom:14px;background:var(--panel3);border:1px solid var(--border);
+  border-radius:7px;padding:10px 12px}
+.proto-svc-h{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.proto-svc-name{font-weight:700;color:var(--accent);font-family:var(--mono);font-size:13px}
+.proto-method{display:flex;align-items:center;gap:10px;padding:5px 4px;font-size:12.5px}
+.proto-method-name{font-family:var(--mono);font-weight:600;color:var(--text);min-width:80px}
+.proto-method-arrow{color:var(--muted);font-size:11px;min-width:80px}
+.proto-msgs{margin-top:10px}
+.proto-msgs-h{font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--faint);font-weight:700;margin-bottom:7px}
+.proto-msg{display:flex;gap:12px;padding:5px 8px;font-size:12px;align-items:baseline}
+.proto-msg-name{font-family:var(--mono);font-weight:600;color:var(--text);min-width:110px}
+.proto-msg-fields{color:var(--muted);font-size:11px}
+.proto-editor-foot{display:flex;align-items:center;gap:12px;padding:12px 20px;
+  border-top:1px solid var(--border);background:var(--panel)}
+.proto-editor-foot .hint{flex:1;max-width:60%}
+@media (max-width:1100px){
+  .proto-editor-split{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+}
+
+/* ---- Centered confirm popup (alertdialog) ---- */
+.confirm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(440px,calc(100vw - 32px));background:var(--panel);
+  border:1px solid var(--border2);border-radius:12px;
+  box-shadow:0 30px 80px rgba(0,0,0,.55);z-index:75;padding:22px 24px;
+  animation:popcenter .14s ease}
+@keyframes popcenter{from{opacity:0;transform:translate(-50%,-46%)}to{opacity:1;transform:translate(-50%,-50%)}}
+.confirm h3{font-size:16px;margin-bottom:6px}
+.confirm .cf-sub{color:var(--muted);font-size:13px;margin-bottom:14px;line-height:1.5}
+.confirm .note{margin-top:0}
+.confirm footer{display:flex;gap:9px;justify-content:flex-end;margin-top:18px}
+
+/* ---- Splash / loading gate (mock-API fetch) ---- */
+.splash{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);z-index:200}
+.splash-box{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding:32px}
+.splash-sub{color:var(--muted);font-size:13px}
+.splash-err{color:var(--danger);font-weight:600;font-size:14px}
+.splash .splash-sub.mono{max-width:420px;word-break:break-word;font-size:12px;color:var(--faint)}
+.spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--border2);
+  border-top-color:var(--accent);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---- Interactive breadcrumb scope picker (Org / Workspace / Collection) ---- */
+.crumb-scope{display:inline-flex;align-items:center;flex-wrap:wrap}
+.crumb-sep{color:var(--faint);margin:0 3px}
+.crumb-extra{color:var(--text);padding:0 4px}
+.crumbdrop{position:relative;display:inline-flex}
+.crumb-seg{display:inline-flex;align-items:center;gap:5px;background:0;border:1px solid transparent;
+  color:var(--muted);font:inherit;font-size:12px;font-weight:600;cursor:pointer;
+  padding:2px 6px;border-radius:6px;transition:.13s}
+.crumb-seg:hover{background:var(--panel3);color:var(--text)}
+.crumb-seg.open{background:var(--panel3);color:var(--text);border-color:var(--border2)}
+.cd-ic{font-size:11px;opacity:.85}
+.cd-chev{font-size:8px;opacity:.7}
+.crumbmenu{position:absolute;top:calc(100% + 5px);left:0;min-width:210px;max-width:300px;max-height:340px;
+  overflow-y:auto;background:var(--panel);border:1px solid var(--border2);border-radius:10px;
+  box-shadow:0 20px 50px rgba(0,0,0,.45);z-index:45;padding:5px;animation:popin .14s ease}
+.cd-item{display:flex;align-items:center;gap:8px;width:100%;background:0;border:0;cursor:pointer;
+  color:var(--text);text-align:left;padding:7px 10px;border-radius:7px;font-size:12.5px;transition:.12s}
+.cd-item:hover{background:var(--panel3)}
+.cd-item.on{background:rgba(24,194,166,.12);box-shadow:inset 2px 0 0 var(--accent)}
+.cd-tick{width:12px;flex:0 0 auto;color:var(--accent);font-size:11px}
+.cd-main{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+.cd-name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd-sub{font-size:10.5px;color:var(--faint);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd-empty{padding:10px;color:var(--faint);font-size:12px;text-align:center}
+
+
+/* topbar Organization switcher (compact ScopeSelect variant) */
+.topbar-sep{width:1px;height:22px;background:var(--border);flex:0 0 auto}
+.scopesel.compact{display:inline-flex}
+.scopesel.compact .scopesel-btn{width:auto;padding:5px 9px;background:var(--panel2);border-radius:8px}
+.scopesel.compact .scopesel-btn:hover{background:var(--panel3);border-color:var(--border2)}
+.scopesel.compact .scopesel-av{width:22px;height:22px;font-size:11px}
+.scopesel.compact .scopesel-menu{left:0;right:auto;min-width:240px}
+
+
+/* ---- single-file additions: CodeMirror <textarea> stub ---- */
+.cm-stub{background:#0b0f17;color:#cdd6f4;border:0;outline:0;resize:vertical;
+  padding:12px 14px;font-size:12.5px;line-height:1.6;tab-size:2;box-sizing:border-box;border-radius:0 0 10px 10px;}
+
+/* ---- bootstrap splash shown until Babel compiles + mounts the app ---- */
+#boot{position:fixed;inset:0;display:grid;place-items:center;background:#0b0f17;color:#9aa4b2;font:14px system-ui;z-index:9999}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="boot">Loading prototype…</div>
+
+  <!-- ============================================================= -->
+  <!--  👇  EDIT YOUR UI HERE  👇                                      -->
+  <!--  Everything below is plain, editable React (JSX). It is compiled -->
+  <!--  in the browser by the vendored Babel above — just edit & reload.-->
+  <!--  Inlined design system = the <style> block; mock data = __DB_SEED__.-->
+  <!-- ============================================================= -->
+  <script type="text/babel" data-presets="react">
+
+/* ---- React / Router globals (provided by the vendored UMD bundles above) ---- */
+const { createContext, forwardRef, lazy, Suspense, useCallback, useContext,
+        useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef,
+        useState } = React;
+const { createPortal } = ReactDOM;
+const { Routes, Route, Navigate, useLocation, useNavigate, useParams,
+        NavLink, Link, Outlet } = ReactRouterDOM;
+/* file:// can't use the History API → route on the URL hash */
+const BrowserRouter = ReactRouterDOM.HashRouter;
+
+/* ---- inlined mock DB (was public/mock/db.json, fetched at ~320ms).
+        Edit __DB_SEED__ to change the demo data. ---- */
+const __DB_SEED__ = {
+  "orgs": [
+    { "id": "acme", "name": "Acme Corp", "initial": "A", "plan": "Enterprise", "slug": "acme",
+      "owner": "ada@acme.io", "idp": "Okta", "domains": ["acme.io", "acme.dev"],
+      "billingEmail": "billing@acme.io", "budget": 9000 },
+    { "id": "globex", "name": "Globex Inc", "initial": "G", "plan": "Team", "slug": "globex",
+      "owner": "hank@globex.com", "idp": "Azure AD", "domains": ["globex.com"],
+      "billingEmail": "ap@globex.com", "budget": 2000 }
+  ],
+  "collectionTrees": {
+    "payments": [
+      { "p": "/checkout", "name": "checkout", "owner": "grace@acme.io", "desc": "Customer-facing checkout & payment flows.", "children": [
+        { "p": "/checkout/web", "name": "web", "owner": "grace@acme.io", "desc": "Web storefront checkout." },
+        { "p": "/checkout/mobile", "name": "mobile", "owner": "mei@acme.io", "desc": "Mobile app checkout." }
+      ] },
+      { "p": "/risk", "name": "risk", "owner": "ada@acme.io", "desc": "Fraud detection & risk scoring." },
+      { "p": "/batch", "name": "batch", "owner": "lin@acme.io", "desc": "Scheduled reconciliation & batch jobs." }
+    ],
+    "core": [
+      { "p": "/identity", "name": "identity", "owner": "grace@acme.io", "desc": "Authentication & identity services." },
+      { "p": "/notifications", "name": "notifications", "owner": "lin@acme.io", "desc": "Outbound email, webhook & push notifications." }
+    ],
+    "data": [
+      { "p": "/ingestion", "name": "ingestion", "owner": "ada@acme.io", "desc": "Streaming & batch data ingestion pipelines." },
+      { "p": "/reporting", "name": "reporting", "owner": "ada@acme.io", "desc": "Scheduled analytical reports." }
+    ],
+    "internal": [{ "p": "/tooling", "name": "tooling", "owner": "hank@globex.com", "desc": "Internal automation & tooling." }],
+    "partners": [{ "p": "/inbound", "name": "inbound", "owner": "dwayne@globex.com", "desc": "Partner inbound integrations." }]
+  },
+  "designerFlow": [
+    { "id": "n1", "kind": "httptrigger", "title": "HTTP Trigger", "body": "GET ?pnfl=", "x": 70, "y": 230 },
+    { "id": "n2", "kind": "httpreq", "title": "ABS get-customer", "body": "GET ${API_BASE_URL}/abs-proxy/customer", "x": 380, "y": 110 },
+    { "id": "n3", "kind": "httpreq", "title": "i-Hamkor salary", "body": "POST ${API_BASE_URL}/integrations/salary", "x": 380, "y": 350 },
+    { "id": "n4", "kind": "merge", "title": "Merge results", "body": "Deep merge", "x": 700, "y": 230 },
+    { "id": "n5", "kind": "return", "title": "Return 200", "body": "{{merge1.output}}", "x": 1000, "y": 230 }
+  ],
+  "designerWires": [["n1", "n2"], ["n1", "n3"], ["n2", "n4"], ["n3", "n4"], ["n4", "n5"]],
+  "flows": [
+    { "id": "f1", "Workspace": "payments", "Collection": "/checkout/web", "Flow": "payments-api", "Trigger": "HTTP", "Method": "POST", "Path": "/checkout", "Adapter": "HTTP REST", "RouteGroup": "payments-public", "Nodes": "7 · 2 container", "Plan": "v42", "State": "live", "p95": "86ms", "env": [{ "k": "API_BASE_URL", "v": "https://api.acme.io/v2" }, { "k": "DB_HOST", "v": "payments-db.prod.acme.io" }, { "k": "MAX_RETRY", "v": "3" }], "secrets": [{ "Name": "STRIPE_API_KEY", "Prefix": "sk_live_8f3c…", "Status": "active", "Created": "2026-01-15", "Rotated": "2026-03-20", "Expiry": "365d" }, { "Name": "TWILIO_AUTH_TOKEN", "Prefix": "tw_4a17…", "Status": "active", "Created": "2025-12-01", "Rotated": "—", "Expiry": "never" }] },
+    { "id": "f2", "Workspace": "payments", "Collection": "/checkout/mobile", "Flow": "mobile-checkout", "Trigger": "HTTP", "Method": "POST", "Path": "/checkout/mobile", "Adapter": "HTTP REST", "RouteGroup": "payments-public", "Nodes": "6 · 1 container", "Plan": "v12", "State": "live", "p95": "94ms", "env": [{ "k": "API_BASE_URL", "v": "https://api.acme.io/v2" }, { "k": "DB_HOST", "v": "payments-db.checkout.acme.io" }, { "k": "TIMEOUT_MS", "v": "5000" }], "secrets": [{ "Name": "STRIPE_API_KEY", "Prefix": "sk_live_8f3c…", "Status": "active", "Created": "2026-01-15", "Rotated": "2026-03-20", "Expiry": "365d" }] },
+    { "id": "f3", "Workspace": "payments", "Collection": "/checkout", "Flow": "refund-processor", "Trigger": "HTTP", "Method": "POST", "Path": "/refunds", "Adapter": "HTTP REST", "RouteGroup": "payments-public", "Nodes": "5 inline", "Plan": "v7", "State": "live", "p95": "61ms", "env": [{ "k": "DB_HOST", "v": "payments-db.checkout.acme.io" }, { "k": "API_BASE_URL", "v": "https://api.acme.io/v2" }], "secrets": [{ "Name": "STRIPE_API_KEY", "Prefix": "sk_live_8f3c…", "Status": "active", "Created": "2026-01-15", "Rotated": "2026-03-20", "Expiry": "365d" }] },
+    { "id": "f4", "Workspace": "payments", "Collection": "/risk", "Flow": "fraud-score", "Trigger": "Kafka", "Nodes": "5 · 1 container", "Plan": "v18", "State": "degraded", "p95": "240ms", "env": [{ "k": "DB_HOST", "v": "payments-db.prod.acme.io" }, { "k": "MODEL_VERSION", "v": "v3.2" }, { "k": "MAX_RETRY", "v": "3" }], "secrets": [{ "Name": "FRAUD_API_KEY", "Prefix": "fr_c2e0…", "Status": "active", "Created": "2026-02-20", "Rotated": "—", "Expiry": "180d" }] },
+    { "id": "f5", "Workspace": "payments", "Collection": "/batch", "Flow": "nightly-recon", "Trigger": "Timer", "Nodes": "6 · 1 container", "Plan": "v3", "State": "scaled to 0", "p95": "—", "env": [{ "k": "API_BASE_URL", "v": "https://api.acme.io/v2" }, { "k": "DB_HOST", "v": "payments-db.prod.acme.io" }], "secrets": [] },
+    { "id": "f6", "Workspace": "core", "Collection": "/identity", "Flow": "auth-service", "Trigger": "HTTP", "Method": "POST", "Path": "/auth/token", "Adapter": "HTTP REST", "RouteGroup": "core-api", "Nodes": "8 · 1 container", "Plan": "v31", "State": "live", "p95": "44ms", "env": [{ "k": "TOKEN_TTL_S", "v": "3600" }, { "k": "ISSUER", "v": "acme-auth" }], "secrets": [{ "Name": "JWT_SIGNING_KEY", "Prefix": "jwt_a4e1…", "Status": "active", "Created": "2025-11-02", "Rotated": "—", "Expiry": "365d" }] },
+    { "id": "f7", "Workspace": "core", "Collection": "/notifications", "Flow": "webhook-fanout", "Trigger": "Webhook", "Method": "POST", "Path": "/hooks/inbound", "Adapter": "Webhook", "RouteGroup": "core-api", "Nodes": "4 inline", "Plan": "v9", "State": "degraded", "p95": "54ms", "env": [{ "k": "NOTIFICATION_TOPIC", "v": "core.notifications.v1" }], "secrets": [] },
+    { "id": "f8", "Workspace": "core", "Collection": "/notifications", "Flow": "email-digest", "Trigger": "Timer", "Nodes": "5 · 1 container", "Plan": "v6", "State": "live", "p95": "120ms", "env": [{ "k": "SMTP_HOST", "v": "smtp.acme.io" }, { "k": "SMTP_PORT", "v": "587" }], "secrets": [{ "Name": "SENDGRID_KEY", "Prefix": "sg_7b9a…", "Status": "active", "Created": "2025-11-10", "Rotated": "2026-04-01", "Expiry": "365d" }] },
+    { "id": "f9", "Workspace": "data", "Collection": "/ingestion", "Flow": "etl-pipeline", "Trigger": "Kafka", "Nodes": "9 · 3 container", "Plan": "v22", "State": "live", "p95": "310ms", "env": [{ "k": "KAFKA_BROKERS", "v": "kafka-1.acme.io:9092,kafka-2.acme.io:9092" }, { "k": "S3_BUCKET", "v": "acme-data-warehouse" }], "secrets": [{ "Name": "AWS_ACCESS_KEY", "Prefix": "AKIA_d4f1…", "Status": "active", "Created": "2025-10-22", "Rotated": "—", "Expiry": "never" }, { "Name": "S3_SECRET_KEY", "Prefix": "sk_e8b3…", "Status": "active", "Created": "2025-10-22", "Rotated": "—", "Expiry": "never" }] },
+    { "id": "f10", "Workspace": "data", "Collection": "/reporting", "Flow": "daily-report", "Trigger": "Timer", "Nodes": "4 · 1 container", "Plan": "v5", "State": "scaled to 0", "p95": "—", "env": [{ "k": "S3_BUCKET", "v": "acme-data-warehouse" }, { "k": "REPORT_PREFIX", "v": "reports/daily/" }], "secrets": [{ "Name": "AWS_ACCESS_KEY", "Prefix": "AKIA_d4f1…", "Status": "active", "Created": "2025-10-22", "Rotated": "—", "Expiry": "never" }] },
+    { "id": "f11", "Workspace": "internal", "Collection": "/tooling", "Flow": "asset-sync", "Trigger": "Timer", "Nodes": "3 inline", "Plan": "v2", "State": "live", "p95": "30ms", "env": [{ "k": "ASSET_BASE_URL", "v": "https://cdn.acme.io" }], "secrets": [] },
+    { "id": "f12", "Workspace": "partners", "Collection": "/inbound", "Flow": "partner-inbound", "Trigger": "Webhook", "Method": "POST", "Path": "/inbound", "Adapter": "Webhook", "RouteGroup": "partner-webhooks", "Nodes": "5 · 1 container", "Plan": "v4", "State": "live", "p95": "78ms", "env": [{ "k": "PARTNER_API_URL", "v": "https://partners.acme.io/v1" }], "secrets": [{ "Name": "PARTNER_HMAC_KEY", "Prefix": "hmac_b2c8…", "Status": "active", "Created": "2026-02-01", "Rotated": "—", "Expiry": "never" }] }
+  ],
+  "functions": [
+    { "id": "fn1", "Workspace": "payments", "Flow": "payments-api", "Function": "risk-score", "Image": "risk-score@sha256:9f3c…", "Runtime/FDK": "Docker · fdk-go", "Mem": "256M", "Memory": 256, "Timeout": "30s", "TimeoutSec": 30, "IdleTimeoutSec": 30, "Format": "http-stream", "Status": "warm", "Config": [{ "k": "MODEL", "v": "v3.2" }, { "k": "THRESHOLD", "v": "0.78" }], "secrets": [],
+      "scaling": {
+        "minReplicaCount": 1, "maxReplicaCount": 12,
+        "cooldownPeriod": 120, "pollingInterval": 5,
+        "triggers": [
+          { "type": "prometheus", "name": "pending-invocations", "query": "sum(flow_pending_invocations{fn=\"payments-api/risk-score\"})", "threshold": "20" },
+          { "type": "prometheus", "name": "concurrency-saturation", "query": "avg(runner_concurrency_used / runner_concurrency_max)", "threshold": "0.7" }
+        ],
+        "behavior": {
+          "scaleUp":   { "stabilizationWindowSeconds": 0,   "percent": 200, "periodSeconds": 15 },
+          "scaleDown": { "stabilizationWindowSeconds": 120, "percent": 25,  "periodSeconds": 60 }
+        }
+      } },
+    { "id": "fn2", "Workspace": "payments", "Flow": "fraud-score", "Function": "fraud-model", "Image": "fraud-model@sha256:4a17…", "Runtime/FDK": "Firecracker · fdk-py", "Mem": "512M", "Memory": 512, "Timeout": "60s", "TimeoutSec": 60, "IdleTimeoutSec": 60, "Format": "http-stream", "Status": "scaling 1→8", "Config": [{ "k": "MAX_BATCH", "v": "32" }], "secrets": [],
+      "scaling": {
+        "minReplicaCount": 1, "maxReplicaCount": 20,
+        "cooldownPeriod": 180, "pollingInterval": 5,
+        "triggers": [
+          { "type": "kafka", "name": "broker-lag", "topic": "fn.fraud-score.fraud-model", "lagThreshold": "100" }
+        ],
+        "behavior": {
+          "scaleUp":   { "stabilizationWindowSeconds": 0,   "percent": 200, "periodSeconds": 15 },
+          "scaleDown": { "stabilizationWindowSeconds": 180, "percent": 25,  "periodSeconds": 60 }
+        }
+      } },
+    { "id": "fn3", "Workspace": "data", "Flow": "etl-pipeline", "Function": "pdf-render", "Image": "pdf-render@sha256:c2e0…", "Runtime/FDK": "Docker · fdk-node", "Mem": "1G", "Memory": 1024, "Timeout": "120s", "TimeoutSec": 120, "IdleTimeoutSec": 120, "Format": "http-stream", "Status": "scaled to 0", "Config": [], "secrets": [],
+      "scaling": {
+        "minReplicaCount": 0, "maxReplicaCount": 4,
+        "cooldownPeriod": 300, "pollingInterval": 10,
+        "triggers": [
+          { "type": "prometheus", "name": "pending-invocations", "query": "sum(flow_pending_invocations{fn=\"etl-pipeline/pdf-render\"})", "threshold": "5" }
+        ],
+        "behavior": {
+          "scaleUp":   { "stabilizationWindowSeconds": 0,   "percent": 100, "periodSeconds": 30 },
+          "scaleDown": { "stabilizationWindowSeconds": 300, "percent": 50,  "periodSeconds": 60 }
+        }
+      } },
+    { "id": "fn4", "Workspace": "core", "Flow": "webhook-fanout", "Function": "fanout-worker", "Image": "fanout-worker@sha256:7b9…", "Runtime/FDK": "Docker · fdk-node", "Mem": "256M", "Memory": 256, "Timeout": "30s", "TimeoutSec": 30, "IdleTimeoutSec": 30, "Format": "http-stream", "Status": "warm", "Config": [{ "k": "FANOUT_RPS", "v": "200" }], "secrets": [],
+      "scaling": {
+        "minReplicaCount": 2, "maxReplicaCount": 50,
+        "cooldownPeriod": 90, "pollingInterval": 5,
+        "triggers": [
+          { "type": "prometheus", "name": "rps", "query": "rate(http_requests_total{flow=\"webhook-fanout\"}[1m])", "threshold": "200" },
+          { "type": "cpu", "name": "cpu-utilization", "value": "70" }
+        ],
+        "behavior": {
+          "scaleUp":   { "stabilizationWindowSeconds": 0,   "percent": 300, "periodSeconds": 15 },
+          "scaleDown": { "stabilizationWindowSeconds": 90,  "percent": 25,  "periodSeconds": 60 }
+        }
+      } }
+  ],
+  "users": [
+    { "id": "ada", "User": "Ada Lovelace", "Email": "ada@acme.io", "Status": "active", "Role": "Owner", "Scope": "Org", "MFA": "on", "SSO": "OIDC", "Last active": "2m ago", "title": "Principal Engineer" },
+    { "id": "grace", "User": "Grace Hopper", "Email": "grace@acme.io", "Status": "active", "Role": "Admin", "Scope": "WS payments", "MFA": "on", "SSO": "SAML", "Last active": "1h ago", "title": "Eng Manager" },
+    { "id": "alan", "User": "Alan Turing", "Email": "alan@acme.io", "Status": "active", "Role": "Developer", "Scope": "Collection /payments/prod", "MFA": "on", "SSO": "OIDC", "Last active": "3h ago", "title": "Staff Engineer" },
+    { "id": "edsger", "User": "Edsger D.", "Email": "edsger@acme.io", "Status": "invited", "Role": "Viewer", "Scope": "WS data", "MFA": "—", "SSO": "OIDC", "Last active": "—", "title": "Analyst" },
+    { "id": "kj", "User": "Katherine J.", "Email": "kj@acme.io", "Status": "suspended", "Role": "Operator", "Scope": "WS core", "MFA": "on", "SSO": "SAML", "Last active": "20d ago", "title": "SRE" }
+  ],
+  "serviceAccounts": [
+    { "id": "sv1", "Service account": "ci-deployer", "Workspace": "payments", "Role": "Operator", "Auth": "API key · deploy", "Created": "2026-01-12", "Last used": "5m ago", "Status": "active" },
+    { "id": "sv2", "Service account": "billing-bot", "Workspace": "org", "Role": "Billing", "Auth": "API key", "Created": "2025-12-01", "Last used": "1d ago", "Status": "active" },
+    { "id": "sv3", "Service account": "metrics-reader", "Workspace": "core", "Role": "Viewer", "Auth": "API key · read", "Created": "2026-02-20", "Last used": "3h ago", "Status": "active" }
+  ],
+  "invitations": [
+    { "id": "iv1", "Email": "edsger@acme.io", "Scope": "WS data", "Role": "Viewer", "Invited by": "ada@acme.io", "Sent": "2d ago", "Status": "invited" },
+    { "id": "iv2", "Email": "margaret@acme.io", "Scope": "Collection /core/api", "Role": "Developer", "Invited by": "grace@acme.io", "Sent": "6d ago", "Status": "expired" }
+  ],
+  "grants": [
+    { "id": "g1", "userId": "ada", "Scope": "Org: Acme Corp", "Role": "Owner", "Granted by": "system", "Granted": "2025-11-02", "Status": "active" },
+    { "id": "g2", "userId": "ada", "Scope": "WS: core", "Role": "Admin", "Granted by": "system", "Granted": "2025-11-02", "Status": "active" },
+    { "id": "g3", "userId": "grace", "Scope": "WS: payments", "Role": "Admin", "Granted by": "ada@acme.io", "Granted": "2026-01-08", "Status": "active" },
+    { "id": "g4", "userId": "alan", "Scope": "Collection: /checkout", "Role": "Developer", "Granted by": "grace@acme.io", "Granted": "2026-03-15", "Status": "active" }
+  ],
+  "apiKeys": [
+    { "id": "k1", "Workspace": "payments", "Name": "ci-deployer", "Prefix": "evd_ci_8f…", "Scopes": "deploy, read", "Rate limit": "200 rps · b400 · c50", "Status": "active", "Expires": "90d" },
+    { "id": "k2", "Workspace": "payments", "Name": "partner-acme", "Prefix": "evd_pk_2a…", "Scopes": "invoke", "Rate limit": "50 rps · b100 · c20", "Status": "active", "Expires": "—" },
+    { "id": "k3", "Workspace": "core", "Name": "legacy-cron", "Prefix": "evd_pk_d1…", "Scopes": "invoke", "Rate limit": "10 rps · b20 · c5", "Status": "revoked", "Expires": "—" }
+  ],
+  "routeGroups": [
+    { "id": "r1", "Workspace": "payments", "Name": "payments-public", "Path namespace": "/payments", "Policy": "API key + 200rps + IP-allow", "Scaling shard": "dedicated", "Status": "reconciled" },
+    { "id": "r2", "Workspace": "core", "Name": "core-api", "Path namespace": "/core", "Policy": "API key + 200rps", "Scaling shard": "shared pool", "Status": "reconciled" },
+    { "id": "r3", "Workspace": "partners", "Name": "partner-webhooks", "Path namespace": "/partners", "Policy": "HMAC + 50rps", "Scaling shard": "shared pool", "Status": "reconciled" }
+  ],
+  "workspaces": [
+    { "id": "w1", "Org": "Acme Corp", "Workspace": "payments", "Env": "prod+staging", "Members": "11", "API keys": "3", "Secrets": "Vault scope", "Collections": "5", "Owner": "grace@acme.io", "Status": "active" },
+    { "id": "w2", "Org": "Acme Corp", "Workspace": "core", "Env": "prod", "Members": "8", "API keys": "2", "Secrets": "Vault scope", "Collections": "2", "Owner": "lin@acme.io", "Status": "active" },
+    { "id": "w3", "Org": "Acme Corp", "Workspace": "data", "Env": "staging", "Members": "5", "API keys": "1", "Secrets": "Vault scope", "Collections": "2", "Owner": "ada@acme.io", "Status": "read-only" },
+    { "id": "w4", "Org": "Globex Inc", "Workspace": "internal", "Env": "prod", "Members": "4", "API keys": "1", "Secrets": "Vault scope", "Collections": "1", "Owner": "hank@globex.com", "Status": "active" },
+    { "id": "w5", "Org": "Globex Inc", "Workspace": "partners", "Env": "staging", "Members": "2", "API keys": "1", "Secrets": "Vault scope", "Collections": "1", "Owner": "dwayne@globex.com", "Status": "read-only" }
+  ],
+  "schedules": [
+    { "id": "s1", "Workspace": "payments", "enabled": true, "Name": "nightly-recon", "Type": "cron", "Spec": "0 2 * * *", "TargetType": "flow", "Target": "nightly-recon", "Flow": "nightly-recon", "Next": "in 4h", "Owner": "replica-2 (leader)", "State": "active" },
+    { "id": "s2", "Workspace": "core", "enabled": true, "Name": "daily-email-digest", "Type": "cron", "Spec": "0 8 * * *", "TargetType": "flow", "Target": "email-digest", "Flow": "email-digest", "Next": "in 6h", "Owner": "replica-2 (leader)", "State": "active" },
+    { "id": "s3", "Workspace": "data", "enabled": false, "Name": "weekly-report", "Type": "one-shot", "Spec": "2026-06-01 09:00Z", "TargetType": "flow", "Target": "daily-report", "Flow": "daily-report", "Next": "paused", "Owner": "replica-2 (leader)", "State": "pending" },
+    { "id": "s4", "Workspace": "payments", "enabled": true, "Name": "fraud-recompute", "Type": "interval", "Spec": "15m", "TargetType": "function", "Target": "fraud-model", "Flow": "—", "Next": "in 8m", "Owner": "replica-1 (leader)", "State": "active" },
+    { "id": "s5", "Workspace": "data", "enabled": true, "Name": "pdf-render-warmup", "Type": "cron", "Spec": "*/30 * * * *", "TargetType": "function", "Target": "pdf-render", "Flow": "—", "Next": "in 22m", "Owner": "replica-1 (leader)", "State": "active" }
+  ],
+  "dlq": [
+    { "id": "d1", "Workspace": "payments", "ExecID": "01HX8…A1", "Flow": "fraud-score", "Node": "risk-score", "Reason": "runner OOM", "Attempts": "2", "Age": "9m" },
+    { "id": "d2", "Workspace": "payments", "ExecID": "01HX8…B7", "Flow": "payments-api", "Node": "http-sink", "Reason": "503 upstream", "Attempts": "3", "Age": "4m" },
+    { "id": "d3", "Workspace": "payments", "ExecID": "01HX8…E2", "Flow": "refund-processor", "Node": "stripe-call", "Reason": "rate-limited", "Attempts": "5", "Age": "32m" },
+    { "id": "d4", "Workspace": "core", "ExecID": "01HX8…C3", "Flow": "webhook-fanout", "Node": "http-sink", "Reason": "timeout", "Attempts": "3", "Age": "2m" },
+    { "id": "d5", "Workspace": "core", "ExecID": "01HX8…D9", "Flow": "auth-service", "Node": "jwt-sign", "Reason": "KMS unavailable", "Attempts": "1", "Age": "47s" },
+    { "id": "d6", "Workspace": "data", "ExecID": "01HX8…F4", "Flow": "etl-pipeline", "Node": "pdf-render", "Reason": "runner OOM", "Attempts": "2", "Age": "11m" },
+    { "id": "d7", "Workspace": "data", "ExecID": "01HX8…G6", "Flow": "daily-report", "Node": "s3-write", "Reason": "AccessDenied", "Attempts": "4", "Age": "1h" },
+    { "id": "d8", "Workspace": "partners", "ExecID": "01HX8…H1", "Flow": "partner-inbound", "Node": "hmac-verify", "Reason": "signature mismatch", "Attempts": "1", "Age": "3m" }
+  ],
+  "deployments": [
+    { "id": "h1", "Workspace": "payments", "Flow": "payments-api", "Version": "v42", "Plan": "PlanSpec", "Author": "ci-deployer", "Trigger": "GitOps", "Started": "12:01Z", "Duration": "4m 12s", "Status": "rolling out" },
+    { "id": "h2", "Workspace": "payments", "Flow": "payments-api", "Version": "v41", "Plan": "PlanSpec", "Author": "grace@acme.io", "Trigger": "manual", "Started": "09:18Z", "Duration": "3m 50s", "Status": "reconciled" },
+    { "id": "h3", "Workspace": "core", "Flow": "auth-service", "Version": "v31", "Plan": "PlanSpec", "Author": "ci-deployer", "Trigger": "GitOps", "Started": "yesterday 17:42Z", "Duration": "4m 22s", "Status": "reconciled" },
+    { "id": "h4", "Workspace": "payments", "Flow": "fraud-score", "Version": "v18", "Plan": "PlanSpec", "Author": "ci-deployer", "Trigger": "GitOps", "Started": "yesterday 11:09Z", "Duration": "5m 04s", "Status": "reconciled" }
+  ],
+  "audit": [
+    { "id": "a1", "agoMin": 25, "Time": "12:01:55Z", "Actor": "ada@acme.io", "Action": "apikey.rate_limit.update", "Target": "partner-acme", "Hash": "a91f…3c2" },
+    { "id": "a2", "agoMin": 160, "Time": "11:58:10Z", "Actor": "ci-deployer", "Action": "deploy.publish", "Target": "payments-api v42", "Hash": "7d0c…b41" },
+    { "id": "a3", "agoMin": 600, "Time": "11:40:02Z", "Actor": "grace@acme.io", "Action": "routegroup.create", "Target": "payments-public", "Hash": "2a55…9e8" },
+    { "id": "a4", "agoMin": 2400, "Time": "yesterday 11:22Z", "Actor": "ada@acme.io", "Action": "flowtap.start", "Target": "payments-api", "Hash": "f3b1…0aa" },
+    { "id": "a5", "agoMin": 7000, "Time": "5d ago 10:11Z", "Actor": "grace@acme.io", "Action": "user.invite", "Target": "edsger@acme.io", "Hash": "b220…4d1" }
+  ],
+  "protos": [
+    {
+      "id": "proto-payments-v3", "Workspace": "payments", "Name": "payments", "Version": "v3",
+      "Ref": "oci://registry/proto/payments@v3",
+      "services": [
+        {
+          "name": "payments.Checkout",
+          "methods": [
+            { "name": "Charge",    "streaming": "unary",            "requestType": "CheckoutRequest", "responseType": "CheckoutResponse" },
+            { "name": "Refund",    "streaming": "unary",            "requestType": "RefundRequest",   "responseType": "RefundResponse"   },
+            { "name": "Subscribe", "streaming": "server-streaming", "requestType": "SubscribeRequest","responseType": "PaymentEvent"     }
+          ]
+        },
+        {
+          "name": "payments.Status",
+          "methods": [
+            { "name": "Stream",  "streaming": "bidi",            "requestType": "StatusReq",    "responseType": "StatusResp" },
+            { "name": "GetOne",  "streaming": "unary",           "requestType": "StatusReq",    "responseType": "StatusResp" }
+          ]
+        }
+      ],
+      "messages": {
+        "CheckoutRequest":  { "amount": "double", "currency": "string", "customer_id": "string", "metadata": "map<string,string>" },
+        "CheckoutResponse": { "transaction_id": "string", "status": "enum(PENDING,APPROVED,DECLINED)", "fee_breakdown": "repeated Fee" },
+        "RefundRequest":    { "transaction_id": "string", "reason": "string" },
+        "RefundResponse":   { "refund_id": "string", "status": "enum(QUEUED,COMPLETED,FAILED)" },
+        "SubscribeRequest": { "customer_id": "string", "since": "google.protobuf.Timestamp" },
+        "PaymentEvent":     { "id": "string", "type": "string", "ts": "google.protobuf.Timestamp", "payload": "google.protobuf.Struct" },
+        "StatusReq":        { "transaction_id": "string" },
+        "StatusResp":       { "status": "string", "ts": "google.protobuf.Timestamp" }
+      }
+    },
+    {
+      "id": "proto-billing-v2", "Workspace": "payments", "Name": "billing", "Version": "v2",
+      "Ref": "oci://registry/proto/billing@v2",
+      "services": [
+        {
+          "name": "billing.Subscription",
+          "methods": [
+            { "name": "Create",  "streaming": "unary", "requestType": "CreateSubReq",  "responseType": "Subscription" },
+            { "name": "Cancel",  "streaming": "unary", "requestType": "CancelSubReq",  "responseType": "Subscription" },
+            { "name": "List",    "streaming": "unary", "requestType": "ListSubReq",    "responseType": "ListSubResp"  }
+          ]
+        }
+      ],
+      "messages": {
+        "CreateSubReq":  { "customer_id": "string", "plan": "string" },
+        "CancelSubReq":  { "subscription_id": "string" },
+        "ListSubReq":    { "customer_id": "string", "limit": "int32" },
+        "Subscription":  { "id": "string", "customer_id": "string", "plan": "string", "status": "enum(ACTIVE,CANCELLED,PAUSED)" },
+        "ListSubResp":   { "items": "repeated Subscription", "next_page": "string" }
+      }
+    },
+    {
+      "id": "proto-notification-v1", "Workspace": "core", "Name": "notification", "Version": "v1",
+      "Ref": "oci://registry/proto/notification@v1",
+      "services": [
+        {
+          "name": "notification.Email",
+          "methods": [
+            { "name": "Send",   "streaming": "unary",            "requestType": "EmailReq",  "responseType": "SendResp" },
+            { "name": "Tail",   "streaming": "server-streaming", "requestType": "TailReq",   "responseType": "EmailEvent" }
+          ]
+        },
+        {
+          "name": "notification.Push",
+          "methods": [
+            { "name": "Send", "streaming": "unary", "requestType": "PushReq", "responseType": "SendResp" }
+          ]
+        }
+      ],
+      "messages": {
+        "EmailReq":   { "to": "repeated string", "subject": "string", "body_html": "string" },
+        "TailReq":    { "since": "google.protobuf.Timestamp" },
+        "EmailEvent": { "message_id": "string", "delivered": "bool", "ts": "google.protobuf.Timestamp" },
+        "PushReq":    { "device_token": "string", "title": "string", "body": "string" },
+        "SendResp":   { "message_id": "string", "queued": "bool" }
+      }
+    },
+    {
+      "id": "proto-etl-v1", "Workspace": "data", "Name": "etl", "Version": "v1",
+      "Ref": "oci://registry/proto/etl@v1",
+      "services": [
+        {
+          "name": "etl.Pipeline",
+          "methods": [
+            { "name": "Trigger",  "streaming": "unary",            "requestType": "TriggerReq",  "responseType": "RunResp" },
+            { "name": "Watch",    "streaming": "server-streaming", "requestType": "WatchReq",    "responseType": "RunEvent" }
+          ]
+        }
+      ],
+      "messages": {
+        "TriggerReq": { "pipeline_id": "string", "params": "google.protobuf.Struct" },
+        "WatchReq":   { "run_id": "string" },
+        "RunResp":    { "run_id": "string", "started_at": "google.protobuf.Timestamp" },
+        "RunEvent":   { "run_id": "string", "stage": "string", "progress": "double" }
+      }
+    },
+    {
+      "id": "proto-middleware-v1", "Workspace": "payments", "Name": "middleware", "Version": "v1",
+      "Ref": "oci://registry/proto/middleware@v1",
+      "description": "HTTP-to-gRPC gateway middleware contracts: auth (JWT/API-key), rate limiting and request enrichment.",
+      "services": [
+        {
+          "name": "middleware.Auth",
+          "methods": [
+            { "name": "ValidateToken",  "streaming": "unary", "requestType": "TokenReq",    "responseType": "TokenResp"   },
+            { "name": "RefreshToken",   "streaming": "unary", "requestType": "RefreshReq",  "responseType": "TokenResp"   },
+            { "name": "RevokeToken",    "streaming": "unary", "requestType": "RevokeReq",   "responseType": "RevokeResp"  }
+          ]
+        },
+        {
+          "name": "middleware.RateLimit",
+          "methods": [
+            { "name": "Check",   "streaming": "unary", "requestType": "RateLimitReq",  "responseType": "RateLimitResp" },
+            { "name": "Reset",   "streaming": "unary", "requestType": "RateLimitReq",  "responseType": "RateLimitResp" }
+          ]
+        },
+        {
+          "name": "middleware.Enricher",
+          "methods": [
+            { "name": "Enrich",  "streaming": "unary",            "requestType": "EnrichReq",  "responseType": "EnrichResp"  },
+            { "name": "Watch",   "streaming": "server-streaming", "requestType": "WatchReq",   "responseType": "EnrichEvent" }
+          ]
+        }
+      ],
+      "messages": {
+        "TokenReq":      { "token": "string", "audience": "string" },
+        "TokenResp":     { "valid": "bool", "subject": "string", "expires_at": "google.protobuf.Timestamp", "claims": "google.protobuf.Struct" },
+        "RefreshReq":    { "refresh_token": "string" },
+        "RevokeReq":     { "token": "string", "reason": "string" },
+        "RevokeResp":    { "revoked": "bool" },
+        "RateLimitReq":  { "key": "string", "limit": "int32", "window_sec": "int32" },
+        "RateLimitResp": { "allowed": "bool", "remaining": "int32", "reset_at": "google.protobuf.Timestamp" },
+        "EnrichReq":     { "request_id": "string", "headers": "map<string,string>", "payload": "google.protobuf.Struct" },
+        "EnrichResp":    { "request_id": "string", "enriched": "google.protobuf.Struct", "latency_ms": "double" },
+        "WatchReq":      { "filter": "string" },
+        "EnrichEvent":   { "request_id": "string", "stage": "string", "ts": "google.protobuf.Timestamp" }
+      }
+    }
+  ],
+  "permissions": [
+    { "id": "flow.read",          "label": "Read flows",            "group": "Flow" },
+    { "id": "flow.create",        "label": "Create flow",           "group": "Flow" },
+    { "id": "flow.update",        "label": "Update flow metadata",  "group": "Flow" },
+    { "id": "flow.deploy",        "label": "Deploy flow",           "group": "Flow" },
+    { "id": "flow.run",           "label": "Run flow (manual)",     "group": "Flow" },
+    { "id": "flow.delete",        "label": "Delete flow",           "group": "Flow" },
+    { "id": "function.read",      "label": "Read functions",        "group": "Function" },
+    { "id": "function.create",    "label": "Create function",       "group": "Function" },
+    { "id": "function.update",    "label": "Update function",       "group": "Function" },
+    { "id": "function.invoke",    "label": "Invoke function",       "group": "Function" },
+    { "id": "function.delete",    "label": "Delete function",       "group": "Function" },
+    { "id": "schedule.read",      "label": "Read schedules",        "group": "Schedule" },
+    { "id": "schedule.create",    "label": "Create schedule",       "group": "Schedule" },
+    { "id": "schedule.update",    "label": "Update schedule",       "group": "Schedule" },
+    { "id": "schedule.delete",    "label": "Delete schedule",       "group": "Schedule" },
+    { "id": "apikey.read",        "label": "Read API keys",         "group": "API key" },
+    { "id": "apikey.create",      "label": "Create API key",        "group": "API key" },
+    { "id": "apikey.revoke",      "label": "Revoke API key",        "group": "API key" },
+    { "id": "routegroup.update",  "label": "Update route group",    "group": "Route group" },
+    { "id": "routegroup.delete",  "label": "Delete route group",    "group": "Route group" },
+    { "id": "secret.read",        "label": "Read secret metadata",  "group": "Secret" },
+    { "id": "secret.rotate",      "label": "Rotate secret",         "group": "Secret" },
+    { "id": "secret.revoke",      "label": "Revoke secret",         "group": "Secret" },
+    { "id": "audit.read",         "label": "Read audit log",        "group": "Audit" },
+    { "id": "audit.export",       "label": "Export audit log",      "group": "Audit" },
+    { "id": "role.read",          "label": "Read roles",            "group": "Role" },
+    { "id": "role.create",        "label": "Create custom role",    "group": "Role" },
+    { "id": "role.update",        "label": "Update custom role",    "group": "Role" },
+    { "id": "role.delete",        "label": "Delete custom role",    "group": "Role" },
+    { "id": "user.invite",        "label": "Invite user",           "group": "User" },
+    { "id": "user.update",        "label": "Update user",           "group": "User" },
+    { "id": "user.suspend",       "label": "Suspend / re-activate", "group": "User" },
+    { "id": "workspace.create",   "label": "Create workspace",      "group": "Workspace" },
+    { "id": "workspace.update",   "label": "Update workspace",      "group": "Workspace" },
+    { "id": "workspace.archive",  "label": "Archive workspace",     "group": "Workspace" }
+  ],
+  "roles": [
+    {
+      "id": "role-owner", "Name": "Owner", "builtin": true,
+      "Description": "Full control across all workspaces — only Owner can manage org policy, billing and other Owners.",
+      "permissions": [
+        "flow.read","flow.create","flow.update","flow.deploy","flow.run","flow.delete",
+        "function.read","function.create","function.update","function.invoke","function.delete",
+        "schedule.read","schedule.create","schedule.update","schedule.delete",
+        "apikey.read","apikey.create","apikey.revoke",
+        "routegroup.update","routegroup.delete",
+        "secret.read","secret.rotate","secret.revoke",
+        "audit.read","audit.export",
+        "role.read","role.create","role.update","role.delete",
+        "user.invite","user.update","user.suspend",
+        "workspace.create","workspace.update","workspace.archive"
+      ]
+    },
+    {
+      "id": "role-admin", "Name": "Admin", "builtin": true,
+      "Description": "Manage workspaces, members, keys, secrets — everything except creating/deleting custom roles and other Admins.",
+      "permissions": [
+        "flow.read","flow.create","flow.update","flow.deploy","flow.run","flow.delete",
+        "function.read","function.create","function.update","function.invoke","function.delete",
+        "schedule.read","schedule.create","schedule.update","schedule.delete",
+        "apikey.read","apikey.create","apikey.revoke",
+        "routegroup.update","routegroup.delete",
+        "secret.read","secret.rotate","secret.revoke",
+        "audit.read","audit.export",
+        "role.read",
+        "user.invite","user.update","user.suspend",
+        "workspace.update","workspace.archive"
+      ]
+    },
+    {
+      "id": "role-developer", "Name": "Developer", "builtin": true,
+      "Description": "Build and ship flows / functions / schedules. No member or workspace admin powers.",
+      "permissions": [
+        "flow.read","flow.create","flow.update","flow.deploy","flow.run",
+        "function.read","function.create","function.update","function.invoke",
+        "schedule.read","schedule.create","schedule.update",
+        "apikey.read",
+        "secret.read",
+        "audit.read",
+        "role.read"
+      ]
+    },
+    {
+      "id": "role-operator", "Name": "Operator", "builtin": true,
+      "Description": "Operate live systems — deploy, run, replay DLQ, rotate secrets. Cannot create / delete flows.",
+      "permissions": [
+        "flow.read","flow.deploy","flow.run",
+        "function.read","function.invoke",
+        "schedule.read","schedule.update",
+        "apikey.read",
+        "secret.read","secret.rotate",
+        "audit.read","audit.export",
+        "role.read"
+      ]
+    },
+    {
+      "id": "role-viewer", "Name": "Viewer", "builtin": true,
+      "Description": "Read-only access across all resources. Cannot mutate anything.",
+      "permissions": [
+        "flow.read","function.read","schedule.read",
+        "apikey.read","secret.read","audit.read","role.read"
+      ]
+    }
+  ],
+  "marketplace": [
+    { "id": "p1", "name": "Stripe connector", "cat": "Payments", "sub": "verified · official", "installs": "12k", "installed": true },
+    { "id": "p2", "name": "OpenAI node", "cat": "AI", "sub": "LLM call · streaming", "installs": "8k", "installed": false },
+    { "id": "p3", "name": "Snowflake sink", "cat": "Data", "sub": "sandboxed · IAM", "installs": "3k", "installed": false },
+    { "id": "p4", "name": "Slack notification", "cat": "Notification", "sub": "incoming webhooks", "installs": "21k", "installed": true },
+    { "id": "p5", "name": "Kafka enrich", "cat": "Data", "sub": "inline transform", "installs": "6k", "installed": false },
+    { "id": "p6", "name": "Twilio SMS", "cat": "Notification", "sub": "send + status", "installs": "9k", "installed": false },
+    { "id": "p7", "name": "Anthropic Claude", "cat": "AI", "sub": "LLM call", "installs": "5k", "installed": false },
+    { "id": "p8", "name": "Postgres outbox", "cat": "Data", "sub": "transactional outbox", "installs": "4k", "installed": true }
+  ]
+};
+const __wait = (ms) => new Promise((r) => setTimeout(r, ms));
+async function loadDb() {
+  await __wait(320);
+  return JSON.parse(JSON.stringify(__DB_SEED__)); // pristine clone per load
+}
+
+/* ---- CodeMirror stub: the editor is replaced by a styled <textarea> so the
+        single-file prototype stays dependency-free. Highlighting is dropped;
+        the write/build/test/deploy flow is otherwise intact. ---- */
+const python = () => [], javascript = () => [], go = null, oneDark = null;
+const StreamLanguage = { define: () => null };
+function CodeMirror({ value, height = '360px', editable = true, onChange }) {
+  return (
+    <textarea
+      className="cm-stub mono"
+      style={{ height, width: '100%' }}
+      spellCheck={false}
+      readOnly={!editable}
+      value={value}
+      onChange={(e) => onChange && onChange(e.target.value)}
+    />
+  );
+}
+
+

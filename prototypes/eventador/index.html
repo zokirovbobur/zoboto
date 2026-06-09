@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>eventador — prototype</title>
+
+  <!-- Design System -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- React 18 + React Router + Babel (CDN) -->
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@remix-run/router@1.19.2/dist/router.umd.min.js"></script>
+  <script src="https://unpkg.com/react-router@6.26.2/dist/umd/react-router.development.js"></script>
+  <script src="https://unpkg.com/react-router-dom@6.26.2/dist/umd/react-router-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- ============================================================ -->
+  <!--  APPLICATION LAYERS — edit these files, not the CDN scripts  -->
+  <!-- ============================================================ -->
+
+  <!-- 1. Libs -->
+  <script type="text/babel" data-type="module" src="js/lib/nodeSchema.js"></script>
+  <script type="text/babel" data-type="module" src="js/lib/functionForm.js"></script>
+  <script type="text/babel" data-type="module" src="js/lib/protoParser.js"></script>
+
+  <!-- 2. Global state & mock DB -->
+  <script type="text/babel" data-type="module" src="js/store.js"></script>
+
+  <!-- 3. UI primitives -->
+  <script type="text/babel" data-type="module" src="js/components/ui.js"></script>
+
+  <!-- 4. Shared components (modals, drawer, canvas, etc.) -->
+  <script type="text/babel" data-type="module" src="js/components/modals.js"></script>
+
+  <!-- 5. Layout shell (sidebar + topbar) -->
+  <script type="text/babel" data-type="module" src="js/components/layout.js"></script>
+
+  <!-- 6. Screens -->
+  <script type="text/babel" data-type="module" src="js/screens/core.js"></script>
+  <script type="text/babel" data-type="module" src="js/screens/more.js"></script>
+
+  <!-- 7. Middleware Proto screen (NEW — separate page) -->
+  <script type="text/babel" data-type="module" src="js/screens/middleware.js"></script>
+
+  <!-- 8. App router + bootstrap -->
+  <script type="text/babel" data-type="module" src="js/app.js"></script>
+</body>
+</html>

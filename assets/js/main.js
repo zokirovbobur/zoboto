@@ -199,6 +199,14 @@ const PROTOTYPES = [
     description: "Concept prototype for a Shariah-compliant digital-banking customer journey."
   },
   {
+    title: "Eventador — Middleware Platform",
+    product: "Trastbank",
+    type: "Internal",
+    status: "Demo",
+    url: "prototypes/eventador/index.html",
+    description: "Enterprise middleware platform prototype — event-driven flow designer, gRPC proto registry, API gateway, deployment pipeline and monitoring. Built to demonstrate Inhouse middleware architecture for banking infrastructure."
+  },
+  {
     title: "Finport — Investment Portfolio",
     product: "Finport",
     type: "External",
