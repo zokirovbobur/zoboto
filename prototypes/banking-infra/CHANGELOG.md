@@ -5,6 +5,15 @@ Path: `prototypes/banking-infra/`
 
 ---
 
+## [2026-06-09] — Comparison Table i18n
+
+### AS-IS vs TO-BE Comparison Table — i18n
+- `COMPARISON_ROWS` converted from static English array to multilingual object (`uz` / `ru` / `en`)
+- `renderComparisonRows()` now reads `COMPARISON_ROWS[L]` — table updates automatically on language switch
+- Applied to both `index.html` (TO-BE) and `joriy-infrastruktura.html` (AS-IS)
+
+---
+
 ## [2026-06-09] — Smart BI Tab
 
 ### DWH & BI Panel — Smart BI Tab

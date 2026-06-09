@@ -5,6 +5,16 @@ Format: `[YYYY-MM-DD] — summary` grouped by date, newest first.
 
 ---
 
+## [2026-06-09] — Comparison Table i18n
+
+### Banking-Infra — AS-IS vs TO-BE Comparison Table
+- Fixed: comparison table rows were hardcoded in English and did not change with language
+- `COMPARISON_ROWS` converted to multilingual object with `uz` / `ru` / `en` keys
+- `renderComparisonRows()` updated to use `COMPARISON_ROWS[L]` — table now updates on every language switch
+- Fix applied to both `index.html` (TO-BE) and `joriy-infrastruktura.html` (AS-IS)
+
+---
+
 ## [2026-06-09] — Smart BI Prototype
 
 ### Smart BI Prototype — Added

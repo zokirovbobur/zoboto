@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
@@ -947,15 +947,35 @@ const EXEC_UI = {
   }
 };
 
-const COMPARISON_ROWS = [
-  ['Integration model','Point-to-point, ABS/ESB/direct SDK mix','Centralized through Middleware'],
-  ['ESB/Middleware role','ESB mainly wraps ABS APIs','Middleware orchestrates APIs, queues, monitoring, DR, and reuse'],
-  ['New platform launch','Multiple integrations and vendor coordination','One primary integration to Middleware'],
-  ['Vendor dependency','High, especially for new ABS methods','Lower; bank specialists can create/reuse methods in Middleware'],
-  ['Time-to-market','Slower, often dependent on vendor timeline','Faster due to reusable APIs and integration hub'],
-  ['Monitoring','Fragmented by system/vendor','Centralized APM/tracing through Middleware'],
-  ['Operational risk','High coupling and change impact','Lower coupling and clearer integration governance']
-];
+const COMPARISON_ROWS = {
+  uz: [
+    ["Integratsiya modeli","Point-to-point, ABS/ESB/to'g'ridan SDK mix","Middleware orqali markazlashtirilgan"],
+    ["ESB/Middleware roli","ESB asosan ABS API larini wraplaydi","Middleware API, navbat, monitoring, DR va reuseni boshqaradi"],
+    ["Yangi platforma qo'shish","Ko'p integratsiya va vendor muvofiqlashuvi","Middleware ga bitta asosiy integratsiya"],
+    ["Vendor bog'liqligi","Yuqori, ayniqsa yangi ABS metodlari uchun","Past; bank mutaxassislari Middleware da metod yarata/qayta ishlatishi mumkin"],
+    ["Bozorga chiqish vaqti","Sekin, ko'pincha vendor jadvaliga bog'liq","Qayta foydalaniladigan API va integration hub tufayli tezroq"],
+    ["Monitoring","Tizim/vendor bo'yicha tarqoq","Middleware orqali markazlashtirilgan APM/tracing"],
+    ["Operatsion xavf","Yuqori bog'liqlik va o'zgarish ta'siri","Past bog'liqlik va aniq integratsiya boshqaruvi"]
+  ],
+  ru: [
+    ["Model' integratsii","Point-to-point, smes' ABS/ESB/pryamyx SDK","Tsentralizovano cherez Middleware"],
+    ["Rol' ESB/Middleware","ESB v osnovnom oborachivaet API ABS","Middleware upravlyaet API, ocheredyami, monitoringom, DR i pereispol'zovaniem"],
+    ["Podklyuchenie novoy platformy","Mnozhestvo integracij i koordinaciya s vendorom","Odna osnovnaya integraciya s Middleware"],
+    ["Zavisimost' ot vendora","Vysokaya, osobenno dlya novyx metodov ABS","Nizhe; specialisty sozdayut/pereispol'zuyut metody v Middleware"],
+    ["Vremya vyvoda na rynok","Medlennee, zavisit ot grafika vendora","Bystree za schet pereispol'zuemyx API i integration hub"],
+    ["Monitoring","Razroznen po sistemam/vendoram","Centralizovannyy APM/tracing cherez Middleware"],
+    ["Operacionnyy risk","Vysokaya svyaznost' i vliyanie izmenenij","Nizkaya svyaznost' i chetkoe upravlenie integraciej"]
+  ],
+  en: [
+    ["Integration model","Point-to-point, ABS/ESB/direct SDK mix","Centralized through Middleware"],
+    ["ESB/Middleware role","ESB mainly wraps ABS APIs","Middleware orchestrates APIs, queues, monitoring, DR, and reuse"],
+    ["New platform launch","Multiple integrations and vendor coordination","One primary integration to Middleware"],
+    ["Vendor dependency","High, especially for new ABS methods","Lower; bank specialists can create/reuse methods in Middleware"],
+    ["Time-to-market","Slower, often dependent on vendor timeline","Faster due to reusable APIs and integration hub"],
+    ["Monitoring","Fragmented by system/vendor","Centralized APM/tracing through Middleware"],
+    ["Operational risk","High coupling and change impact","Lower coupling and clearer integration governance"]
+  ]
+};
 
 function renderExecUI(){
   const copy = EXEC_UI[L] || EXEC_UI.uz;
@@ -977,7 +997,8 @@ function renderExecUI(){
 function renderComparisonRows(){
   const body = document.getElementById('comparisonRows');
   if (!body) return;
-  body.innerHTML = COMPARISON_ROWS.map(row => '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>').join('');
+  const rows = COMPARISON_ROWS[L] || COMPARISON_ROWS.en;
+  body.innerHTML = rows.map(row => '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td></tr>').join('');
 }
 
 function openComparison(){
