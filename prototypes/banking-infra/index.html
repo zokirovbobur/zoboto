@@ -3242,10 +3242,27 @@ function renderDwhPanel(optKey) {
     <div class="divider" style="margin:10px -20px"></div>
     <div class="prow"><div class="prow-lbl">${T[L].panelStatus}</div><span class="status-badge" style="color:${st.light};border-color:${st.color}44;background:${st.bg}">${st.label}</span></div>`;
 }
+function renderDwhAiPanel() {
+  return `<span class="abs-badge" style="color:#7C3AED;border-color:#7C3AED55;background:rgba(124,58,237,.12)">AI-NATIVE BI</span>
+    <div class="when-box"><div class="when-label">${T[L].panelWhen||'Qachon ishlatish kerak'}</div><div class="when-val">${L==='uz'?"Bank rahbariyati uchun real-time KPI nazorati, AI yordamida analitika va avtomatik hisobotlar zarur bo'lganda.":L==='ru'?"Когда нужен мониторинг KPI в реальном времени, аналитика с помощью ИИ и автоматическая отчётность для банковского руководства.":"When real-time KPI monitoring, AI-assisted analytics, and automated reporting are needed for banking executives."}</div></div>
+    <div class="divider" style="margin:10px -20px"></div>
+    <div class="prow"><div class="prow-lbl">${L==='uz'?'TAVSIF':L==='ru'?'ОПИСАНИЕ':'DESCRIPTION'}</div><div class="prow-val">${L==='uz'?"Smart BI — sun'iy intellekt asosida ishlovchi bank analytics platformasi. Ijrochi dashboard (9 ta KPI + sparkline), GenBI suhbat interfeysi, rolga asoslangan kirish (CEO, Tahlilchi, Bo'lim boshlig'i, Ma'lumotlar admini), 14 ta ekran, mavzular va 3 tilli interfeysni o'z ichiga oladi.":L==='ru'?"Smart BI — аналитическая платформа для банкинга на основе ИИ. Включает исполнительный дашборд (9 KPI + sparkline), GenBI-интерфейс, ролевой доступ (CEO, Аналитик, Руководитель отдела, Администратор данных), 14 экранов, темы оформления и 3-язычный интерфейс.":"Smart BI — AI-native business intelligence platform for banking. Includes executive dashboard (9 KPIs + sparklines), GenBI conversational interface, role-based access (CEO, Analyst, Department Head, Data Admin), 14 screens, themes, and 3-language UI."}</div></div>
+    <div class="divider" style="margin:10px -20px"></div>
+    <div class="prow"><div class="prow-lbl">${L==='uz'?"ASOSIY IMKONIYATLAR":L==='ru'?"КЛЮЧЕВЫЕ ВОЗМОЖНОСТИ":"KEY CAPABILITIES"}</div><ul class="feat-list">${(L==='uz'?["Real-time KPI dashboard — hisoblash animatsiyasi bilan","GenBI — tabiiy til orqali grafik va tushuncha yaratish","Faktor tahlili — ishlash ko'rsatkichlariga ta'sir qiluvchilar","Dashboard kutubxonasi va widget konstruktori","Connectors — 5 bosqichli sozlash ustasi","Admin va audit — kirish matritsasi va jurnal","Mobil preview — telefon ramkasida ko'rish","Qorong'u/yorug' mavzu + UZ/RU/EN tili"]:L==='ru'?['Дашборд KPI в реальном времени — с анимацией счётчиков','GenBI — генерация графиков и аналитики через естественный язык','Факторный анализ — выявление драйверов показателей','Библиотека дашбордов и конструктор виджетов','Коннекторы — 5-шаговый мастер настройки','Администрирование и аудит — матрица доступа и лог','Мобильный превью — просмотр в рамке телефона','Тёмная/светлая тема + язык UZ/RU/EN']:['Real-time KPI dashboard — with count-up animations','GenBI — natural language chart and insight generation','Factor analysis — identify performance drivers','Dashboard library and widget builder','Connectors — 5-step configuration wizard','Admin & audit — access matrix and log','Mobile preview — phone-frame layout view','Dark/light theme + UZ/RU/EN language']).map(f=>`<li>${f}</li>`).join('')}</ul></div>
+    <div class="divider" style="margin:10px -20px"></div>
+    <div style="margin-top:14px">
+      <a href="../../prototypes/ai-bi-navigator/index.html" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,#7C3AED,#2563EB);color:#fff;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;transition:opacity .15s"
+         onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        ${L==='uz'?"Demo ko'rish":L==='ru'?"Открыть демо":"Open Demo"}
+      </a>
+    </div>`;
+}
 function switchDwhTab(key) {
   document.querySelectorAll('.dwh-tab').forEach(t=>t.classList.toggle('active',t.dataset.key===key));
   document.querySelectorAll('.dwh-panel').forEach(p=>p.classList.toggle('active',p.dataset.key===key));
-  document.getElementById('dwh-content-'+key).innerHTML=renderDwhPanel(key);
+  document.getElementById('dwh-content-'+key).innerHTML = key==='ai_bi' ? renderDwhAiPanel() : renderDwhPanel(key);
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -4319,9 +4336,11 @@ function openPanel(id) {
        <div class="abs-tabs">
          <button class="abs-tab dwh-tab active" data-key="clickhouse" onclick="switchDwhTab('clickhouse')">ClickHouse</button>
          <button class="abs-tab dwh-tab"        data-key="snowflake"  onclick="switchDwhTab('snowflake')">Snowflake + PBI</button>
+         <button class="abs-tab dwh-tab"        data-key="ai_bi"      onclick="switchDwhTab('ai_bi')">Smart BI</button>
        </div>
        <div class="abs-panel dwh-panel active" data-key="clickhouse" id="dwh-content-clickhouse">${renderDwhPanel('clickhouse')}</div>
-       <div class="abs-panel dwh-panel"        data-key="snowflake"  id="dwh-content-snowflake"></div>`;
+       <div class="abs-panel dwh-panel"        data-key="snowflake"  id="dwh-content-snowflake"></div>
+       <div class="abs-panel dwh-panel"        data-key="ai_bi"      id="dwh-content-ai_bi"></div>`;
   } else if (d.cardOption) {
     document.getElementById('pVendor').textContent = d.vendor;
     document.getElementById('pPurpose').textContent = t(d.purpose);

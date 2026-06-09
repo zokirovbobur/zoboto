@@ -5,6 +5,26 @@ Format: `[YYYY-MM-DD] — summary` grouped by date, newest first.
 
 ---
 
+## [2026-06-09] — Smart BI Prototype
+
+### Smart BI Prototype — Added
+- Added `prototypes/ai-bi-navigator/` — AI-native BI platform prototype (Smart BI) for Uzbekistan banking
+- Includes: executive dashboard (9 KPIs + sparklines), GenBI conversational analyst, factor analysis, dashboard library, widget builder, connectors wizard, admin & audit, 14 screens total
+- Role-based access: CEO, Analyst, Department Head, Data Admin
+- Dark/light theme, UZ/RU/EN language switch, mobile preview frame
+
+### Prototypes List (`main.js`)
+- Added **Smart BI** card to the Prototypes section on the main site (Internal / Demo)
+
+### Banking-Infra — DWH & BI Panel
+- Added **Smart BI** tab (3rd option) to DWH & BI vendor comparison alongside ClickHouse and Snowflake + PBI
+- Tab content includes UZ/RU/EN definitions, key capabilities list, and a **"Demo ko'rish"** button linking to the Smart BI prototype
+
+### Infrastructure
+- Fixed `launch.json` static server path: changed from `UsersuserProjectszoboto` to `.` (project root)
+
+---
+
 ## [2026-06-09]
 
 ### Eventador Middleware Prototype — Added

@@ -5,6 +5,18 @@ Path: `prototypes/banking-infra/`
 
 ---
 
+## [2026-06-09] — Smart BI Tab
+
+### DWH & BI Panel — Smart BI Tab
+- Added **Smart BI** tab (3rd option) to DWH & BI vendor comparison alongside ClickHouse and Snowflake + PBI
+- Added `renderDwhAiPanel()` function with full UZ/RU/EN content:
+  - When to use, description, and 8 key capabilities per language
+  - AI-NATIVE BI badge in purple (`#7C3AED`)
+- Added **"Demo ko'rish / Открыть демо / Open Demo"** button linking to `../../prototypes/ai-bi-navigator/index.html`
+- Updated `switchDwhTab()` to dispatch `ai_bi` key to `renderDwhAiPanel()` instead of generic `renderDwhPanel()`
+
+---
+
 ## [2026-06-09]
 
 ### Middleware Panel — Inhouse Tab

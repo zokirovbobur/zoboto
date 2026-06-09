@@ -207,6 +207,14 @@ const PROTOTYPES = [
     description: "Enterprise middleware platform prototype — event-driven flow designer, gRPC proto registry, API gateway, deployment pipeline and monitoring. Built to demonstrate Inhouse middleware architecture for banking infrastructure."
   },
   {
+    title: "Smart BI",
+    product: "Trastbank",
+    type: "Internal",
+    status: "Demo",
+    url: "prototypes/ai-bi-navigator/index.html",
+    description: "AI-native BI platform prototype for Uzbekistan banking — executive dashboard, GenBI analyst, 14 screens, role-based access, 3-language support (UZ/RU/EN). Built to demonstrate DWH & BI analytics layer for banking infrastructure."
+  },
+  {
     title: "Finport — Investment Portfolio",
     product: "Finport",
     type: "External",
