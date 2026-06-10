@@ -4692,6 +4692,7 @@ function showToast(message, type = '') {
 // Press D for Director dashboard, E for Employee dashboard, A for Approved employee
 document.addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return;
+  if (e.ctrlKey || e.metaKey) return;
   if (e.key === 'd' || e.key === 'D') {
     state.userData = { fio: 'Bobur Zokirov', phone: '+998 90 111 22 33', position: 'Bosh Direktor', inn: '302456789' };
     goToDashboard('director');
