@@ -535,7 +535,7 @@ const I18N = {
       const action = isSoon
         ? '<span class="btn btn--primary btn--sm" style="opacity:.4;cursor:not-allowed">' + tr.proto_btn_soon + '</span>'
         : isInternal
-          ? '<a class="btn btn--primary btn--sm" href="' + p.url + '">' + tr.proto_btn_open + '</a>'
+          ? '<a class="btn btn--primary btn--sm" href="' + p.url + '" target="_blank" rel="noopener">' + tr.proto_btn_open + '</a>'
           : '<a class="btn btn--primary btn--sm" href="' + p.url + '" target="_blank" rel="noopener">' + tr.proto_btn_link + '</a>';
       return '' +
         '<article class="proto-card reveal' + (isSoon ? ' proto-card--soon' : '') + '">' +
