@@ -1207,6 +1207,85 @@ body {
 .wiz-next-num { width: 22px; height: 22px; border-radius: 50%; background: var(--primary); color: white; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .wiz-nav { display: flex; justify-content: space-between; align-items: center; }
 
+/* ═══════════════ PAYMENTS MODULE ═══════════════ */
+.pay-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-tertiary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.pay-section-title span { flex: 1; height: 1px; background: var(--border); }
+
+.pay-debt-section { background: var(--surface); border: 1.5px solid var(--warning); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 20px; }
+.pay-debt-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.pay-debt-heading { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.pay-debt-count { font-size: 12px; background: var(--warning-surface); color: #7A4F00; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.pay-contracts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pay-contract-card { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; cursor: pointer; transition: var(--transition); background: var(--bg); }
+.pay-contract-card:hover { border-color: var(--primary-light); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.pay-contract-card.has-overdue { border-color: var(--warning); background: #FFFBF3; }
+.pcc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.pcc-type { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
+.pcc-type.mrb { background: var(--primary-surface); color: var(--primary); }
+.pcc-type.ijr { background: var(--info-surface); color: var(--info); }
+.pcc-num { font-size: 11px; font-family: monospace; color: var(--text-tertiary); }
+.pcc-asset { font-size: 13px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pcc-amounts { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+.pcc-footer { display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+.pcc-progress { flex: 1; height: 4px; background: var(--border); border-radius: 2px; margin-right: 10px; overflow: hidden; }
+.pcc-progress-fill { height: 100%; border-radius: 2px; background: var(--primary); }
+.pcc-status-ok { color: var(--success); font-weight: 600; }
+.pcc-status-warn { color: var(--warning); font-weight: 700; }
+
+.pay-cats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.pay-cat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 14px 16px; text-align: center; cursor: pointer; transition: var(--transition); position: relative; }
+.pay-cat:hover { border-color: var(--primary-light); box-shadow: var(--shadow-sm); }
+.pay-cat-icon { font-size: 30px; margin-bottom: 8px; }
+.pay-cat-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.pay-cat-hint { font-size: 11px; color: var(--text-tertiary); }
+.pay-cat-badge { position: absolute; top: 10px; right: 10px; min-width: 20px; height: 20px; border-radius: 10px; background: var(--danger); color: white; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 4px; }
+
+.pay-recent { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.pay-recent-head { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg); }
+.pay-recent-head h4 { font-size: 13px; font-weight: 700; }
+.pay-ri { display: flex; align-items: center; gap: 12px; padding: 11px 16px; border-bottom: 1px solid var(--border-light); transition: var(--transition); }
+.pay-ri:last-child { border-bottom: none; }
+.pay-ri:hover { background: var(--bg); }
+.pay-ri-ico { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.pay-ri-info { flex: 1; }
+.pay-ri-name { font-size: 13px; font-weight: 500; }
+.pay-ri-meta { font-size: 11px; color: var(--text-tertiary); }
+.pay-ri-right { text-align: right; }
+.pay-ri-sum { font-size: 14px; font-weight: 700; }
+.pay-ri-date { font-size: 11px; color: var(--text-tertiary); }
+
+/* CONTRACT DETAIL */
+.cd-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
+.cd-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 16px; }
+.cd-card-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-tertiary); margin-bottom: 4px; }
+.cd-card-value { font-size: 18px; font-weight: 700; }
+.cd-card-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+.cd-alert { border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 10px; display: flex; gap: 10px; font-size: 13px; line-height: 1.5; }
+.cd-alert.warn { background: var(--warning-surface); border: 1px solid rgba(232,163,23,0.35); color: #6B4300; }
+.cd-alert.danger { background: var(--danger-surface); border: 1px solid rgba(217,48,37,0.3); color: #6B1A14; }
+.cd-alert.info { background: var(--info-surface); border: 1px solid rgba(26,115,232,0.2); color: #0B3F8B; }
+.cd-alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.cd-alert strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+.sched-table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.sched-head-row { display: grid; grid-template-columns: 40px 100px 1fr 130px 1fr; gap: 0; padding: 9px 16px; background: var(--bg); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-tertiary); }
+.sched-row { display: grid; grid-template-columns: 40px 100px 1fr 130px 1fr; gap: 0; padding: 10px 16px; border-bottom: 1px solid var(--border-light); font-size: 13px; align-items: center; transition: background 0.15s; }
+.sched-row:last-child { border-bottom: none; }
+.sched-row.paid { }
+.sched-row.overdue-row { background: #FFFAF2; }
+.sched-row.next-row { background: var(--info-surface); }
+.sched-row:hover { background: var(--bg); }
+.sched-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.sched-badge.b-paid { background: var(--success-surface); color: var(--success); }
+.sched-badge.b-overdue { background: var(--warning-surface); color: #7A4F00; }
+.sched-badge.b-next { background: var(--info-surface); color: var(--info); }
+.sched-badge.b-pending { background: var(--bg); color: var(--text-tertiary); border: 1px solid var(--border); }
+.sched-num { font-size: 12px; color: var(--text-tertiary); font-weight: 600; }
+.sched-date { font-size: 13px; }
+.sched-amount { font-size: 13px; font-weight: 600; }
+.sched-balance { font-size: 12px; color: var(--text-secondary); }
+
 /* Responsive */
 @media (max-width: 1100px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1372,7 +1451,7 @@ body {
         <p>Platformadagi imkoniyatlar lavozimingizga qarab belgilanadi</p>
       </div>
       <div class="role-cards">
-        <div class="role-card" id="role-director" onclick="selectRole('director')">
+        <div class="role-card selected" id="role-director" onclick="selectRole('director')">
           <div class="role-icon">👔</div>
           <div class="role-name">Bosh Direktor</div>
           <div class="role-desc">ERI bilan to'liq kirish, barcha modullar, tasdiqlash huquqi</div>
@@ -1385,7 +1464,7 @@ body {
       </div>
       <div class="btn-row">
         <button class="btn btn-ghost" onclick="goBack('register')">← Orqaga</button>
-        <button class="btn btn-primary btn-lg" style="flex:1" id="btn-role-next" onclick="goToEriOrDashboard()" disabled>Davom etish →</button>
+        <button class="btn btn-primary btn-lg" style="flex:1" id="btn-role-next" onclick="goToEriOrDashboard()">Davom etish →</button>
       </div>
     </div>
   </div>
@@ -1431,7 +1510,7 @@ body {
         <h3>Elektron raqamli imzo (ERI)</h3>
         <p>Shaxsingizni tasdiqlash uchun qulay usulni tanlang</p>
         <div class="eri-methods">
-          <div class="eri-method" onclick="selectEriMethod(this, 'eimzo')">
+          <div class="eri-method selected" onclick="selectEriMethod(this, 'eimzo')">
             <div class="eri-method-icon">🔑</div>
             <div class="eri-method-info">
               <div class="eri-method-name">E-IMZO kaliti</div>
@@ -1453,7 +1532,7 @@ body {
             </div>
           </div>
         </div>
-        <button class="btn btn-primary btn-full btn-lg" onclick="startEriVerification()" id="btn-eri-start" disabled>Tasdiqlashni boshlash</button>
+        <button class="btn btn-primary btn-full btn-lg" onclick="startEriVerification()" id="btn-eri-start">Tasdiqlashni boshlash</button>
       </div>
     </div>
 
@@ -1493,7 +1572,7 @@ body {
       <div class="nav-section-title">Asosiy</div>
       <div class="nav-item active"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
       <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item"><span class="nav-icon">🔄</span> To'lovlar <span class="nav-badge">3</span></div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar <span class="nav-badge">3</span></div>
       <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
 
       <div class="nav-section-title">Xizmatlar</div>
@@ -1824,7 +1903,7 @@ body {
       <div class="nav-section-title">Asosiy</div>
       <div class="nav-item active"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
       <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
 
       <div class="nav-section-title">Xizmatlar</div>
       <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
@@ -2180,7 +2259,7 @@ body {
       <div class="nav-section-title">Asosiy</div>
       <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
       <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
       <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
       <div class="nav-section-title">Xizmatlar</div>
       <div class="nav-item active"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
@@ -2452,7 +2531,7 @@ body {
       <div class="nav-section-title">Asosiy</div>
       <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
       <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
       <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
       <div class="nav-section-title">Xizmatlar</div>
       <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
@@ -2871,7 +2950,7 @@ body {
       <div class="nav-section-title">Asosiy</div>
       <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
       <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
       <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
       <div class="nav-section-title">Xizmatlar</div>
       <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
@@ -3147,7 +3226,7 @@ body {
       <div class="nav-section-title">Asosiy</div>
       <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
       <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
       <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
       <div class="nav-section-title">Xizmatlar</div>
       <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
@@ -3529,6 +3608,280 @@ body {
 </div>
 
 
+<!-- ═══════════════════════════════════════════ -->
+<!-- SCREEN 10: PAYMENTS                        -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="screen-payments" class="dashboard-container hidden">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-icon">☪</div>
+      <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
+      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
+      <div class="nav-item active"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
+      <div class="nav-section-title">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
+      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
+      <div class="nav-section-title">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
+      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">BZ</div>
+        <div class="sidebar-user-info">
+          <div class="user-name">Bobur Zokirov</div>
+          <div class="user-role">Bosh Direktor</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h2>To'lovlar</h2>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary btn-sm" onclick="showToast('To\'lov yaratildi (demo)', 'success')">+ Yangi to\'lov</button>
+      </div>
+    </div>
+
+    <div class="page-content" style="padding:16px 24px;max-width:1000px;">
+
+      <!-- BANK DEBTS TOP MODULE -->
+      <div class="pay-debt-section">
+        <div class="pay-debt-header">
+          <div class="pay-debt-heading">
+            <span>🏦</span> Bank oldidagi qarzdorliklar
+            <span class="pay-debt-count">⚠️ 1 ta kechikkan</span>
+          </div>
+          <span style="font-size:12px;color:var(--text-tertiary);">2 ta faol shartnoma</span>
+        </div>
+        <div class="pay-contracts-grid">
+          <!-- Murabaha contract — OVERDUE -->
+          <div class="pay-contract-card has-overdue" onclick="openContract('MRB-2026-04723')">
+            <div class="pcc-top">
+              <span class="pcc-type mrb">Murobaha</span>
+              <span class="pcc-num">MRB-2026-04723</span>
+            </div>
+            <div class="pcc-asset">CNC dastgohi — Model XR-500</div>
+            <div class="pcc-amounts">Jami: 1 030 008 000 UZS &nbsp;·&nbsp; Qoldi: <strong>901 257 000 UZS</strong></div>
+            <div class="pcc-footer">
+              <div class="pcc-progress" style="margin-right:10px;">
+                <div class="pcc-progress-fill" style="width:12.5%;background:var(--warning);"></div>
+              </div>
+              <span class="pcc-status-warn">⚠️ 1 to'lov kechikdi (31 kun)</span>
+            </div>
+          </div>
+          <!-- Ijara contract — OK -->
+          <div class="pay-contract-card" onclick="openContract('IJR-2026-01847')">
+            <div class="pcc-top">
+              <span class="pcc-type ijr">Ijara IMB</span>
+              <span class="pcc-num">IJR-2026-01847</span>
+            </div>
+            <div class="pcc-asset">MRI Siemens 3T — Diagnostika markazi</div>
+            <div class="pcc-amounts">Jami: 1 152 000 000 UZS &nbsp;·&nbsp; Qoldi: <strong>1 088 000 000 UZS</strong></div>
+            <div class="pcc-footer">
+              <div class="pcc-progress" style="margin-right:10px;">
+                <div class="pcc-progress-fill" style="width:5.5%;"></div>
+              </div>
+              <span class="pcc-status-ok">✅ Keyingi: 15-iyul (5 kun)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENT CATEGORIES -->
+      <div class="pay-section-title">To'lov kategoriyalari <span></span></div>
+      <div class="pay-cats-grid">
+        <div class="pay-cat" onclick="openContract('MRB-2026-04723')">
+          <div class="pay-cat-badge">1</div>
+          <div class="pay-cat-icon">🏦</div>
+          <div class="pay-cat-name">Bank moliyalashtirishi</div>
+          <div class="pay-cat-hint">Murobaha · Ijara IMB</div>
+        </div>
+        <div class="pay-cat" onclick="showPayCat('kommunal')">
+          <div class="pay-cat-icon">🔌</div>
+          <div class="pay-cat-name">Kommunal to'lovlar</div>
+          <div class="pay-cat-hint">Gaz · Elektr · Suv · Internet</div>
+        </div>
+        <div class="pay-cat" onclick="showPayCat('hamkor')">
+          <div class="pay-cat-icon">🤝</div>
+          <div class="pay-cat-name">Hamkorlar to'lovlari</div>
+          <div class="pay-cat-hint">Shartnomalar bo'yicha</div>
+        </div>
+        <div class="pay-cat" onclick="showPayCat('tovar')">
+          <div class="pay-cat-icon">🛒</div>
+          <div class="pay-cat-name">Tovar va xizmatlar</div>
+          <div class="pay-cat-hint">Xarid · Xizmat · Pudrat</div>
+        </div>
+      </div>
+
+      <!-- RECENT PAYMENTS -->
+      <div class="pay-section-title">So'nggi to'lovlar <span></span></div>
+      <div class="pay-recent">
+        <div class="pay-recent-head">
+          <h4>To'lovlar tarixi</h4>
+          <span style="font-size:12px;color:var(--text-tertiary);">Iyun 2026</span>
+        </div>
+        <div class="pay-ri">
+          <div class="pay-ri-ico" style="background:var(--primary-surface);">🏦</div>
+          <div class="pay-ri-info">
+            <div class="pay-ri-name">Ijara IMB oylik to'lov — IJR-2026-01847</div>
+            <div class="pay-ri-meta">15-may 2026 · Bank hisob-raqami: 2020 8000 2345 6789</div>
+          </div>
+          <div class="pay-ri-right">
+            <div class="pay-ri-sum" style="color:var(--danger);">−32 000 000 UZS</div>
+            <div class="pay-ri-date">✅ Bajarildi</div>
+          </div>
+        </div>
+        <div class="pay-ri">
+          <div class="pay-ri-ico" style="background:var(--primary-surface);">🏦</div>
+          <div class="pay-ri-info">
+            <div class="pay-ri-name">Murobaha oylik to'lov — MRB-2026-04723</div>
+            <div class="pay-ri-meta">10-may 2026 · Bank hisob-raqami: 2020 8000 2345 6789</div>
+          </div>
+          <div class="pay-ri-right">
+            <div class="pay-ri-sum" style="color:var(--danger);">−42 917 000 UZS</div>
+            <div class="pay-ri-date">✅ Bajarildi</div>
+          </div>
+        </div>
+        <div class="pay-ri">
+          <div class="pay-ri-ico" style="background:#FFF3E0;">🔌</div>
+          <div class="pay-ri-info">
+            <div class="pay-ri-name">O'zbekenergo — elektr energiya</div>
+            <div class="pay-ri-meta">5-may 2026 · Shartnoма № 2024-E-7823</div>
+          </div>
+          <div class="pay-ri-right">
+            <div class="pay-ri-sum" style="color:var(--danger);">−8 450 000 UZS</div>
+            <div class="pay-ri-date">✅ Bajarildi</div>
+          </div>
+        </div>
+        <div class="pay-ri">
+          <div class="pay-ri-ico" style="background:var(--primary-surface);">🏦</div>
+          <div class="pay-ri-info">
+            <div class="pay-ri-name">Ijara IMB oylik to'lov — IJR-2026-01847</div>
+            <div class="pay-ri-meta">15-aprel 2026 · Bank hisob-raqami: 2020 8000 2345 6789</div>
+          </div>
+          <div class="pay-ri-right">
+            <div class="pay-ri-sum" style="color:var(--danger);">−32 000 000 UZS</div>
+            <div class="pay-ri-date">✅ Bajarildi</div>
+          </div>
+        </div>
+        <div class="pay-ri">
+          <div class="pay-ri-ico" style="background:#E8F4FD;">🤝</div>
+          <div class="pay-ri-info">
+            <div class="pay-ri-name">TechParts MChJ — yetkazib berish shartnomasi</div>
+            <div class="pay-ri-meta">12-aprel 2026 · Shartnoma № 2026-TP-0341</div>
+          </div>
+          <div class="pay-ri-right">
+            <div class="pay-ri-sum" style="color:var(--danger);">−24 000 000 UZS</div>
+            <div class="pay-ri-date">✅ Bajarildi</div>
+          </div>
+        </div>
+        <div class="pay-ri">
+          <div class="pay-ri-ico" style="background:var(--primary-surface);">🏦</div>
+          <div class="pay-ri-info">
+            <div class="pay-ri-name">Murobaha oylik to'lov — MRB-2026-04723</div>
+            <div class="pay-ri-meta">10-aprel 2026 · Bank hisob-raqami: 2020 8000 2345 6789</div>
+          </div>
+          <div class="pay-ri-right">
+            <div class="pay-ri-sum" style="color:var(--danger);">−42 917 000 UZS</div>
+            <div class="pay-ri-date">✅ Bajarildi</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SCREEN 11: CONTRACT DETAIL                 -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="screen-contract-detail" class="dashboard-container hidden">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-icon">☪</div>
+      <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
+      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
+      <div class="nav-item active" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
+      <div class="nav-section-title">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
+      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
+      <div class="nav-section-title">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
+      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">BZ</div>
+        <div class="sidebar-user-info">
+          <div class="user-name">Bobur Zokirov</div>
+          <div class="user-role">Bosh Direktor</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button onclick="showScreen('payments')" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-secondary);padding:4px 8px;border-radius:6px;line-height:1;">←</button>
+        <h2 id="cd-topbar-title">Shartnoma tafsilotlari</h2>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary btn-sm" id="cd-pay-btn" onclick="payNow()">To'lovni amalga oshirish</button>
+      </div>
+    </div>
+
+    <div class="page-content" style="padding:16px 24px;max-width:960px;">
+
+      <!-- INFO CARDS -->
+      <div class="cd-grid" id="cd-info-grid">
+        <!-- filled by JS -->
+      </div>
+
+      <!-- WARNING BANNERS -->
+      <div id="cd-alerts">
+        <!-- filled by JS -->
+      </div>
+
+      <!-- PAYMENT SCHEDULE -->
+      <div class="pay-section-title" style="margin-bottom:10px;">To'lov jadvali <span></span></div>
+      <div class="sched-table">
+        <div class="sched-head-row">
+          <div class="sched-num">#</div>
+          <div>Muddat</div>
+          <div>Summa</div>
+          <div>Holat</div>
+          <div>Qolgan balans</div>
+        </div>
+        <div id="cd-schedule">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- Toast notification -->
 <div class="toast" id="toast"></div>
 
@@ -3540,8 +3893,8 @@ body {
 
 let state = {
   currentScreen: 'register',
-  selectedRole: null,
-  selectedEriMethod: null,
+  selectedRole: 'director',
+  selectedEriMethod: 'eimzo',
   userData: {},
   employeeApproved: false
 };
@@ -3829,6 +4182,9 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'r' || e.key === 'R') {
     showScreen('register');
   }
+  if (e.key === 'p' || e.key === 'P') {
+    showScreen('payments');
+  }
   if (e.key === 'm' || e.key === 'M') {
     showScreen('murabaha-apply');
   }
@@ -3972,6 +4328,162 @@ function wizSignERI() {
     wizGoTo(5);
     showToast('Ariza muvaffaqiyatli yuborildi! ✅', 'success');
   }, 2200);
+}
+
+// ——— Payments Module ———
+var CONTRACTS = {
+  'MRB-2026-04723': {
+    type: 'Murobaha', badge: 'mrb', aaoifi: 'AAOIFI SS-8 / FAS-28',
+    asset: 'CNC dastgohi — Model XR-500', supplier: 'TechParts MChJ',
+    startDate: [2026,2,10], months: 24, monthly: 42917000,
+    totalAmount: 1030008000, paid: 3, overdueMonths: 1,
+    overdueDay: 31
+  },
+  'IJR-2026-01847': {
+    type: 'Ijara IMB', badge: 'ijr', aaoifi: 'AAOIFI SS-9 / FAS-32',
+    asset: 'MRI Siemens 3T — Diagnostika markazi', supplier: 'MedTech Solutions MChJ',
+    startDate: [2026,3,15], months: 36, monthly: 32000000,
+    totalAmount: 1152000000, paid: 2, overdueMonths: 0,
+    overdueDay: 0
+  }
+};
+
+var MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Iyn','Iyul','Avg','Sen','Okt','Noy','Dek'];
+
+function fmtMoney(n) {
+  return n.toLocaleString('ru-RU') + ' UZS';
+}
+
+function schedDate(base, addM) {
+  var y = base[0], m = base[1] + addM, d = base[2];
+  while (m > 12) { m -= 12; y++; }
+  return d + '-' + MONTH_NAMES[m - 1] + ' ' + y;
+}
+
+function openContract(id) {
+  state.currentContract = id;
+  var c = CONTRACTS[id];
+  if (!c) return;
+
+  // Topbar title
+  document.getElementById('cd-topbar-title').textContent = c.type + ' — ' + id;
+
+  // Info cards
+  var paidAmt = (c.paid - c.overdueMonths) * c.monthly;
+  var remaining = c.totalAmount - paidAmt;
+  var nextDue = schedDate(c.startDate, c.paid + 1);
+  var endDate = schedDate(c.startDate, c.months);
+  document.getElementById('cd-info-grid').innerHTML =
+    cdCard('SHARTNOMA TURI', c.type, c.aaoifi) +
+    cdCard('JAMI SUMMA', fmtMoney(c.totalAmount), c.months + ' oy muddatga') +
+    cdCard('QOLGAN BALANS', fmtMoney(remaining), Math.round(remaining / c.totalAmount * 100) + '% qoldi') +
+    cdCard('KEYINGI TO\'LOV', c.overdueMonths > 0 ? '⚠️ Kechikkan' : nextDue, c.overdueMonths > 0 ? c.overdueDay + ' kun kechikmoqda' : 'Muddati: ' + endDate);
+
+  // Alerts
+  var alerts = '';
+  if (c.overdueMonths > 0) {
+    var sadaqa = Math.round(c.monthly * 0.005);
+    alerts +=
+      '<div class="cd-alert warn"><div class="cd-alert-icon">⚠️</div><div>' +
+        '<strong>' + c.overdueDay + '-may to\'lovi kechikmoqda (' + c.overdueDay + ' kun)</strong>' +
+        'To\'lanmagan summa: ' + fmtMoney(c.monthly) + '. Tezroq to\'lash tavsiya etiladi.' +
+      '</div></div>';
+    if (c.overdueDay >= 15) {
+      alerts +=
+        '<div class="cd-alert warn"><div class="cd-alert-icon">🕌</div><div>' +
+          '<strong>Sadaqa (halol jarima): ' + fmtMoney(sadaqa) + '</strong>' +
+          'Shartnoma shartlari bo\'yicha kechiktirilgan to\'lov uchun xayriya (sadaqa) mablag\'i hisoblanadi. ' +
+          'Bu riba emas — xayriya fondiga o\'tkaziladi. Summani to\'lov bilan birga yuborish mumkin.' +
+        '</div></div>';
+    }
+    if (c.overdueDay >= 30) {
+      alerts +=
+        '<div class="cd-alert danger"><div class="cd-alert-icon">🚨</div><div>' +
+          '<strong>Shartnomani muddatidan oldin yopish xavfi</strong>' +
+          'Agar ' + fmtMoney(c.monthly) + ' 15 kun ichida to\'lanmasa, bank shartnomani muddatidan oldin yopish huquqiga ega. ' +
+          'Bu holda qolgan barcha summa (' + fmtMoney(remaining) + ') bir yo\'la to\'lash talab qilinadi.' +
+        '</div></div>';
+    }
+  } else {
+    alerts = '<div class="cd-alert info"><div class="cd-alert-icon">✅</div><div>' +
+      '<strong>Shartnoma muddatida — hamma narsa yaxshi</strong>' +
+      'Barcha to\'lovlar o\'z vaqtida amalga oshirilmoqda.' +
+    '</div></div>';
+  }
+  document.getElementById('cd-alerts').innerHTML = alerts;
+
+  // Pay button
+  var btn = document.getElementById('cd-pay-btn');
+  if (btn) {
+    if (c.overdueMonths > 0) {
+      btn.textContent = '⚠️ Kechikkan to\'lovni amalga oshirish';
+      btn.style.background = 'var(--warning)';
+      btn.style.color = '#fff';
+    } else {
+      btn.textContent = 'To\'lovni amalga oshirish';
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+  }
+
+  // Schedule
+  var rows = '';
+  for (var i = 1; i <= c.months; i++) {
+    var paid0 = c.paid - c.overdueMonths;
+    var statusCls, statusLabel, rowCls = '';
+    if (i <= paid0) {
+      statusCls = 'b-paid'; statusLabel = '✅ To\'langan';
+    } else if (i <= c.paid) {
+      statusCls = 'b-overdue'; statusLabel = '⚠️ Kechikkan'; rowCls = 'overdue-row';
+    } else if (i === c.paid + 1) {
+      statusCls = 'b-next'; statusLabel = '⏳ Keyingi'; rowCls = 'next-row';
+    } else {
+      statusCls = 'b-pending'; statusLabel = 'Kutilmoqda';
+    }
+    var bal = Math.max(0, c.totalAmount - i * c.monthly);
+    var dueDate = schedDate(c.startDate, i);
+    rows += '<div class="sched-row ' + rowCls + '">' +
+      '<div class="sched-num">' + i + '</div>' +
+      '<div class="sched-date">' + dueDate + '</div>' +
+      '<div class="sched-amount">' + fmtMoney(c.monthly) + '</div>' +
+      '<div><span class="sched-badge ' + statusCls + '">' + statusLabel + '</span></div>' +
+      '<div class="sched-balance">' + fmtMoney(bal) + '</div>' +
+    '</div>';
+  }
+  document.getElementById('cd-schedule').innerHTML = rows;
+
+  showScreen('contract-detail');
+}
+
+function cdCard(label, value, sub) {
+  return '<div class="cd-card"><div class="cd-card-label">' + label + '</div>' +
+    '<div class="cd-card-value" style="font-size:15px;">' + value + '</div>' +
+    '<div class="cd-card-sub">' + sub + '</div></div>';
+}
+
+function payNow() {
+  var c = state.currentContract ? CONTRACTS[state.currentContract] : null;
+  if (!c) return;
+  if (c.overdueMonths > 0) {
+    showToast('To\'lov qayta ishlanmoqda... ✅', 'success');
+    setTimeout(function() {
+      CONTRACTS[state.currentContract].overdueMonths = 0;
+      CONTRACTS[state.currentContract].overdueDay = 0;
+      CONTRACTS[state.currentContract].paid += 1;
+      openContract(state.currentContract);
+      showToast('To\'lov muvaffaqiyatli amalga oshirildi!', 'success');
+    }, 1800);
+  } else {
+    showToast('To\'lov qayta ishlanmoqda... ✅', 'success');
+    setTimeout(function() {
+      showToast('To\'lov muvaffaqiyatli amalga oshirildi!', 'success');
+    }, 1800);
+  }
+}
+
+function showPayCat(cat) {
+  var labels = { kommunal: 'Kommunal to\'lovlar', hamkor: 'Hamkorlar to\'lovlari', tovar: 'Tovar va xizmatlar' };
+  showToast(labels[cat] + ' — tez orada (demo)', 'success');
 }
 
 // ——— Ijara Wizard ———
