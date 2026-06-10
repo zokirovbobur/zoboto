@@ -1498,7 +1498,7 @@ body {
 
       <div class="nav-section-title">Xizmatlar</div>
       <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item" onclick="showScreen('ijara-cjm')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
       <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
       <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
 
@@ -2184,7 +2184,7 @@ body {
       <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
       <div class="nav-section-title">Xizmatlar</div>
       <div class="nav-item active"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item" onclick="showScreen('ijara-cjm')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
       <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
       <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
       <div class="nav-section-title">Boshqaruv</div>
@@ -2456,7 +2456,7 @@ body {
       <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
       <div class="nav-section-title">Xizmatlar</div>
       <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item" onclick="showScreen('ijara-cjm')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
       <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
       <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
       <div class="nav-section-title">Boshqaruv</div>
@@ -2859,9 +2859,9 @@ body {
 
 
 <!-- ═══════════════════════════════════════════ -->
-<!-- SCREEN 8: IJARA CJM                        -->
+<!-- SCREEN 8: IJARA APPLICATION WIZARD         -->
 <!-- ═══════════════════════════════════════════ -->
-<div id="screen-ijara-cjm" class="dashboard-container hidden">
+<div id="screen-ijara-apply" class="dashboard-container hidden">
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo-icon">☪</div>
@@ -2885,6 +2885,282 @@ body {
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">
+        <div class="sidebar-user-avatar">BZ</div>
+        <div class="sidebar-user-info">
+          <div class="user-name">Bobur Zokirov</div>
+          <div class="user-role">Bosh Direktor</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button onclick="showScreen('dashboard-director')" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-secondary);padding:4px 8px;border-radius:6px;line-height:1;" title="Orqaga">←</button>
+        <h2>Ijara IMB — Yangi ariza</h2>
+      </div>
+      <div class="topbar-right">
+        <button class="wiz-help-btn" onclick="showScreen('ijara-cjm')">? &nbsp;Shariah jarayoni</button>
+      </div>
+    </div>
+
+    <div class="page-content" style="padding:16px 24px;max-width:860px;">
+
+      <!-- STEPPER -->
+      <div class="wiz-progress">
+        <div class="wiz-step active" data-iwstep="1">
+          <div class="wiz-step-circle">1</div>
+          <div class="wiz-step-info">
+            <div class="wiz-step-num">1-QADAM</div>
+            <div class="wiz-step-name">Aktiv</div>
+          </div>
+        </div>
+        <div class="wiz-connector" id="iwcon-1"></div>
+        <div class="wiz-step" data-iwstep="2">
+          <div class="wiz-step-circle">2</div>
+          <div class="wiz-step-info">
+            <div class="wiz-step-num">2-QADAM</div>
+            <div class="wiz-step-name">Shartlar</div>
+          </div>
+        </div>
+        <div class="wiz-connector" id="iwcon-2"></div>
+        <div class="wiz-step" data-iwstep="3">
+          <div class="wiz-step-circle">3</div>
+          <div class="wiz-step-info">
+            <div class="wiz-step-num">3-QADAM</div>
+            <div class="wiz-step-name">Hujjatlar</div>
+          </div>
+        </div>
+        <div class="wiz-connector" id="iwcon-3"></div>
+        <div class="wiz-step" data-iwstep="4">
+          <div class="wiz-step-circle">4</div>
+          <div class="wiz-step-info">
+            <div class="wiz-step-num">4-QADAM</div>
+            <div class="wiz-step-name">IMB Wa'd</div>
+          </div>
+        </div>
+        <div class="wiz-connector" id="iwcon-4"></div>
+        <div class="wiz-step" data-iwstep="5">
+          <div class="wiz-step-circle">5</div>
+          <div class="wiz-step-info">
+            <div class="wiz-step-num">5-QADAM</div>
+            <div class="wiz-step-name">Natija</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WIZARD BODY -->
+      <div class="wiz-body">
+
+        <!-- PANE 1: AKTIV -->
+        <div class="wiz-pane active" id="iwpane-1">
+          <div class="wiz-section-label">Ijaralash ob'ekti haqida</div>
+          <div class="wiz-form-grid">
+            <div class="form-group">
+              <label class="form-label">Aktiv turi <span style="color:var(--danger)">*</span></label>
+              <select class="form-input" id="ijz-aktiv-turi">
+                <option value="jihozlar" selected>Ishlab chiqarish jihozlari</option>
+                <option value="transport">Transport vositasi</option>
+                <option value="kochmas">Ko'chmas mulk</option>
+                <option value="tibbiy">Tibbiy uskunalar</option>
+                <option value="it">IT uskunalar</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Aktiv nomi <span style="color:var(--danger)">*</span></label>
+              <input type="text" class="form-input" id="ijz-aktiv-nomi" value="Tibbiy diagnostika markazi — MRI Siemens 3T">
+            </div>
+            <div class="form-group wiz-form-full">
+              <label class="form-label">Aktiv tavsifi</label>
+              <input type="text" class="form-input" id="ijz-aktiv-tavsif" value="Siemens MAGNETOM Vida 3T — klinika uchun MRI skaneri">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Yetkazib beruvchi <span style="color:var(--danger)">*</span></label>
+              <input type="text" class="form-input" id="ijz-supplier-nomi" value="MedTech Solutions MChJ">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Yetkazib beruvchi telefoni</label>
+              <input type="tel" class="form-input" id="ijz-supplier-tel" value="+998 71 300 50 60">
+            </div>
+            <div class="form-group wiz-form-full">
+              <label class="form-label">Aktivning bozor qiymati (UZS) <span style="color:var(--danger)">*</span></label>
+              <input type="text" class="form-input" id="ijz-aktiv-qiymati" value="2 400 000 000" oninput="updateIjzCalc()">
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 2: SHARTLAR -->
+        <div class="wiz-pane" id="iwpane-2">
+          <div class="wiz-form-grid" style="margin-bottom:4px;">
+            <div class="form-group">
+              <label class="form-label">Ijara muddati <span style="color:var(--danger)">*</span></label>
+              <select class="form-input" id="ijz-muddat" onchange="updateIjzCalc()">
+                <option value="12">12 oy (1 yil)</option>
+                <option value="24">24 oy (2 yil)</option>
+                <option value="36" selected>36 oy (3 yil)</option>
+                <option value="48">48 oy (4 yil)</option>
+                <option value="60">60 oy (5 yil)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Garov / Kafolat turi</label>
+              <select class="form-input" id="ijz-garov">
+                <option>Ko'chmas mulk garovi</option>
+                <option>Ijaraga olinayotgan aktiv (o'zi)</option>
+                <option>Bank kafolati</option>
+                <option>Depozit garovi</option>
+              </select>
+            </div>
+          </div>
+          <div class="wiz-section-label">IMB — Ko'chirish usuli (AAOIFI SS-9)</div>
+          <div class="wiz-radio-group">
+            <div class="wiz-radio selected" id="ijz-imb-hibah" onclick="selectIjzIMB('hibah')">
+              <div class="wiz-radio-dot"></div>
+              <div class="wiz-radio-text">
+                <strong>Hibah (hadya) orqali ko'chirish</strong>
+                <small>Ijara muddati oxirida bank aktivni <strong>bepul</strong> hadya qiladi. Barcha ijara to'lovlari to'liq to'langandan keyin</small>
+              </div>
+            </div>
+            <div class="wiz-radio" id="ijz-imb-savdo" onclick="selectIjzIMB('savdo')">
+              <div class="wiz-radio-dot"></div>
+              <div class="wiz-radio-text">
+                <strong>Nominal narxda sotish</strong>
+                <small>Muddat oxirida aktiv ramziy narxda (1 UZS yoki belgilangan) sotiladi. Alohida savdo akti tuziladi</small>
+              </div>
+            </div>
+            <div class="wiz-radio" id="ijz-imb-bosqich" onclick="selectIjzIMB('bosqich')">
+              <div class="wiz-radio-dot"></div>
+              <div class="wiz-radio-text">
+                <strong>Bosqichma-bosqich ko'chirish</strong>
+                <small>Har oylik to'lov bilan aktivning bir qismi mijozga o'tib boradi — Diminishing Musharakah usuliga yaqin</small>
+              </div>
+            </div>
+          </div>
+          <div class="wiz-calc-display">
+            <div>
+              <div class="wiz-calc-label">Taxminiy oylik ijara to'lovi</div>
+              <div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">Ijara stavkasi ≈16% yillik · aniq miqdor bank taklif xatida</div>
+            </div>
+            <div class="wiz-calc-value" id="ijz-monthly-payment">32 000 000 UZS</div>
+          </div>
+        </div>
+
+        <!-- PANE 3: HUJJATLAR -->
+        <div class="wiz-pane" id="iwpane-3">
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">Quyidagi hujjatlarni yuklang. <strong>Demo rejimida</strong> — kartochkani bosing.</p>
+          <div class="wiz-upload-grid">
+            <div class="wiz-upload" id="iwup-1" onclick="fakeUploadI('iwup-1','Ustav_2024.pdf')">
+              <div class="wiz-upload-icon">📋</div>
+              <div class="wiz-upload-name">Ustav / GUVOHNOMA</div>
+              <div class="wiz-upload-hint">PDF yoki JPG · max 10MB</div>
+            </div>
+            <div class="wiz-upload" id="iwup-2" onclick="fakeUploadI('iwup-2','Moliyaviy_hisobot_2024.xlsx')">
+              <div class="wiz-upload-icon">💰</div>
+              <div class="wiz-upload-name">Moliyaviy hisobot</div>
+              <div class="wiz-upload-hint">Oxirgi 2 yil · Excel / PDF</div>
+            </div>
+            <div class="wiz-upload" id="iwup-3" onclick="fakeUploadI('iwup-3','Aktiv_baholash.pdf')">
+              <div class="wiz-upload-icon">📊</div>
+              <div class="wiz-upload-name">Aktiv baholash hujjati</div>
+              <div class="wiz-upload-hint">Lisenziyalangan baholovchi · PDF</div>
+            </div>
+            <div class="wiz-upload" id="iwup-4" onclick="fakeUploadI('iwup-4','Yetkazib_beruvchi_taklifi.pdf')">
+              <div class="wiz-upload-icon">🛒</div>
+              <div class="wiz-upload-name">Yetkazib beruvchi taklifi</div>
+              <div class="wiz-upload-hint">Invoice / Spec-sheet</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 4: IMB WA'D -->
+        <div class="wiz-pane" id="iwpane-4">
+          <h4 style="font-size:15px;font-weight:700;margin-bottom:12px;">Ariza xulosasi</h4>
+          <div class="wiz-summary" id="ijz-summary-table"></div>
+          <div class="wiz-section-label">IMB Wa'd — Alohida va'da hujjati (AAOIFI SS-9)</div>
+          <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">IMB va'dasi Ijara shartnomasi bilan <strong>birlashtirib yozilmaydi</strong> — alohida hujjat sifatida tuziladi. Bank aktiv egasi sifatida yirik ta'mirlash xarajatlarini o'z zimmaga oladi.</p>
+          <div class="wiz-checks" id="ijz-checks">
+            <div class="wiz-check-item" onclick="toggleIjzCheck(this)">
+              <div class="wiz-check-box"></div>
+              <div class="wiz-check-text">Bank aktivni sotib oladi va menga ijaraga beradi. Ijara muddati davomida aktiv <strong>bank mulki</strong> bo'lib qoladi</div>
+            </div>
+            <div class="wiz-check-item" onclick="toggleIjzCheck(this)">
+              <div class="wiz-check-box"></div>
+              <div class="wiz-check-text">Ijara muddati oxirida aktiv <strong id="ijz-wa-imb">Hibah (hadya)</strong> yo'li bilan menga o'tkaziladi. Bu va'da Ijara shartnomasidan <strong>alohida hujjat</strong> — AAOIFI SS-9</div>
+            </div>
+            <div class="wiz-check-item" onclick="toggleIjzCheck(this)">
+              <div class="wiz-check-box"></div>
+              <div class="wiz-check-text">Bank <strong>yirik ta'mirlash</strong> xarajatlarini o'z zimmaga olishini, kundalik texnik xizmat ko'rsatish esa menimkiligini tushundim (AAOIFI SS-9, m. 5/1/3)</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="btn-ijz-eri" onclick="ijzSignERI()" disabled style="width:100%;padding:14px;font-size:14px;margin-top:4px;opacity:0.5;cursor:not-allowed;">
+            🔐 ERI bilan IMB Wa'dni imzolash va arizani yuborish
+          </button>
+        </div>
+
+        <!-- PANE 5: NATIJA -->
+        <div class="wiz-pane" id="iwpane-5">
+          <div class="wiz-success-screen">
+            <div class="wiz-success-icon">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#0A6847" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3 style="font-size:20px;font-weight:700;margin-bottom:6px;">Ariza qabul qilindi!</h3>
+            <p style="font-size:14px;color:var(--text-secondary);margin-bottom:8px;">Ijara IMB arizangiz muvaffaqiyatli yuborildi</p>
+            <div class="wiz-app-number" id="ijz-app-num">IJR-2026-01847</div>
+            <div class="wiz-next-steps">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);margin-bottom:10px;">Keyingi qadamlar</div>
+              <div class="wiz-next-step-item"><div class="wiz-next-num">1</div><span>1–2 ish kuni: Bank aktiv va mijoz tekshiruvi</span></div>
+              <div class="wiz-next-step-item"><div class="wiz-next-num">2</div><span>3–5 ish kuni: Baholash va Shariah board tasdiqi</span></div>
+              <div class="wiz-next-step-item"><div class="wiz-next-num">3</div><span>6–8 ish kuni: Ijara shartnomasi + IMB Wa'd hujjati</span></div>
+              <div class="wiz-next-step-item"><div class="wiz-next-num">4</div><span>Bank yetkazib beruvchiga to'lov qiladi va aktiv keladi</span></div>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+              <button class="btn btn-primary" onclick="showScreen('dashboard-director')">Boshqaruv paneliga qaytish</button>
+              <button class="btn btn-secondary" onclick="showScreen('ijara-cjm')" style="font-size:13px;">☪ Shariah jarayonini ko'rish</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /wiz-body -->
+
+      <!-- NAV BUTTONS -->
+      <div class="wiz-nav">
+        <button class="btn btn-secondary" id="btn-ijz-back" onclick="ijzBack()" style="display:none;">← Orqaga</button>
+        <div></div>
+        <button class="btn btn-primary" id="btn-ijz-next" onclick="ijzNext()">Keyingisi →</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SCREEN 9: IJARA CJM                        -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="screen-ijara-cjm" class="dashboard-container hidden">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-icon">☪</div>
+      <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
+      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
+      <div class="nav-item"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
+      <div class="nav-section-title">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
+      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
+      <div class="nav-section-title">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
+      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
         <div class="sidebar-user-avatar">AK</div>
         <div class="sidebar-user-info">
           <div class="user-name">Aziz Karimov</div>
@@ -2897,11 +3173,11 @@ body {
   <div class="main-content">
     <div class="topbar">
       <div class="topbar-left">
-        <h2>Ijara Muntahia Bittamleek — Mijoz Yo'li (CJM)</h2>
+        <h2>Ijara IMB — Shariah Jarayon Xaritasi</h2>
         <span class="cjm-aaoifi-tag">☪ AAOIFI SS-9 / FAS-32</span>
       </div>
       <div class="topbar-right">
-        <button class="topbar-btn" onclick="showScreen('dashboard-director')" title="Yopish">✕</button>
+        <button class="topbar-btn" onclick="showScreen('ijara-apply')" title="Arizaga qaytish" style="font-size:13px;padding:6px 12px;border-radius:20px;">← Arizaga qaytish</button>
       </div>
     </div>
 
@@ -3557,7 +3833,7 @@ document.addEventListener('keydown', (e) => {
     showScreen('murabaha-apply');
   }
   if (e.key === 'i' || e.key === 'I') {
-    showScreen('ijara-cjm');
+    showScreen('ijara-apply');
   }
 });
 
@@ -3698,13 +3974,152 @@ function wizSignERI() {
   }, 2200);
 }
 
+// ——— Ijara Wizard ———
+var ijzStep = 1;
+var ijzIMB = 'hibah';
+
+function ijzGoTo(step) {
+  for (var i = 1; i <= 5; i++) {
+    var dot = document.querySelector('[data-iwstep="' + i + '"]');
+    var pane = document.getElementById('iwpane-' + i);
+    if (!dot || !pane) continue;
+    if (i < step) dot.className = 'wiz-step done';
+    else if (i === step) dot.className = 'wiz-step active';
+    else dot.className = 'wiz-step';
+    pane.classList.toggle('active', i === step);
+  }
+  for (var j = 1; j <= 4; j++) {
+    var con = document.getElementById('iwcon-' + j);
+    if (con) con.classList.toggle('done', j < step);
+  }
+  ijzStep = step;
+  var back = document.getElementById('btn-ijz-back');
+  var next = document.getElementById('btn-ijz-next');
+  if (back) back.style.display = step > 1 && step < 5 ? 'inline-flex' : 'none';
+  if (next) next.style.display = step < 4 ? 'inline-flex' : 'none';
+  if (step === 4) ijzBuildSummary();
+}
+
+function ijzNext() { if (ijzStep < 4) ijzGoTo(ijzStep + 1); }
+function ijzBack() { if (ijzStep > 1) ijzGoTo(ijzStep - 1); }
+
+function selectIjzIMB(type) {
+  ijzIMB = type;
+  ['hibah','savdo','bosqich'].forEach(function(t) {
+    var el = document.getElementById('ijz-imb-' + t);
+    if (el) el.classList.toggle('selected', t === type);
+  });
+  var labels = { hibah: 'Hibah (hadya)', savdo: 'Nominal narxda sotish', bosqich: 'Bosqichma-bosqich ko\'chirish' };
+  var waEl = document.getElementById('ijz-wa-imb');
+  if (waEl) waEl.textContent = labels[type] || labels.hibah;
+}
+
+function updateIjzCalc() {
+  var qEl = document.getElementById('ijz-aktiv-qiymati');
+  var qiym = qEl ? parseInt(qEl.value.replace(/\D/g, '')) || 2400000000 : 2400000000;
+  var mEl = document.getElementById('ijz-muddat');
+  var muddat = mEl ? parseInt(mEl.value) || 36 : 36;
+  var oylik = Math.round(qiym * 0.16 / 12);
+  var fmt = oylik.toLocaleString('ru-RU') + ' UZS';
+  var el = document.getElementById('ijz-monthly-payment');
+  if (el) el.textContent = fmt;
+}
+
+function fakeUploadI(id, filename) {
+  var el = document.getElementById(id);
+  if (!el || el.classList.contains('uploaded')) return;
+  el.classList.add('uploaded');
+  el.querySelector('.wiz-upload-icon').textContent = '✅';
+  el.querySelector('.wiz-upload-hint').textContent = filename;
+}
+
+function ijzBuildSummary() {
+  var aktiv = (document.getElementById('ijz-aktiv-nomi') || {}).value || 'MRI Siemens 3T';
+  var qiym = (document.getElementById('ijz-aktiv-qiymati') || {}).value || '2 400 000 000';
+  var muddat = (document.getElementById('ijz-muddat') || {}).value || '36';
+  var imbLabels = { hibah: 'Hibah (hadya)', savdo: 'Nominal narxda sotish', bosqich: 'Bosqichma-bosqich' };
+  var garov = (document.getElementById('ijz-garov') || {}).value || 'Ko\'chmas mulk garovi';
+  var oylik = (document.getElementById('ijz-monthly-payment') || {}).textContent || '32 000 000 UZS';
+  var fio = state.userData && state.userData.fio ? state.userData.fio : 'Bobur Zokirov';
+  var inn = state.userData && state.userData.inn ? state.userData.inn : '302456789';
+  var rows = [
+    ['Kompaniya / Direktor', fio + ' (INN: ' + inn + ')'],
+    ['Ijaraga olinayotgan aktiv', aktiv],
+    ['Aktiv bozor qiymati', qiym + ' UZS'],
+    ['Ijara muddati', muddat + ' oy'],
+    ['IMB ko\'chirish usuli', imbLabels[ijzIMB] || imbLabels.hibah],
+    ['Garov', garov],
+    ['Taxminiy oylik ijara to\'lovi', oylik],
+  ];
+  var tbl = document.getElementById('ijz-summary-table');
+  if (!tbl) return;
+  tbl.innerHTML = rows.map(function(r) {
+    return '<div class="wiz-summ-row"><span class="wiz-summ-label">' + r[0] + '</span><span class="wiz-summ-value">' + r[1] + '</span></div>';
+  }).join('');
+  updateIjzCalc();
+}
+
+function toggleIjzCheck(el) {
+  el.classList.toggle('checked');
+  var box = el.querySelector('.wiz-check-box');
+  if (box) box.textContent = el.classList.contains('checked') ? '✓' : '';
+  var all = document.querySelectorAll('#ijz-checks .wiz-check-item').length;
+  var checked = document.querySelectorAll('#ijz-checks .wiz-check-item.checked').length;
+  var btn = document.getElementById('btn-ijz-eri');
+  if (btn) {
+    btn.disabled = checked < all;
+    btn.style.opacity = checked < all ? '0.5' : '1';
+    btn.style.cursor = checked < all ? 'not-allowed' : 'pointer';
+  }
+}
+
+function ijzSignERI() {
+  var btn = document.getElementById('btn-ijz-eri');
+  if (btn) { btn.textContent = '⏳ Imzolanmoqda...'; btn.disabled = true; }
+  showToast('ERI orqali IMB Wa\'d imzolanmoqda...', 'success');
+  setTimeout(function() {
+    var appNum = 'IJR-2026-0' + (Math.floor(1000 + Math.random() * 8999));
+    var el = document.getElementById('ijz-app-num');
+    if (el) el.textContent = appNum;
+    ijzGoTo(5);
+    showToast('Ijara arizasi muvaffaqiyatli yuborildi! ✅', 'success');
+  }, 2200);
+}
+
 // Wrap showScreen for wizard reset + role auto-select
 var _origShowScreen = showScreen;
 showScreen = function(id) {
   _origShowScreen(id);
   if (id === 'role-select') {
-    // Pre-select director so demo can proceed without clicking a role card
     setTimeout(function() { selectRole('director'); }, 50);
+  }
+  if (id === 'eri') {
+    setTimeout(function() {
+      var first = document.querySelector('.eri-method');
+      if (first) selectEriMethod(first, 'eimzo');
+    }, 50);
+  }
+  if (id === 'ijara-apply') {
+    ijzStep = 1;
+    ijzGoTo(1);
+    ['iwup-1','iwup-2','iwup-3','iwup-4'].forEach(function(uid, idx) {
+      var el = document.getElementById(uid);
+      if (!el || !el.classList.contains('uploaded')) return;
+      el.classList.remove('uploaded');
+      var icons = ['📋','💰','📊','🛒'];
+      var hints = ['PDF yoki JPG · max 10MB','Oxirgi 2 yil · Excel / PDF','Lisenziyalangan baholovchi · PDF','Invoice / Spec-sheet'];
+      el.querySelector('.wiz-upload-icon').textContent = icons[idx];
+      el.querySelector('.wiz-upload-hint').textContent = hints[idx];
+    });
+    document.querySelectorAll('#ijz-checks .wiz-check-item').forEach(function(ci) {
+      ci.classList.remove('checked');
+      var box = ci.querySelector('.wiz-check-box');
+      if (box) box.textContent = '';
+    });
+    var eriBtn = document.getElementById('btn-ijz-eri');
+    if (eriBtn) { eriBtn.disabled = true; eriBtn.style.opacity = '0.5'; eriBtn.style.cursor = 'not-allowed'; eriBtn.textContent = '🔐 ERI bilan IMB Wa\'dni imzolash va arizani yuborish'; }
+    selectIjzIMB('hibah');
+    updateIjzCalc();
   }
   if (id === 'murabaha-apply') {
     wizStep = 1;
