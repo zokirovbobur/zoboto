@@ -1287,6 +1287,36 @@ body {
 .sched-balance { font-size: 12px; color: var(--text-secondary); }
 
 /* ═══════════════ LANGUAGE SELECTOR ═══════════════ */
+.lang-selector {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 99999;
+  display: flex;
+  gap: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 5px;
+  box-shadow: var(--shadow-sm);
+}
+.lang-selector.hidden { display: none; }
+.lang-btn {
+  border: none;
+  background: transparent;
+  padding: 4px 11px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  transition: var(--transition);
+  letter-spacing: 0.5px;
+}
+.lang-btn:hover { background: var(--bg); color: var(--text-primary); }
+.lang-btn.active { background: var(--primary); color: #fff; }
+
 .lang-select {
   width: 100%;
   padding: 7px 10px;
@@ -1330,6 +1360,13 @@ body {
 
 <div class="islamic-pattern"></div>
 
+
+<!-- Language Selector (auth screens only) -->
+<div class="lang-selector" id="lang-selector">
+  <button class="lang-btn active" onclick="setLang('uz')">UZ</button>
+  <button class="lang-btn" onclick="setLang('ru')">RU</button>
+  <button class="lang-btn" onclick="setLang('en')">EN</button>
+</div>
 
 <!-- ═══════════════════════════════════════════ -->
 <!-- SCREEN 1: ONBOARDING – REGISTRATION       -->
@@ -3971,6 +4008,9 @@ function showScreen(id) {
     state.currentScreen = id;
     window.scrollTo(0, 0);
   }
+  var isAuth = target && target.classList.contains('onboarding-container');
+  var langSelector = document.getElementById('lang-selector');
+  if (langSelector) langSelector.classList.toggle('hidden', !isAuth);
 }
 
 function goBack(screen) {
@@ -4838,8 +4878,9 @@ function setLang(lang) {
     var key = el.getAttribute('data-i18n-ph');
     if (t[key] !== undefined) el.placeholder = t[key];
   });
-  document.querySelectorAll('.lang-select').forEach(function(sel) {
-    sel.value = lang;
+  document.querySelectorAll('.lang-select').forEach(function(sel) { sel.value = lang; });
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
   });
   document.documentElement.lang = lang;
 }
