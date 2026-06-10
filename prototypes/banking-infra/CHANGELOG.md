@@ -21,7 +21,7 @@ Path: `prototypes/banking-infra/`
 - Added `renderDwhAiPanel()` function with full UZ/RU/EN content:
   - When to use, description, and 8 key capabilities per language
   - AI-NATIVE BI badge in purple (`#7C3AED`)
-- Added **"Demo ko'rish / Открыть демо / Open Demo"** button linking to `../../prototypes/ai-bi-navigator/index.html`
+- Added **"Demo ko'rish / Открыть демо / Open Demo"** button linking to `../../prototypes/smart-bi/index.html`
 - Updated `switchDwhTab()` to dispatch `ai_bi` key to `renderDwhAiPanel()` instead of generic `renderDwhPanel()`
 
 ---

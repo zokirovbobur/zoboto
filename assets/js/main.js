@@ -211,7 +211,7 @@ const PROTOTYPES = [
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
-    url: "prototypes/ai-bi-navigator/index.html",
+    url: "prototypes/smart-bi/index.html",
     description: "AI-native BI platform prototype for Uzbekistan banking — executive dashboard, GenBI analyst, 14 screens, role-based access, 3-language support (UZ/RU/EN). Built to demonstrate DWH & BI analytics layer for banking infrastructure."
   },
   {

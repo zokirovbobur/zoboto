@@ -18,7 +18,7 @@ Format: `[YYYY-MM-DD] — summary` grouped by date, newest first.
 ## [2026-06-09] — Smart BI Prototype
 
 ### Smart BI Prototype — Added
-- Added `prototypes/ai-bi-navigator/` — AI-native BI platform prototype (Smart BI) for Uzbekistan banking
+- Added `prototypes/smart-bi/` — AI-native BI platform prototype (Smart BI) for Uzbekistan banking
 - Includes: executive dashboard (9 KPIs + sparklines), GenBI conversational analyst, factor analysis, dashboard library, widget builder, connectors wizard, admin & audit, 14 screens total
 - Role-based access: CEO, Analyst, Department Head, Data Admin
 - Dark/light theme, UZ/RU/EN language switch, mobile preview frame
