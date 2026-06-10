@@ -78,6 +78,8 @@ const PORTFOLIO = [
     role: "Senior Product Manager",
     description: "Unified BNPL processing platform for client onboarding, identification, credit-limit allocation, and installment-plan execution across financial partners.",
     image: "assets/img/portfolio/bnpl-broker.jpg",
+    liveUrl: "prototypes/mediapark-bnpl/index.html",
+    liveBtnLabel: "Open Prototype ↗",
     caseStudy: {
       overview: "A single BNPL 'broker' layer connecting retailers with multiple banks and microfinance organizations through one unified processing flow.",
       problem: "Each financial partner had different onboarding, scoring, and installment rules — creating friction for retailers and customers.",
@@ -213,6 +215,14 @@ const PROTOTYPES = [
     status: "Demo",
     url: "prototypes/smart-bi/index.html",
     description: "AI-native BI platform prototype for Uzbekistan banking — executive dashboard, GenBI analyst, 14 screens, role-based access, 3-language support (UZ/RU/EN). Built to demonstrate DWH & BI analytics layer for banking infrastructure."
+  },
+  {
+    title: "BNPL Broker — Mediapark",
+    product: "Mediapark",
+    type: "Internal",
+    status: "Demo",
+    url: "prototypes/mediapark-bnpl/index.html",
+    description: "Unified BNPL checkout broker prototype — multi-partner offer comparison, scoring simulation, contract generation, e-signature, and Face ID flow. Online & offline retail modes."
   },
   {
     title: "Finport — Investment Portfolio",
