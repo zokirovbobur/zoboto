@@ -1073,6 +1073,76 @@ body {
 .toast.success { background: var(--success); }
 .toast.error { background: var(--danger); }
 
+/* ═══════════════ CJM — CUSTOMER JOURNEY MAP ═══════════════ */
+.cjm-aaoifi-tag {
+  background: var(--accent-surface); color: #8B6914;
+  border: 1px solid #E8D5A0; border-radius: 20px;
+  padding: 4px 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+}
+.cjm-intro {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 16px;
+}
+.cjm-intro-text { font-size: 14px; color: var(--text-secondary); line-height: 1.6; flex: 1; }
+.cjm-legend { display: flex; align-items: center; gap: 10px; font-size: 12px; white-space: nowrap; flex-shrink: 0; flex-wrap: wrap; }
+.leg-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 3px; }
+.cjm-scroll-wrap { overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--border); }
+.cjm-table { border-collapse: collapse; min-width: 1380px; width: 100%; background: var(--surface); }
+.cjm-table th, .cjm-table td { border: 1px solid var(--border-light); }
+.cjm-th-label { width: 108px; background: var(--bg); }
+.cjm-th-stage {
+  background: var(--surface); padding: 12px 10px;
+  text-align: center; vertical-align: top; min-width: 185px;
+}
+.cjm-th-critical { background: #FEF9ED; }
+.cjm-stage-num-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--primary); color: white;
+  font-size: 13px; font-weight: 700; margin: 0 auto 5px;
+}
+.cjm-stage-name { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 3px; }
+.cjm-stage-dur { font-size: 11px; color: var(--text-tertiary); font-weight: 500; }
+.cjm-critical-badge {
+  display: inline-block; background: var(--warning-surface); color: #8B6914;
+  border: 1px solid #E8D5A0; border-radius: 4px;
+  padding: 2px 6px; font-size: 11px; font-weight: 700; margin-top: 5px;
+}
+.cjm-td-label {
+  padding: 10px 8px; text-align: center; vertical-align: middle;
+  background: var(--bg); width: 108px;
+}
+.cjm-lane-icon { font-size: 20px; margin-bottom: 3px; }
+.cjm-lane-name { font-size: 10px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+.cjm-td { padding: 10px 11px; vertical-align: top; font-size: 12px; min-width: 185px; }
+.cjm-td-warn { background: #FFFBF0; }
+.cjm-td-critical { background: #FEF9ED; }
+.cjm-td-emotion { vertical-align: middle; background: var(--bg); }
+.cjm-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
+.cjm-list li { font-size: 12px; color: var(--text-secondary); line-height: 1.45; padding-left: 13px; position: relative; }
+.cjm-list li::before { content: '·'; position: absolute; left: 3px; color: var(--primary); font-weight: 700; }
+.cjm-shariah-note { display: flex; flex-direction: column; gap: 5px; }
+.csn-ok  { font-size: 12px; color: #0A6847; line-height: 1.4; }
+.csn-warn{ font-size: 12px; color: #8B6914; line-height: 1.4; }
+.csn-fail{ font-size: 12px; color: var(--danger); line-height: 1.4; font-weight: 600; }
+.cjm-docs { display: flex; flex-direction: column; gap: 4px; }
+.cjm-doc { font-size: 12px; color: var(--text-secondary); padding: 3px 6px; background: var(--bg); border-radius: 4px; line-height: 1.3; }
+.cjm-emotion-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; }
+.cjm-emotion-face { font-size: 22px; }
+.cjm-emotion-text { font-size: 11px; color: var(--text-secondary); text-align: center; line-height: 1.3; }
+.cjm-aaoifi-notes { margin-top: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px 20px; }
+.cjm-aaoifi-notes h4 { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+.cjm-note-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cjm-note { font-size: 12px; line-height: 1.5; padding: 12px 14px; border-radius: var(--radius-sm); }
+.cjm-note strong { display: block; margin-bottom: 4px; font-size: 13px; }
+.cjm-note-ok   { background: var(--success-surface); color: #0A4D32; border-left: 3px solid var(--success); }
+.cjm-note-warn { background: var(--warning-surface); color: #7A5510; border-left: 3px solid var(--warning); }
+.cjm-note-fail { background: var(--danger-surface);  color: #9B1F17; border-left: 3px solid var(--danger); }
+.cjm-note-info { background: var(--info-surface);    color: #1558AD; border-left: 3px solid var(--info); }
+.cjm-imt-opts { display: flex; flex-direction: column; gap: 5px; margin-top: 5px; }
+.cjm-imt-opt { font-size: 12px; padding: 5px 9px; background: var(--primary-surface); border-radius: 4px; color: var(--primary); font-weight: 500; }
+
 /* Responsive */
 @media (max-width: 1100px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1363,8 +1433,8 @@ body {
       <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
 
       <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
+      <div class="nav-item" onclick="showScreen('murabaha-cjm')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
+      <div class="nav-item" onclick="showScreen('ijara-cjm')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
       <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
       <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
 
@@ -1693,7 +1763,7 @@ body {
       <div class="nav-item"><span class="nav-icon">🔄</span> To'lovlar</div>
 
       <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
+      <div class="nav-item" onclick="showScreen('murabaha-cjm')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
       <div class="nav-item locked"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
       <div class="nav-item locked"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
       <div class="nav-item locked"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
@@ -2033,6 +2103,820 @@ body {
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════ -->
+<!-- SCREEN 7: MURABAHA CJM                     -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="screen-murabaha-cjm" class="dashboard-container hidden">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-icon">☪</div>
+      <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
+      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
+      <div class="nav-item"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
+      <div class="nav-section-title">Xizmatlar</div>
+      <div class="nav-item active"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
+      <div class="nav-item" onclick="showScreen('ijara-cjm')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
+      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
+      <div class="nav-section-title">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
+      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">AK</div>
+        <div class="sidebar-user-info">
+          <div class="user-name">Aziz Karimov</div>
+          <div class="user-role">Bosh Direktor</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h2>Murobaha — Mijoz Yo'li (CJM)</h2>
+        <span class="cjm-aaoifi-tag">☪ AAOIFI SS-8 / FAS-28</span>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn" onclick="showScreen('dashboard-director')" title="Yopish">✕</button>
+      </div>
+    </div>
+
+    <div class="page-content" style="padding:16px 24px;">
+
+      <div class="cjm-intro">
+        <div class="cjm-intro-text">
+          <strong>Murobaha</strong> — bank mijoz uchun aktiiv sotib olib, tannarx + kelishilgan foyda bilan qayta sotadi. <strong>Yuridik shaxslar uchun:</strong> uskunalar, xomashyo, transport, ko'chmas mulk. Muddatli to'lov 3–36 oy. Shariah asosiy talabi: Bank <em>qabz</em> (egalik/hukmi egalik) olgandan <strong>keyin</strong> sotishi mumkin.
+        </div>
+        <div class="cjm-legend">
+          <span><span class="leg-dot" style="background:#1A73E8"></span>Mijoz</span>
+          <span><span class="leg-dot" style="background:#0A6847"></span>Bank</span>
+          <span><span class="leg-dot" style="background:#C5A236"></span>Shariah</span>
+          <span><span class="leg-dot" style="background:#9AA0A6"></span>Hujjatlar</span>
+        </div>
+      </div>
+
+      <div class="cjm-scroll-wrap">
+        <table class="cjm-table">
+          <thead>
+            <tr>
+              <th class="cjm-th-label"></th>
+              <th class="cjm-th-stage">
+                <div class="cjm-stage-num-badge">1</div>
+                <div class="cjm-stage-name">Ariza berish</div>
+                <div class="cjm-stage-dur">1–2 kun</div>
+              </th>
+              <th class="cjm-th-stage">
+                <div class="cjm-stage-num-badge">2</div>
+                <div class="cjm-stage-name">Bank tahlili</div>
+                <div class="cjm-stage-dur">3–5 kun</div>
+              </th>
+              <th class="cjm-th-stage">
+                <div class="cjm-stage-num-badge">3</div>
+                <div class="cjm-stage-name">Wa'd imzolash</div>
+                <div class="cjm-stage-dur">1 kun</div>
+              </th>
+              <th class="cjm-th-stage cjm-th-critical">
+                <div class="cjm-stage-num-badge" style="background:var(--warning)">4</div>
+                <div class="cjm-stage-name">Aktiv sotib olish + Qabz</div>
+                <div class="cjm-stage-dur">2–5 kun</div>
+                <div class="cjm-critical-badge">⚠️ Shariah kritik</div>
+              </th>
+              <th class="cjm-th-stage">
+                <div class="cjm-stage-num-badge">5</div>
+                <div class="cjm-stage-name">Murobaha shartnomasi</div>
+                <div class="cjm-stage-dur">1 kun</div>
+              </th>
+              <th class="cjm-th-stage">
+                <div class="cjm-stage-num-badge">6</div>
+                <div class="cjm-stage-name">Aktiv topshirish</div>
+                <div class="cjm-stage-dur">1 kun</div>
+              </th>
+              <th class="cjm-th-stage">
+                <div class="cjm-stage-num-badge">7</div>
+                <div class="cjm-stage-name">To'lov davri</div>
+                <div class="cjm-stage-dur">12–36 oy</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- ── MIJOZ ── -->
+            <tr>
+              <td class="cjm-td-label" style="border-left:3px solid var(--info)">
+                <div class="cjm-lane-icon">👤</div>
+                <div class="cjm-lane-name">Mijoz harakati</div>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Murobaha ariza formasini to'ldirish</li>
+                  <li>Aktiv turi, spetsifikatsiya va yetkazib beruvchini ko'rsatish</li>
+                  <li>Moliyaviy hujjatlarni yuklash</li>
+                  <li>Mablag' va muddat tanlash</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Bank so'roviga qo'shimcha hujjat taqdim etish</li>
+                  <li>Tushuntiruvchi xatlar yozish (kerak bo'lsa)</li>
+                  <li>Natija kutish</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Bank taklifini (narx, foyda %, muddat) ko'rish</li>
+                  <li><strong>Wa'd</strong> shartlari bilan tanishish</li>
+                  <li>ERI orqali Wa'd hujjatini imzolash</li>
+                </ul>
+              </td>
+              <td class="cjm-td cjm-td-warn">
+                <ul class="cjm-list">
+                  <li>Agar <strong>Wakala</strong>: bank nomidan yetkazib beruvchiga to'lov qilish (agent sifatida)</li>
+                  <li>Delivery note va title hujjatlarini DBO ga yuklash</li>
+                  <li>Bank qabz tasdiqlashini kutish</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Murobaha shartnomasini ko'rish (tannarx + foyda = yakuniy narx)</li>
+                  <li>To'lov jadvalini tasdiqlash</li>
+                  <li>ERI orqali imzolash</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Aktiv/tovarni qabul qilish</li>
+                  <li>Qabul-topshirish dalolatnomasini imzolash</li>
+                  <li>Foydalanishni boshlash</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Oylik to'lovlarni DBO orqali amalga oshirish</li>
+                  <li>To'lov tarixi va qoldiqni kuzatish</li>
+                  <li>Erta to'lov so'rovi yuborish (ixtiyoriy)</li>
+                </ul>
+              </td>
+            </tr>
+
+            <!-- ── BANK ── -->
+            <tr>
+              <td class="cjm-td-label" style="border-left:3px solid var(--primary)">
+                <div class="cjm-lane-icon">🏦</div>
+                <div class="cjm-lane-name">Bank harakati</div>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Arizani qabul qilish va ro'yxatga olish</li>
+                  <li>Dastlabki tekshiruv: qora ro'yxat, INN, yetkazib beruvchi</li>
+                  <li>Ariza raqami va SMS tasdiqlash yuborish</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Kredit tahlili (moliyaviy ko'rsatkichlar, biz-reja)</li>
+                  <li>Shariah board ko'rib chiqishi</li>
+                  <li>Garov / kafolat baholash</li>
+                  <li>Limit va muddat aniqlash</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Murobaha taklif xatini (offer letter) yuborish</li>
+                  <li>Wa'd hujjatini tayyorlash va DBO ga joylashtirish</li>
+                  <li>Mijoz ERI imzosini qayd etish</li>
+                </ul>
+              </td>
+              <td class="cjm-td cjm-td-warn">
+                <ul class="cjm-list">
+                  <li>Yetkazib beruvchiga to'lov buyrug'i (PO) <strong>YOKI</strong> Wakala buyrug'i imzolash</li>
+                  <li>Title / delivery hujjatlarini qabul qilish</li>
+                  <li><strong>Qabz rasmiy tasdiqlash</strong> — bank egalik bayonnomasi tuzadi</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Murobaha savdo shartnomasini tayyorlash</li>
+                  <li>Narx: tannarx + fikslangan foyda</li>
+                  <li>To'lov jadvalini generatsiya qilish</li>
+                  <li>ERI orqali bank imzosi</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Logistika va topshirish tashkillashtirish</li>
+                  <li>Egalikni rasmiy mijozga o'tkazish</li>
+                  <li>Moliyalash hisobini aktivlashtirish</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>To'lov monitoringi va eslatmalar (SMS/email)</li>
+                  <li>Kech to'lov: <em>ta'widh</em> — faqat haqiqiy bank zarari</li>
+                  <li>Erta to'lovda ixtiyoriy chegirma ko'rib chiqish</li>
+                </ul>
+              </td>
+            </tr>
+
+            <!-- ── SHARIAH ── -->
+            <tr>
+              <td class="cjm-td-label" style="border-left:3px solid var(--accent)">
+                <div class="cjm-lane-icon">☪</div>
+                <div class="cjm-lane-name">Shariah nazorat</div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-shariah-note">
+                  <div class="csn-ok">✅ Maqsad halolligi tekshiruvi</div>
+                  <div class="csn-ok">✅ Aktiv tovar/mol bo'lishi shart (xizmat murobaha bo'lmaydi)</div>
+                  <div class="csn-warn">⚠️ Aktiv avvaldan mijoz egaligida bo'lmasligi kerak</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-shariah-note">
+                  <div class="csn-ok">✅ Aktiv halol toifada ekanligini tasdiqlash</div>
+                  <div class="csn-ok">✅ Foyda miqdori aniq va fikslangan bo'lishi shart</div>
+                  <div class="csn-fail">❌ Suzuvchi foiz taqiqlangan</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-shariah-note">
+                  <div class="csn-ok">✅ Wa'd = va'da, savdo emas. ALOHIDA hujjat</div>
+                  <div class="csn-ok">✅ Majburiy va'da — AAOIFI SS-8 binding promise</div>
+                  <div class="csn-fail">❌ Wa'd va Murobaha shartnomasini birlashtirish taqiqlangan</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-critical">
+                <div class="cjm-shariah-note">
+                  <div class="csn-fail">❌ Bank qabzsiz sotish taqiqlangan — bay' al-ma'dum</div>
+                  <div class="csn-ok">✅ Fizikiy qabz YOKI hukmi qabz (title, ombor kvitansiyasi)</div>
+                  <div class="csn-warn">⚠️ Wakala: mijoz bank agenti sifatida harakat qiladi. Aktiv avval bank nomiga o'tishi shart!</div>
+                  <div class="csn-ok">✅ AAOIFI SS-8 §2/3: qabz tasdiqlash majburiy</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-shariah-note">
+                  <div class="csn-ok">✅ Savdo shu yerda bo'ladi: bank mijozga sotadi</div>
+                  <div class="csn-ok">✅ Murobaha narxi = tannarx + oshkor foyda</div>
+                  <div class="csn-fail">❌ Imzolangandan keyin narxni o'zgartirish mumkin emas</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-shariah-note">
+                  <div class="csn-ok">✅ Egalik va risk mijozga o'tadi</div>
+                  <div class="csn-ok">✅ Topshirish dalolatnomasi Shariah uchun qabz dalili</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-shariah-note">
+                  <div class="csn-ok">✅ To'lov = asosiy qarz + foyda (riba emas)</div>
+                  <div class="csn-fail">❌ Kech to'lovga qo'shimcha foiz taqiqlangan</div>
+                  <div class="csn-warn">⚠️ Ta'widh: faqat haqiqiy bank xarajatlarini qoplash uchun</div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ── HUJJATLAR ── -->
+            <tr>
+              <td class="cjm-td-label" style="border-left:3px solid #9AA0A6">
+                <div class="cjm-lane-icon">📄</div>
+                <div class="cjm-lane-name">Hujjatlar</div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">📋 Murobaha ariza formasi</div>
+                  <div class="cjm-doc">🏢 Ustav / GUVOHNOMA</div>
+                  <div class="cjm-doc">💰 Moliyaviy hisobot (2 yil)</div>
+                  <div class="cjm-doc">🛒 Yetkazib beruvchi taklifi (invoice/spec)</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">📊 Kredit tahlil xulosasi</div>
+                  <div class="cjm-doc">☪ Shariah compliance bayonnomasi</div>
+                  <div class="cjm-doc">🏦 Garov baholash akti</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">📨 Taklif xati (Offer Letter)</div>
+                  <div class="cjm-doc">✍️ Wa'd shartnomasi (ERI imzoli)</div>
+                  <div class="cjm-doc">📅 Taxminiy to'lov jadvali</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">📦 Topshirish dalolatnomasi (delivery note)</div>
+                  <div class="cjm-doc">📜 Title hujjati / mulk guvohnomasi</div>
+                  <div class="cjm-doc">🤝 Wakala shartnomasi (agent usulida)</div>
+                  <div class="cjm-doc">✅ Bank qabz tasdiqlash bayonnomasi</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">📃 Murobaha savdo shartnomasi (ERI)</div>
+                  <div class="cjm-doc">📅 Tasdiqlangan to'lov jadvali</div>
+                  <div class="cjm-doc">🔐 Bank + mijoz ERI imzolari</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">✅ Qabul-topshirish dalolatnomasi</div>
+                  <div class="cjm-doc">🔑 Aktiv kalitlari / kirish huquqlari</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">💳 Oylik to'lov kvitansiyalari</div>
+                  <div class="cjm-doc">📊 Murobaha hisobi holati (DBO)</div>
+                  <div class="cjm-doc">📩 SMS / email eslatmalar</div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ── HISSIYOT ── -->
+            <tr>
+              <td class="cjm-td-label" style="border-left:3px solid #E8A317">
+                <div class="cjm-lane-icon">😊</div>
+                <div class="cjm-lane-name">Hissiyot</div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😊</div>
+                  <div class="cjm-emotion-text">Ijobiy. Onlayn ariza qulayligi.</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😐</div>
+                  <div class="cjm-emotion-text">Noaniqliq. Javob kutilmoqda.</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😊</div>
+                  <div class="cjm-emotion-text">Ijobiy. Tasdiqlandi, narx aniq.</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😐</div>
+                  <div class="cjm-emotion-text">Murakkab. Wakala jarayoni tushuntirishni talab qiladi.</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😊</div>
+                  <div class="cjm-emotion-text">Ijobiy. Shartnoma imzolandi.</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😄</div>
+                  <div class="cjm-emotion-text">Juda ijobiy. Aktiv qo'lga tegdi!</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😊</div>
+                  <div class="cjm-emotion-text">Barqaror. Onlayn to'lov qulaylik.</div>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cjm-aaoifi-notes">
+        <h4>☪ AAOIFI SS-8 / FAS-28 — Murobaha asosiy talablari</h4>
+        <div class="cjm-note-grid">
+          <div class="cjm-note cjm-note-fail">
+            <strong>❌ Bay' al-ma'dum — taqiqlangan</strong>
+            Bank egaligida yo'q aktiv sotolmaydi. Avval qabz (egalik/hukmi egalik) olinishi shart, shundagina Murobaha shartnomasi tuziladi.
+          </div>
+          <div class="cjm-note cjm-note-warn">
+            <strong>⚠️ Qabz (Egalik) — majburiy bosqich</strong>
+            Fizikiy qabz: tovar bankka keladi. Hukmi (konstruktiv) qabz: title hujjati, delivery order, ombor kvitansiyasi bankga o'tadi. Ikkisi ham AAOIFI SS-8 bo'yicha qabul qilinadi.
+          </div>
+          <div class="cjm-note cjm-note-warn">
+            <strong>⚠️ Wa'd ≠ Murobaha shartnomasi</strong>
+            Wa'd (va'da) va Murobaha savdo shartnomasi ikki ALOHIDA hujjat bo'lishi shart. Bir hujjatda birlashtirish shariah bo'yicha taqiqlangan.
+          </div>
+          <div class="cjm-note cjm-note-ok">
+            <strong>✅ Wakala (agent) usuli — ruxsat etilgan</strong>
+            Bank mijozni Wakeel (agent) sifatida tayinlashi mumkin. Lekin aktiv hujjatlar avval bank nomiga o'tadi, keyin alohida Murobaha shartnomasi tuziladi. Wakala va Murobaha — ikki alohida amal.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SCREEN 8: IJARA CJM                        -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="screen-ijara-cjm" class="dashboard-container hidden">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-icon">☪</div>
+      <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
+      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
+      <div class="nav-item"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
+      <div class="nav-section-title">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-cjm')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
+      <div class="nav-item active"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
+      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
+      <div class="nav-section-title">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
+      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar">AK</div>
+        <div class="sidebar-user-info">
+          <div class="user-name">Aziz Karimov</div>
+          <div class="user-role">Bosh Direktor</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h2>Ijara Muntahia Bittamleek — Mijoz Yo'li (CJM)</h2>
+        <span class="cjm-aaoifi-tag">☪ AAOIFI SS-9 / FAS-32</span>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn" onclick="showScreen('dashboard-director')" title="Yopish">✕</button>
+      </div>
+    </div>
+
+    <div class="page-content" style="padding:16px 24px;">
+
+      <div class="cjm-intro">
+        <div class="cjm-intro-text">
+          <strong>Ijara Muntahia Bittamleek (IMB)</strong> — bank aktiv sotib olib ijaraga beradi, ijara muddati oxirida egalik turli yo'llar bilan mijozga o'tadi. <strong>Yuridik shaxslar uchun:</strong> ishlab chiqarish jihozlari, transport vositalari, IT uskunalar, ko'chmas mulk. Muddati 1–5 yil. Asosiy farq Murobahadan: bank ijara davomida aktiv <em>egasi</em> bo'lib qoladi.
+        </div>
+        <div class="cjm-legend">
+          <span><span class="leg-dot" style="background:#1A73E8"></span>Mijoz</span>
+          <span><span class="leg-dot" style="background:#0A6847"></span>Bank</span>
+          <span><span class="leg-dot" style="background:#C5A236"></span>Shariah</span>
+          <span><span class="leg-dot" style="background:#9AA0A6"></span>Hujjatlar</span>
+        </div>
+      </div>
+
+      <div class="cjm-scroll-wrap">
+        <table class="cjm-table">
+          <thead>
+            <tr>
+              <th class="cjm-th-label"></th>
+              <th class="cjm-th-stage">
+                <div class="cjm-stage-num-badge">1</div>
+                <div class="cjm-stage-name">Ariza berish</div>
+                <div class="cjm-stage-dur">1–2 kun</div>
+              </th>
+              <th class="cjm-th-stage">
+                <div class="cjm-stage-num-badge">2</div>
+                <div class="cjm-stage-name">Tahlil va baholash</div>
+                <div class="cjm-stage-dur">3–5 kun</div>
+              </th>
+              <th class="cjm-th-stage cjm-th-critical">
+                <div class="cjm-stage-num-badge" style="background:var(--warning)">3</div>
+                <div class="cjm-stage-name">Bank aktiv sotib oladi</div>
+                <div class="cjm-stage-dur">2–5 kun</div>
+                <div class="cjm-critical-badge">⚠️ Shariah kritik</div>
+              </th>
+              <th class="cjm-th-stage cjm-th-critical">
+                <div class="cjm-stage-num-badge" style="background:var(--warning)">4</div>
+                <div class="cjm-stage-name">Ijara shartnomasi + Topshirish</div>
+                <div class="cjm-stage-dur">1 kun</div>
+                <div class="cjm-critical-badge">⚠️ IMB alohida</div>
+              </th>
+              <th class="cjm-th-stage">
+                <div class="cjm-stage-num-badge">5</div>
+                <div class="cjm-stage-name">Ijara davri</div>
+                <div class="cjm-stage-dur">12–60 oy</div>
+              </th>
+              <th class="cjm-th-stage">
+                <div class="cjm-stage-num-badge">6</div>
+                <div class="cjm-stage-name">Mulk o'tkazish (IMB)</div>
+                <div class="cjm-stage-dur">1 kun</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- ── MIJOZ ── -->
+            <tr>
+              <td class="cjm-td-label" style="border-left:3px solid var(--info)">
+                <div class="cjm-lane-icon">👤</div>
+                <div class="cjm-lane-name">Mijoz harakati</div>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Ijara arizasini to'ldirish</li>
+                  <li>Aktiv turi va spetsifikatsiyasini ko'rsatish (jihozlar, transport, ko'chmas mulk)</li>
+                  <li>Ijara muddati va maqsadini belgilash</li>
+                  <li>Yetkazib beruvchi ma'lumotlarini kiritish</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Aktiv narxini tasdiqlash (supplier taklifi)</li>
+                  <li>Qo'shimcha hujjatlar taqdim etish</li>
+                  <li>Takaful (sug'urta) variantini ko'rib chiqish</li>
+                </ul>
+              </td>
+              <td class="cjm-td cjm-td-warn">
+                <ul class="cjm-list">
+                  <li>Yetkazib beruvchi bilan koordinatsiya qilish (bank nomidan)</li>
+                  <li>Bank aktiv qabz qilganini DBO da tasdiqlash</li>
+                </ul>
+              </td>
+              <td class="cjm-td cjm-td-warn">
+                <ul class="cjm-list">
+                  <li>Ijara shartnomasini diqqat bilan o'qish</li>
+                  <li>ERI orqali ijara shartnomasini imzolash</li>
+                  <li>Aktivni qabul qilish, topshirish dalolatnomasini imzolash</li>
+                  <li><strong>IMB va'da hujjatini</strong> alohida o'qib imzolash</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Oylik ujra (ijara to'lovi) DBO orqali to'lash</li>
+                  <li>Joriy texnik xizmat (routine maintenance) o'zi amalga oshiradi</li>
+                  <li>Katta buzilish bo'lsa bankka xabar berish</li>
+                  <li>Kenja ijaraga berish uchun bank ruxsati so'rash</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Tanlangan variant bo'yicha mulk o'tkazish hujjatini imzolash</li>
+                  <li>A: Hibah qabul qilish (bepul)</li>
+                  <li>B: Nominal narxda sotib olish (ERI + to'lov)</li>
+                  <li>C: Bosqichli sotuv — oxirgi qismni qabul qilish</li>
+                </ul>
+              </td>
+            </tr>
+
+            <!-- ── BANK ── -->
+            <tr>
+              <td class="cjm-td-label" style="border-left:3px solid var(--primary)">
+                <div class="cjm-lane-icon">🏦</div>
+                <div class="cjm-lane-name">Bank harakati</div>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Arizani qabul qilish va ro'yxatga olish</li>
+                  <li>Aktiv toifasini tekshiruv (ijaralanishi mumkin bo'lishi kerak)</li>
+                  <li>Dastlabki kredit ko'rib chiqish</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Aktiv mustaqil baholash</li>
+                  <li>Shariah board tasdiqlash</li>
+                  <li>Ujra (ijara narxi) hisoblash</li>
+                  <li>Takaful (halol sug'urta) rejalash</li>
+                </ul>
+              </td>
+              <td class="cjm-td cjm-td-warn">
+                <ul class="cjm-list">
+                  <li>Yetkazib beruvchiga to'lov buyrug'i (PO) berish</li>
+                  <li>To'lovni amalga oshirish</li>
+                  <li><strong>Title hujjatini bank nomiga qabul qilish</strong></li>
+                  <li>Qabz bayonnomasini tuzish</li>
+                </ul>
+              </td>
+              <td class="cjm-td cjm-td-warn">
+                <ul class="cjm-list">
+                  <li>Ijara shartnomasini tayyorlash (ujra, muddat, shart-sharoitlar)</li>
+                  <li><strong>IMB va'da hujjatini alohida tuzish</strong></li>
+                  <li>Aktivni mijozga topshirish</li>
+                  <li>Ijara hisobini aktivlashtirish</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>Ujra to'lovlarini monitoring</li>
+                  <li><strong>Katta ta'mirlash</strong> xarajatlarini o'z zimmasiga olish</li>
+                  <li>Takaful premiyasini boshqarish</li>
+                  <li>Yillik ujra ko'rib chiqish (agar belgilangan bo'lsa)</li>
+                </ul>
+              </td>
+              <td class="cjm-td">
+                <ul class="cjm-list">
+                  <li>IMB turini ijara oxirida bajarish</li>
+                  <li>A: Hibah hujjati tuzish</li>
+                  <li>B/C: Sotuv shartnomasi + to'lov</li>
+                  <li>Rasmiy mulk o'tkazish hujjatini imzolash</li>
+                </ul>
+              </td>
+            </tr>
+
+            <!-- ── SHARIAH ── -->
+            <tr>
+              <td class="cjm-td-label" style="border-left:3px solid var(--accent)">
+                <div class="cjm-lane-icon">☪</div>
+                <div class="cjm-lane-name">Shariah nazorat</div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-shariah-note">
+                  <div class="csn-ok">✅ Aktiv o'zgarmas (non-consumable) bo'lishi shart — massa, benzin, oziq-ovqat ijaralanmaydi</div>
+                  <div class="csn-ok">✅ Aktivdan foydalanish halol bo'lishi kerak</div>
+                  <div class="csn-warn">⚠️ Mavjud bo'lmagan aktiv ijaralanmaydi</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-shariah-note">
+                  <div class="csn-ok">✅ Ujra aniq va fikslangan bo'lishi shart (yoki aniqlanadigan)</div>
+                  <div class="csn-ok">✅ Takaful (halol sug'urta) — konvensional sug'urtaga ustunlik berilishi</div>
+                  <div class="csn-warn">⚠️ Ujra aktivning o'ziga bog'liq bo'lishi kerak, qarz stavkasiga emas</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-critical">
+                <div class="cjm-shariah-note">
+                  <div class="csn-fail">❌ Bank aktiv egasi bo'lmasdan ijaraga bera olmaydi — AAOIFI SS-9 asosiy talabi</div>
+                  <div class="csn-ok">✅ Bank title hujjatini olishi va qabz bayonnomasini tuzishi shart</div>
+                  <div class="csn-warn">⚠️ Aktiv bank nomiga rasmiy ro'yxatga olinishi tavsiya etiladi</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-critical">
+                <div class="cjm-shariah-note">
+                  <div class="csn-fail">❌ IMB va'dasi ijara shartnomasiga KIRITILMAYDI — alohida hujjat bo'lishi shart</div>
+                  <div class="csn-ok">✅ Ijara shartnomasi: foydalanish huquqi beriladi, bank egalik saqlab qoladi</div>
+                  <div class="csn-warn">⚠️ Ijara + mulk o'tkazish bitta shartga bog'lanishi taqiqlangan (AAOIFI SS-9 §8)</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-shariah-note">
+                  <div class="csn-ok">✅ Bank egalik riskini oladi: katta ta'mirlash, sug'urta bank zimmasida</div>
+                  <div class="csn-ok">✅ Mijoz foydalanish riskini oladi: joriy ta'mirlash mijozda</div>
+                  <div class="csn-fail">❌ Bank katta ta'mirlashni mijozga to'latishi taqiqlangan</div>
+                  <div class="csn-warn">⚠️ Sublease uchun bank yozma ruxsati talab etiladi</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-shariah-note">
+                  <div class="csn-ok">✅ 3 ta ruxsat etilgan yo'l: Hibah / Nominal sotuv / Bosqichli sotuv</div>
+                  <div class="csn-fail">❌ IMB shartnomada shart sifatida kiritilishi taqiqlangan</div>
+                  <div class="csn-ok">✅ AAOIFI SS-9 §20: IMB ijara yakunida alohida yangi amal sifatida bajariladi</div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ── HUJJATLAR ── -->
+            <tr>
+              <td class="cjm-td-label" style="border-left:3px solid #9AA0A6">
+                <div class="cjm-lane-icon">📄</div>
+                <div class="cjm-lane-name">Hujjatlar</div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">📋 Ijara ariza formasi</div>
+                  <div class="cjm-doc">🏢 Ustav / GUVOHNOMA</div>
+                  <div class="cjm-doc">💰 Moliyaviy hisobot (2 yil)</div>
+                  <div class="cjm-doc">🔧 Aktiv spetsifikatsiyasi / supplier taklifi</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">📊 Aktiv baholash xulosasi</div>
+                  <div class="cjm-doc">☪ Shariah compliance bayonnomasi</div>
+                  <div class="cjm-doc">🛡 Takaful rejalama</div>
+                  <div class="cjm-doc">📅 Ujra hisob-kitobi</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">🧾 Bank PO (purchase order)</div>
+                  <div class="cjm-doc">📜 Title hujjati (bank nomiga)</div>
+                  <div class="cjm-doc">📦 Delivery note</div>
+                  <div class="cjm-doc">✅ Qabz bayonnomasi (bank egaligi)</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">📃 Ijara shartnomasi (ERI imzoli)</div>
+                  <div class="cjm-doc">🤝 IMB va'dasi — ALOHIDA hujjat (ERI)</div>
+                  <div class="cjm-doc">✅ Aktiv topshirish dalolatnomasi</div>
+                  <div class="cjm-doc">🛡 Takaful polisi</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">💳 Oylik ujra kvitansiyalari</div>
+                  <div class="cjm-doc">🔧 Katta ta'mirlash aktlari (bankdan)</div>
+                  <div class="cjm-doc">📊 Ijara hisobi holati (DBO)</div>
+                </div>
+              </td>
+              <td class="cjm-td">
+                <div class="cjm-docs">
+                  <div class="cjm-doc">🎁 Hibah hujjati (A variant)</div>
+                  <div class="cjm-doc">📃 Sotuv shartnomasi (B/C variant, ERI)</div>
+                  <div class="cjm-doc">📜 Mulk guvohnomasi o'tkazish</div>
+                  <div class="cjm-doc">✅ Ijara yakunlanish bayonnomasi</div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ── HISSIYOT ── -->
+            <tr>
+              <td class="cjm-td-label" style="border-left:3px solid #E8A317">
+                <div class="cjm-lane-icon">😊</div>
+                <div class="cjm-lane-name">Hissiyot</div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😊</div>
+                  <div class="cjm-emotion-text">Ijobiy. Ariza qulayligi.</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😐</div>
+                  <div class="cjm-emotion-text">Noaniqliq. Baholash natijasi kutilmoqda.</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😐</div>
+                  <div class="cjm-emotion-text">Neytral. Bank aktiv olishini kutish.</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😊</div>
+                  <div class="cjm-emotion-text">Ijobiy. Shartnoma imzolandi, aktiv qo'lga tegdi.</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😊</div>
+                  <div class="cjm-emotion-text">Barqaror. Oylik to'lovlar aniq va ma'lum.</div>
+                </div>
+              </td>
+              <td class="cjm-td cjm-td-emotion">
+                <div class="cjm-emotion-wrap">
+                  <div class="cjm-emotion-face">😄</div>
+                  <div class="cjm-emotion-text">Juda ijobiy! Mulk rasman o'tdi.</div>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cjm-aaoifi-notes">
+        <h4>☪ AAOIFI SS-9 / FAS-32 — Ijara Muntahia Bittamleek asosiy talablari</h4>
+        <div class="cjm-note-grid">
+          <div class="cjm-note cjm-note-fail">
+            <strong>❌ Bank egaligi — zaruriy shart</strong>
+            Bank aktiv egasi bo'lmasdan ijaraga bera olmaydi. Title hujjati bankda bo'lishi shart. Ijaraga beruvchi egaligida bo'lmagan aktivni ijaraga berishi AAOIFI bo'yicha taqiqlangan.
+          </div>
+          <div class="cjm-note cjm-note-fail">
+            <strong>❌ IMB ijara shartnomasiga kiritilmaydi</strong>
+            Mulk o'tkazish va'dasi (hibah, sotuv) ijara shartnomasining sharti bo'lolmaydi. Bu alohida hujjat sifatida ijara muddati oxirida bajariladi (AAOIFI SS-9 §8, §20).
+          </div>
+          <div class="cjm-note cjm-note-warn">
+            <strong>⚠️ Bank katta ta'mirlashni o'z zimmasiga oladi</strong>
+            Aktivning egaligi bankda bo'lgani uchun strukturaviy ta'mirlash, yirik buzilishlar bank hisobiga. Joriy (kundalik) texnik xizmat esa ijarachi (mijoz) zimmasida.
+          </div>
+          <div class="cjm-note cjm-note-info">
+            <strong>ℹ️ IMB — 3 ta ruxsat etilgan variant</strong>
+            <div class="cjm-imt-opts">
+              <div class="cjm-imt-opt">🎁 A — Hibah: ijara oxirida bepul hadya</div>
+              <div class="cjm-imt-opt">💰 B — Nominal narxda sotuv: simvolik narxda savdo shartnomasi</div>
+              <div class="cjm-imt-opt">📈 C — Bosqichli sotuv: ijara davomida qismma-qism mulk o'tkazish</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
 <!-- Toast notification -->
 <div class="toast" id="toast"></div>
 
@@ -2332,6 +3216,12 @@ document.addEventListener('keydown', (e) => {
   }
   if (e.key === 'r' || e.key === 'R') {
     showScreen('register');
+  }
+  if (e.key === 'm' || e.key === 'M') {
+    showScreen('murabaha-cjm');
+  }
+  if (e.key === 'i' || e.key === 'I') {
+    showScreen('ijara-cjm');
   }
 });
 
