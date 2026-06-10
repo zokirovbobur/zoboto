@@ -169,7 +169,7 @@ const PROTOTYPES = [
   {
     title: "Islamic Banking Web App",
     product: "Trastbank",
-    type: "Internal",
+    type: "External",
     status: "Demo",
     url: "prototypes/banking-infra/islamic-bank-dbo.html",
     description: "Corporate internet banking web application — accounts, payments, transfers and client management."
