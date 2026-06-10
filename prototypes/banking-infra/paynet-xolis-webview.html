@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Paynet Xolis — Moliya</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pn: #00A651;
+  --pn-dark: #00874A;
+  --pn-light: #E6F7EE;
+  --ib: #0A6847;
+  --ib-light: #E8F5EE;
+  --gold: #C5A236;
+  --gold-bg: #FDF6E3;
+  --bg: #F3F4F6;
+  --surface: #FFFFFF;
+  --border: #E4E7EB;
+  --text: #1A1D21;
+  --text-2: #5F6368;
+  --text-3: #9AA0A6;
+  --danger: #D93025;
+  --font: 'IBM Plex Sans', -apple-system, sans-serif;
+  --tr: 0.2s cubic-bezier(0.4,0,0.2,1);
+  --r: 12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{
+  font-family:var(--font);
+  background:#D5D8DF;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:20px 0 40px;
+}
+
+/* ─── PHONE SHELL ─── */
+.phone{
+  width:390px;
+  min-height:844px;
+  background:var(--bg);
+  border-radius:50px;
+  box-shadow:0 32px 80px rgba(0,0,0,0.28),0 0 0 11px #111827;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+.phone-notch{
+  height:36px;background:#000;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;flex-shrink:0;
+}
+.phone-notch-pill{width:110px;height:28px;background:#000;border-radius:0 0 18px 18px}
+.status-bar{
+  height:28px;background:var(--surface);display:flex;align-items:center;
+  justify-content:space-between;padding:0 20px;font-size:12px;color:var(--text);
+  font-weight:600;flex-shrink:0;border-bottom:1px solid var(--border);
+}
+.status-icons{display:flex;align-items:center;gap:6px;font-size:11px}
+.pn-topbar{
+  height:52px;background:var(--surface);display:flex;align-items:center;
+  justify-content:space-between;padding:0 16px;flex-shrink:0;
+  border-bottom:1px solid var(--border);
+}
+.pn-logo{display:flex;align-items:center;gap:4px;font-weight:700;font-size:15px;color:var(--text)}
+.pn-logo .dot{width:10px;height:10px;background:var(--pn);border-radius:50%;margin-right:2px}
+.pn-topbar-right{display:flex;align-items:center;gap:10px}
+.pn-badge{
+  background:var(--pn);color:white;border-radius:50%;width:22px;height:22px;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;
+}
+
+/* ─── CONTENT ─── */
+.phone-content{flex:1;overflow-y:auto;display:flex;flex-direction:column;background:var(--bg)}
+.phone-content::-webkit-scrollbar{display:none}
+.home-bar{height:28px;background:var(--surface);display:flex;align-items:center;justify-content:center;flex-shrink:0;padding-bottom:4px}
+.home-bar-line{width:120px;height:4px;background:#CCC;border-radius:2px}
+
+/* ─── SCREENS ─── */
+.screen{display:none;flex-direction:column;flex:1;min-height:100%}
+.screen.active{display:flex}
+
+/* ─── PAYNET HEADER (inside WebView) ─── */
+.wv-header{
+  background:var(--pn);padding:14px 16px;
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.wv-back{
+  width:32px;height:32px;background:rgba(255,255,255,0.18);border:none;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  color:white;font-size:17px;flex-shrink:0;transition:var(--tr);
+}
+.wv-back:active{background:rgba(255,255,255,0.3);transform:scale(0.9)}
+.wv-header-title{font-size:16px;font-weight:700;color:white;flex:1}
+.wv-header-sub{font-size:11px;color:rgba(255,255,255,0.72);margin-top:1px}
+.wv-icon-badge{
+  width:34px;height:34px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.25);
+  border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;
+}
+
+/* ─── MOLIYA SCREEN ─── */
+.moliya-header{
+  background:var(--surface);padding:20px 20px 16px;
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.moliya-title{font-size:22px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+
+/* Islamic Bank section header */
+.section-divider{
+  padding:10px 16px 6px;
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.divider-label{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;
+  color:var(--text-3);white-space:nowrap;
+}
+.divider-line{flex:1;height:1px;background:var(--border)}
+
+/* ─── MENU ITEM (Paynet style) ─── */
+.menu-item{
+  background:var(--surface);margin:0 12px 10px;border-radius:var(--r);
+  display:flex;align-items:center;gap:0;cursor:pointer;
+  border:1px solid var(--border);overflow:hidden;
+  transition:var(--tr);position:relative;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+}
+.menu-item:active{transform:scale(0.97);box-shadow:none}
+
+/* TEZ ORADA ribbon */
+.ribbon{
+  position:absolute;top:0;left:0;width:56px;height:56px;overflow:hidden;
+  pointer-events:none;z-index:1;
+}
+.ribbon span{
+  position:absolute;top:10px;left:-14px;
+  background:var(--pn);color:white;
+  font-size:7px;font-weight:800;letter-spacing:0.3px;
+  padding:3px 18px;transform:rotate(-45deg);
+  white-space:nowrap;text-transform:uppercase;
+  box-shadow:0 1px 4px rgba(0,0,0,0.15);
+}
+
+/* Islamic Bank ribbon */
+.ribbon-ib span{
+  background:linear-gradient(135deg,var(--ib),var(--pn));
+}
+
+.menu-icon-wrap{
+  width:60px;height:68px;display:flex;align-items:center;justify-content:center;
+  background:var(--pn-light);flex-shrink:0;
+}
+.menu-icon{font-size:24px}
+.menu-icon-wrap.ib-bg{background:var(--ib-light)}
+.menu-icon-wrap.gold-bg{background:var(--gold-bg)}
+
+.menu-text{flex:1;padding:14px 12px}
+.menu-text-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
+.menu-text-sub{font-size:12px;color:var(--text-2);line-height:1.4}
+.menu-text-tag{
+  display:inline-block;margin-top:5px;
+  background:var(--ib-light);color:var(--ib);
+  font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;
+  letter-spacing:0.2px;
+}
+.menu-arrow{
+  width:40px;display:flex;align-items:center;justify-content:center;
+  color:var(--text-3);font-size:14px;font-weight:600;flex-shrink:0;
+}
+
+/* ─── BOTTOM NAV ─── */
+.bottom-nav{
+  background:var(--surface);border-top:1px solid var(--border);
+  display:flex;align-items:stretch;height:64px;flex-shrink:0;
+  padding-bottom:4px;
+}
+.nav-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;position:relative;padding-top:6px;
+  color:var(--text-3);font-size:10px;font-weight:600;letter-spacing:0.2px;
+  transition:var(--tr);
+}
+.nav-tab:active{opacity:0.7}
+.nav-tab.active{color:var(--pn)}
+.nav-tab-icon{font-size:20px;line-height:1}
+.nav-qr-btn{
+  flex:1;display:flex;align-items:center;justify-content:center;
+}
+.nav-qr-circle{
+  width:52px;height:52px;background:var(--pn);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:white;margin-top:-14px;
+  box-shadow:0 4px 12px rgba(0,166,81,0.35);
+}
+
+/* ─── WIZARD COMMON ─── */
+.wiz-stepper{
+  background:var(--surface);padding:12px 16px 10px;
+  border-bottom:1px solid var(--border);display:flex;align-items:center;flex-shrink:0;
+}
+.ws-step{
+  display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;position:relative;
+}
+.ws-step::after{
+  content:'';position:absolute;top:14px;right:-50%;width:100%;height:2px;
+  background:var(--border);z-index:0;
+}
+.ws-step:last-child::after{display:none}
+.ws-step.done::after{background:var(--pn)}
+.ws-circle{
+  width:28px;height:28px;border-radius:50%;border:2px solid var(--border);
+  background:var(--surface);display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--text-3);z-index:1;transition:var(--tr);flex-shrink:0;
+}
+.ws-step.active .ws-circle{border-color:var(--pn);background:var(--pn);color:white}
+.ws-step.done .ws-circle{border-color:var(--pn);background:var(--pn);color:white}
+.ws-label{font-size:9px;color:var(--text-3);font-weight:600;white-space:nowrap;text-transform:uppercase;letter-spacing:0.3px}
+.ws-step.active .ws-label,.ws-step.done .ws-label{color:var(--pn)}
+
+/* Wizard body */
+.wiz-body{flex:1;padding:18px 16px;overflow-y:auto}
+.wiz-body::-webkit-scrollbar{display:none}
+.wiz-sec{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;
+  color:var(--text-3);margin-bottom:8px;margin-top:16px;
+}
+.wiz-sec:first-child{margin-top:0}
+
+/* Forms */
+.fg{margin-bottom:12px}
+.fl{display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:5px;
+  text-transform:uppercase;letter-spacing:0.4px}
+.fi{
+  width:100%;padding:12px 13px;border:1.5px solid var(--border);border-radius:10px;
+  font-size:14px;font-family:var(--font);color:var(--text);background:var(--surface);
+  outline:none;transition:var(--tr);-webkit-appearance:none;
+}
+.fi:focus{border-color:var(--pn);box-shadow:0 0 0 3px rgba(0,166,81,0.1)}
+select.fi{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239AA0A6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;padding-right:34px;cursor:pointer;
+}
+
+/* Radio */
+.radio-g{display:flex;flex-direction:column;gap:8px}
+.radio-o{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+  padding:11px 12px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:var(--tr);
+}
+.radio-o.sel{border-color:var(--pn);background:var(--pn-light)}
+.radio-d{
+  width:17px;height:17px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;
+  margin-top:1px;transition:var(--tr);display:flex;align-items:center;justify-content:center;
+}
+.radio-o.sel .radio-d{border-color:var(--pn);background:var(--pn)}
+.radio-o.sel .radio-d::after{content:'';width:5px;height:5px;border-radius:50%;background:white}
+.radio-t strong{font-size:13px;color:var(--text);display:block;margin-bottom:2px}
+.radio-t small{font-size:11px;color:var(--text-2);line-height:1.4}
+
+/* Calc card */
+.calc-card{
+  background:linear-gradient(135deg,var(--ib) 0%,var(--pn) 100%);
+  border-radius:12px;padding:14px 16px;margin-top:14px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.calc-l{color:rgba(255,255,255,0.8);font-size:12px;margin-bottom:2px}
+.calc-h{font-size:10px;color:rgba(255,255,255,0.55);margin-top:4px;max-width:150px;line-height:1.4}
+.calc-v{font-size:20px;font-weight:700;color:white;white-space:nowrap}
+.calc-u{font-size:11px;color:rgba(255,255,255,0.7)}
+
+/* Upload */
+.upload-g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.upload-c{
+  background:var(--surface);border:1.5px dashed var(--border);border-radius:10px;
+  padding:14px 10px;display:flex;flex-direction:column;align-items:center;
+  gap:5px;cursor:pointer;text-align:center;transition:var(--tr);
+}
+.upload-c:active{background:var(--pn-light);border-color:var(--pn)}
+.upload-c.done{background:var(--pn-light);border-color:var(--pn);border-style:solid}
+.upload-ico{font-size:22px}
+.upload-nm{font-size:12px;font-weight:600;color:var(--text);line-height:1.3}
+.upload-ht{font-size:10px;color:var(--text-3)}
+.upload-c.done .upload-ht{color:var(--pn);font-weight:600}
+
+/* Summary */
+.sum-card{background:var(--bg);border-radius:10px;padding:12px;margin-bottom:14px}
+.sum-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding:6px 0;border-bottom:1px solid var(--border);gap:10px;
+}
+.sum-row:last-child{border-bottom:none;padding-bottom:0}
+.sum-k{font-size:12px;color:var(--text-2);flex-shrink:0}
+.sum-v{font-size:13px;font-weight:600;color:var(--text);text-align:right}
+
+/* Checkboxes */
+.check-g{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.check-i{
+  display:flex;gap:10px;align-items:flex-start;background:var(--surface);
+  border:1.5px solid var(--border);border-radius:10px;padding:11px;
+  cursor:pointer;transition:var(--tr);
+}
+.check-i.chk{border-color:var(--pn);background:var(--pn-light)}
+.check-b{
+  width:19px;height:19px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;
+  margin-top:1px;display:flex;align-items:center;justify-content:center;
+  transition:var(--tr);background:var(--surface);
+}
+.check-i.chk .check-b{background:var(--pn);border-color:var(--pn)}
+.check-i.chk .check-b::after{content:'✓';color:white;font-size:11px;font-weight:700}
+.check-t{font-size:12px;color:var(--text-2);line-height:1.5}
+.check-t strong{color:var(--text)}
+
+/* OTP */
+.otp-sec{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px;
+}
+.otp-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
+.otp-desc{font-size:12px;color:var(--text-2);margin-bottom:12px;line-height:1.4}
+.otp-row{display:flex;gap:8px;align-items:center}
+.otp-in{
+  flex:1;padding:11px;border:1.5px solid var(--border);border-radius:9px;
+  font-size:20px;font-weight:700;font-family:var(--font);text-align:center;
+  letter-spacing:6px;color:var(--text);outline:none;
+}
+.otp-in:focus{border-color:var(--pn)}
+.otp-btn{
+  background:var(--pn);color:white;border:none;border-radius:9px;
+  padding:11px 14px;font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;
+  white-space:nowrap;transition:var(--tr);
+}
+.otp-btn:disabled{background:var(--border);color:var(--text-3);cursor:not-allowed}
+.otp-btn:active:not(:disabled){background:var(--pn-dark)}
+
+/* Footer */
+.wiz-footer{
+  background:var(--surface);border-top:1px solid var(--border);
+  padding:10px 14px;display:flex;gap:8px;flex-shrink:0;
+}
+.btn-back{
+  background:var(--bg);border:1.5px solid var(--border);color:var(--text);
+  border-radius:10px;padding:12px 16px;font-size:14px;font-weight:600;
+  font-family:var(--font);cursor:pointer;transition:var(--tr);
+}
+.btn-back:active{background:var(--border)}
+.btn-next{
+  flex:1;background:var(--pn);border:none;color:white;border-radius:10px;
+  padding:12px;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;transition:var(--tr);
+}
+.btn-next:active{background:var(--pn-dark);transform:scale(0.98)}
+.btn-next:disabled{background:var(--border);color:var(--text-3);cursor:not-allowed}
+
+/* Success */
+.success-wrap{
+  display:flex;flex-direction:column;align-items:center;padding:28px 18px;text-align:center;
+}
+.suc-ring{
+  width:76px;height:76px;background:var(--pn-light);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+  border:3px solid #b3e5cf;
+}
+.suc-ring svg{width:38px;height:38px}
+.suc-title{font-size:21px;font-weight:700;color:var(--text);margin-bottom:5px}
+.suc-sub{font-size:13px;color:var(--text-2);margin-bottom:18px;line-height:1.4}
+.app-badge{
+  background:var(--bg);border:1.5px dashed #b3e5cf;border-radius:12px;
+  padding:11px 18px;font-size:18px;font-weight:700;color:var(--ib);
+  letter-spacing:1px;margin-bottom:20px;font-variant-numeric:tabular-nums;
+}
+.ns-card{
+  width:100%;background:var(--surface);border-radius:12px;
+  padding:14px;text-align:left;margin-bottom:18px;border:1px solid var(--border);
+}
+.ns-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-3);margin-bottom:12px}
+.ns-item{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.ns-item:last-child{margin-bottom:0}
+.ns-num{
+  width:20px;height:20px;background:var(--pn);border-radius:50%;color:white;
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.ns-text{font-size:12px;color:var(--text-2);line-height:1.4}
+.btn-full{
+  width:100%;background:var(--pn);border:none;color:white;border-radius:10px;
+  padding:13px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;
+  transition:var(--tr);margin-bottom:8px;
+}
+.btn-full:active{background:var(--pn-dark)}
+.btn-outline{
+  width:100%;background:transparent;border:1.5px solid var(--pn);color:var(--pn);
+  border-radius:10px;padding:12px;font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;transition:var(--tr);
+}
+
+/* Islamic note */
+.ib-note{
+  background:var(--gold-bg);border:1px solid #e8d08a;border-radius:10px;
+  padding:11px 12px;margin-top:12px;font-size:12px;color:#8a6d00;line-height:1.5;
+}
+
+/* Dim overlay */
+.disabled-wrap{opacity:0.5;pointer-events:none}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+.anim{animation:fadeUp .3s cubic-bezier(.16,1,.3,1) forwards}
+
+/* Desktop demo note */
+.demo-label{
+  text-align:center;margin-bottom:14px;font-size:13px;color:#777;
+  font-family:var(--font);
+}
+@media(max-width:500px){
+  body{padding:0;background:var(--bg)}
+  .phone{width:100%;min-height:100vh;border-radius:0;box-shadow:none}
+  .phone-notch,.home-bar,.demo-label{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="demo-label">Paynet Xolis — Moliya ekrani prototipi &nbsp;|&nbsp; <small>Telefon simulyatsiyasi</small></div>
+
+<div class="phone">
+  <!-- Notch -->
+  <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+
+  <!-- Status bar (Paynet style) -->
+  <div class="status-bar">
+    <span style="font-weight:600">16:36</span>
+    <div class="status-icons">
+      <svg width="14" height="11" viewBox="0 0 14 11" fill="currentColor"><rect x="0" y="4" width="2" height="7" rx="1"/><rect x="3" y="2.5" width="2" height="8.5" rx="1"/><rect x="6" y="1" width="2" height="10" rx="1"/><rect x="9" y="0" width="2" height="11" rx="1"/></svg>
+      <svg width="14" height="11" viewBox="0 0 14 11" fill="currentColor"><path d="M7 2.5C9.2 2.5 11.2 3.5 12.5 5.1L13.5 4C11.9 2.1 9.6 1 7 1S2.1 2.1.5 4L1.5 5.1C2.8 3.5 4.8 2.5 7 2.5z"/><path d="M7 5C8.6 5 10 5.7 10.9 6.8L12 5.7C10.7 4.3 8.9 3.5 7 3.5S3.3 4.3 2 5.7L3.1 6.8C4 5.7 5.4 5 7 5z"/><circle cx="7" cy="9.5" r="1.5"/></svg>
+      <div class="pn-badge">6</div>
+      <svg width="20" height="11" viewBox="0 0 20 11" fill="none"><rect x="0.5" y="0.5" width="17" height="10" rx="2" stroke="currentColor" stroke-opacity="0.35"/><rect x="1.5" y="1.5" width="14" height="8" rx="1.5" fill="currentColor" fill-opacity="0.9"/><path d="M18.5 3.5v4a1.5 1.5 0 000-4z" fill="currentColor" fill-opacity="0.4"/></svg>
+    </div>
+  </div>
+
+  <!-- Paynet topbar -->
+  <div class="pn-topbar">
+    <div class="pn-logo">
+      <div class="dot"></div>paynet
+    </div>
+    <div class="pn-topbar-right">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA0A6" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA0A6" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </div>
+  </div>
+
+  <!-- PHONE CONTENT -->
+  <div class="phone-content" id="phoneContent">
+
+    <!-- ══════════════════════════════════════
+         SCREEN: MOLIYA (entry point)
+    ══════════════════════════════════════ -->
+    <div class="screen active" id="s-moliya">
+      <div class="moliya-header">
+        <div class="moliya-title">Moliya</div>
+      </div>
+
+      <!-- Islamic Bank section -->
+      <div class="section-divider" style="margin-top:10px">
+        <span class="divider-label">☪ Islamic Bank hamkorligi</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Murobaha item -->
+      <div class="menu-item anim" onclick="startWizard('murobaha')" style="border-color:#b3e5cf">
+        <div class="ribbon ribbon-ib"><span>ISLOMIY</span></div>
+        <div class="menu-icon-wrap ib-bg">
+          <div class="menu-icon">💰</div>
+        </div>
+        <div class="menu-text">
+          <div class="menu-text-title">Murobaha Moliyalash</div>
+          <div class="menu-text-sub">Jihozlar, transport va ko'chmas mulk uchun foizsiz moliyalashtirish</div>
+          <span class="menu-text-tag">16–20% / yil · 6–36 oy</span>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <!-- Ijara item -->
+      <div class="menu-item anim" onclick="startWizard('ijara')" style="animation-delay:.06s;border-color:#b3e5cf">
+        <div class="ribbon ribbon-ib"><span>ISLOMIY</span></div>
+        <div class="menu-icon-wrap gold-bg">
+          <div class="menu-icon">📋</div>
+        </div>
+        <div class="menu-text">
+          <div class="menu-text-title">Ijara IMB (Leasing)</div>
+          <div class="menu-text-sub">Uskunalar va aktivlarni ijaraga oling — muddat oxirida egalik huquqi o'tadi</div>
+          <span class="menu-text-tag">14–18% / yil · 12–60 oy</span>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <!-- Existing Paynet items -->
+      <div class="section-divider" style="margin-top:6px">
+        <span class="divider-label">Mavjud takliflar</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="menu-item anim" style="animation-delay:.1s;opacity:.72;cursor:default">
+        <div class="ribbon"><span>TEZ ORADA</span></div>
+        <div class="menu-icon-wrap">
+          <div class="menu-icon">💸</div>
+        </div>
+        <div class="menu-text">
+          <div class="menu-text-title">Kreditlar</div>
+          <div class="menu-text-sub">Pul kerakmi? Kredit oling</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <div class="menu-item anim" style="animation-delay:.14s;opacity:.72;cursor:default">
+        <div class="ribbon"><span>TEZ ORADA</span></div>
+        <div class="menu-icon-wrap">
+          <div class="menu-icon">🚗</div>
+        </div>
+        <div class="menu-text">
+          <div class="menu-text-title">Lizing</div>
+          <div class="menu-text-sub">Katta xaridlarni osongina bajaring</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <div class="menu-item anim" style="animation-delay:.18s;opacity:.72;cursor:default">
+        <div class="ribbon"><span>TEZ ORADA</span></div>
+        <div class="menu-icon-wrap">
+          <div class="menu-icon">🏦</div>
+        </div>
+        <div class="menu-text">
+          <div class="menu-text-title">Omonatlar</div>
+          <div class="menu-text-sub">Bugungi jam'g'arma — ertangi ishonchli hayot</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <div class="menu-item anim" style="animation-delay:.22s;opacity:.72;cursor:default;margin-bottom:16px">
+        <div class="ribbon"><span>TEZ ORADA</span></div>
+        <div class="menu-icon-wrap">
+          <div class="menu-icon">🛡️</div>
+        </div>
+        <div class="menu-text">
+          <div class="menu-text-title">Sug'urta</div>
+          <div class="menu-text-sub">Sug'urta qiling, xavotirdan xoli bo'ling</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <!-- Bottom nav -->
+      <div style="flex:1"></div>
+      <div class="bottom-nav">
+        <div class="nav-tab" onclick="goScreen('s-moliya')">
+          <div class="nav-tab-icon">🏠</div>
+          <span>Asosiy</span>
+        </div>
+        <div class="nav-tab active">
+          <div class="nav-tab-icon">💳</div>
+          <span>Moliya</span>
+        </div>
+        <div class="nav-qr-btn">
+          <div class="nav-qr-circle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h2v2h-2zM18 14h3M18 18v3M14 18h2M21 18h.5"/></svg>
+          </div>
+        </div>
+        <div class="nav-tab">
+          <div class="nav-tab-icon">📄</div>
+          <span>Hujjatlar</span>
+        </div>
+        <div class="nav-tab">
+          <div class="nav-tab-icon">👛</div>
+          <span>To'lovlar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         MUROBAHA WIZARD
+    ══════════════════════════════════════ -->
+
+    <!-- Step 1: Aktiv -->
+    <div class="screen" id="s-mur-1">
+      <div class="wv-header">
+        <button class="wv-back" onclick="goScreen('s-moliya')">←</button>
+        <div>
+          <div class="wv-header-title">Murobaha Moliyalash</div>
+          <div class="wv-header-sub">Yangi ariza · 1-qadam</div>
+        </div>
+        <div class="wv-icon-badge">☪</div>
+      </div>
+      <div class="wiz-stepper">
+        <div class="ws-step active"><div class="ws-circle">1</div><div class="ws-label">Aktiv</div></div>
+        <div class="ws-step"><div class="ws-circle">2</div><div class="ws-label">Shartlar</div></div>
+        <div class="ws-step"><div class="ws-circle">3</div><div class="ws-label">Hujjat</div></div>
+        <div class="ws-step"><div class="ws-circle">4</div><div class="ws-label">Wa'd</div></div>
+        <div class="ws-step"><div class="ws-circle">5</div><div class="ws-label">Natija</div></div>
+      </div>
+      <div class="wiz-body">
+        <div class="wiz-sec">Aktiv ma'lumotlari</div>
+        <div class="fg">
+          <label class="fl">Aktiv turi <span style="color:var(--danger)">*</span></label>
+          <select class="fi" id="m-aktiv-turi">
+            <option value="jihozlar">Ishlab chiqarish jihozlari</option>
+            <option value="transport">Transport vositasi</option>
+            <option value="kochmas">Ko'chmas mulk</option>
+            <option value="it">IT uskunalar</option>
+            <option value="xomashyo">Xomashyo va materiallar</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Aktiv nomi <span style="color:var(--danger)">*</span></label>
+          <input type="text" class="fi" id="m-aktiv-nomi" placeholder="Masalan: CNC dastgohi XR-500">
+        </div>
+        <div class="fg">
+          <label class="fl">Aktiv tavsifi</label>
+          <input type="text" class="fi" id="m-aktiv-tavsif" placeholder="Qisqacha tavsif">
+        </div>
+        <div class="fg">
+          <label class="fl">Yetkazib beruvchi <span style="color:var(--danger)">*</span></label>
+          <input type="text" class="fi" id="m-supplier" placeholder="Kompaniya nomi">
+        </div>
+        <div class="fg">
+          <label class="fl">Aktiv narxi (so'm) <span style="color:var(--danger)">*</span></label>
+          <input type="number" class="fi" id="m-narx" placeholder="0" oninput="updateMurCalc()" inputmode="numeric">
+        </div>
+      </div>
+      <div class="wiz-footer">
+        <button class="btn-back" onclick="goScreen('s-moliya')">← Orqaga</button>
+        <button class="btn-next" onclick="mur1Next()">Keyingisi →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Shartlar -->
+    <div class="screen" id="s-mur-2">
+      <div class="wv-header">
+        <button class="wv-back" onclick="goScreen('s-mur-1')">←</button>
+        <div>
+          <div class="wv-header-title">Murobaha — Shartlar</div>
+          <div class="wv-header-sub">2-qadam: Moliyalashtirish shartlari</div>
+        </div>
+      </div>
+      <div class="wiz-stepper">
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Aktiv</div></div>
+        <div class="ws-step active"><div class="ws-circle">2</div><div class="ws-label">Shartlar</div></div>
+        <div class="ws-step"><div class="ws-circle">3</div><div class="ws-label">Hujjat</div></div>
+        <div class="ws-step"><div class="ws-circle">4</div><div class="ws-label">Wa'd</div></div>
+        <div class="ws-step"><div class="ws-circle">5</div><div class="ws-label">Natija</div></div>
+      </div>
+      <div class="wiz-body">
+        <div class="fg">
+          <label class="fl">Moliyalashtirish muddati <span style="color:var(--danger)">*</span></label>
+          <select class="fi" id="m-muddat" onchange="updateMurCalc()">
+            <option value="6">6 oy</option>
+            <option value="12">12 oy (1 yil)</option>
+            <option value="18">18 oy</option>
+            <option value="24" selected>24 oy (2 yil)</option>
+            <option value="36">36 oy (3 yil)</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Garov / Kafolat turi</label>
+          <select class="fi" id="m-garov">
+            <option>Ko'chmas mulk garovi</option>
+            <option>Sotib olinayotgan aktiv garovi</option>
+            <option>Bank kafolati</option>
+            <option>Depozit garovi</option>
+          </select>
+        </div>
+        <div class="wiz-sec">Murobaha usuli</div>
+        <div class="radio-g">
+          <div class="radio-o sel" id="m-usul-direct" onclick="selMurUsul('direct')">
+            <div class="radio-d"></div>
+            <div class="radio-t">
+              <strong>To'g'ridan-to'g'ri sotib olish</strong>
+              <small>Bank yetkazib beruvchiga to'g'ridan-to'g'ri to'lov qiladi — aktiv bankka keladi (hukmi qabz)</small>
+            </div>
+          </div>
+          <div class="radio-o" id="m-usul-wakala" onclick="selMurUsul('wakala')">
+            <div class="radio-d"></div>
+            <div class="radio-t">
+              <strong>Wakala (siz agent sifatida)</strong>
+              <small>Bank sizni Wakeel (agent) tayinlaydi, siz bank nomidan sotib olasiz</small>
+            </div>
+          </div>
+        </div>
+        <div class="calc-card">
+          <div>
+            <div class="calc-l">Taxminiy oylik to'lov</div>
+            <div class="calc-h">Murobaha foydasi ≈18%/yil · aniq narx bank taklif xatida</div>
+          </div>
+          <div style="text-align:right">
+            <div class="calc-v" id="mur-monthly">—</div>
+            <div class="calc-u">so'm/oy</div>
+          </div>
+        </div>
+      </div>
+      <div class="wiz-footer">
+        <button class="btn-back" onclick="goScreen('s-mur-1')">← Orqaga</button>
+        <button class="btn-next" onclick="goScreen('s-mur-3')">Keyingisi →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Hujjatlar -->
+    <div class="screen" id="s-mur-3">
+      <div class="wv-header">
+        <button class="wv-back" onclick="goScreen('s-mur-2')">←</button>
+        <div>
+          <div class="wv-header-title">Murobaha — Hujjatlar</div>
+          <div class="wv-header-sub">3-qadam: Hujjatlarni yuklang</div>
+        </div>
+      </div>
+      <div class="wiz-stepper">
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Aktiv</div></div>
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Shartlar</div></div>
+        <div class="ws-step active"><div class="ws-circle">3</div><div class="ws-label">Hujjat</div></div>
+        <div class="ws-step"><div class="ws-circle">4</div><div class="ws-label">Wa'd</div></div>
+        <div class="ws-step"><div class="ws-circle">5</div><div class="ws-label">Natija</div></div>
+      </div>
+      <div class="wiz-body">
+        <div class="wiz-sec">Kerakli hujjatlar</div>
+        <p style="font-size:12px;color:var(--text-2);margin-bottom:12px;line-height:1.5">Demo rejimi — kartochkaga bosib «yuklashni» simulyatsiya qiling.</p>
+        <div class="upload-g">
+          <div class="upload-c" id="mup-1" onclick="fakeUp('mup-1','Ustav_2024.pdf')">
+            <div class="upload-ico">📋</div>
+            <div class="upload-nm">Ustav / Guvohnoma</div>
+            <div class="upload-ht">PDF · max 10MB</div>
+          </div>
+          <div class="upload-c" id="mup-2" onclick="fakeUp('mup-2','Moliyaviy_hisobot.xlsx')">
+            <div class="upload-ico">💰</div>
+            <div class="upload-nm">Moliyaviy hisobot</div>
+            <div class="upload-ht">Oxirgi 2 yil</div>
+          </div>
+          <div class="upload-c" id="mup-3" onclick="fakeUp('mup-3','Invoice.pdf')">
+            <div class="upload-ico">🛒</div>
+            <div class="upload-nm">Yetkazib beruvchi taklifi</div>
+            <div class="upload-ht">Invoice / Spec-sheet</div>
+          </div>
+          <div class="upload-c" id="mup-4" onclick="fakeUp('mup-4','Garov.pdf')">
+            <div class="upload-ico">🏦</div>
+            <div class="upload-nm">Garov hujjati</div>
+            <div class="upload-ht">Ko'chmas mulk</div>
+          </div>
+        </div>
+        <div class="ib-note">☪ <strong>Eslatma:</strong> Barcha hujjatlar Shariah board tekshiruvidan o'tkaziladi (AAOIFI SS-8).</div>
+      </div>
+      <div class="wiz-footer">
+        <button class="btn-back" onclick="goScreen('s-mur-2')">← Orqaga</button>
+        <button class="btn-next" onclick="goMurWad()">Keyingisi →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Wa'd -->
+    <div class="screen" id="s-mur-4">
+      <div class="wv-header">
+        <button class="wv-back" onclick="goScreen('s-mur-3')">←</button>
+        <div>
+          <div class="wv-header-title">Murobaha — Wa'd</div>
+          <div class="wv-header-sub">4-qadam: Majburiy va'da va imzolash</div>
+        </div>
+      </div>
+      <div class="wiz-stepper">
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Aktiv</div></div>
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Shartlar</div></div>
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Hujjat</div></div>
+        <div class="ws-step active"><div class="ws-circle">4</div><div class="ws-label">Wa'd</div></div>
+        <div class="ws-step"><div class="ws-circle">5</div><div class="ws-label">Natija</div></div>
+      </div>
+      <div class="wiz-body">
+        <div class="wiz-sec">Ariza xulosasi</div>
+        <div class="sum-card" id="mur-summary"></div>
+        <div class="wiz-sec">Wa'd — Majburiy va'da (AAOIFI SS-8)</div>
+        <p style="font-size:12px;color:var(--text-2);margin-bottom:10px;line-height:1.5">Wa'd — bank aktivni sotib olgandan keyin murobaha narxida sotib olish bo'yicha <strong>majburiy va'dangiz</strong>. Bu savdo shartnomasi emas.</p>
+        <div class="check-g" id="mur-checks">
+          <div class="check-i" onclick="toggleChk(this,'mur')">
+            <div class="check-b"></div>
+            <div class="check-t">Bank yuqoridagi aktivni <strong>men uchun</strong> sotib olgandan so'ng, kelishilgan <strong>murobaha narxida</strong> (tannarx + oshkor foyda) sotib olishga va'da beraman</div>
+          </div>
+          <div class="check-i" onclick="toggleChk(this,'mur')">
+            <div class="check-b"></div>
+            <div class="check-t">To'lov jadvali kelishilgan muddat davomida amalga oshiriladi. Kechiktirilgan to'lovlar uchun jarima yo'q — faqat xayriya fondiga</div>
+          </div>
+          <div class="check-i" onclick="toggleChk(this,'mur')">
+            <div class="check-b"></div>
+            <div class="check-t">AAOIFI SS-8 bo'yicha Wa'd <strong>majburiy va'da</strong> ekanligini va bank <strong>qabz</strong> olgandan keyin alohida Murobaha shartnomasi imzolanishini tushundim</div>
+          </div>
+        </div>
+        <div id="mur-otp-wrap" class="disabled-wrap">
+          <div class="otp-sec">
+            <div class="otp-title">📱 SMS orqali tasdiqlash</div>
+            <div class="otp-desc">Paynet Xolis'dagi raqamingizga 6 xonali kod yuborildi</div>
+            <div class="otp-row">
+              <input type="tel" class="otp-in" id="mur-otp" maxlength="6" placeholder="──────" inputmode="numeric">
+              <button class="otp-btn" onclick="murOTP()">Tasdiqlash</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wiz-footer">
+        <button class="btn-back" onclick="goScreen('s-mur-3')">← Orqaga</button>
+        <button class="btn-next" id="mur-submit" disabled onclick="murSubmit()">🔐 Yuborish</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Natija -->
+    <div class="screen" id="s-mur-5">
+      <div class="wv-header" style="background:var(--ib)">
+        <div style="flex:1">
+          <div class="wv-header-title">Ariza qabul qilindi!</div>
+          <div class="wv-header-sub">Murobaha moliyalash</div>
+        </div>
+        <div class="wv-icon-badge">✓</div>
+      </div>
+      <div class="wiz-body" style="padding:0">
+        <div class="success-wrap">
+          <div class="suc-ring">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0A6847" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <div class="suc-title">Arizangiz yuborildi!</div>
+          <div class="suc-sub">Murobaha arizangiz muvaffaqiyatli qabul qilindi. Bank 1–2 ish kuni ichida bog'lanadi.</div>
+          <div class="app-badge" id="mur-app-num">MRB-2026-04723</div>
+          <div class="ns-card">
+            <div class="ns-title">Keyingi qadamlar</div>
+            <div class="ns-item"><div class="ns-num">1</div><div class="ns-text">1–2 ish kuni: Bank dastlabki tekshiruv va kredit tahlili</div></div>
+            <div class="ns-item"><div class="ns-num">2</div><div class="ns-text">3–5 ish kuni: Shariah board ko'rib chiqishi</div></div>
+            <div class="ns-item"><div class="ns-num">3</div><div class="ns-text">6–7 ish kuni: Bank Wa'd taklif xati yuboradi</div></div>
+            <div class="ns-item"><div class="ns-num">4</div><div class="ns-text">Bank Paynet Xolis orqali sizga xabar beradi</div></div>
+          </div>
+          <button class="btn-full" onclick="goScreen('s-moliya')">← Paynet Xolisga qaytish</button>
+          <button class="btn-outline" onclick="startWizard('ijara')">Ijara IMB arizasini ham berish</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         IJARA WIZARD
+    ══════════════════════════════════════ -->
+
+    <!-- Step 1: Aktiv -->
+    <div class="screen" id="s-ij-1">
+      <div class="wv-header">
+        <button class="wv-back" onclick="goScreen('s-moliya')">←</button>
+        <div>
+          <div class="wv-header-title">Ijara IMB (Leasing)</div>
+          <div class="wv-header-sub">Yangi ariza · 1-qadam</div>
+        </div>
+        <div class="wv-icon-badge">☪</div>
+      </div>
+      <div class="wiz-stepper">
+        <div class="ws-step active"><div class="ws-circle">1</div><div class="ws-label">Aktiv</div></div>
+        <div class="ws-step"><div class="ws-circle">2</div><div class="ws-label">Shartlar</div></div>
+        <div class="ws-step"><div class="ws-circle">3</div><div class="ws-label">Hujjat</div></div>
+        <div class="ws-step"><div class="ws-circle">4</div><div class="ws-label">Wa'd</div></div>
+        <div class="ws-step"><div class="ws-circle">5</div><div class="ws-label">Natija</div></div>
+      </div>
+      <div class="wiz-body">
+        <div class="wiz-sec">Ijaralash ob'ekti haqida</div>
+        <div class="fg">
+          <label class="fl">Aktiv turi <span style="color:var(--danger)">*</span></label>
+          <select class="fi" id="ij-aktiv-turi">
+            <option value="jihozlar">Ishlab chiqarish jihozlari</option>
+            <option value="transport">Transport vositasi</option>
+            <option value="kochmas">Ko'chmas mulk</option>
+            <option value="tibbiy">Tibbiy uskunalar</option>
+            <option value="it">IT uskunalar</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Aktiv nomi <span style="color:var(--danger)">*</span></label>
+          <input type="text" class="fi" id="ij-aktiv-nomi" placeholder="Masalan: MRI Siemens 3T">
+        </div>
+        <div class="fg">
+          <label class="fl">Aktiv tavsifi</label>
+          <input type="text" class="fi" id="ij-aktiv-tavsif" placeholder="Qisqacha tavsif">
+        </div>
+        <div class="fg">
+          <label class="fl">Yetkazib beruvchi <span style="color:var(--danger)">*</span></label>
+          <input type="text" class="fi" id="ij-supplier" placeholder="Kompaniya nomi">
+        </div>
+        <div class="fg">
+          <label class="fl">Aktivning bozor qiymati (so'm) <span style="color:var(--danger)">*</span></label>
+          <input type="number" class="fi" id="ij-narx" placeholder="0" oninput="updateIjCalc()" inputmode="numeric">
+        </div>
+      </div>
+      <div class="wiz-footer">
+        <button class="btn-back" onclick="goScreen('s-moliya')">← Orqaga</button>
+        <button class="btn-next" onclick="ij1Next()">Keyingisi →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Shartlar -->
+    <div class="screen" id="s-ij-2">
+      <div class="wv-header">
+        <button class="wv-back" onclick="goScreen('s-ij-1')">←</button>
+        <div>
+          <div class="wv-header-title">Ijara — Shartlar</div>
+          <div class="wv-header-sub">2-qadam: Ijara shartlari</div>
+        </div>
+      </div>
+      <div class="wiz-stepper">
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Aktiv</div></div>
+        <div class="ws-step active"><div class="ws-circle">2</div><div class="ws-label">Shartlar</div></div>
+        <div class="ws-step"><div class="ws-circle">3</div><div class="ws-label">Hujjat</div></div>
+        <div class="ws-step"><div class="ws-circle">4</div><div class="ws-label">Wa'd</div></div>
+        <div class="ws-step"><div class="ws-circle">5</div><div class="ws-label">Natija</div></div>
+      </div>
+      <div class="wiz-body">
+        <div class="fg">
+          <label class="fl">Ijara muddati <span style="color:var(--danger)">*</span></label>
+          <select class="fi" id="ij-muddat" onchange="updateIjCalc()">
+            <option value="12">12 oy (1 yil)</option>
+            <option value="24">24 oy (2 yil)</option>
+            <option value="36" selected>36 oy (3 yil)</option>
+            <option value="48">48 oy (4 yil)</option>
+            <option value="60">60 oy (5 yil)</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Garov / Kafolat turi</label>
+          <select class="fi" id="ij-garov">
+            <option>Ko'chmas mulk garovi</option>
+            <option>Ijaraga olinayotgan aktiv (o'zi)</option>
+            <option>Bank kafolati</option>
+            <option>Depozit garovi</option>
+          </select>
+        </div>
+        <div class="wiz-sec">IMB — Ko'chirish usuli (AAOIFI SS-9)</div>
+        <div class="radio-g">
+          <div class="radio-o sel" id="ij-imb-hibah" onclick="selIjIMB('hibah')">
+            <div class="radio-d"></div>
+            <div class="radio-t">
+              <strong>Hibah (hadya) orqali ko'chirish</strong>
+              <small>Ijara muddati oxirida bank aktivni <strong>bepul</strong> hadya qiladi</small>
+            </div>
+          </div>
+          <div class="radio-o" id="ij-imb-savdo" onclick="selIjIMB('savdo')">
+            <div class="radio-d"></div>
+            <div class="radio-t">
+              <strong>Nominal narxda sotish</strong>
+              <small>Muddat oxirida aktiv ramziy narxda (1 so'm yoki belgilangan) sotiladi</small>
+            </div>
+          </div>
+          <div class="radio-o" id="ij-imb-bosqich" onclick="selIjIMB('bosqich')">
+            <div class="radio-d"></div>
+            <div class="radio-t">
+              <strong>Bosqichma-bosqich ko'chirish</strong>
+              <small>Har oylik to'lov bilan aktivning bir qismi o'tib boradi</small>
+            </div>
+          </div>
+        </div>
+        <div class="calc-card">
+          <div>
+            <div class="calc-l">Taxminiy oylik ijara to'lovi</div>
+            <div class="calc-h">Ijara stavkasi ≈16%/yil · aniq miqdor bank taklif xatida</div>
+          </div>
+          <div style="text-align:right">
+            <div class="calc-v" id="ij-monthly">—</div>
+            <div class="calc-u">so'm/oy</div>
+          </div>
+        </div>
+      </div>
+      <div class="wiz-footer">
+        <button class="btn-back" onclick="goScreen('s-ij-1')">← Orqaga</button>
+        <button class="btn-next" onclick="goScreen('s-ij-3')">Keyingisi →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Hujjatlar -->
+    <div class="screen" id="s-ij-3">
+      <div class="wv-header">
+        <button class="wv-back" onclick="goScreen('s-ij-2')">←</button>
+        <div>
+          <div class="wv-header-title">Ijara — Hujjatlar</div>
+          <div class="wv-header-sub">3-qadam: Hujjatlarni yuklang</div>
+        </div>
+      </div>
+      <div class="wiz-stepper">
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Aktiv</div></div>
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Shartlar</div></div>
+        <div class="ws-step active"><div class="ws-circle">3</div><div class="ws-label">Hujjat</div></div>
+        <div class="ws-step"><div class="ws-circle">4</div><div class="ws-label">Wa'd</div></div>
+        <div class="ws-step"><div class="ws-circle">5</div><div class="ws-label">Natija</div></div>
+      </div>
+      <div class="wiz-body">
+        <div class="wiz-sec">Kerakli hujjatlar</div>
+        <p style="font-size:12px;color:var(--text-2);margin-bottom:12px;line-height:1.5">Demo rejimi — kartochkaga bosing.</p>
+        <div class="upload-g">
+          <div class="upload-c" id="ijp-1" onclick="fakeUp('ijp-1','Ustav_2024.pdf')">
+            <div class="upload-ico">📋</div>
+            <div class="upload-nm">Ustav / Guvohnoma</div>
+            <div class="upload-ht">PDF · max 10MB</div>
+          </div>
+          <div class="upload-c" id="ijp-2" onclick="fakeUp('ijp-2','Moliyaviy_hisobot.xlsx')">
+            <div class="upload-ico">💰</div>
+            <div class="upload-nm">Moliyaviy hisobot</div>
+            <div class="upload-ht">Oxirgi 2 yil</div>
+          </div>
+          <div class="upload-c" id="ijp-3" onclick="fakeUp('ijp-3','Aktiv_baholash.pdf')">
+            <div class="upload-ico">📊</div>
+            <div class="upload-nm">Aktiv baholash hujjati</div>
+            <div class="upload-ht">Lisenziyalangan baholovchi</div>
+          </div>
+          <div class="upload-c" id="ijp-4" onclick="fakeUp('ijp-4','Supplier_invoice.pdf')">
+            <div class="upload-ico">🛒</div>
+            <div class="upload-nm">Yetkazib beruvchi taklifi</div>
+            <div class="upload-ht">Invoice / Spec-sheet</div>
+          </div>
+        </div>
+        <div class="ib-note">☪ <strong>Ijara IMB:</strong> Bank aktiv egasi sifatida yirik ta'mirlash xarajatlarini o'z zimmiga oladi (AAOIFI SS-9).</div>
+      </div>
+      <div class="wiz-footer">
+        <button class="btn-back" onclick="goScreen('s-ij-2')">← Orqaga</button>
+        <button class="btn-next" onclick="goIjWad()">Keyingisi →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: IMB Wa'd -->
+    <div class="screen" id="s-ij-4">
+      <div class="wv-header">
+        <button class="wv-back" onclick="goScreen('s-ij-3')">←</button>
+        <div>
+          <div class="wv-header-title">Ijara — IMB Wa'd</div>
+          <div class="wv-header-sub">4-qadam: Va'da va imzolash</div>
+        </div>
+      </div>
+      <div class="wiz-stepper">
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Aktiv</div></div>
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Shartlar</div></div>
+        <div class="ws-step done"><div class="ws-circle">✓</div><div class="ws-label">Hujjat</div></div>
+        <div class="ws-step active"><div class="ws-circle">4</div><div class="ws-label">Wa'd</div></div>
+        <div class="ws-step"><div class="ws-circle">5</div><div class="ws-label">Natija</div></div>
+      </div>
+      <div class="wiz-body">
+        <div class="wiz-sec">Ariza xulosasi</div>
+        <div class="sum-card" id="ij-summary"></div>
+        <div class="wiz-sec">IMB Wa'd — Alohida va'da (AAOIFI SS-9)</div>
+        <p style="font-size:12px;color:var(--text-2);margin-bottom:10px;line-height:1.5">IMB va'dasi Ijara shartnomasi bilan <strong>birlashtirib yozilmaydi</strong> — alohida hujjat. Bank yirik ta'mirlashlarni o'z zimmiga oladi.</p>
+        <div class="check-g" id="ij-checks">
+          <div class="check-i" onclick="toggleChk(this,'ij')">
+            <div class="check-b"></div>
+            <div class="check-t">Bank aktivni sotib oladi va menga ijaraga beradi. Ijara muddati davomida aktiv <strong>bank mulki</strong> bo'lib qoladi</div>
+          </div>
+          <div class="check-i" onclick="toggleChk(this,'ij')">
+            <div class="check-b"></div>
+            <div class="check-t">Ijara muddati oxirida aktiv <strong id="ij-wa-imb">Hibah (hadya)</strong> yo'li bilan menga o'tkaziladi. Bu va'da Ijara shartnomasidan <strong>alohida hujjat</strong></div>
+          </div>
+          <div class="check-i" onclick="toggleChk(this,'ij')">
+            <div class="check-b"></div>
+            <div class="check-t">Bank <strong>yirik ta'mirlash</strong> xarajatlarini o'z zimmiga olishini, kundalik texnik xizmat ko'rsatish esa menimkiligini tushundim (AAOIFI SS-9)</div>
+          </div>
+        </div>
+        <div id="ij-otp-wrap" class="disabled-wrap">
+          <div class="otp-sec">
+            <div class="otp-title">📱 SMS orqali tasdiqlash</div>
+            <div class="otp-desc">Paynet Xolis'dagi raqamingizga 6 xonali kod yuborildi</div>
+            <div class="otp-row">
+              <input type="tel" class="otp-in" id="ij-otp" maxlength="6" placeholder="──────" inputmode="numeric">
+              <button class="otp-btn" onclick="ijOTP()">Tasdiqlash</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wiz-footer">
+        <button class="btn-back" onclick="goScreen('s-ij-3')">← Orqaga</button>
+        <button class="btn-next" id="ij-submit" disabled onclick="ijSubmit()">🔐 Yuborish</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Natija -->
+    <div class="screen" id="s-ij-5">
+      <div class="wv-header" style="background:var(--ib)">
+        <div style="flex:1">
+          <div class="wv-header-title">Ariza qabul qilindi!</div>
+          <div class="wv-header-sub">Ijara IMB (Leasing)</div>
+        </div>
+        <div class="wv-icon-badge">✓</div>
+      </div>
+      <div class="wiz-body" style="padding:0">
+        <div class="success-wrap">
+          <div class="suc-ring">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0A6847" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <div class="suc-title">Arizangiz yuborildi!</div>
+          <div class="suc-sub">Ijara IMB arizangiz muvaffaqiyatli qabul qilindi. Bank 1–2 ish kuni ichida bog'lanadi.</div>
+          <div class="app-badge" id="ij-app-num">IJR-2026-01847</div>
+          <div class="ns-card">
+            <div class="ns-title">Keyingi qadamlar</div>
+            <div class="ns-item"><div class="ns-num">1</div><div class="ns-text">1–2 ish kuni: Bank aktiv va mijoz tekshiruvi</div></div>
+            <div class="ns-item"><div class="ns-num">2</div><div class="ns-text">3–5 ish kuni: Baholash va Shariah board tasdiqi</div></div>
+            <div class="ns-item"><div class="ns-num">3</div><div class="ns-text">6–8 ish kuni: Ijara shartnomasi + IMB Wa'd hujjati</div></div>
+            <div class="ns-item"><div class="ns-num">4</div><div class="ns-text">Bank yetkazib beruvchiga to'lov qiladi va aktiv keladi</div></div>
+          </div>
+          <button class="btn-full" onclick="goScreen('s-moliya')">← Paynet Xolisga qaytish</button>
+          <button class="btn-outline" onclick="startWizard('murobaha')">Murobaha arizasini ham berish</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /phone-content -->
+
+  <div class="home-bar"><div class="home-bar-line"></div></div>
+</div><!-- /phone -->
+
+<script>
+/* ── NAVIGATION ── */
+function goScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const t = document.getElementById(id);
+  if (t) { t.classList.add('active'); document.getElementById('phoneContent').scrollTop = 0; }
+}
+
+function startWizard(type) {
+  if (type === 'murobaha') { resetMur(); goScreen('s-mur-1'); }
+  else { resetIj(); goScreen('s-ij-1'); }
+}
+
+/* ── MUROBAHA ── */
+let M = { narx:0, muddat:24, usul:'direct', otpOk:false };
+
+function resetMur() {
+  M = { narx:0, muddat:24, usul:'direct', otpOk:false };
+  ['m-aktiv-nomi','m-aktiv-tavsif','m-supplier','m-narx'].forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
+  document.getElementById('m-aktiv-turi').value = 'jihozlar';
+  document.getElementById('mur-monthly').textContent = '—';
+  document.getElementById('m-muddat').value = '24';
+  document.getElementById('m-usul-direct').classList.add('sel');
+  document.getElementById('m-usul-wakala').classList.remove('sel');
+  ['mup-1','mup-2','mup-3','mup-4'].forEach(id => {
+    const e=document.getElementById(id); e.classList.remove('done');
+    e.querySelector('.upload-ico').textContent = ['📋','💰','🛒','🏦'][['mup-1','mup-2','mup-3','mup-4'].indexOf(id)];
+    e.querySelector('.upload-ht').textContent = ['PDF · max 10MB','Oxirgi 2 yil','Invoice / Spec-sheet','Ko\'chmas mulk'][['mup-1','mup-2','mup-3','mup-4'].indexOf(id)];
+  });
+  document.querySelectorAll('#mur-checks .check-i').forEach(e => e.classList.remove('chk'));
+  document.getElementById('mur-otp-wrap').className = 'disabled-wrap';
+  document.getElementById('mur-submit').disabled = true;
+  document.getElementById('mur-otp').value = '';
+}
+
+function mur1Next() {
+  const nomi = document.getElementById('m-aktiv-nomi').value.trim();
+  const narx = document.getElementById('m-narx').value;
+  const sup = document.getElementById('m-supplier').value.trim();
+  if (!nomi) { shake('m-aktiv-nomi'); return; }
+  if (!narx) { shake('m-narx'); return; }
+  if (!sup) { shake('m-supplier'); return; }
+  M.narx = parseFloat(narx)||0;
+  updateMurCalc();
+  buildMurSum();
+  goScreen('s-mur-2');
+}
+
+function updateMurCalc() {
+  const narx = parseFloat(document.getElementById('m-narx').value)||M.narx;
+  const mud = parseInt(document.getElementById('m-muddat')?.value||'24');
+  if (!narx) { const e=document.getElementById('mur-monthly'); if(e) e.textContent='—'; return; }
+  const r=0.18/12;
+  const m=Math.round(narx*(r*Math.pow(1+r,mud))/(Math.pow(1+r,mud)-1));
+  document.getElementById('mur-monthly').textContent = fmt(m);
+  M.narx=narx; M.muddat=mud;
+}
+
+function selMurUsul(u) {
+  M.usul=u;
+  document.getElementById('m-usul-direct').classList.toggle('sel',u==='direct');
+  document.getElementById('m-usul-wakala').classList.toggle('sel',u==='wakala');
+}
+
+function buildMurSum() {
+  const nm=document.getElementById('m-aktiv-nomi').value||'—';
+  const tu=document.getElementById('m-aktiv-turi').options[document.getElementById('m-aktiv-turi').selectedIndex]?.text||'—';
+  const su=document.getElementById('m-supplier').value||'—';
+  const mud=document.getElementById('m-muddat')?.value||'24';
+  const r=0.18/12; const mud_=parseInt(mud);
+  const mo=M.narx?Math.round(M.narx*(r*Math.pow(1+r,mud_))/(Math.pow(1+r,mud_)-1)):0;
+  document.getElementById('mur-summary').innerHTML=`
+    <div class="sum-row"><span class="sum-k">Aktiv turi</span><span class="sum-v">${tu}</span></div>
+    <div class="sum-row"><span class="sum-k">Aktiv nomi</span><span class="sum-v">${nm}</span></div>
+    <div class="sum-row"><span class="sum-k">Yetkazib beruvchi</span><span class="sum-v">${su}</span></div>
+    <div class="sum-row"><span class="sum-k">Aktiv narxi</span><span class="sum-v">${fmt(M.narx)} so'm</span></div>
+    <div class="sum-row"><span class="sum-k">Muddat</span><span class="sum-v">${mud} oy</span></div>
+    <div class="sum-row"><span class="sum-k">Oylik to'lov</span><span class="sum-v" style="color:var(--ib);font-size:14px">~${fmt(mo)} so'm</span></div>
+    <div class="sum-row"><span class="sum-k">Usul</span><span class="sum-v">${M.usul==='direct'?'To\'g\'ridan-to\'g\'ri':'Wakala'}</span></div>
+  `;
+}
+
+function goMurWad() { buildMurSum(); goScreen('s-mur-4'); }
+
+function toggleChk(el, type) {
+  el.classList.toggle('chk');
+  const grp = '#'+(type==='mur'?'mur':'ij')+'-checks';
+  const tot = document.querySelectorAll(grp+' .check-i').length;
+  const chk = document.querySelectorAll(grp+' .check-i.chk').length;
+  const wrap = document.getElementById(type+'-otp-wrap');
+  const sub = document.getElementById(type+'-submit');
+  if (chk===tot) { wrap.className=''; }
+  else { wrap.className='disabled-wrap'; if(sub) sub.disabled=true; }
+}
+
+function murOTP() {
+  const v=document.getElementById('mur-otp').value;
+  if(!v||v.length<4) { flashOTP('mur-otp'); return; }
+  M.otpOk=true;
+  document.getElementById('mur-submit').disabled=false;
+  styleOTPok('mur-otp');
+}
+function murSubmit() {
+  if(!M.otpOk) return;
+  document.getElementById('mur-app-num').textContent='MRB-2026-'+(Math.floor(10000+Math.random()*90000));
+  goScreen('s-mur-5');
+}
+
+/* ── IJARA ── */
+let IJ = { narx:0, muddat:36, imb:'hibah', otpOk:false };
+
+function resetIj() {
+  IJ = { narx:0, muddat:36, imb:'hibah', otpOk:false };
+  ['ij-aktiv-nomi','ij-aktiv-tavsif','ij-supplier','ij-narx'].forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
+  document.getElementById('ij-aktiv-turi').value='jihozlar';
+  document.getElementById('ij-monthly').textContent='—';
+  document.getElementById('ij-muddat').value='36';
+  ['hibah','savdo','bosqich'].forEach(k=>{
+    document.getElementById('ij-imb-'+k)?.classList.toggle('sel',k==='hibah');
+  });
+  ['ijp-1','ijp-2','ijp-3','ijp-4'].forEach((id,i)=>{
+    const e=document.getElementById(id); e.classList.remove('done');
+    e.querySelector('.upload-ico').textContent=['📋','💰','📊','🛒'][i];
+    e.querySelector('.upload-ht').textContent=['PDF · max 10MB','Oxirgi 2 yil','Lisenziyalangan baholovchi','Invoice / Spec-sheet'][i];
+  });
+  document.querySelectorAll('#ij-checks .check-i').forEach(e=>e.classList.remove('chk'));
+  document.getElementById('ij-otp-wrap').className='disabled-wrap';
+  document.getElementById('ij-submit').disabled=true;
+  document.getElementById('ij-otp').value='';
+}
+
+function ij1Next() {
+  const nomi=document.getElementById('ij-aktiv-nomi').value.trim();
+  const narx=document.getElementById('ij-narx').value;
+  const sup=document.getElementById('ij-supplier').value.trim();
+  if(!nomi){shake('ij-aktiv-nomi');return}
+  if(!narx){shake('ij-narx');return}
+  if(!sup){shake('ij-supplier');return}
+  IJ.narx=parseFloat(narx)||0;
+  updateIjCalc();
+  buildIjSum();
+  goScreen('s-ij-2');
+}
+
+function updateIjCalc() {
+  const narx=parseFloat(document.getElementById('ij-narx').value)||IJ.narx;
+  const mud=parseInt(document.getElementById('ij-muddat')?.value||'36');
+  if(!narx){const e=document.getElementById('ij-monthly');if(e)e.textContent='—';return}
+  const mo=Math.round(narx*(0.16/12+1/mud));
+  document.getElementById('ij-monthly').textContent=fmt(mo);
+  IJ.narx=narx; IJ.muddat=mud;
+}
+
+function selIjIMB(imb) {
+  IJ.imb=imb;
+  ['hibah','savdo','bosqich'].forEach(k=>{
+    document.getElementById('ij-imb-'+k)?.classList.toggle('sel',k===imb);
+  });
+  const labels={hibah:'Hibah (hadya)',savdo:'Nominal narxda sotish',bosqich:'Bosqichma-bosqich ko\'chirish'};
+  const e=document.getElementById('ij-wa-imb'); if(e) e.textContent=labels[imb]||'';
+}
+
+function buildIjSum() {
+  const nm=document.getElementById('ij-aktiv-nomi').value||'—';
+  const tu=document.getElementById('ij-aktiv-turi').options[document.getElementById('ij-aktiv-turi').selectedIndex]?.text||'—';
+  const su=document.getElementById('ij-supplier').value||'—';
+  const mud=document.getElementById('ij-muddat')?.value||'36';
+  const mo=IJ.narx?Math.round(IJ.narx*(0.16/12+1/parseInt(mud))):0;
+  const imbL={hibah:'Hibah',savdo:'Nominal narx',bosqich:'Bosqichma-bosqich'};
+  document.getElementById('ij-summary').innerHTML=`
+    <div class="sum-row"><span class="sum-k">Aktiv turi</span><span class="sum-v">${tu}</span></div>
+    <div class="sum-row"><span class="sum-k">Aktiv nomi</span><span class="sum-v">${nm}</span></div>
+    <div class="sum-row"><span class="sum-k">Yetkazib beruvchi</span><span class="sum-v">${su}</span></div>
+    <div class="sum-row"><span class="sum-k">Aktiv qiymati</span><span class="sum-v">${fmt(IJ.narx)} so'm</span></div>
+    <div class="sum-row"><span class="sum-k">Ijara muddati</span><span class="sum-v">${mud} oy</span></div>
+    <div class="sum-row"><span class="sum-k">Oylik ijara</span><span class="sum-v" style="color:var(--ib);font-size:14px">~${fmt(mo)} so'm</span></div>
+    <div class="sum-row"><span class="sum-k">Ko'chirish usuli</span><span class="sum-v">${imbL[IJ.imb]||'—'}</span></div>
+  `;
+}
+
+function goIjWad() { buildIjSum(); goScreen('s-ij-4'); }
+
+function ijOTP() {
+  const v=document.getElementById('ij-otp').value;
+  if(!v||v.length<4){flashOTP('ij-otp');return}
+  IJ.otpOk=true;
+  document.getElementById('ij-submit').disabled=false;
+  styleOTPok('ij-otp');
+}
+function ijSubmit() {
+  if(!IJ.otpOk) return;
+  document.getElementById('ij-app-num').textContent='IJR-2026-'+(Math.floor(10000+Math.random()*90000));
+  goScreen('s-ij-5');
+}
+
+/* ── UTILS ── */
+function fakeUp(id, name) {
+  const e=document.getElementById(id); e.classList.add('done');
+  e.querySelector('.upload-ico').textContent='✅';
+  e.querySelector('.upload-ht').textContent=name;
+}
+function fmt(n){return n?Math.round(n).toLocaleString('uz-UZ'):'0'}
+function shake(id){
+  const e=document.getElementById(id); if(!e) return;
+  e.style.borderColor='var(--danger)';
+  e.style.animation='shake .4s ease';
+  setTimeout(()=>{e.style.borderColor='';e.style.animation=''},800);
+}
+function flashOTP(id){
+  const e=document.getElementById(id); if(!e) return;
+  e.style.borderColor='var(--danger)';e.style.background='#fee';
+  setTimeout(()=>{e.style.borderColor='';e.style.background=''},600);
+}
+function styleOTPok(id){
+  const e=document.getElementById(id); if(!e) return;
+  e.style.borderColor='var(--pn)';e.style.background='var(--pn-light)';
+}
+</script>
+</body>
+</html>
