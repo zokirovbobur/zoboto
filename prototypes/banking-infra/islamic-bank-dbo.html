@@ -1286,6 +1286,36 @@ body {
 .sched-amount { font-size: 13px; font-weight: 600; }
 .sched-balance { font-size: 12px; color: var(--text-secondary); }
 
+/* ═══════════════ LANGUAGE SELECTOR ═══════════════ */
+.lang-selector {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 99999;
+  display: flex;
+  gap: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 5px;
+  box-shadow: var(--shadow-sm);
+}
+.lang-btn {
+  border: none;
+  background: transparent;
+  padding: 4px 11px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  transition: var(--transition);
+  letter-spacing: 0.5px;
+}
+.lang-btn:hover { background: var(--bg); color: var(--text-primary); }
+.lang-btn.active { background: var(--primary); color: #fff; }
+
 /* Responsive */
 @media (max-width: 1100px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1310,6 +1340,13 @@ body {
 
 <div class="islamic-pattern"></div>
 
+<!-- Language Selector -->
+<div class="lang-selector" id="lang-selector">
+  <button class="lang-btn active" onclick="setLang('uz')">UZ</button>
+  <button class="lang-btn" onclick="setLang('ru')">RU</button>
+  <button class="lang-btn" onclick="setLang('en')">EN</button>
+</div>
+
 <!-- ═══════════════════════════════════════════ -->
 <!-- SCREEN 1: ONBOARDING – REGISTRATION       -->
 <!-- ═══════════════════════════════════════════ -->
@@ -1327,8 +1364,8 @@ body {
           <div class="step-line"></div>
         </div>
         <div class="step-content">
-          <div class="step-title">Ro'yxatdan o'tish</div>
-          <div class="step-desc">Kompaniya ma'lumotlarini kiriting</div>
+          <div class="step-title" data-i18n="step1_title">Ro'yxatdan o'tish</div>
+          <div class="step-desc" data-i18n="step1_desc">Kompaniya ma'lumotlarini kiriting</div>
         </div>
       </div>
       <div class="step-item" id="step-ind-2">
@@ -1337,8 +1374,8 @@ body {
           <div class="step-line"></div>
         </div>
         <div class="step-content">
-          <div class="step-title">Lavozim tanlash</div>
-          <div class="step-desc">Direktor yoki hodim sifatida davom eting</div>
+          <div class="step-title" data-i18n="step2_title">Lavozim tanlash</div>
+          <div class="step-desc" data-i18n="step2_desc">Direktor yoki hodim sifatida davom eting</div>
         </div>
       </div>
       <div class="step-item" id="step-ind-3">
@@ -1347,8 +1384,8 @@ body {
           <div class="step-line"></div>
         </div>
         <div class="step-content">
-          <div class="step-title">Identifikatsiya</div>
-          <div class="step-desc">ERI orqali shaxsingizni tasdiqlang</div>
+          <div class="step-title" data-i18n="step3_title">Identifikatsiya</div>
+          <div class="step-desc" data-i18n="step3_desc">ERI orqali shaxsingizni tasdiqlang</div>
         </div>
       </div>
       <div class="step-item" id="step-ind-4">
@@ -1356,14 +1393,14 @@ body {
           <div class="step-dot">4</div>
         </div>
         <div class="step-content">
-          <div class="step-title">Platformaga kirish</div>
-          <div class="step-desc">Barcha xizmatlardan foydalaning</div>
+          <div class="step-title" data-i18n="step4_title">Platformaga kirish</div>
+          <div class="step-desc" data-i18n="step4_desc">Barcha xizmatlardan foydalaning</div>
         </div>
       </div>
     </div>
 
     <div class="support-block">
-      <p>Yordam kerakmi?</p>
+      <p data-i18n="support_q">Yordam kerakmi?</p>
       <a href="#">+998 71 200 00 00 · Qo'llab-quvvatlash</a>
     </div>
   </div>
@@ -1371,33 +1408,33 @@ body {
   <div class="onboarding-right">
     <div class="onboarding-form-wrap slide-up">
       <div class="form-header">
-        <h1>Xush kelibsiz! 👋</h1>
-        <p>Kompaniyangizni islomiy moliyaviy xizmatlar platformasiga ulang</p>
+        <h1 data-i18n="reg_welcome">Xush kelibsiz! 👋</h1>
+        <p data-i18n="reg_subtitle">Kompaniyangizni islomiy moliyaviy xizmatlar platformasiga ulang</p>
       </div>
 
       <div class="form-group">
-        <label>F.I.Sh. <span class="required">*</span></label>
+        <label><span data-i18n="reg_fio">F.I.Sh.</span> <span class="required">*</span></label>
         <div class="form-input-icon-wrap">
           <span class="input-icon">👤</span>
           <input type="text" class="form-input" id="inp-fio" placeholder="Ism Familiya Sharif" autocomplete="name" value="Bobur Zokirov">
         </div>
       </div>
       <div class="form-group">
-        <label>Telefon raqami <span class="required">*</span></label>
+        <label><span data-i18n="reg_phone">Telefon raqami</span> <span class="required">*</span></label>
         <div class="form-input-icon-wrap">
           <span class="input-icon">📱</span>
           <input type="tel" class="form-input" id="inp-phone" placeholder="+998 __ ___ __ __" autocomplete="tel" value="+998 90 000 00 00">
         </div>
       </div>
       <div class="form-group">
-        <label>Lavozim <span class="required">*</span></label>
+        <label><span data-i18n="reg_position">Lavozim</span> <span class="required">*</span></label>
         <div class="form-input-icon-wrap">
           <span class="input-icon">💼</span>
           <input type="text" class="form-input" id="inp-position" placeholder="Masalan: Bosh hisobchi, Moliya bo'limi boshlig'i" value="Bosh Direktor (CEO)">
         </div>
       </div>
       <div class="form-group">
-        <label>Kompaniya INN <span class="required">*</span></label>
+        <label><span data-i18n="reg_inn">Kompaniya INN</span> <span class="required">*</span></label>
         <div class="form-input-icon-wrap">
           <span class="input-icon">🏢</span>
           <input type="text" class="form-input" id="inp-inn" placeholder="9 xonali INN raqamini kiriting" maxlength="9" value="302456789">
@@ -1405,7 +1442,7 @@ body {
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary btn-full btn-lg" onclick="goToRoleSelect()">Davom etish →</button>
+        <button class="btn btn-primary btn-full btn-lg" onclick="goToRoleSelect()" data-i18n="btn_continue">Davom etish →</button>
       </div>
     </div>
   </div>
@@ -1423,23 +1460,23 @@ body {
     <div class="steps-indicator">
       <div class="step-item completed" id="s2-step-1">
         <div class="step-dot-wrap"><div class="step-dot">✓</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">Ro'yxatdan o'tish</div><div class="step-desc">Kompaniya ma'lumotlari kiritildi</div></div>
+        <div class="step-content"><div class="step-title" data-i18n="step1_title">Ro'yxatdan o'tish</div><div class="step-desc" data-i18n="step1_desc">Kompaniya ma'lumotlari kiritildi</div></div>
       </div>
       <div class="step-item active" id="s2-step-2">
         <div class="step-dot-wrap"><div class="step-dot">2</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">Lavozim tanlash</div><div class="step-desc">Direktor yoki hodim sifatida davom eting</div></div>
+        <div class="step-content"><div class="step-title" data-i18n="step2_title">Lavozim tanlash</div><div class="step-desc" data-i18n="step2_desc">Direktor yoki hodim sifatida davom eting</div></div>
       </div>
       <div class="step-item" id="s2-step-3">
         <div class="step-dot-wrap"><div class="step-dot">3</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">Identifikatsiya</div><div class="step-desc">ERI orqali shaxsingizni tasdiqlang</div></div>
+        <div class="step-content"><div class="step-title" data-i18n="step3_title">Identifikatsiya</div><div class="step-desc" data-i18n="step3_desc">ERI orqali shaxsingizni tasdiqlang</div></div>
       </div>
       <div class="step-item" id="s2-step-4">
         <div class="step-dot-wrap"><div class="step-dot">4</div></div>
-        <div class="step-content"><div class="step-title">Platformaga kirish</div></div>
+        <div class="step-content"><div class="step-title" data-i18n="step4_title">Platformaga kirish</div></div>
       </div>
     </div>
     <div class="support-block">
-      <p>Yordam kerakmi?</p>
+      <p data-i18n="support_q">Yordam kerakmi?</p>
       <a href="#">+998 71 200 00 00 · Qo'llab-quvvatlash</a>
     </div>
   </div>
@@ -1447,24 +1484,24 @@ body {
   <div class="onboarding-right">
     <div class="onboarding-form-wrap slide-up">
       <div class="form-header">
-        <h1>Lavozimingizni tanlang</h1>
-        <p>Platformadagi imkoniyatlar lavozimingizga qarab belgilanadi</p>
+        <h1 data-i18n="role_select_title">Lavozimingizni tanlang</h1>
+        <p data-i18n="role_select_subtitle">Platformadagi imkoniyatlar lavozimingizga qarab belgilanadi</p>
       </div>
       <div class="role-cards">
         <div class="role-card selected" id="role-director" onclick="selectRole('director')">
           <div class="role-icon">👔</div>
-          <div class="role-name">Bosh Direktor</div>
-          <div class="role-desc">ERI bilan to'liq kirish, barcha modullar, tasdiqlash huquqi</div>
+          <div class="role-name" data-i18n="role_director_name">Bosh Direktor</div>
+          <div class="role-desc" data-i18n="role_director_desc">ERI bilan to'liq kirish, barcha modullar, tasdiqlash huquqi</div>
         </div>
         <div class="role-card" id="role-employee" onclick="selectRole('employee')">
           <div class="role-icon">👤</div>
-          <div class="role-name">Hodim</div>
-          <div class="role-desc">Cheklangan kirish, direktor tomonidan tasdiqlanadi</div>
+          <div class="role-name" data-i18n="role_employee_name">Hodim</div>
+          <div class="role-desc" data-i18n="role_employee_desc">Cheklangan kirish, direktor tomonidan tasdiqlanadi</div>
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-ghost" onclick="goBack('register')">← Orqaga</button>
-        <button class="btn btn-primary btn-lg" style="flex:1" id="btn-role-next" onclick="goToEriOrDashboard()">Davom etish →</button>
+        <button class="btn btn-ghost" onclick="goBack('register')" data-i18n="btn_back">← Orqaga</button>
+        <button class="btn btn-primary btn-lg" style="flex:1" id="btn-role-next" onclick="goToEriOrDashboard()" data-i18n="btn_continue">Davom etish →</button>
       </div>
     </div>
   </div>
@@ -1482,23 +1519,23 @@ body {
     <div class="steps-indicator">
       <div class="step-item completed">
         <div class="step-dot-wrap"><div class="step-dot">✓</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">Ro'yxatdan o'tish</div></div>
+        <div class="step-content"><div class="step-title" data-i18n="step1_title">Ro'yxatdan o'tish</div></div>
       </div>
       <div class="step-item completed">
         <div class="step-dot-wrap"><div class="step-dot">✓</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">Lavozim tanlash</div></div>
+        <div class="step-content"><div class="step-title" data-i18n="step2_title">Lavozim tanlash</div></div>
       </div>
       <div class="step-item active">
         <div class="step-dot-wrap"><div class="step-dot">3</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">Identifikatsiya</div><div class="step-desc">ERI orqali shaxsingizni tasdiqlang</div></div>
+        <div class="step-content"><div class="step-title" data-i18n="step3_title">Identifikatsiya</div><div class="step-desc" data-i18n="step3_desc">ERI orqali shaxsingizni tasdiqlang</div></div>
       </div>
       <div class="step-item">
         <div class="step-dot-wrap"><div class="step-dot">4</div></div>
-        <div class="step-content"><div class="step-title">Platformaga kirish</div></div>
+        <div class="step-content"><div class="step-title" data-i18n="step4_title">Platformaga kirish</div></div>
       </div>
     </div>
     <div class="support-block">
-      <p>Yordam kerakmi?</p>
+      <p data-i18n="support_q">Yordam kerakmi?</p>
       <a href="#">+998 71 200 00 00 · Qo'llab-quvvatlash</a>
     </div>
   </div>
@@ -1507,40 +1544,40 @@ body {
     <div class="onboarding-form-wrap slide-up" id="eri-step-select">
       <div class="eri-verification">
         <div class="eri-icon">🔐</div>
-        <h3>Elektron raqamli imzo (ERI)</h3>
-        <p>Shaxsingizni tasdiqlash uchun qulay usulni tanlang</p>
+        <h3 data-i18n="eri_title">Elektron raqamli imzo (ERI)</h3>
+        <p data-i18n="eri_subtitle">Shaxsingizni tasdiqlash uchun qulay usulni tanlang</p>
         <div class="eri-methods">
           <div class="eri-method selected" onclick="selectEriMethod(this, 'eimzo')">
             <div class="eri-method-icon">🔑</div>
             <div class="eri-method-info">
-              <div class="eri-method-name">E-IMZO kaliti</div>
-              <div class="eri-method-desc">USB kalit orqali tasdiqlash</div>
+              <div class="eri-method-name" data-i18n="eri_eimzo_name">E-IMZO kaliti</div>
+              <div class="eri-method-desc" data-i18n="eri_eimzo_desc">USB kalit orqali tasdiqlash</div>
             </div>
           </div>
           <div class="eri-method" onclick="selectEriMethod(this, 'oneid')">
             <div class="eri-method-icon">📱</div>
             <div class="eri-method-info">
               <div class="eri-method-name">OneID</div>
-              <div class="eri-method-desc">Mobil ilova orqali tasdiqlash</div>
+              <div class="eri-method-desc" data-i18n="eri_oneid_desc">Mobil ilova orqali tasdiqlash</div>
             </div>
           </div>
           <div class="eri-method" onclick="selectEriMethod(this, 'myid')">
             <div class="eri-method-icon">🆔</div>
             <div class="eri-method-info">
               <div class="eri-method-name">MyID</div>
-              <div class="eri-method-desc">Biometrik tasdiqlash</div>
+              <div class="eri-method-desc" data-i18n="eri_myid_desc">Biometrik tasdiqlash</div>
             </div>
           </div>
         </div>
-        <button class="btn btn-primary btn-full btn-lg" onclick="startEriVerification()" id="btn-eri-start">Tasdiqlashni boshlash</button>
+        <button class="btn btn-primary btn-full btn-lg" onclick="startEriVerification()" id="btn-eri-start" data-i18n="btn_start_verify">Tasdiqlashni boshlash</button>
       </div>
     </div>
 
     <div class="onboarding-form-wrap hidden" id="eri-step-loading">
       <div class="eri-verification">
         <div class="loading-spinner"></div>
-        <h3>Tasdiqlanmoqda...</h3>
-        <p>ERI orqali shaxsingiz tasdiqlanmoqda. Iltimos, kuting.</p>
+        <h3 data-i18n="eri_loading_title">Tasdiqlanmoqda...</h3>
+        <p data-i18n="eri_loading_desc">ERI orqali shaxsingiz tasdiqlanmoqda. Iltimos, kuting.</p>
       </div>
     </div>
 
@@ -1549,9 +1586,9 @@ body {
         <div class="success-check">
           <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
         </div>
-        <h3>Muvaffaqiyatli tasdiqlandi! ✅</h3>
-        <p>Sizning shaxsingiz tasdiqlandi. Platformaga kirish uchun davom eting.</p>
-        <button class="btn btn-primary btn-full btn-lg" onclick="goToDashboard('director')" style="margin-top: 16px;">Platformaga kirish →</button>
+        <h3 data-i18n="eri_success_title">Muvaffaqiyatli tasdiqlandi! ✅</h3>
+        <p data-i18n="eri_success_desc">Sizning shaxsingiz tasdiqlandi. Platformaga kirish uchun davom eting.</p>
+        <button class="btn btn-primary btn-full btn-lg" onclick="goToDashboard('director')" style="margin-top: 16px;" data-i18n="btn_enter_platform">Platformaga kirish →</button>
       </div>
     </div>
   </div>
@@ -1569,22 +1606,22 @@ body {
       <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-title">Asosiy</div>
-      <div class="nav-item active"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar <span class="nav-badge">3</span></div>
-      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
+      <div class="nav-section-title" data-i18n="nav_sec_main">Asosiy</div>
+      <div class="nav-item active"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Boshqaruv paneli</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_accounts">Hisoblar</span></div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> <span data-i18n="nav_payments">To'lovlar</span> <span class="nav-badge">3</span></div>
+      <div class="nav-item"><span class="nav-icon">📈</span> <span data-i18n="nav_reports">Moliyaviy hisobot</span></div>
 
-      <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
-      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
-      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
+      <div class="nav-section-title" data-i18n="nav_sec_services">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> <span data-i18n="nav_murabaha">Murobaha moliyalash</span></div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> <span data-i18n="nav_ijara">Ijara (Leasing)</span></div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> <span data-i18n="nav_mudaraba">Mudoraba depozit</span></div>
+      <div class="nav-item"><span class="nav-icon">💱</span> <span data-i18n="nav_currency">Valyuta ayirboshlash</span></div>
 
-      <div class="nav-section-title">Boshqaruv</div>
-      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar <span class="nav-badge" id="emp-pending-badge">1</span></div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
-      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+      <div class="nav-section-title" data-i18n="nav_sec_management">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> <span data-i18n="nav_employees">Hodimlar</span> <span class="nav-badge" id="emp-pending-badge">1</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_cards">Korporativ kartalar</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Sozlamalar</span></div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">
@@ -1600,7 +1637,7 @@ body {
   <div class="main-content">
     <div class="topbar">
       <div class="topbar-left">
-        <h2>Boshqaruv paneli</h2>
+        <h2 data-i18n="dash_title">Boshqaruv paneli</h2>
       </div>
       <div class="topbar-right">
         <button class="topbar-btn" onclick="showToast('Qidiruv tez kunda ishga tushadi')">🔍</button>
@@ -1617,10 +1654,10 @@ body {
       <div class="approval-banner" id="dir-approval-banner">
         <div class="approval-banner-icon">⏳</div>
         <div class="approval-banner-text">
-          <h4>Hodim tasdiqlash so'rovi</h4>
-          <p>1 ta hodim platformaga kirish uchun sizning tasdiqingizni kutmoqda</p>
+          <h4 data-i18n="banner_emp_title">Hodim tasdiqlash so'rovi</h4>
+          <p data-i18n="banner_emp_desc">1 ta hodim platformaga kirish uchun sizning tasdiqingizni kutmoqda</p>
         </div>
-        <button class="btn btn-accent" onclick="openEmployeeApprovalModal()">Ko'rib chiqish</button>
+        <button class="btn btn-accent" onclick="openEmployeeApprovalModal()" data-i18n="btn_review">Ko'rib chiqish</button>
       </div>
 
       <!-- Stats -->
@@ -1631,7 +1668,7 @@ body {
             <span class="stat-change up">+12.5%</span>
           </div>
           <div class="stat-value">2,450,000,000</div>
-          <div class="stat-label">Umumiy balans (UZS)</div>
+          <div class="stat-label" data-i18n="stat_balance">Umumiy balans (UZS)</div>
         </div>
         <div class="stat-card">
           <div class="stat-header">
@@ -1639,21 +1676,21 @@ body {
             <span class="stat-change up">+8.2%</span>
           </div>
           <div class="stat-value">847</div>
-          <div class="stat-label">Oylik tranzaksiyalar</div>
+          <div class="stat-label" data-i18n="stat_transactions">Oylik tranzaksiyalar</div>
         </div>
         <div class="stat-card">
           <div class="stat-header">
             <div class="stat-icon" style="background: var(--accent-surface); color: var(--accent);">💳</div>
           </div>
           <div class="stat-value">12</div>
-          <div class="stat-label">Faol korporativ kartalar</div>
+          <div class="stat-label" data-i18n="stat_cards">Faol korporativ kartalar</div>
         </div>
         <div class="stat-card">
           <div class="stat-header">
             <div class="stat-icon" style="background: var(--warning-surface); color: var(--warning);">⏳</div>
           </div>
           <div class="stat-value" id="dir-pending-ops">3</div>
-          <div class="stat-label">Tasdiqlash kutilmoqda</div>
+          <div class="stat-label" data-i18n="stat_pending">Tasdiqlash kutilmoqda</div>
         </div>
       </div>
 
@@ -1661,19 +1698,19 @@ body {
       <div class="quick-actions">
         <div class="quick-action" onclick="openPaymentModal()">
           <div class="qa-icon">📤</div>
-          <div class="qa-label">To'lov yaratish</div>
+          <div class="qa-label" data-i18n="qa_payment">To'lov yaratish</div>
         </div>
         <div class="quick-action" onclick="showToast('Oylik tushirish moduli')">
           <div class="qa-icon">💵</div>
-          <div class="qa-label">Oylik tushirish</div>
+          <div class="qa-label" data-i18n="qa_salary">Oylik tushirish</div>
         </div>
         <div class="quick-action" onclick="showToast('Valyuta ayirboshlash')">
           <div class="qa-icon">💱</div>
-          <div class="qa-label">Valyuta ayirboshlash</div>
+          <div class="qa-label" data-i18n="qa_currency">Valyuta ayirboshlash</div>
         </div>
         <div class="quick-action" onclick="openOperationApprovalModal()">
           <div class="qa-icon">✅</div>
-          <div class="qa-label">Operatsiyalarni tasdiqlash</div>
+          <div class="qa-label" data-i18n="qa_approve">Operatsiyalarni tasdiqlash</div>
         </div>
       </div>
 
@@ -1681,8 +1718,8 @@ body {
       <div class="content-grid">
         <div class="card">
           <div class="card-header">
-            <h3>So'nggi operatsiyalar</h3>
-            <button class="btn btn-ghost" style="font-size:13px;">Barchasini ko'rish →</button>
+            <h3 data-i18n="tx_title">So'nggi operatsiyalar</h3>
+            <button class="btn btn-ghost" style="font-size:13px;" data-i18n="btn_view_all">Barchasini ko'rish →</button>
           </div>
           <div class="card-body no-pad">
             <div class="tx-row">
@@ -1735,8 +1772,8 @@ body {
 
         <div class="card">
           <div class="card-header">
-            <h3>Bildirishnomalar</h3>
-            <span style="font-size:12px; color:var(--text-tertiary);">Bugun</span>
+            <h3 data-i18n="notif_title">Bildirishnomalar</h3>
+            <span style="font-size:12px; color:var(--text-tertiary);" data-i18n="notif_today">Bugun</span>
           </div>
           <div class="card-body no-pad">
             <div class="notif-item" onclick="openEmployeeApprovalModal()">
@@ -1785,22 +1822,22 @@ body {
       <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-title">Asosiy</div>
-      <div class="nav-item active"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
-      <div class="nav-item locked"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item locked"><span class="nav-icon">🔄</span> To'lovlar</div>
-      <div class="nav-item locked"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
+      <div class="nav-section-title" data-i18n="nav_sec_main">Asosiy</div>
+      <div class="nav-item active"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Boshqaruv paneli</span></div>
+      <div class="nav-item locked"><span class="nav-icon">💳</span> <span data-i18n="nav_accounts">Hisoblar</span></div>
+      <div class="nav-item locked"><span class="nav-icon">🔄</span> <span data-i18n="nav_payments">To'lovlar</span></div>
+      <div class="nav-item locked"><span class="nav-icon">📈</span> <span data-i18n="nav_reports">Moliyaviy hisobot</span></div>
 
-      <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item locked"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item locked"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
-      <div class="nav-item locked"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
-      <div class="nav-item locked"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
+      <div class="nav-section-title" data-i18n="nav_sec_services">Xizmatlar</div>
+      <div class="nav-item locked"><span class="nav-icon">💰</span> <span data-i18n="nav_murabaha">Murobaha moliyalash</span></div>
+      <div class="nav-item locked"><span class="nav-icon">📋</span> <span data-i18n="nav_ijara">Ijara (Leasing)</span></div>
+      <div class="nav-item locked"><span class="nav-icon">🏦</span> <span data-i18n="nav_mudaraba">Mudoraba depozit</span></div>
+      <div class="nav-item locked"><span class="nav-icon">💱</span> <span data-i18n="nav_currency">Valyuta ayirboshlash</span></div>
 
-      <div class="nav-section-title">Boshqaruv</div>
-      <div class="nav-item locked"><span class="nav-icon">👥</span> Hodimlar</div>
-      <div class="nav-item locked"><span class="nav-icon">💳</span> Korporativ kartalar</div>
-      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+      <div class="nav-section-title" data-i18n="nav_sec_management">Boshqaruv</div>
+      <div class="nav-item locked"><span class="nav-icon">👥</span> <span data-i18n="nav_employees">Hodimlar</span></div>
+      <div class="nav-item locked"><span class="nav-icon">💳</span> <span data-i18n="nav_cards">Korporativ kartalar</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Sozlamalar</span></div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">
@@ -1816,7 +1853,7 @@ body {
   <div class="main-content">
     <div class="topbar">
       <div class="topbar-left">
-        <h2>Boshqaruv paneli</h2>
+        <h2 data-i18n="dash_title">Boshqaruv paneli</h2>
       </div>
       <div class="topbar-right">
         <button class="topbar-btn">🔍</button>
@@ -1829,10 +1866,10 @@ body {
       <div class="approval-banner" id="emp-approval-banner">
         <div class="approval-banner-icon">⏳</div>
         <div class="approval-banner-text">
-          <h4>Direktor tasdig'i kutilmoqda</h4>
-          <p>Platformadan to'liq foydalanish uchun direktoringiz tasdiqini olishingiz kerak</p>
+          <h4 data-i18n="emp_banner_title">Direktor tasdig'i kutilmoqda</h4>
+          <p data-i18n="emp_banner_desc">Platformadan to'liq foydalanish uchun direktoringiz tasdiqini olishingiz kerak</p>
         </div>
-        <button class="btn btn-accent" onclick="openRequestApprovalModal()">Tasdiqlash so'rash</button>
+        <button class="btn btn-accent" onclick="openRequestApprovalModal()" data-i18n="btn_request_approval">Tasdiqlash so'rash</button>
       </div>
 
       <!-- Blurred stats for employee -->
@@ -1843,21 +1880,21 @@ body {
             <span class="stat-change up">—</span>
           </div>
           <div class="stat-value">•••••••••</div>
-          <div class="stat-label">Umumiy balans (UZS)</div>
+          <div class="stat-label" data-i18n="stat_balance">Umumiy balans (UZS)</div>
         </div>
         <div class="stat-card blurred">
           <div class="stat-header">
             <div class="stat-icon" style="background: var(--info-surface); color: var(--info);">📊</div>
           </div>
           <div class="stat-value">•••</div>
-          <div class="stat-label">Oylik tranzaksiyalar</div>
+          <div class="stat-label" data-i18n="stat_transactions">Oylik tranzaksiyalar</div>
         </div>
         <div class="stat-card blurred">
           <div class="stat-header">
             <div class="stat-icon" style="background: var(--accent-surface); color: var(--accent);">💳</div>
           </div>
           <div class="stat-value">••</div>
-          <div class="stat-label">Faol korporativ kartalar</div>
+          <div class="stat-label" data-i18n="stat_cards">Faol korporativ kartalar</div>
         </div>
         <div class="stat-card">
           <div class="stat-header">
@@ -1900,21 +1937,21 @@ body {
       <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-title">Asosiy</div>
-      <div class="nav-item active"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
+      <div class="nav-section-title" data-i18n="nav_sec_main">Asosiy</div>
+      <div class="nav-item active"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Boshqaruv paneli</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_accounts">Hisoblar</span></div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> <span data-i18n="nav_payments">To'lovlar</span></div>
 
-      <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item locked"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
-      <div class="nav-item locked"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
-      <div class="nav-item locked"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
+      <div class="nav-section-title" data-i18n="nav_sec_services">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> <span data-i18n="nav_murabaha">Murobaha moliyalash</span></div>
+      <div class="nav-item locked"><span class="nav-icon">📋</span> <span data-i18n="nav_ijara">Ijara (Leasing)</span></div>
+      <div class="nav-item locked"><span class="nav-icon">🏦</span> <span data-i18n="nav_mudaraba">Mudoraba depozit</span></div>
+      <div class="nav-item locked"><span class="nav-icon">💱</span> <span data-i18n="nav_currency">Valyuta ayirboshlash</span></div>
 
-      <div class="nav-section-title">Boshqaruv</div>
-      <div class="nav-item locked"><span class="nav-icon">👥</span> Hodimlar</div>
-      <div class="nav-item locked"><span class="nav-icon">💳</span> Korporativ kartalar</div>
-      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+      <div class="nav-section-title" data-i18n="nav_sec_management">Boshqaruv</div>
+      <div class="nav-item locked"><span class="nav-icon">👥</span> <span data-i18n="nav_employees">Hodimlar</span></div>
+      <div class="nav-item locked"><span class="nav-icon">💳</span> <span data-i18n="nav_cards">Korporativ kartalar</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Sozlamalar</span></div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">
@@ -1930,7 +1967,7 @@ body {
   <div class="main-content">
     <div class="topbar">
       <div class="topbar-left">
-        <h2>Boshqaruv paneli</h2>
+        <h2 data-i18n="dash_title">Boshqaruv paneli</h2>
       </div>
       <div class="topbar-right">
         <button class="topbar-btn">🔍</button>
@@ -1947,7 +1984,7 @@ body {
             <span class="stat-change up">+12.5%</span>
           </div>
           <div class="stat-value">2,450,000,000</div>
-          <div class="stat-label">Umumiy balans (UZS)</div>
+          <div class="stat-label" data-i18n="stat_balance">Umumiy balans (UZS)</div>
         </div>
         <div class="stat-card">
           <div class="stat-header">
@@ -1955,14 +1992,14 @@ body {
             <span class="stat-change up">+8.2%</span>
           </div>
           <div class="stat-value">847</div>
-          <div class="stat-label">Oylik tranzaksiyalar</div>
+          <div class="stat-label" data-i18n="stat_transactions">Oylik tranzaksiyalar</div>
         </div>
         <div class="stat-card">
           <div class="stat-header">
             <div class="stat-icon" style="background: var(--accent-surface); color: var(--accent);">💳</div>
           </div>
           <div class="stat-value">12</div>
-          <div class="stat-label">Faol korporativ kartalar</div>
+          <div class="stat-label" data-i18n="stat_cards">Faol korporativ kartalar</div>
         </div>
         <div class="stat-card">
           <div class="stat-header">
@@ -1976,7 +2013,7 @@ body {
       <div class="quick-actions">
         <div class="quick-action" onclick="openPaymentCreationModal()">
           <div class="qa-icon">📤</div>
-          <div class="qa-label">To'lov yaratish</div>
+          <div class="qa-label" data-i18n="qa_payment">To'lov yaratish</div>
         </div>
         <div class="quick-action" onclick="showToast('Murobaha moliyalash sahifasi')">
           <div class="qa-icon">💰</div>
@@ -1996,7 +2033,7 @@ body {
         <div class="card">
           <div class="card-header">
             <h3>Mening operatsiyalarim</h3>
-            <button class="btn btn-ghost" style="font-size:13px;">Barchasini ko'rish →</button>
+            <button class="btn btn-ghost" style="font-size:13px;" data-i18n="btn_view_all">Barchasini ko'rish →</button>
           </div>
           <div class="card-body no-pad">
             <div class="tx-row">
@@ -2063,7 +2100,7 @@ body {
 <div class="modal-overlay hidden" id="modal-request-approval">
   <div class="modal">
     <div class="modal-header">
-      <h3>Direktordan tasdiqlash so'rash</h3>
+      <h3 data-i18n="modal_req_title">Direktordan tasdiqlash so'rash</h3>
       <button class="modal-close" onclick="closeModal('modal-request-approval')">✕</button>
     </div>
     <div class="modal-body">
@@ -2078,8 +2115,8 @@ body {
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('modal-request-approval')">Bekor qilish</button>
-      <button class="btn btn-primary" onclick="sendApprovalRequest()">Habarnoma yuborish 📨</button>
+      <button class="btn btn-secondary" onclick="closeModal('modal-request-approval')" data-i18n="btn_cancel">Bekor qilish</button>
+      <button class="btn btn-primary" onclick="sendApprovalRequest()" data-i18n="btn_send_notif">Habarnoma yuborish 📨</button>
     </div>
   </div>
 </div>
@@ -2088,7 +2125,7 @@ body {
 <div class="modal-overlay hidden" id="modal-employee-approval">
   <div class="modal">
     <div class="modal-header">
-      <h3>Hodimni tasdiqlash</h3>
+      <h3 data-i18n="modal_emp_title">Hodimni tasdiqlash</h3>
       <button class="modal-close" onclick="closeModal('modal-employee-approval')">✕</button>
     </div>
     <div class="modal-body">
@@ -2120,7 +2157,7 @@ body {
         </div>
       </div>
 
-      <h4 style="font-size:14px; font-weight:700; margin-bottom:8px;">Modullar uchun ruxsat bering:</h4>
+      <h4 style="font-size:14px; font-weight:700; margin-bottom:8px;" data-i18n="mod_title">Modullar uchun ruxsat bering:</h4>
       <div class="module-checkboxes" id="module-checks">
         <div class="module-check" onclick="toggleModule(this)">
           <div class="check-box"></div>
@@ -2153,8 +2190,8 @@ body {
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-danger" onclick="rejectEmployee()">Rad etish</button>
-      <button class="btn btn-primary" onclick="approveEmployee()">ERI bilan tasdiqlash 🔐</button>
+      <button class="btn btn-danger" onclick="rejectEmployee()" data-i18n="btn_reject">Rad etish</button>
+      <button class="btn btn-primary" onclick="approveEmployee()" data-i18n="btn_approve_eri">ERI bilan tasdiqlash 🔐</button>
     </div>
   </div>
 </div>
@@ -2163,7 +2200,7 @@ body {
 <div class="modal-overlay hidden" id="modal-operation-approval">
   <div class="modal">
     <div class="modal-header">
-      <h3>Operatsiyalarni tasdiqlash</h3>
+      <h3 data-i18n="modal_op_title">Operatsiyalarni tasdiqlash</h3>
       <button class="modal-close" onclick="closeModal('modal-operation-approval')">✕</button>
     </div>
     <div class="modal-body">
@@ -2205,8 +2242,8 @@ body {
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('modal-operation-approval')">Yopish</button>
-      <button class="btn btn-primary" onclick="approveAllOps()">Barchasini ERI bilan tasdiqlash 🔐</button>
+      <button class="btn btn-secondary" onclick="closeModal('modal-operation-approval')" data-i18n="btn_close">Yopish</button>
+      <button class="btn btn-primary" onclick="approveAllOps()" data-i18n="btn_approve_all_eri">Barchasini ERI bilan tasdiqlash 🔐</button>
     </div>
   </div>
 </div>
@@ -2215,7 +2252,7 @@ body {
 <div class="modal-overlay hidden" id="modal-payment">
   <div class="modal">
     <div class="modal-header">
-      <h3>Yangi to'lov yaratish</h3>
+      <h3 data-i18n="modal_pay_title">Yangi to'lov yaratish</h3>
       <button class="modal-close" onclick="closeModal('modal-payment')">✕</button>
     </div>
     <div class="modal-body">
@@ -2240,8 +2277,8 @@ body {
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('modal-payment')">Bekor qilish</button>
-      <button class="btn btn-primary" onclick="submitPayment()">To'lovni yuborish</button>
+      <button class="btn btn-secondary" onclick="closeModal('modal-payment')" data-i18n="btn_cancel">Bekor qilish</button>
+      <button class="btn btn-primary" onclick="submitPayment()" data-i18n="btn_submit_payment">To'lovni yuborish</button>
     </div>
   </div>
 </div>
@@ -2256,20 +2293,20 @@ body {
       <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-title">Asosiy</div>
-      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
-      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
-      <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item active"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
-      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
-      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
-      <div class="nav-section-title">Boshqaruv</div>
-      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
-      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+      <div class="nav-section-title" data-i18n="nav_sec_main">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Boshqaruv paneli</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_accounts">Hisoblar</span></div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> <span data-i18n="nav_payments">To'lovlar</span></div>
+      <div class="nav-item"><span class="nav-icon">📈</span> <span data-i18n="nav_reports">Moliyaviy hisobot</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_services">Xizmatlar</div>
+      <div class="nav-item active"><span class="nav-icon">💰</span> <span data-i18n="nav_murabaha">Murobaha moliyalash</span></div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> <span data-i18n="nav_ijara">Ijara (Leasing)</span></div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> <span data-i18n="nav_mudaraba">Mudoraba depozit</span></div>
+      <div class="nav-item"><span class="nav-icon">💱</span> <span data-i18n="nav_currency">Valyuta ayirboshlash</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_management">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> <span data-i18n="nav_employees">Hodimlar</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_cards">Korporativ kartalar</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Sozlamalar</span></div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">
@@ -2286,7 +2323,7 @@ body {
     <div class="topbar">
       <div class="topbar-left">
         <button onclick="showScreen('dashboard-director')" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-secondary);padding:4px 8px;border-radius:6px;line-height:1;" title="Orqaga">←</button>
-        <h2>Murobaha — Yangi ariza</h2>
+        <h2 data-i18n="topbar_murabaha">Murobaha — Yangi ariza</h2>
       </div>
       <div class="topbar-right">
         <button class="wiz-help-btn" onclick="showScreen('murabaha-cjm')">? &nbsp;Shariah jarayoni</button>
@@ -2301,7 +2338,7 @@ body {
           <div class="wiz-step-circle">1</div>
           <div class="wiz-step-info">
             <div class="wiz-step-num">1-QADAM</div>
-            <div class="wiz-step-name">Aktiv</div>
+            <div class="wiz-step-name" data-i18n="wiz_step1">Aktiv</div>
           </div>
         </div>
         <div class="wiz-connector" id="wcon-1"></div>
@@ -2309,7 +2346,7 @@ body {
           <div class="wiz-step-circle">2</div>
           <div class="wiz-step-info">
             <div class="wiz-step-num">2-QADAM</div>
-            <div class="wiz-step-name">Shartlar</div>
+            <div class="wiz-step-name" data-i18n="wiz_step2">Shartlar</div>
           </div>
         </div>
         <div class="wiz-connector" id="wcon-2"></div>
@@ -2317,7 +2354,7 @@ body {
           <div class="wiz-step-circle">3</div>
           <div class="wiz-step-info">
             <div class="wiz-step-num">3-QADAM</div>
-            <div class="wiz-step-name">Hujjatlar</div>
+            <div class="wiz-step-name" data-i18n="wiz_step3">Hujjatlar</div>
           </div>
         </div>
         <div class="wiz-connector" id="wcon-3"></div>
@@ -2325,7 +2362,7 @@ body {
           <div class="wiz-step-circle">4</div>
           <div class="wiz-step-info">
             <div class="wiz-step-num">4-QADAM</div>
-            <div class="wiz-step-name">Wa'd</div>
+            <div class="wiz-step-name" data-i18n="wiz_step4">Wa'd</div>
           </div>
         </div>
         <div class="wiz-connector" id="wcon-4"></div>
@@ -2333,7 +2370,7 @@ body {
           <div class="wiz-step-circle">5</div>
           <div class="wiz-step-info">
             <div class="wiz-step-num">5-QADAM</div>
-            <div class="wiz-step-name">Natija</div>
+            <div class="wiz-step-name" data-i18n="wiz_step5">Natija</div>
           </div>
         </div>
       </div>
@@ -2509,9 +2546,9 @@ body {
 
       <!-- NAV BUTTONS -->
       <div class="wiz-nav">
-        <button class="btn btn-secondary" id="btn-wiz-back" onclick="wizBack()" style="display:none;">← Orqaga</button>
+        <button class="btn btn-secondary" id="btn-wiz-back" onclick="wizBack()" style="display:none;" data-i18n="wiz_back">← Orqaga</button>
         <div></div>
-        <button class="btn btn-primary" id="btn-wiz-next" onclick="wizNext()">Keyingisi →</button>
+        <button class="btn btn-primary" id="btn-wiz-next" onclick="wizNext()" data-i18n="wiz_next">Keyingisi →</button>
       </div>
 
     </div>
@@ -2528,20 +2565,20 @@ body {
       <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-title">Asosiy</div>
-      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
-      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
-      <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
-      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
-      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
-      <div class="nav-section-title">Boshqaruv</div>
-      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
-      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+      <div class="nav-section-title" data-i18n="nav_sec_main">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Boshqaruv paneli</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_accounts">Hisoblar</span></div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> <span data-i18n="nav_payments">To'lovlar</span></div>
+      <div class="nav-item"><span class="nav-icon">📈</span> <span data-i18n="nav_reports">Moliyaviy hisobot</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_services">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> <span data-i18n="nav_murabaha">Murobaha moliyalash</span></div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> <span data-i18n="nav_ijara">Ijara (Leasing)</span></div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> <span data-i18n="nav_mudaraba">Mudoraba depozit</span></div>
+      <div class="nav-item"><span class="nav-icon">💱</span> <span data-i18n="nav_currency">Valyuta ayirboshlash</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_management">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> <span data-i18n="nav_employees">Hodimlar</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_cards">Korporativ kartalar</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Sozlamalar</span></div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">
@@ -2557,7 +2594,7 @@ body {
   <div class="main-content">
     <div class="topbar">
       <div class="topbar-left">
-        <h2>Murobaha — Shariah Jarayon Xaritasi</h2>
+        <h2 data-i18n="topbar_murabaha_cjm">Murobaha — Shariah Jarayon Xaritasi</h2>
         <span class="cjm-aaoifi-tag">☪ AAOIFI SS-8 / FAS-28</span>
       </div>
       <div class="topbar-right">
@@ -2947,20 +2984,20 @@ body {
       <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-title">Asosiy</div>
-      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
-      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
-      <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item active"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
-      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
-      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
-      <div class="nav-section-title">Boshqaruv</div>
-      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
-      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+      <div class="nav-section-title" data-i18n="nav_sec_main">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Boshqaruv paneli</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_accounts">Hisoblar</span></div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> <span data-i18n="nav_payments">To'lovlar</span></div>
+      <div class="nav-item"><span class="nav-icon">📈</span> <span data-i18n="nav_reports">Moliyaviy hisobot</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_services">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> <span data-i18n="nav_murabaha">Murobaha moliyalash</span></div>
+      <div class="nav-item active"><span class="nav-icon">📋</span> <span data-i18n="nav_ijara">Ijara (Leasing)</span></div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> <span data-i18n="nav_mudaraba">Mudoraba depozit</span></div>
+      <div class="nav-item"><span class="nav-icon">💱</span> <span data-i18n="nav_currency">Valyuta ayirboshlash</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_management">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> <span data-i18n="nav_employees">Hodimlar</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_cards">Korporativ kartalar</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Sozlamalar</span></div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">
@@ -2977,7 +3014,7 @@ body {
     <div class="topbar">
       <div class="topbar-left">
         <button onclick="showScreen('dashboard-director')" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-secondary);padding:4px 8px;border-radius:6px;line-height:1;" title="Orqaga">←</button>
-        <h2>Ijara IMB — Yangi ariza</h2>
+        <h2 data-i18n="topbar_ijara">Ijara IMB — Yangi ariza</h2>
       </div>
       <div class="topbar-right">
         <button class="wiz-help-btn" onclick="showScreen('ijara-cjm')">? &nbsp;Shariah jarayoni</button>
@@ -2992,7 +3029,7 @@ body {
           <div class="wiz-step-circle">1</div>
           <div class="wiz-step-info">
             <div class="wiz-step-num">1-QADAM</div>
-            <div class="wiz-step-name">Aktiv</div>
+            <div class="wiz-step-name" data-i18n="wiz_step1">Aktiv</div>
           </div>
         </div>
         <div class="wiz-connector" id="iwcon-1"></div>
@@ -3000,7 +3037,7 @@ body {
           <div class="wiz-step-circle">2</div>
           <div class="wiz-step-info">
             <div class="wiz-step-num">2-QADAM</div>
-            <div class="wiz-step-name">Shartlar</div>
+            <div class="wiz-step-name" data-i18n="wiz_step2">Shartlar</div>
           </div>
         </div>
         <div class="wiz-connector" id="iwcon-2"></div>
@@ -3008,7 +3045,7 @@ body {
           <div class="wiz-step-circle">3</div>
           <div class="wiz-step-info">
             <div class="wiz-step-num">3-QADAM</div>
-            <div class="wiz-step-name">Hujjatlar</div>
+            <div class="wiz-step-name" data-i18n="wiz_step3">Hujjatlar</div>
           </div>
         </div>
         <div class="wiz-connector" id="iwcon-3"></div>
@@ -3016,7 +3053,7 @@ body {
           <div class="wiz-step-circle">4</div>
           <div class="wiz-step-info">
             <div class="wiz-step-num">4-QADAM</div>
-            <div class="wiz-step-name">IMB Wa'd</div>
+            <div class="wiz-step-name" data-i18n="ijara_step4">IMB Wa'd</div>
           </div>
         </div>
         <div class="wiz-connector" id="iwcon-4"></div>
@@ -3024,7 +3061,7 @@ body {
           <div class="wiz-step-circle">5</div>
           <div class="wiz-step-info">
             <div class="wiz-step-num">5-QADAM</div>
-            <div class="wiz-step-name">Natija</div>
+            <div class="wiz-step-name" data-i18n="wiz_step5">Natija</div>
           </div>
         </div>
       </div>
@@ -3204,9 +3241,9 @@ body {
 
       <!-- NAV BUTTONS -->
       <div class="wiz-nav">
-        <button class="btn btn-secondary" id="btn-ijz-back" onclick="ijzBack()" style="display:none;">← Orqaga</button>
+        <button class="btn btn-secondary" id="btn-ijz-back" onclick="ijzBack()" style="display:none;" data-i18n="wiz_back">← Orqaga</button>
         <div></div>
-        <button class="btn btn-primary" id="btn-ijz-next" onclick="ijzNext()">Keyingisi →</button>
+        <button class="btn btn-primary" id="btn-ijz-next" onclick="ijzNext()" data-i18n="wiz_next">Keyingisi →</button>
       </div>
 
     </div>
@@ -3223,20 +3260,20 @@ body {
       <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-title">Asosiy</div>
-      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
-      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
-      <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
-      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
-      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
-      <div class="nav-section-title">Boshqaruv</div>
-      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
-      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+      <div class="nav-section-title" data-i18n="nav_sec_main">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Boshqaruv paneli</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_accounts">Hisoblar</span></div>
+      <div class="nav-item" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> <span data-i18n="nav_payments">To'lovlar</span></div>
+      <div class="nav-item"><span class="nav-icon">📈</span> <span data-i18n="nav_reports">Moliyaviy hisobot</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_services">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> <span data-i18n="nav_murabaha">Murobaha moliyalash</span></div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> <span data-i18n="nav_ijara">Ijara (Leasing)</span></div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> <span data-i18n="nav_mudaraba">Mudoraba depozit</span></div>
+      <div class="nav-item"><span class="nav-icon">💱</span> <span data-i18n="nav_currency">Valyuta ayirboshlash</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_management">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> <span data-i18n="nav_employees">Hodimlar</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_cards">Korporativ kartalar</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Sozlamalar</span></div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">
@@ -3252,7 +3289,7 @@ body {
   <div class="main-content">
     <div class="topbar">
       <div class="topbar-left">
-        <h2>Ijara IMB — Shariah Jarayon Xaritasi</h2>
+        <h2 data-i18n="topbar_ijara_cjm">Ijara IMB — Shariah Jarayon Xaritasi</h2>
         <span class="cjm-aaoifi-tag">☪ AAOIFI SS-9 / FAS-32</span>
       </div>
       <div class="topbar-right">
@@ -3618,20 +3655,20 @@ body {
       <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-title">Asosiy</div>
-      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item active"><span class="nav-icon">🔄</span> To'lovlar</div>
-      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
-      <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
-      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
-      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
-      <div class="nav-section-title">Boshqaruv</div>
-      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
-      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+      <div class="nav-section-title" data-i18n="nav_sec_main">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Boshqaruv paneli</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_accounts">Hisoblar</span></div>
+      <div class="nav-item active"><span class="nav-icon">🔄</span> <span data-i18n="nav_payments">To'lovlar</span></div>
+      <div class="nav-item"><span class="nav-icon">📈</span> <span data-i18n="nav_reports">Moliyaviy hisobot</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_services">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> <span data-i18n="nav_murabaha">Murobaha moliyalash</span></div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> <span data-i18n="nav_ijara">Ijara (Leasing)</span></div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> <span data-i18n="nav_mudaraba">Mudoraba depozit</span></div>
+      <div class="nav-item"><span class="nav-icon">💱</span> <span data-i18n="nav_currency">Valyuta ayirboshlash</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_management">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> <span data-i18n="nav_employees">Hodimlar</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_cards">Korporativ kartalar</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Sozlamalar</span></div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">
@@ -3647,7 +3684,7 @@ body {
   <div class="main-content">
     <div class="topbar">
       <div class="topbar-left">
-        <h2>To'lovlar</h2>
+        <h2 data-i18n="pay_title">To'lovlar</h2>
       </div>
       <div class="topbar-right">
         <button class="btn btn-primary btn-sm" onclick="showToast('To\'lov yaratildi (demo)', 'success')">+ Yangi to\'lov</button>
@@ -3660,7 +3697,7 @@ body {
       <div class="pay-debt-section">
         <div class="pay-debt-header">
           <div class="pay-debt-heading">
-            <span>🏦</span> Mening bankim
+            <span>🏦</span> <span data-i18n="pay_my_bank">Mening bankim</span>
             <span class="pay-debt-count">⚠️ 1 ta kechikkan</span>
           </div>
           <span style="font-size:12px;color:var(--text-tertiary);">2 ta faol shartnoma</span>
@@ -3700,7 +3737,7 @@ body {
       </div>
 
       <!-- PAYMENT CATEGORIES -->
-      <div class="pay-section-title">To'lov kategoriyalari <span></span></div>
+      <div class="pay-section-title"><span data-i18n="pay_cats_title">To'lov kategoriyalari</span> <span></span></div>
       <div class="pay-cats-grid" style="grid-template-columns:repeat(3,1fr);">
         <div class="pay-cat" onclick="showPayCat('kommunal')">
           <div class="pay-cat-icon">🔌</div>
@@ -3720,10 +3757,10 @@ body {
       </div>
 
       <!-- RECENT PAYMENTS -->
-      <div class="pay-section-title">So'nggi to'lovlar <span></span></div>
+      <div class="pay-section-title"><span data-i18n="pay_recent_title">So'nggi to'lovlar</span> <span></span></div>
       <div class="pay-recent">
         <div class="pay-recent-head">
-          <h4>To'lovlar tarixi</h4>
+          <h4 data-i18n="pay_history">To'lovlar tarixi</h4>
           <span style="font-size:12px;color:var(--text-tertiary);">Iyun 2026</span>
         </div>
         <div class="pay-ri">
@@ -3808,20 +3845,20 @@ body {
       <div class="sidebar-brand">Islamic Bank <span>Business</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-title">Asosiy</div>
-      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> Boshqaruv paneli</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Hisoblar</div>
-      <div class="nav-item active" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> To'lovlar</div>
-      <div class="nav-item"><span class="nav-icon">📈</span> Moliyaviy hisobot</div>
-      <div class="nav-section-title">Xizmatlar</div>
-      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> Murobaha moliyalash</div>
-      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> Ijara (Leasing)</div>
-      <div class="nav-item"><span class="nav-icon">🏦</span> Mudoraba depozit</div>
-      <div class="nav-item"><span class="nav-icon">💱</span> Valyuta ayirboshlash</div>
-      <div class="nav-section-title">Boshqaruv</div>
-      <div class="nav-item"><span class="nav-icon">👥</span> Hodimlar</div>
-      <div class="nav-item"><span class="nav-icon">💳</span> Korporativ kartalar</div>
-      <div class="nav-item"><span class="nav-icon">⚙️</span> Sozlamalar</div>
+      <div class="nav-section-title" data-i18n="nav_sec_main">Asosiy</div>
+      <div class="nav-item" onclick="showScreen('dashboard-director')"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Boshqaruv paneli</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_accounts">Hisoblar</span></div>
+      <div class="nav-item active" onclick="showScreen('payments')"><span class="nav-icon">🔄</span> <span data-i18n="nav_payments">To'lovlar</span></div>
+      <div class="nav-item"><span class="nav-icon">📈</span> <span data-i18n="nav_reports">Moliyaviy hisobot</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_services">Xizmatlar</div>
+      <div class="nav-item" onclick="showScreen('murabaha-apply')"><span class="nav-icon">💰</span> <span data-i18n="nav_murabaha">Murobaha moliyalash</span></div>
+      <div class="nav-item" onclick="showScreen('ijara-apply')"><span class="nav-icon">📋</span> <span data-i18n="nav_ijara">Ijara (Leasing)</span></div>
+      <div class="nav-item"><span class="nav-icon">🏦</span> <span data-i18n="nav_mudaraba">Mudoraba depozit</span></div>
+      <div class="nav-item"><span class="nav-icon">💱</span> <span data-i18n="nav_currency">Valyuta ayirboshlash</span></div>
+      <div class="nav-section-title" data-i18n="nav_sec_management">Boshqaruv</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> <span data-i18n="nav_employees">Hodimlar</span></div>
+      <div class="nav-item"><span class="nav-icon">💳</span> <span data-i18n="nav_cards">Korporativ kartalar</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Sozlamalar</span></div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">
@@ -3838,10 +3875,10 @@ body {
     <div class="topbar">
       <div class="topbar-left">
         <button onclick="showScreen('payments')" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-secondary);padding:4px 8px;border-radius:6px;line-height:1;">←</button>
-        <h2 id="cd-topbar-title">Shartnoma tafsilotlari</h2>
+        <h2 id="cd-topbar-title" data-i18n="cd_title">Shartnoma tafsilotlari</h2>
       </div>
       <div class="topbar-right">
-        <button class="btn btn-primary btn-sm" id="cd-pay-btn" onclick="payNow()">To'lovni amalga oshirish</button>
+        <button class="btn btn-primary btn-sm" id="cd-pay-btn" onclick="payNow()" data-i18n="btn_pay_now">To'lovni amalga oshirish</button>
       </div>
     </div>
 
@@ -3858,14 +3895,14 @@ body {
       </div>
 
       <!-- PAYMENT SCHEDULE -->
-      <div class="pay-section-title" style="margin-bottom:10px;">To'lov jadvali <span></span></div>
+      <div class="pay-section-title" style="margin-bottom:10px;"><span data-i18n="cd_schedule">To'lov jadvali</span> <span></span></div>
       <div class="sched-table">
         <div class="sched-head-row">
           <div class="sched-num">#</div>
-          <div>Muddat</div>
-          <div>Summa</div>
-          <div>Holat</div>
-          <div>Qolgan balans</div>
+          <div data-i18n="sched_date">Muddat</div>
+          <div data-i18n="sched_amount">Summa</div>
+          <div data-i18n="sched_status">Holat</div>
+          <div data-i18n="sched_balance">Qolgan balans</div>
         </div>
         <div id="cd-schedule">
           <!-- filled by JS -->
@@ -4592,7 +4629,193 @@ function ijzSignERI() {
   }, 2200);
 }
 
-// Wrap showScreen for wizard reset + role auto-select
+// ——— Localisation ———
+var TRANSLATIONS = {
+  uz: {
+    nav_sec_main:'Asosiy', nav_sec_services:'Xizmatlar', nav_sec_management:'Boshqaruv',
+    nav_dashboard:'Boshqaruv paneli', nav_accounts:'Hisoblar', nav_payments:'To\'lovlar',
+    nav_reports:'Moliyaviy hisobot', nav_murabaha:'Murobaha moliyalash', nav_ijara:'Ijara (Leasing)',
+    nav_mudaraba:'Mudoraba depozit', nav_currency:'Valyuta ayirboshlash',
+    nav_employees:'Hodimlar', nav_cards:'Korporativ kartalar', nav_settings:'Sozlamalar',
+    step1_title:'Ro\'yxatdan o\'tish', step2_title:'Lavozim tanlash',
+    step3_title:'Identifikatsiya', step4_title:'Platformaga kirish',
+    step1_desc:'Kompaniya ma\'lumotlarini kiriting', step2_desc:'Direktor yoki hodim sifatida davom eting',
+    step3_desc:'ERI orqali shaxsingizni tasdiqlang', step4_desc:'Barcha xizmatlardan foydalaning',
+    support_q:'Yordam kerakmi?',
+    reg_welcome:'Xush kelibsiz! 👋', reg_subtitle:'Kompaniyangizni islomiy moliyaviy xizmatlar platformasiga ulang',
+    reg_fio:'F.I.Sh.', reg_phone:'Telefon raqami', reg_position:'Lavozim', reg_inn:'Kompaniya INN',
+    btn_continue:'Davom etish →', btn_back:'← Orqaga',
+    role_select_title:'Lavozimingizni tanlang', role_select_subtitle:'Platformadagi imkoniyatlar lavozimingizga qarab belgilanadi',
+    role_director_name:'Bosh Direktor', role_director_desc:'ERI bilan to\'liq kirish, barcha modullar, tasdiqlash huquqi',
+    role_employee_name:'Hodim', role_employee_desc:'Cheklangan kirish, direktor tomonidan tasdiqlanadi',
+    eri_title:'Elektron raqamli imzo (ERI)', eri_subtitle:'Shaxsingizni tasdiqlash uchun qulay usulni tanlang',
+    eri_eimzo_name:'E-IMZO kaliti', eri_eimzo_desc:'USB kalit orqali tasdiqlash',
+    eri_oneid_desc:'Mobil ilova orqali tasdiqlash', eri_myid_desc:'Biometrik tasdiqlash',
+    btn_start_verify:'Tasdiqlashni boshlash',
+    eri_loading_title:'Tasdiqlanmoqda...', eri_loading_desc:'ERI orqali shaxsingiz tasdiqlanmoqda. Iltimos, kuting.',
+    eri_success_title:'Muvaffaqiyatli tasdiqlandi! ✅', eri_success_desc:'Sizning shaxsingiz tasdiqlandi. Platformaga kirish uchun davom eting.',
+    btn_enter_platform:'Platformaga kirish →',
+    dash_title:'Boshqaruv paneli',
+    banner_emp_title:'Hodim tasdiqlash so\'rovi', banner_emp_desc:'1 ta hodim platformaga kirish uchun sizning tasdiqingizni kutmoqda',
+    btn_review:'Ko\'rib chiqish',
+    stat_balance:'Umumiy balans (UZS)', stat_transactions:'Oylik tranzaksiyalar',
+    stat_cards:'Faol korporativ kartalar', stat_pending:'Tasdiqlash kutilmoqda',
+    qa_payment:'To\'lov yaratish', qa_salary:'Oylik tushirish', qa_currency:'Valyuta ayirboshlash', qa_approve:'Operatsiyalarni tasdiqlash',
+    tx_title:'So\'nggi operatsiyalar', btn_view_all:'Barchasini ko\'rish →',
+    notif_title:'Bildirishnomalar', notif_today:'Bugun',
+    status_approved:'Tasdiqlangan', status_pending:'Kutilmoqda', status_rejected:'Rad etilgan',
+    emp_banner_title:'Direktor tasdig\'i kutilmoqda', emp_banner_desc:'Platformadan to\'liq foydalanish uchun direktoringiz tasdiqini olishingiz kerak',
+    btn_request_approval:'Tasdiqlash so\'rash',
+    modal_req_title:'Direktordan tasdiqlash so\'rash',
+    modal_emp_title:'Hodimni tasdiqlash', modal_op_title:'Operatsiyalarni tasdiqlash',
+    modal_pay_title:'Yangi to\'lov yaratish',
+    btn_cancel:'Bekor qilish', btn_close:'Yopish', btn_reject:'Rad etish',
+    btn_send_notif:'Habarnoma yuborish 📨', btn_submit_payment:'To\'lovni yuborish',
+    btn_approve_eri:'ERI bilan tasdiqlash 🔐', btn_approve_all_eri:'Barchasini ERI bilan tasdiqlash 🔐',
+    pay_title:'To\'lovlar', btn_new_payment:'+ Yangi to\'lov',
+    pay_my_bank:'Mening bankim', pay_cats_title:'To\'lov kategoriyalari',
+    pay_recent_title:'So\'nggi to\'lovlar', pay_history:'To\'lovlar tarixi',
+    cd_title:'Shartnoma tafsilotlari', cd_schedule:'To\'lov jadvali',
+    btn_pay_now:'To\'lovni amalga oshirish',
+    sched_date:'Muddat', sched_amount:'Summa', sched_status:'Holat', sched_balance:'Qolgan balans',
+    badge_paid:'✅ To\'langan', badge_overdue:'⚠️ Kechikkan', badge_next:'⏳ Keyingi', badge_pending:'Kutilmoqda',
+    topbar_murabaha:'Murobaha — Yangi ariza', topbar_murabaha_cjm:'Murobaha — Shariah Jarayon Xaritasi',
+    topbar_ijara:'Ijara IMB — Yangi ariza', topbar_ijara_cjm:'Ijara IMB — Shariah Jarayon Xaritasi',
+    wiz_step1:'Aktiv', wiz_step2:'Shartlar', wiz_step3:'Hujjatlar', wiz_step4:'Wa\'d', wiz_step5:'Natija',
+    ijara_step4:'IMB Wa\'d', wiz_back:'← Orqaga', wiz_next:'Keyingisi →',
+    mod_title:'Modullar uchun ruxsat bering:', user_role_dir:'Bosh Direktor'
+  },
+  ru: {
+    nav_sec_main:'Основное', nav_sec_services:'Услуги', nav_sec_management:'Управление',
+    nav_dashboard:'Панель управления', nav_accounts:'Счета', nav_payments:'Платежи',
+    nav_reports:'Финансовые отчёты', nav_murabaha:'Мурабаха финансирование', nav_ijara:'Иджара (Лизинг)',
+    nav_mudaraba:'Мударабах депозит', nav_currency:'Обмен валют',
+    nav_employees:'Сотрудники', nav_cards:'Корпоративные карты', nav_settings:'Настройки',
+    step1_title:'Регистрация', step2_title:'Выбор роли',
+    step3_title:'Идентификация', step4_title:'Вход на платформу',
+    step1_desc:'Введите данные компании', step2_desc:'Продолжить как директор или сотрудник',
+    step3_desc:'Подтвердите личность через ЭЦП', step4_desc:'Воспользуйтесь всеми услугами',
+    support_q:'Нужна помощь?',
+    reg_welcome:'Добро пожаловать! 👋', reg_subtitle:'Подключите вашу компанию к платформе исламских финансовых услуг',
+    reg_fio:'Ф.И.О.', reg_phone:'Номер телефона', reg_position:'Должность', reg_inn:'ИНН компании',
+    btn_continue:'Продолжить →', btn_back:'← Назад',
+    role_select_title:'Выберите вашу роль', role_select_subtitle:'Возможности платформы определяются вашей ролью',
+    role_director_name:'Генеральный директор', role_director_desc:'Полный доступ с ЭЦП, все модули, право утверждения',
+    role_employee_name:'Сотрудник', role_employee_desc:'Ограниченный доступ, утверждается директором',
+    eri_title:'Электронная цифровая подпись (ЭЦП)', eri_subtitle:'Выберите удобный способ подтверждения личности',
+    eri_eimzo_name:'Ключ E-IMZO', eri_eimzo_desc:'Подтверждение через USB-ключ',
+    eri_oneid_desc:'Подтверждение через мобильное приложение', eri_myid_desc:'Биометрическое подтверждение',
+    btn_start_verify:'Начать подтверждение',
+    eri_loading_title:'Подтверждение...', eri_loading_desc:'Ваша личность подтверждается через ЭЦП. Пожалуйста, подождите.',
+    eri_success_title:'Успешно подтверждено! ✅', eri_success_desc:'Ваша личность подтверждена. Продолжите для входа.',
+    btn_enter_platform:'Войти на платформу →',
+    dash_title:'Панель управления',
+    banner_emp_title:'Запрос на одобрение сотрудника', banner_emp_desc:'1 сотрудник ожидает вашего одобрения для входа',
+    btn_review:'Просмотреть',
+    stat_balance:'Общий баланс (UZS)', stat_transactions:'Ежемесячные транзакции',
+    stat_cards:'Активные корпоративные карты', stat_pending:'Ожидают подтверждения',
+    qa_payment:'Создать платёж', qa_salary:'Выплата зарплаты', qa_currency:'Обмен валют', qa_approve:'Подтвердить операции',
+    tx_title:'Последние операции', btn_view_all:'Смотреть все →',
+    notif_title:'Уведомления', notif_today:'Сегодня',
+    status_approved:'Подтверждено', status_pending:'Ожидание', status_rejected:'Отклонено',
+    emp_banner_title:'Ожидается подтверждение директора', emp_banner_desc:'Для полного доступа необходимо одобрение директора',
+    btn_request_approval:'Запросить одобрение',
+    modal_req_title:'Запрос одобрения у директора',
+    modal_emp_title:'Подтверждение сотрудника', modal_op_title:'Подтверждение операций',
+    modal_pay_title:'Создание нового платежа',
+    btn_cancel:'Отмена', btn_close:'Закрыть', btn_reject:'Отклонить',
+    btn_send_notif:'Отправить уведомление 📨', btn_submit_payment:'Отправить платёж',
+    btn_approve_eri:'Подтвердить через ЭЦП 🔐', btn_approve_all_eri:'Подтвердить всё через ЭЦП 🔐',
+    pay_title:'Платежи', btn_new_payment:'+ Новый платёж',
+    pay_my_bank:'Мой банк', pay_cats_title:'Категории платежей',
+    pay_recent_title:'Последние платежи', pay_history:'История платежей',
+    cd_title:'Детали договора', cd_schedule:'График платежей',
+    btn_pay_now:'Выполнить платёж',
+    sched_date:'Срок', sched_amount:'Сумма', sched_status:'Статус', sched_balance:'Остаток',
+    badge_paid:'✅ Оплачено', badge_overdue:'⚠️ Просрочено', badge_next:'⏳ Следующий', badge_pending:'Ожидание',
+    topbar_murabaha:'Мурабаха — Новая заявка', topbar_murabaha_cjm:'Мурабаха — Карта процесса Шариата',
+    topbar_ijara:'Иджара IMB — Новая заявка', topbar_ijara_cjm:'Иджара IMB — Карта процесса Шариата',
+    wiz_step1:'Актив', wiz_step2:'Условия', wiz_step3:'Документы', wiz_step4:'Ва\'д', wiz_step5:'Результат',
+    ijara_step4:'IMB Ва\'д', wiz_back:'← Назад', wiz_next:'Далее →',
+    mod_title:'Дать разрешение на модули:', user_role_dir:'Генеральный директор'
+  },
+  en: {
+    nav_sec_main:'Main', nav_sec_services:'Services', nav_sec_management:'Management',
+    nav_dashboard:'Dashboard', nav_accounts:'Accounts', nav_payments:'Payments',
+    nav_reports:'Financial Reports', nav_murabaha:'Murabaha Financing', nav_ijara:'Ijara (Leasing)',
+    nav_mudaraba:'Mudaraba Deposit', nav_currency:'Currency Exchange',
+    nav_employees:'Employees', nav_cards:'Corporate Cards', nav_settings:'Settings',
+    step1_title:'Registration', step2_title:'Role Selection',
+    step3_title:'Identification', step4_title:'Platform Access',
+    step1_desc:'Enter company information', step2_desc:'Continue as director or employee',
+    step3_desc:'Verify identity via digital signature', step4_desc:'Use all available services',
+    support_q:'Need help?',
+    reg_welcome:'Welcome! 👋', reg_subtitle:'Connect your company to the Islamic financial services platform',
+    reg_fio:'Full Name', reg_phone:'Phone Number', reg_position:'Position', reg_inn:'Company TIN',
+    btn_continue:'Continue →', btn_back:'← Back',
+    role_select_title:'Select Your Role', role_select_subtitle:'Platform capabilities are determined by your role',
+    role_director_name:'CEO', role_director_desc:'Full access with digital signature, all modules, approval rights',
+    role_employee_name:'Employee', role_employee_desc:'Limited access, approved by director',
+    eri_title:'Electronic Digital Signature (EDS)', eri_subtitle:'Choose a convenient way to verify your identity',
+    eri_eimzo_name:'E-IMZO Key', eri_eimzo_desc:'Verification via USB key',
+    eri_oneid_desc:'Verification via mobile app', eri_myid_desc:'Biometric verification',
+    btn_start_verify:'Start Verification',
+    eri_loading_title:'Verifying...', eri_loading_desc:'Your identity is being verified via EDS. Please wait.',
+    eri_success_title:'Successfully Verified! ✅', eri_success_desc:'Your identity has been verified. Continue to access the platform.',
+    btn_enter_platform:'Enter Platform →',
+    dash_title:'Dashboard',
+    banner_emp_title:'Employee Approval Request', banner_emp_desc:'1 employee is awaiting your approval to access the platform',
+    btn_review:'Review',
+    stat_balance:'Total Balance (UZS)', stat_transactions:'Monthly Transactions',
+    stat_cards:'Active Corporate Cards', stat_pending:'Awaiting Approval',
+    qa_payment:'Create Payment', qa_salary:'Salary Disbursement', qa_currency:'Currency Exchange', qa_approve:'Approve Operations',
+    tx_title:'Recent Transactions', btn_view_all:'View All →',
+    notif_title:'Notifications', notif_today:'Today',
+    status_approved:'Approved', status_pending:'Pending', status_rejected:'Rejected',
+    emp_banner_title:'Awaiting Director Approval', emp_banner_desc:'You need your director\'s approval to fully access the platform',
+    btn_request_approval:'Request Approval',
+    modal_req_title:'Request Approval from Director',
+    modal_emp_title:'Approve Employee', modal_op_title:'Approve Operations',
+    modal_pay_title:'Create New Payment',
+    btn_cancel:'Cancel', btn_close:'Close', btn_reject:'Reject',
+    btn_send_notif:'Send Notification 📨', btn_submit_payment:'Submit Payment',
+    btn_approve_eri:'Approve via EDS 🔐', btn_approve_all_eri:'Approve All via EDS 🔐',
+    pay_title:'Payments', btn_new_payment:'+ New Payment',
+    pay_my_bank:'My Bank', pay_cats_title:'Payment Categories',
+    pay_recent_title:'Recent Payments', pay_history:'Payment History',
+    cd_title:'Contract Details', cd_schedule:'Payment Schedule',
+    btn_pay_now:'Make Payment',
+    sched_date:'Due Date', sched_amount:'Amount', sched_status:'Status', sched_balance:'Remaining Balance',
+    badge_paid:'✅ Paid', badge_overdue:'⚠️ Overdue', badge_next:'⏳ Next', badge_pending:'Pending',
+    topbar_murabaha:'Murabaha — New Application', topbar_murabaha_cjm:'Murabaha — Shariah Process Map',
+    topbar_ijara:'Ijara IMB — New Application', topbar_ijara_cjm:'Ijara IMB — Shariah Process Map',
+    wiz_step1:'Asset', wiz_step2:'Terms', wiz_step3:'Documents', wiz_step4:'Wa\'d', wiz_step5:'Result',
+    ijara_step4:'IMB Wa\'d', wiz_back:'← Back', wiz_next:'Next →',
+    mod_title:'Grant module permissions:', user_role_dir:'CEO'
+  }
+};
+
+var currentLang = 'uz';
+
+function setLang(lang) {
+  currentLang = lang;
+  var t = TRANSLATIONS[lang];
+  if (!t) return;
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-ph');
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
+  });
+  document.documentElement.lang = lang;
+}
+
+// ——— Wrap showScreen for wizard reset + role auto-select
 var _origShowScreen = showScreen;
 showScreen = function(id) {
   _origShowScreen(id);
