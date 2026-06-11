@@ -161,7 +161,7 @@ const PORTFOLIO = [
    url    : internal path (e.g. "prototypes/x/index.html") or external https link  */
 const PROTOTYPES = [
   {
-    title: "Enterprise Banking IT Infrastructure",
+    title: "Banking infra",
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
@@ -170,7 +170,7 @@ const PROTOTYPES = [
     description: "Interactive AS-IS / TO-BE architecture explorer: Core Banking ABS, Middleware layer, client channels, compliance modules and external integrations — with multilingual support (UZ/RU/EN)."
   },
   {
-    title: "Islamic Banking Web App",
+    title: "Islamic banking app",
     product: "Trastbank",
     type: "External",
     status: "Demo",
@@ -179,7 +179,7 @@ const PROTOTYPES = [
     description: "Corporate internet banking web application — accounts, payments, transfers and client management."
   },
   {
-    title: "Banking Bonus Management",
+    title: "Bonus app",
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
@@ -188,7 +188,7 @@ const PROTOTYPES = [
     description: "Front office bonus calculation app — daily accruals, anti-bonus rules, formula breakdown per operation."
   },
   {
-    title: "Banking Loan Management System",
+    title: "Loan conveyor",
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
@@ -197,15 +197,7 @@ const PROTOTYPES = [
     description: "End-to-end loan conveyor — application intake, scoring, approval workflow and disbursement tracking."
   },
   {
-    title: "Islamic Banking Mobile Concept",
-    product: "Islamic Banking",
-    type: "Internal",
-    status: "Coming Soon",
-    url: "prototypes/islamic-banking/index.html",
-    description: "Concept prototype for a Shariah-compliant digital-banking customer journey."
-  },
-  {
-    title: "Eventador — Middleware Platform",
+    title: "Eventador",
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
@@ -223,7 +215,7 @@ const PROTOTYPES = [
     description: "AI-native BI platform prototype for Uzbekistan banking — executive dashboard, GenBI analyst, 14 screens, role-based access, 3-language support (UZ/RU/EN). Built to demonstrate DWH & BI analytics layer for banking infrastructure."
   },
   {
-    title: "BNPL Broker — Mediapark",
+    title: "BNPL broker",
     product: "Mediapark",
     type: "Internal",
     status: "Demo",
@@ -232,7 +224,7 @@ const PROTOTYPES = [
     description: "Unified BNPL checkout broker prototype — multi-partner offer comparison, scoring simulation, contract generation, e-signature, and Face ID flow. Online & offline retail modes."
   },
   {
-    title: "Trastbank PMO Dashboard",
+    title: "PMO desk",
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
