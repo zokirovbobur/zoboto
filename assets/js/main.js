@@ -230,7 +230,7 @@ const PROTOTYPES = [
     status: "Demo",
     platforms: ["desktop", "mobile"],
     url: "prototypes/trastbank-pmo/index.html",
-    description: "Executive project reporting board — 99-project PMO registry, Kanban status board, employee workload, roadmap, risks & incidents. Fully multilingual (UZ/RU/EN), built from real data."
+    description: "Executive project reporting board — PMO registry, Kanban status board, employee workload, roadmap, risks & incidents. Fully multilingual (UZ/RU/EN)."
   },
   {
     title: "Finport",
