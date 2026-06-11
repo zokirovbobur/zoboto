@@ -196,6 +196,12 @@ function Portfolio() {
     return r;
   }, [status, product, pm, demoOnly, search, sort]);
 
+  // chart data — derived from filtered rows
+  const statusCounts  = uM1(() => STATUS_ORDER.map(s => rows.filter(p => p.norm === s).length), [rows]);
+  const prodChart     = uM1(() => { const m = {}; rows.forEach(p => m[p.product] = (m[p.product]||0)+1); return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6); }, [rows]);
+  const pmChart       = uM1(() => { const m = {}; rows.forEach(p => { if(p.pm) m[p.pm]=(m[p.pm]||0)+1; }); return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6); }, [rows]);
+  const demoCounts    = uM1(() => [rows.filter(p=>p.demoReady).length, rows.filter(p=>!p.demoReady).length], [rows]);
+
   const reset = () => { setStatus("all"); setProduct("all"); setPm("all"); setDemoOnly(false); };
   const SortTh = ({ k, label, cls }) => (
     <th className={cls} onClick={() => setSort(s => ({ k, dir: s.k === k ? -s.dir : 1 }))}>
@@ -223,6 +229,51 @@ function Portfolio() {
         </select></div>
         <button className={"chip" + (demoOnly ? " on" : "")} onClick={() => setDemoOnly(v => !v)}>{t("kpi_demo")}</button>
         <button className="btn btn-ghost" onClick={reset}>↺ {t("resetFilters")}</button>
+      </div>
+
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:14, marginBottom:16 }}>
+        <div className="card">
+          <div className="card-h"><h3>{t("col_status")}</h3></div>
+          <div className="card-pad">
+            <Chart_ type="doughnut" height={160}
+              onClickIndex={i => setStatus(status === STATUS_ORDER[i] ? "all" : STATUS_ORDER[i])}
+              data={{ labels: STATUS_ORDER.map(s => t(STATUS[s].short)),
+                datasets:[{ data: statusCounts, backgroundColor: STATUS_ORDER.map(s=>STATUS[s].color), borderWidth:2, borderColor:"#fff", hoverOffset:4 }] }}
+              options={{ cutout:"60%", plugins:{ legend:{ position:"bottom", labels:{ usePointStyle:true, pointStyle:"circle", padding:8, font:{ size:10.5 } } } } }} />
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-h"><h3>{t("col_product")}</h3></div>
+          <div className="card-pad">
+            <Chart_ type="bar" height={160}
+              onClickIndex={i => setProduct(product === prodChart[i][0] ? "all" : prodChart[i][0])}
+              data={{ labels: prodChart.map(d=>prodShort(d[0])),
+                datasets:[{ data: prodChart.map(d=>d[1]), backgroundColor: prodChart.map(d=> product==="all"||product===d[0] ? "#2563EB" : "#C5D4F0"), borderRadius:4, maxBarThickness:16 }] }}
+              options={{ indexAxis:"y", plugins:{ legend:{ display:false } },
+                scales:{ x:{ grid:{ color:"#EEF2F8" }, ticks:{ precision:0, font:{ size:10 } } }, y:{ grid:{ display:false }, ticks:{ font:{ size:10 } } } } }} />
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-h"><h3>{t("col_pm")}</h3></div>
+          <div className="card-pad">
+            <Chart_ type="bar" height={160}
+              onClickIndex={i => setPm(pm === pmChart[i][0] ? "all" : pmChart[i][0])}
+              data={{ labels: pmChart.map(d=>d[0].split(" ")[0]),
+                datasets:[{ data: pmChart.map(d=>d[1]), backgroundColor: pmChart.map(d=> pm==="all"||pm===d[0] ? "#6D5CD6" : "#D4CEF5"), borderRadius:4, maxBarThickness:16 }] }}
+              options={{ indexAxis:"y", plugins:{ legend:{ display:false } },
+                scales:{ x:{ grid:{ color:"#EEF2F8" }, ticks:{ precision:0, font:{ size:10 } } }, y:{ grid:{ display:false }, ticks:{ font:{ size:10 } } } } }} />
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-h"><h3>{t("kpi_demo")}</h3></div>
+          <div className="card-pad">
+            <Chart_ type="doughnut" height={160}
+              onClickIndex={i => setDemoOnly(i === 0 ? !demoOnly : false)}
+              data={{ labels:[t("yes"), t("no")],
+                datasets:[{ data: demoCounts, backgroundColor:["#138A5E","#D0D6E0"], borderWidth:2, borderColor:"#fff", hoverOffset:4 }] }}
+              options={{ cutout:"60%", plugins:{ legend:{ position:"bottom", labels:{ usePointStyle:true, pointStyle:"circle", padding:8, font:{ size:10.5 } } } } }} />
+          </div>
+        </div>
       </div>
 
       <div className="card">

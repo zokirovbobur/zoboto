@@ -81,7 +81,6 @@ function App() {
                 </div>
               ))}
             </nav>
-            <div className="sidebar-foot">{t("source")}: <br />{DATA.meta.sourceFile.replace(/\.xlsx$/, "")}</div>
           </aside>
 
           <div className="main">
