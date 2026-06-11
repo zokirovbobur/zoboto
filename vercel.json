@@ -1,4 +1,6 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "redirects": [
     { "source": "/protos", "destination": "/#prototypes", "permanent": false },
     { "source": "/about", "destination": "/#top", "permanent": false }
