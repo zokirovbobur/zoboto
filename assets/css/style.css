@@ -291,6 +291,10 @@ img{max-width:100%;display:block;}
 .pf-role b{color:var(--ink-soft);font-weight:600;}
 .pf-desc{font-size:14.5px;color:var(--ink-soft);line-height:1.6;flex:1;}
 .pf-actions{display:flex;gap:10px;align-items:center;margin-top:6px;flex-wrap:wrap;}
+.store-links{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
+.store-link{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:100px;border:1px solid var(--line-strong);font-size:12px;font-weight:600;color:var(--ink-soft);text-decoration:none;transition:border-color .2s,color .2s;}
+.store-link:hover{border-color:var(--accent);color:var(--accent-text);}
+.store-link svg{flex-shrink:0;}
 
 /* ----------------------- Prototype Library -------------------------- */
 .filters{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
