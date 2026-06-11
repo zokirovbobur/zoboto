@@ -856,4 +856,20 @@ const I18N = {
   /* ---------- Footer year ---------- */
   const yr = document.getElementById("year");
   if (yr) yr.textContent = new Date().getFullYear();
+
+  /* ---------- Easter egg button ---------- */
+  const easterBtn = document.getElementById("easterBtn");
+  const easterTip = document.getElementById("easterTip");
+  if (easterBtn && easterTip) {
+    easterBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      easterTip.classList.toggle("visible");
+    });
+    easterBtn.addEventListener("mouseleave", function () {
+      easterTip.classList.remove("visible");
+    });
+    document.addEventListener("click", function () {
+      easterTip.classList.remove("visible");
+    });
+  }
 })();
