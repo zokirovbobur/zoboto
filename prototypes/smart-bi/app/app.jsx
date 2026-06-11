@@ -4,7 +4,7 @@
 const { useState: AUS, useEffect: AUE } = React;
 
 const ROLE_META = {
-  CEO:               { name:'Aziz Karimov', initials:'AK', titleFull:'Chief Executive Officer', color:'#3b82f6', home:'dashboard' },
+  CEO:               { name:'Bobur Zokirov', initials:'BZ', titleFull:'Chief Executive Officer', color:'#3b82f6', home:'dashboard' },
   Analyst:           { name:'Sardor Aliyev', initials:'SA', titleFull:'Business Analyst', color:'#22d3ee', home:'ai' },
   'Department Head': { name:'Nodira Yusupova', initials:'NY', titleFull:'Head of Retail', color:'#34d399', home:'dashboard' },
   'Data Admin':      { name:'Dilshod Umarov', initials:'DU', titleFull:'Data Administrator', color:'#a78bfa', home:'connectors' },

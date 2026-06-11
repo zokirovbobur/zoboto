@@ -59,11 +59,11 @@
   ];
 
   const DASHBOARDS = [
-    { id:'ceo', name:'CEO Cockpit', owner:'Aziz Karimov', updated:'12 min ago', widgets:14, access:'Executive', accent:'#3b82f6', tag:'Executive' },
+    { id:'ceo', name:'CEO Cockpit', owner:'Bobur Zokirov', updated:'12 min ago', widgets:14, access:'Executive', accent:'#3b82f6', tag:'Executive' },
     { id:'retail', name:'Retail Sales Dashboard', owner:'Nodira Yusupova', updated:'1 hour ago', widgets:18, access:'Department', accent:'#22d3ee', tag:'Retail' },
     { id:'bank', name:'Bank Portfolio Dashboard', owner:'Risk Office', updated:'34 min ago', widgets:22, access:'Restricted', accent:'#a78bfa', tag:'Banking' },
     { id:'fintech', name:'Fintech Transactions', owner:'Sardor Aliyev', updated:'4 min ago', widgets:16, access:'Department', accent:'#34d399', tag:'Fintech' },
-    { id:'region', name:'Regional Performance', owner:'Aziz Karimov', updated:'22 min ago', widgets:11, access:'Company', accent:'#f59e0b', tag:'Regional' },
+    { id:'region', name:'Regional Performance', owner:'Bobur Zokirov', updated:'22 min ago', widgets:11, access:'Company', accent:'#f59e0b', tag:'Regional' },
     { id:'construction', name:'Construction Projects', owner:'Jasur Toshev', updated:'2 hours ago', widgets:9, access:'Department', accent:'#fb7185', tag:'Construction' },
     { id:'horeca', name:'HoReCa Operations', owner:'Kamola Rashidova', updated:'48 min ago', widgets:13, access:'Department', accent:'#60a5fa', tag:'HoReCa' },
   ];
@@ -127,7 +127,7 @@
   ];
 
   const USERS = [
-    { id:1, name:'Aziz Karimov', email:'a.karimov@navigator.uz', role:'CEO', dept:'Executive', status:'Active', color:'#3b82f6', mfa:true },
+    { id:1, name:'Bobur Zokirov', email:'b.zokirov@navigator.uz', role:'CEO', dept:'Executive', status:'Active', color:'#3b82f6', mfa:true },
     { id:2, name:'Nodira Yusupova', email:'n.yusupova@navigator.uz', role:'Department Head', dept:'Retail', status:'Active', color:'#22d3ee', mfa:true },
     { id:3, name:'Sardor Aliyev', email:'s.aliyev@navigator.uz', role:'Business Analyst', dept:'Fintech', status:'Active', color:'#34d399', mfa:false },
     { id:4, name:'Kamola Rashidova', email:'k.rashidova@navigator.uz', role:'Data Analyst', dept:'Analytics', status:'Active', color:'#a78bfa', mfa:true },
@@ -149,7 +149,7 @@
 
   const AUDIT = [
     { id:1, user:'Dilshod Umarov', action:'Granted admin role', target:'Malika Tursunova', when:'Today 14:22', type:'security', ip:'10.4.2.18' },
-    { id:2, user:'Aziz Karimov', action:'Exported report', target:'Q2 Board Report', when:'Today 11:08', type:'export', ip:'10.4.1.4' },
+    { id:2, user:'Bobur Zokirov', action:'Exported report', target:'Q2 Board Report', when:'Today 11:08', type:'export', ip:'10.4.1.4' },
     { id:3, user:'Sardor Aliyev', action:'Connected source', target:'ClickHouse', when:'Today 09:41', type:'data', ip:'10.4.3.22' },
     { id:4, user:'System', action:'Sync completed', target:'Banking Core', when:'Today 09:40', type:'system', ip:'—' },
     { id:5, user:'Nodira Yusupova', action:'Shared dashboard', target:'Retail Sales', when:'Yesterday 17:55', type:'access', ip:'10.4.2.7' },
