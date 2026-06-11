@@ -114,6 +114,7 @@ function Risks() {
             <td className="cell-proj">{p.name}</td>
             <td><span className="tag">{prodShort(p.product)}</span></td>
             <td className="t-muted">{p.originalStatus}</td>
+            <td className="t-muted" style={{ fontSize: 12, maxWidth: 360 }}>{p.pauseReason || "—"}</td>
             <td>{p.pm ? <span className="row"><Avatar name={p.pm} size={22} />{p.pm}</span> : <span className="pill pill-amber">{t("kpi_noowner")}</span>}</td>
             <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
           </tr>

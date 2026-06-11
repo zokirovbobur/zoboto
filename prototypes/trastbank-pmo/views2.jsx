@@ -112,6 +112,10 @@ function ProjectDetail() {
                 {p.norm === "paused" && <span className="pill pill-red">{p.originalStatus}</span>}
                 {h === "good" && !isOverdue(p) && <span className="pill pill-green">✓ {t("health_good")}</span>}
               </div>
+              {p.pauseReason && <div style={{ marginTop: 14 }}>
+                <div className="fact-l" style={{ marginBottom: 6 }}>{t("pauseReason")}</div>
+                <div className="muted" style={{ fontSize: 13.5, lineHeight: 1.45 }}>{p.pauseReason}</div>
+              </div>}
               {relInc.length > 0 && <div style={{ marginTop: 14 }}>
                 <div className="fact-l" style={{ marginBottom: 8 }}>{t("nav_risks")}</div>
                 {relInc.map(i => <div key={i.id} className="member-row">
