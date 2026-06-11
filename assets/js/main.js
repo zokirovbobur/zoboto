@@ -233,7 +233,7 @@ const PROTOTYPES = [
     description: "Executive project reporting board — 99-project PMO registry, Kanban status board, employee workload, roadmap, risks & incidents. Fully multilingual (UZ/RU/EN), built from real data."
   },
   {
-    title: "Finport — Investment Portfolio",
+    title: "Finport",
     product: "Finport",
     type: "External",
     status: "Demo",
