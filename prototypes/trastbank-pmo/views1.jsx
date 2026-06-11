@@ -231,7 +231,7 @@ function Portfolio() {
         <button className="btn btn-ghost" onClick={reset}>↺ {t("resetFilters")}</button>
       </div>
 
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:14, marginBottom:16 }}>
+      <div className="stat-bg">
         <div className="card">
           <div className="card-h"><h3>{t("col_status")}</h3></div>
           <div className="card-pad">

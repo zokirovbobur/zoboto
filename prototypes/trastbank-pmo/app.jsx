@@ -48,11 +48,12 @@ function App() {
   const [lang, setLang] = uSA(() => localStorage.getItem("tb_lang") || "uz");
   const [route, setRoute] = uSA({ name: "dashboard" });
   const [search, setSearch] = uSA("");
+  const [sideOpen, setSideOpen] = uSA(false);
 
   uEA(() => { localStorage.setItem("tb_lang", lang); document.documentElement.lang = lang; }, [lang]);
   uEA(() => { window.scrollTo(0, 0); const m = document.querySelector(".main"); if (m) m.scrollTop = 0; }, [route]);
 
-  const nav = (name, params = {}) => { setSearch(""); setRoute({ name, ...params }); };
+  const nav = (name, params = {}) => { setSearch(""); setRoute({ name, ...params }); setSideOpen(false); };
   const dict = window.TB_I18N[lang];
   const t = (k) => (dict && dict[k] != null ? dict[k] : k);
   const activeId = ACTIVE_OF[route.name] || route.name;
@@ -62,7 +63,8 @@ function App() {
     <AppCtx.Provider value={{ lang, nav, route, search }}>
       <ToastHost>
         <div className="app">
-          <aside className="sidebar">
+          <div className={"sidebar-ov" + (sideOpen ? " on" : "")} onClick={() => setSideOpen(false)} />
+          <aside className={"sidebar" + (sideOpen ? " on" : "")}>
             <div className="brand">
               <div className="brand-mark"><span>T</span></div>
               <div className="brand-txt"><b>Trastbank</b><small>Reporting Board</small></div>
@@ -85,6 +87,11 @@ function App() {
 
           <div className="main">
             <header className="topbar">
+              <button className="mob-btn" onClick={() => setSideOpen(o => !o)} aria-label="Menu">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+              </button>
               <div className="search-box">
                 <svg className="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" /></svg>
                 <input value={search} onChange={e => setSearch(e.target.value)}
