@@ -19,10 +19,16 @@ function Dashboard() {
   const t = useT(); const { nav, lang } = useApp();
   const a = uM1(agg, []);
 
-  // product breakdown
+  // product breakdown by status
   const prodData = uM1(() => {
-    const m = {}; ALL_P.forEach(p => m[p.product] = (m[p.product] || 0) + 1);
-    return Object.entries(m).sort((x, y) => y[1] - x[1]).slice(0, 10);
+    const m = {};
+    ALL_P.forEach(p => {
+      if (!m[p.product]) m[p.product] = { completed: 0, progress: 0, planned: 0, paused: 0 };
+      m[p.product][p.norm]++;
+    });
+    return Object.entries(m)
+      .map(([name, counts]) => [name, counts, counts.completed + counts.progress + counts.planned + counts.paused])
+      .sort((x, y) => y[2] - x[2]).slice(0, 10);
   }, []);
   // stack breakdown
   const stackData = uM1(() => {
@@ -87,14 +93,19 @@ function Dashboard() {
         <div className="card">
           <div className="card-h"><h3>{t("ch_product")}</h3><span className="hint">{t("clickHint")}</span></div>
           <div className="card-pad">
-            <Chart_ type="bar" height={230}
+            <Chart_ type="bar" height={260}
               onClickIndex={(i) => nav("portfolio", { product: prodData[i][0] })}
               data={{
                 labels: prodData.map(d => prodShort(d[0])),
-                datasets: [{ data: prodData.map(d => d[1]), backgroundColor: "#1E4279", borderRadius: 5, maxBarThickness: 26 }],
+                datasets: STATUS_ORDER.map(s => ({
+                  label: t(STATUS[s].short),
+                  data: prodData.map(d => d[1][s]),
+                  backgroundColor: STATUS[s].color, borderRadius: 3, stack: "x", maxBarThickness: 22,
+                })),
               }}
-              options={{ indexAxis: "y", plugins: { legend: { display: false } },
-                scales: { x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 11.5 } } } } }} />
+              options={{ indexAxis: "y",
+                plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", padding: 14, font: { size: 11.5 } } } },
+                scales: { x: { stacked: true, grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 11.5 } } } } }} />
           </div>
         </div>
       </div>
