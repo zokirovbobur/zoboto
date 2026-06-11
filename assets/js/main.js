@@ -165,6 +165,7 @@ const PROTOTYPES = [
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
+    platforms: ["desktop"],
     url: "prototypes/banking-infra/index.html",
     description: "Interactive AS-IS / TO-BE architecture explorer: Core Banking ABS, Middleware layer, client channels, compliance modules and external integrations — with multilingual support (UZ/RU/EN)."
   },
@@ -173,6 +174,7 @@ const PROTOTYPES = [
     product: "Trastbank",
     type: "External",
     status: "Demo",
+    platforms: ["desktop", "mobile"],
     url: "prototypes/banking-infra/islamic-bank-dbo.html",
     description: "Corporate internet banking web application — accounts, payments, transfers and client management."
   },
@@ -181,6 +183,7 @@ const PROTOTYPES = [
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
+    platforms: ["desktop", "mobile"],
     url: "prototypes/banking-infra/bonus-proto.html",
     description: "Front office bonus calculation app — daily accruals, anti-bonus rules, formula breakdown per operation."
   },
@@ -189,6 +192,7 @@ const PROTOTYPES = [
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
+    platforms: ["desktop", "mobile"],
     url: "prototypes/banking-infra/kredit-konveyer.html",
     description: "End-to-end loan conveyor — application intake, scoring, approval workflow and disbursement tracking."
   },
@@ -205,6 +209,7 @@ const PROTOTYPES = [
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
+    platforms: ["desktop", "mobile"],
     url: "prototypes/eventador/index.html",
     description: "Enterprise middleware platform prototype — event-driven flow designer, gRPC proto registry, API gateway, deployment pipeline and monitoring. Built to demonstrate Inhouse middleware architecture for banking infrastructure."
   },
@@ -213,6 +218,7 @@ const PROTOTYPES = [
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
+    platforms: ["desktop", "mobile"],
     url: "prototypes/smart-bi/index.html",
     description: "AI-native BI platform prototype for Uzbekistan banking — executive dashboard, GenBI analyst, 14 screens, role-based access, 3-language support (UZ/RU/EN). Built to demonstrate DWH & BI analytics layer for banking infrastructure."
   },
@@ -221,6 +227,7 @@ const PROTOTYPES = [
     product: "Mediapark",
     type: "Internal",
     status: "Demo",
+    platforms: ["desktop", "mobile"],
     url: "prototypes/mediapark-bnpl/index.html",
     description: "Unified BNPL checkout broker prototype — multi-partner offer comparison, scoring simulation, contract generation, e-signature, and Face ID flow. Online & offline retail modes."
   },
@@ -229,6 +236,7 @@ const PROTOTYPES = [
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
+    platforms: ["desktop", "mobile"],
     url: "prototypes/trastbank-pmo/index.html",
     description: "Executive project reporting board — 99-project PMO registry, Kanban status board, employee workload, roadmap, risks & incidents. Fully multilingual (UZ/RU/EN), built from real data."
   },
@@ -237,6 +245,7 @@ const PROTOTYPES = [
     product: "Finport",
     type: "External",
     status: "Demo",
+    platforms: ["desktop", "mobile"],
     url: "https://finport.uz/",
     description: "Investment portfolio management platform — public demo prototype."
   },
@@ -545,6 +554,8 @@ const I18N = {
     var tr = I18N[LANG] || I18N.en;
     var arrow = function (d) { return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="' + d + '"/></svg>'; };
     var down = "M4 6l4 4 4-4", up = "M12 10l-4-4-4 4";
+    var deskSVG = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="2" width="13" height="8.5" rx="1.5"/><path d="M5.5 13.5h5M8 10.5v3"/></svg>';
+    var mobSVG = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="1" width="8" height="14" rx="2"/><path d="M7.5 12.5h1"/></svg>';
     const list = currentFilter && currentFilter !== "All"
       ? PROTOTYPES.filter(function (p) { return p.type === currentFilter; })
       : PROTOTYPES;
@@ -559,6 +570,11 @@ const I18N = {
         : "badge--private";
       const typeLabel = isInternal ? tr.filter_internal : tr.filter_external;
       const statusLabel = isSoon ? tr.proto_btn_soon : p.status;
+      const statusBadge = p.platforms
+        ? p.platforms.map(function(pl) {
+            return '<span class="badge badge--platform badge--platform-' + pl + '" title="' + (pl === "desktop" ? "Desktop" : "Mobile") + '">' + (pl === "desktop" ? deskSVG : mobSVG) + '</span>';
+          }).join("")
+        : '<span class="badge ' + stClass + '">' + statusLabel + '</span>';
       const action = isSoon
         ? '<span class="btn btn--primary btn--sm" style="opacity:.4;cursor:not-allowed">' + tr.proto_btn_soon + '</span>'
         : isInternal
@@ -570,7 +586,7 @@ const I18N = {
             '<div><h3>' + p.title + '</h3></div>' +
             '<div class="proto-badges">' +
               '<span class="badge ' + (isInternal ? "badge--int" : "badge--ext") + '">' + typeLabel + '</span>' +
-              '<span class="badge ' + stClass + '">' + statusLabel + '</span>' +
+              statusBadge +
             '</div>' +
           '</div>' +
           '<p class="proto-desc">' + p.description + '</p>' +
