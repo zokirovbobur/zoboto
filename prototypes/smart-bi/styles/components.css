@@ -159,3 +159,40 @@
 .ai-ring { background: conic-gradient(from 180deg, var(--accent), var(--accent-2), var(--purple), var(--accent)); }
 .glow-border { position: relative; }
 .glow-border::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; opacity: .6; }
+
+/* ============================================================
+   Mobile responsive — only affects ≤ 768px, desktop unchanged
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Screen content padding */
+  .screen { padding: 14px 14px 24px; }
+  .screen-title { font-size: 19px; }
+
+  /* Stack all dash-grid cards to single column */
+  .dash-grid { grid-template-columns: 1fr !important; }
+  .dash-grid > * { grid-column: 1 / -1 !important; }
+
+  /* Table horizontal scroll */
+  .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Login page: single column, hide brand panel */
+  .login-root { grid-template-columns: 1fr !important; }
+  .login-brand { display: none !important; }
+  .login-form-wrap { padding: 28px 20px !important; }
+
+  /* Move toasts above mobile bottom nav */
+  .toast-wrap { bottom: 70px; }
+
+  /* Thinner scrollbars on mobile */
+  ::-webkit-scrollbar { width: 3px; height: 3px; }
+
+  /* Topbar search hidden on mobile (handled in JS) */
+  .topbar-search { display: none !important; }
+
+  /* Tabs wrap on mobile */
+  .tabs { flex-wrap: wrap; }
+  .tab { font-size: 12px; }
+
+  /* Chips and badges don't overflow */
+  .chip { font-size: 12px; }
+}

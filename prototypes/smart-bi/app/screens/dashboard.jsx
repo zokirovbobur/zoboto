@@ -116,19 +116,21 @@ function DashboardScreen({ navigate, openAI, toast, role }) {
             <span className="section-title">Product / category performance</span>
             <button className="btn btn-sm btn-ghost" onClick={()=>setDrill({label:'Products'})}>Open report<Icon name="arrowRight" size={13}/></button>
           </div>
-          <table className="tbl">
-            <thead><tr><th>Product line</th><th className="num">Revenue</th><th className="num">Plan</th><th className="num">vs Plan</th><th className="num">Growth</th></tr></thead>
-            <tbody>
-              {D.PRODUCTS.map((p,i) => { const vp = ((p.rev/p.plan-1)*100); return (
-                <tr key={i} className="clickable" onClick={()=>setDrill({label:p.name})}>
-                  <td style={{ fontWeight:600 }}>{p.name}</td>
-                  <td className="num mono">{p.rev}</td>
-                  <td className="num mono muted">{p.plan}</td>
-                  <td className="num"><span className={`badge ${vp>=0?'badge-pos':'badge-neg'}`}>{vp>=0?'+':''}{vp.toFixed(1)}%</span></td>
-                  <td className="num"><Delta value={p.growth} /></td>
-                </tr>); })}
-            </tbody>
-          </table>
+          <div className="tbl-scroll">
+            <table className="tbl">
+              <thead><tr><th>Product line</th><th className="num">Revenue</th><th className="num">Plan</th><th className="num">vs Plan</th><th className="num">Growth</th></tr></thead>
+              <tbody>
+                {D.PRODUCTS.map((p,i) => { const vp = ((p.rev/p.plan-1)*100); return (
+                  <tr key={i} className="clickable" onClick={()=>setDrill({label:p.name})}>
+                    <td style={{ fontWeight:600 }}>{p.name}</td>
+                    <td className="num mono">{p.rev}</td>
+                    <td className="num mono muted">{p.plan}</td>
+                    <td className="num"><span className={`badge ${vp>=0?'badge-pos':'badge-neg'}`}>{vp>=0?'+':''}{vp.toFixed(1)}%</span></td>
+                    <td className="num"><Delta value={p.growth} /></td>
+                  </tr>); })}
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className="card card-pad" style={{ gridColumn:'span 5' }}>
           <div className="row between" style={{ marginBottom:12 }}>

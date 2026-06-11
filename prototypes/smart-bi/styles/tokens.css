@@ -91,8 +91,15 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   letter-spacing: -0.01em;
+  /* Prevent mobile pull-to-refresh interfering with app scroll */
+  overscroll-behavior: none;
 }
 #root { height: 100%; }
+
+/* Mobile safe area support */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  body { padding-bottom: env(safe-area-inset-bottom, 0px); }
+}
 ::selection { background: var(--accent-soft); }
 
 /* scrollbars */

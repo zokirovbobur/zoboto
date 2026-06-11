@@ -66,15 +66,18 @@ function MobileFrame({ children, onClose, role, screen, navigate }) {
   );
 }
 
-function MobileDash({ role, navigate }) {
+/* MobileDash: embedded=true hides built-in header/nav (used in real mobile layout) */
+function MobileDash({ role, navigate, embedded }) {
   const D = window.DATA;
   return (
-    <div className="col grow" style={{ overflowY:'auto' }}>
-      <div className="row between" style={{ padding:'10px 16px' }}>
-        <div className="row gap-10"><Logo size={28}/><div className="col" style={{lineHeight:1.1}}><span style={{fontWeight:800,fontSize:13}}>BI Navigator</span><span className="dim" style={{fontSize:9.5,letterSpacing:'0.05em'}}>UZBEKISTAN</span></div></div>
-        <span className="avatar" style={{ width:30, height:30, background:`linear-gradient(135deg,${role.color},var(--accent-2))`, fontSize:11 }}>{role.initials}</span>
-      </div>
-      <div className="col gap-12" style={{ padding:'6px 16px 80px' }}>
+    <div className="col grow" style={{ overflowY: embedded ? 'visible' : 'auto' }}>
+      {!embedded && (
+        <div className="row between" style={{ padding:'10px 16px' }}>
+          <div className="row gap-10"><Logo size={28}/><div className="col" style={{lineHeight:1.1}}><span style={{fontWeight:800,fontSize:13}}>BI Navigator</span><span className="dim" style={{fontSize:9.5,letterSpacing:'0.05em'}}>UZBEKISTAN</span></div></div>
+          <span className="avatar" style={{ width:30, height:30, background:`linear-gradient(135deg,${role.color},var(--accent-2))`, fontSize:11 }}>{role.initials}</span>
+        </div>
+      )}
+      <div className="col gap-12" style={{ padding: embedded ? '12px 14px 24px' : '6px 16px 80px' }}>
         <div className="col gap-2"><span className="dim" style={{fontSize:12}}>Good morning, {role.name.split(' ')[0]}</span><span style={{fontSize:18,fontWeight:800,letterSpacing:'-0.02em'}}>Company overview</span></div>
         <div className="card card-pad glow-border" style={{ background:'var(--card-2)' }}>
           <div className="row gap-8" style={{marginBottom:8}}><span className="badge badge-info"><Icon name="sparkle" size={11}/>AI brief</span></div>
@@ -97,12 +100,19 @@ function MobileDash({ role, navigate }) {
           <div className="section-title" style={{marginBottom:10,fontSize:13.5}}>Regional performance</div>
           <RegionBars regions={D.REGIONS.slice(0,5)} />
         </div>
+        {embedded && (
+          <button className="btn btn-sm row gap-6" onClick={() => navigate('ai')} style={{ alignSelf:'center', marginTop:4 }}>
+            <Icon name="sparkle" size={14} />Ask AI a question
+          </button>
+        )}
       </div>
-      <div className="row between" style={{ position:'absolute', bottom:0, left:0, right:0, padding:'10px 26px 22px', background:'var(--surface)', borderTop:'1px solid var(--border)' }}>
-        {[['dashboard','Home'],['ai','AI'],['alerts','Alerts'],['library','Boards']].map(([ic,l],i)=>(
-          <button key={i} className="col center gap-4" style={{ color:i===0?'var(--accent)':'var(--text-3)' }}><Icon name={ic} size={20}/><span style={{fontSize:9.5,fontWeight:600}}>{l}</span></button>
-        ))}
-      </div>
+      {!embedded && (
+        <div className="row between" style={{ position:'absolute', bottom:0, left:0, right:0, padding:'10px 26px 22px', background:'var(--surface)', borderTop:'1px solid var(--border)' }}>
+          {[['dashboard','Home'],['ai','AI'],['alerts','Alerts'],['library','Boards']].map(([ic,l],i)=>(
+            <button key={i} className="col center gap-4" style={{ color:i===0?'var(--accent)':'var(--text-3)' }}><Icon name={ic} size={20}/><span style={{fontSize:9.5,fontWeight:600}}>{l}</span></button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -118,7 +128,14 @@ function App() {
   const [mobile, setMobile] = AUS(false);
   const [notifOpen, setNotifOpen] = AUS(false);
   const [profileOpen, setProfileOpen] = AUS(false);
+  const [isMobile, setIsMobile] = AUS(() => window.innerWidth <= 768);
   const toast = useToast();
+
+  AUE(() => {
+    const handle = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handle);
+    return () => window.removeEventListener('resize', handle);
+  }, []);
 
   AUE(() => { document.documentElement.setAttribute('data-theme', theme); }, [theme]);
   AUE(() => {
@@ -145,6 +162,32 @@ function App() {
     return <ComingSoon id={screen} t={t} />;
   };
 
+  const renderMobileScreen = () => {
+    if (screen === 'dashboard') return <MobileDash role={role} navigate={navigate} embedded={true} />;
+    if (screen === 'ai') return <AIScreen navigate={navigate} toast={toast} />;
+    const compName = SCREEN_COMPONENTS[screen];
+    const Comp = window[compName];
+    if (Comp) return <Comp navigate={navigate} openAI={()=>setAiOpen(true)} toast={toast} role={role} lang={lang} setLang={setLang} theme={theme} setTheme={setTheme} />;
+    return <ComingSoon id={screen} t={t} />;
+  };
+
+  /* ---- Real mobile device layout ---- */
+  if (isMobile) {
+    return (
+      <div className="col" style={{ height:'100vh', overflow:'hidden' }}>
+        <MobileTopbar role={role} theme={theme} setTheme={setTheme}
+          openAI={() => setAiOpen(true)} navigate={navigate}
+          notifOpen={notifOpen} setNotifOpen={setNotifOpen} />
+        <main className="grow" style={{ overflowY:'auto', WebkitOverflowScrolling:'touch', minHeight:0 }}>
+          {renderMobileScreen()}
+        </main>
+        <MobileBottomNav screen={screen} navigate={navigate} />
+        <AIPanel open={aiOpen} onClose={() => setAiOpen(false)} navigate={navigate} toast={toast} />
+      </div>
+    );
+  }
+
+  /* ---- Desktop layout (unchanged) ---- */
   return (
     <div style={{ display:'flex', height:'100vh', overflow:'hidden' }}>
       <Sidebar screen={screen} navigate={navigate} t={t} collapsed={collapsed} role={role} />

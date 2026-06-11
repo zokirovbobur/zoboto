@@ -12,9 +12,9 @@ function LoginScreen({ onEnter, lang, setLang, theme, setTheme }) {
   const langs = [{id:'uz',l:'Oʻzbekcha'},{id:'ru',l:'Русский'},{id:'en',l:'English'}];
 
   return (
-    <div style={{ minHeight:'100vh', display:'grid', gridTemplateColumns:'1.05fr 0.95fr' }}>
+    <div className="login-root" style={{ minHeight:'100vh', display:'grid', gridTemplateColumns:'1.05fr 0.95fr' }}>
       {/* left brand panel */}
-      <div className="col between" style={{ padding:'42px 48px', position:'relative', overflow:'hidden',
+      <div className="login-brand col between" style={{ padding:'42px 48px', position:'relative', overflow:'hidden',
         background:'radial-gradient(900px 500px at 20% 0%, rgba(59,130,246,0.18), transparent 60%), radial-gradient(700px 500px at 90% 100%, rgba(34,211,238,0.14), transparent 55%), var(--surface)',
         borderRight:'1px solid var(--border)' }}>
         <div className="row gap-12">
@@ -50,7 +50,7 @@ function LoginScreen({ onEnter, lang, setLang, theme, setTheme }) {
       </div>
 
       {/* right login card */}
-      <div className="col center" style={{ padding:'42px', position:'relative' }}>
+      <div className="login-form-wrap col center" style={{ padding:'42px', position:'relative' }}>
         <div className="row gap-8" style={{ position:'absolute', top:24, right:28 }}>
           <button className="iconbtn" onClick={() => setTheme(theme==='dark'?'light':'dark')}><Icon name={theme==='dark'?'sun':'moon'} size={17} /></button>
         </div>

@@ -209,4 +209,79 @@ function ProfileMenu({ role, navigate, close, onLogout }) {
   </>;
 }
 
-Object.assign(window, { Sidebar, Topbar, Logo, NAV_GROUPS });
+/* ---------- Mobile Header (compact topbar for real mobile devices) ---------- */
+function MobileTopbar({ role, theme, setTheme, openAI, navigate, notifOpen, setNotifOpen }) {
+  return (
+    <header style={{ height: 54, flexShrink: 0, borderBottom: '1px solid var(--border)',
+      background: 'color-mix(in srgb, var(--surface) 90%, transparent)',
+      backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center',
+      gap: 10, padding: '0 16px', position: 'sticky', top: 0, zIndex: 40 }}>
+      <Logo size={26} />
+      <div className="col" style={{ lineHeight: 1.1 }}>
+        <span style={{ fontWeight: 800, fontSize: 13, letterSpacing: '-0.02em' }}>Smart BI</span>
+        <span className="dim" style={{ fontSize: 9, letterSpacing: '0.05em' }}>UZBEKISTAN</span>
+      </div>
+      <div className="grow" />
+      <button className="iconbtn" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} title="Toggle theme">
+        <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={17} />
+      </button>
+      <div style={{ position: 'relative' }}>
+        <button className="iconbtn" onClick={() => setNotifOpen(!notifOpen)} style={{ position: 'relative' }}>
+          <Icon name="bell" size={17} />
+          <span style={{ position: 'absolute', top: 5, right: 6, width: 7, height: 7, borderRadius: 99, background: 'var(--neg)', border: '2px solid var(--surface)' }} />
+        </button>
+        {notifOpen && <NotifPanel navigate={navigate} close={() => setNotifOpen(false)} />}
+      </div>
+      <button className="btn btn-sm btn-accent2" onClick={openAI} style={{ paddingLeft: 10, paddingRight: 12, height: 34 }}>
+        <Icon name="sparkle" size={14} /><span style={{ fontSize: 12.5 }}>AI</span>
+      </button>
+      <button onClick={() => navigate('settings')} style={{ display: 'flex', alignItems: 'center' }}>
+        <span className="avatar" style={{ background: `linear-gradient(135deg, ${role.color}, var(--accent-2))`,
+          width: 30, height: 30, fontSize: 10 }}>{role.initials}</span>
+      </button>
+    </header>
+  );
+}
+
+/* ---------- Mobile Bottom Navigation ---------- */
+const MOBILE_NAV_ITEMS = [
+  { id: 'dashboard', icon: 'dashboard', label: 'Home' },
+  { id: 'ai', icon: 'ai', label: 'AI', glow: true },
+  { id: 'alerts', icon: 'alerts', label: 'Alerts', badge: '7' },
+  { id: 'library', icon: 'library', label: 'Boards' },
+  { id: 'connectors', icon: 'connectors', label: 'Data' },
+];
+
+function MobileBottomNav({ screen, navigate }) {
+  return (
+    <nav style={{ height: 58, flexShrink: 0, borderTop: '1px solid var(--border)',
+      background: 'color-mix(in srgb, var(--surface) 95%, transparent)',
+      backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center',
+      justifyContent: 'space-around', padding: '0 4px',
+      paddingBottom: 'env(safe-area-inset-bottom, 0px)', zIndex: 40 }}>
+      {MOBILE_NAV_ITEMS.map(item => {
+        const active = screen === item.id;
+        return (
+          <button key={item.id} onClick={() => navigate(item.id)}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
+              flex: 1, height: '100%', borderRadius: 0,
+              color: active ? 'var(--accent)' : 'var(--text-3)',
+              transition: 'color .15s ease' }}>
+            <span style={{ position: 'relative', display: 'flex' }}>
+              <Icon name={item.icon} size={20} />
+              {item.badge && !active && (
+                <span style={{ position: 'absolute', top: -3, right: -6, width: 15, height: 15,
+                  borderRadius: 99, background: 'var(--neg)', color: '#fff',
+                  fontSize: 8.5, fontWeight: 700, display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', border: '1.5px solid var(--surface)' }}>{item.badge}</span>
+              )}
+            </span>
+            <span style={{ fontSize: 9.5, fontWeight: active ? 700 : 500 }}>{item.label}</span>
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
+Object.assign(window, { Sidebar, Topbar, Logo, NAV_GROUPS, MobileTopbar, MobileBottomNav });
