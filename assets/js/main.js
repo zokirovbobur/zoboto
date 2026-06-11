@@ -225,6 +225,14 @@ const PROTOTYPES = [
     description: "Unified BNPL checkout broker prototype — multi-partner offer comparison, scoring simulation, contract generation, e-signature, and Face ID flow. Online & offline retail modes."
   },
   {
+    title: "Trastbank PMO Dashboard",
+    product: "Trastbank",
+    type: "Internal",
+    status: "Demo",
+    url: "prototypes/trastbank-pmo/index.html",
+    description: "Executive project reporting board — 99-project PMO registry, Kanban status board, employee workload, roadmap, risks & incidents. Fully multilingual (UZ/RU/EN), built from real data."
+  },
+  {
     title: "Finport — Investment Portfolio",
     product: "Finport",
     type: "External",
