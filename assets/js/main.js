@@ -467,6 +467,8 @@ const I18N = {
   }
 
   /* ---------- Render portfolio ---------- */
+  var pfIsOpen = false;
+  var protoIsOpen = false;
   function renderPortfolio(wrap) {
     var tr = I18N[LANG] || I18N.en;
     var prevWrap = document.getElementById("pfExpandWrap");
@@ -507,12 +509,19 @@ const I18N = {
       var pfMore = document.getElementById("pfMore");
       pfBtn.addEventListener("click", function () {
         var isOpen = pfMore.classList.toggle("open");
+        pfIsOpen = isOpen;
         pfBtn.classList.toggle("open", isOpen);
         pfBtn.setAttribute("aria-expanded", String(isOpen));
         pfBtn.innerHTML = isOpen
           ? arrow(up) + ' Show fewer projects'
           : arrow(down) + ' Show all projects · ' + hidden + ' more';
       });
+      if (pfIsOpen) {
+        pfMore.classList.add("open");
+        pfBtn.classList.add("open");
+        pfBtn.setAttribute("aria-expanded", "true");
+        pfBtn.innerHTML = arrow(up) + ' Show fewer projects';
+      }
     } else {
       wrap.innerHTML = allCards.join("");
     }
@@ -582,12 +591,19 @@ const I18N = {
       var protoMore = document.getElementById("protoMore");
       protoBtn.addEventListener("click", function () {
         var isOpen = protoMore.classList.toggle("open");
+        protoIsOpen = isOpen;
         protoBtn.classList.toggle("open", isOpen);
         protoBtn.setAttribute("aria-expanded", String(isOpen));
         protoBtn.innerHTML = isOpen
           ? arrow(up) + ' Show fewer prototypes'
           : arrow(down) + ' Show all prototypes · ' + hidden + ' more';
       });
+      if (protoIsOpen) {
+        protoMore.classList.add("open");
+        protoBtn.classList.add("open");
+        protoBtn.setAttribute("aria-expanded", "true");
+        protoBtn.innerHTML = arrow(up) + ' Show fewer prototypes';
+      }
     } else {
       w.innerHTML = allCards.join("");
     }
@@ -668,12 +684,24 @@ const I18N = {
   applyLang(LANG);
 
   /* ---------- Re-render on resize (grid column count changes) ---------- */
+  function calcPfLimit() { var w = window.innerWidth; return w > 1040 ? 3 : w > 600 ? 2 : 1; }
+  function calcProtoLimit() { return protosFull ? Infinity : (window.innerWidth > 880 ? 2 : 1); }
+  var lastPfLimit = calcPfLimit();
+  var lastProtoLimit = calcProtoLimit();
   var resizeTimer;
   window.addEventListener("resize", function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
-      if (pfWrap) renderPortfolio(pfWrap);
-      if (protoWrap) renderProtos(currentFilter);
+      var newPfLimit = calcPfLimit();
+      var newProtoLimit = calcProtoLimit();
+      if (pfWrap && newPfLimit !== lastPfLimit) {
+        lastPfLimit = newPfLimit;
+        renderPortfolio(pfWrap);
+      }
+      if (protoWrap && newProtoLimit !== lastProtoLimit) {
+        lastProtoLimit = newProtoLimit;
+        renderProtos(currentFilter);
+      }
     }, 200);
   });
 
