@@ -45,6 +45,10 @@ const PORTFOLIO = [
     role: "Chief Product Officer",
     description: "Corporate & SME banking platform with onboarding, roles & permissions, maker-checker flows, payment UX, statements, exports, and reliability improvements.",
     image: "assets/img/portfolio/trast-business.jpg",
+    storeLinks: [
+      { label: "App Store",   url: "https://apps.apple.com/uz/app/trastbank-business/id6752846707",                                                key: "apple" },
+      { label: "Google Play", url: "https://play.google.com/store/apps/details?id=uz.micros24.trastbank.mobile&pcampaignid=web_share", key: "gplay" }
+    ],
     caseStudy: {
       overview: "A corporate and SME online-banking platform built for reliability, multi-user control, and efficient day-to-day treasury operations.",
       problem: "SME clients needed multi-user access with proper controls, faster payments, and dependable statements/exports — without enterprise complexity.",
