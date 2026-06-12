@@ -79,7 +79,7 @@ function FeaturedCompare({lang,go}){
         <div key={i} className="feat-row" style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) minmax(0,1fr)',borderTop:'1px solid var(--line)'}}>
           <div className="feat-cell" style={{padding:'13px 20px',fontSize:14,color:'var(--ink-2)',borderRight:'1px solid var(--line)',minWidth:0,wordBreak:'break-word'}}>{r.od}</div>
           <div className="feat-cell" style={{padding:'13px 20px',fontSize:14,color:'var(--emerald-2)',fontWeight:600,background:'var(--emerald-wash)',display:'flex',alignItems:'center',gap:8,minWidth:0}}>
-            <Icon name={r.icon} size={15} style={{flexShrink:0}}/><span style={{minWidth:0,wordBreak:'break-word'}}>{r.is}</span>
+            <Icon name={r.icon} size={15} style={{flexShrink:0}}/><span style={{flex:1,minWidth:0,wordBreak:'break-word',overflowWrap:'break-word'}}>{r.is}</span>
           </div>
         </div>
       ))}
