@@ -250,6 +250,15 @@ const PROTOTYPES = [
     url: "https://finport.uz/",
     description: "Investment portfolio management platform — public demo prototype."
   },
+  {
+    title: "Finport Blog",
+    product: "Finport",
+    type: "Internal",
+    status: "Demo",
+    platforms: ["desktop", "mobile"],
+    url: "prototypes/finport-blog/index.html",
+    description: "Premium fintech editorial blog — moliyaviy savodxonlik platformasi. Hero + search, category grid, Islamic vs conventional banking comparison, 7 interactive calculators (budget, debt, zakat, murabaha, savings), article detail with sticky TOC, glossary, UZ/RU/EN language switch."
+  },
 ];
 
 /* =========================== I18N ================================== */
