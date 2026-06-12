@@ -90,7 +90,7 @@ function DashboardScreen({ navigate, openAI, toast, role }) {
             <span className="section-title">Regional performance</span>
             <button className="btn btn-sm btn-ghost" onClick={()=>navigate('factor')}>Details<Icon name="arrowRight" size={13}/></button>
           </div>
-          <RegionBars regions={D.REGIONS} activeId={region} onClick={(r)=>setRegion(region===r.id?null:r.id)} />
+          <UzbekistanMap regions={D.REGIONS} activeId={region} onClick={(r)=>setRegion(region===r.id?null:r.id)} />
         </div>
         <div className="card card-pad" style={{ gridColumn:'span 4' }}>
           <div className="col gap-2" style={{ marginBottom:14 }}><span className="section-title">Plan vs Fact</span><span className="dim" style={{ fontSize:12 }}>By product line · bn UZS</span></div>

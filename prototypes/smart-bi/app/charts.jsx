@@ -257,4 +257,99 @@ function MiniBars({ data = [40,65,52,78,60,88,72], color = 'var(--accent)', h = 
   );
 }
 
-Object.assign(window, { Sparkline, AreaChart, BarPlanFact, RegionBars, Donut, Gauge, Funnel, Heatmap, MiniBars });
+/* ---------- Uzbekistan SVG Map ---------- */
+function UzbekistanMap({ regions, onClick, activeId }) {
+  const [hover, setHover] = useState(null);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const svgRef = useRef(null);
+
+  const dataMap = {};
+  regions.forEach(r => { dataMap[r.id] = r; });
+
+  // Approximate polygon paths (viewBox 0 0 590 345), back-to-front draw order
+  const MAP = [
+    { id: 'karakalpakstan', name: "Qoraqalpog'iston", d: "M 3,4 L 212,4 L 215,195 L 175,235 L 60,238 L 3,202 Z" },
+    { id: 'navoi',          name: "Navoiy",            d: "M 215,4 L 315,4 L 365,60 L 355,172 L 290,212 L 215,215 Z" },
+    { id: 'bukhara',        name: "Buxoro",            d: "M 60,238 L 175,235 L 215,215 L 290,212 L 302,275 L 248,318 L 158,308 L 148,270 Z" },
+    { id: 'kashkadarya',    name: "Qashqadaryo",       d: "M 290,212 L 355,172 L 385,208 L 372,288 L 310,310 L 285,272 Z" },
+    { id: 'surkhandarya',   name: "Surxondaryo",       d: "M 375,264 L 420,232 L 452,267 L 432,340 L 365,332 L 355,300 Z" },
+    { id: 'samarkand',      name: "Samarqand",         d: "M 315,138 L 365,122 L 395,155 L 378,210 L 335,215 L 308,196 Z" },
+    { id: 'jizzakh',        name: "Jizzax",            d: "M 355,105 L 408,90 L 432,122 L 412,162 L 365,168 L 348,142 Z" },
+    { id: 'sirdarya',       name: "Sirdaryo",          d: "M 402,75 L 450,60 L 466,92 L 446,118 L 404,115 L 392,90 Z" },
+    { id: 'tashkent',       name: "Toshkent",          d: "M 440,48 L 502,30 L 535,62 L 514,110 L 455,114 L 430,82 Z" },
+    { id: 'namangan',       name: "Namangan",          d: "M 488,62 L 528,48 L 550,74 L 526,94 L 486,90 Z" },
+    { id: 'fergana',        name: "Farg'ona",          d: "M 494,92 L 532,80 L 556,102 L 540,132 L 498,132 Z" },
+    { id: 'andijan',        name: "Andijon",           d: "M 530,70 L 567,58 L 583,84 L 562,108 L 532,98 Z" },
+    { id: 'khorezm',        name: "Xorazm",            d: "M 118,162 L 172,162 L 175,198 L 118,202 Z" },
+  ];
+
+  const hovered    = hover ? MAP.find(r => r.id === hover) : null;
+  const hoveredData = hover ? dataMap[hover] : null;
+
+  const trackMouse = (e) => {
+    if (!svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    setMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  return (
+    <div style={{ position: 'relative', width: '100%', userSelect: 'none' }}>
+      <svg ref={svgRef} viewBox="0 0 590 345" width="100%" style={{ display: 'block' }}
+        onMouseMove={trackMouse} onMouseLeave={() => setHover(null)}>
+        {MAP.map(region => {
+          const data    = dataMap[region.id];
+          const isActive = activeId === region.id;
+          const isHover  = hover === region.id;
+          const hasData  = !!data;
+          const isNeg    = hasData && data.growth < 0;
+
+          const fill = isActive
+            ? (isNeg ? 'rgba(248,113,113,0.75)' : 'rgba(34,211,238,0.55)')
+            : isHover && hasData
+              ? (isNeg ? 'rgba(248,113,113,0.45)' : 'rgba(34,211,238,0.38)')
+              : hasData
+                ? (isNeg ? 'rgba(248,113,113,0.18)' : 'rgba(34,211,238,0.14)')
+                : 'rgba(255,255,255,0.03)';
+
+          return (
+            <path key={region.id} d={region.d}
+              fill={fill}
+              stroke={isActive || isHover ? 'rgba(34,211,238,0.65)' : 'rgba(255,255,255,0.1)'}
+              strokeWidth={isActive || isHover ? 1.8 : 0.7}
+              style={{ cursor: hasData ? 'pointer' : 'default', transition: 'fill 0.15s' }}
+              onMouseEnter={() => setHover(region.id)}
+              onClick={() => hasData && onClick && onClick(data)}
+            />
+          );
+        })}
+      </svg>
+
+      {hovered && hoveredData && (
+        <div style={{
+          position: 'absolute',
+          left: Math.min(mouse.x + 12, (svgRef.current?.clientWidth || 300) - 145),
+          top: Math.max(mouse.y - 88, 4),
+          background: 'var(--elevated)',
+          border: '1px solid var(--border-strong)',
+          borderRadius: 10,
+          padding: '8px 13px',
+          minWidth: 132,
+          pointerEvents: 'none',
+          boxShadow: 'var(--shadow-2)',
+          zIndex: 10,
+        }}>
+          <div style={{ fontWeight: 700, fontSize: 12.5, marginBottom: 3 }}>{hovered.name}</div>
+          <div className="mono" style={{ fontSize: 15, fontWeight: 800, color: 'var(--accent-2)' }}>
+            {hoveredData.rev} bn
+          </div>
+          <div style={{ fontSize: 10.5, color: 'var(--text-3)', marginBottom: 2 }}>UZS revenue</div>
+          <div className={`delta ${hoveredData.growth < 0 ? 'down' : 'up'}`} style={{ fontSize: 11.5 }}>
+            {hoveredData.growth > 0 ? '+' : ''}{hoveredData.growth}%
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+Object.assign(window, { Sparkline, AreaChart, BarPlanFact, RegionBars, UzbekistanMap, Donut, Gauge, Funnel, Heatmap, MiniBars });
