@@ -264,9 +264,16 @@ ul{margin:0;padding:0;list-style:none}
   /* hero search bar: don't overflow narrow screen */
   .hero-search{max-width:100%!important}
 
-  /* featured compare card: tighter cells so text fits */
-  .feat-cmp .feat-cell{padding:9px 11px!important;font-size:12.5px!important}
-  .feat-cmp .feat-cell .feat-label{font-size:12.5px!important}
+  /* featured compare card: fix grid overflow + reduce cell size */
+  .feat-cmp .feat-head,
+  .feat-cmp .feat-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+  .feat-cmp .feat-cell{
+    min-width:0;
+    padding:9px 11px!important;
+    font-size:12.5px!important;
+    word-break:break-word;
+    overflow-wrap:break-word;
+  }
 
   /* learning path: side panel stacks above steps */
   .path-side{min-width:0}
