@@ -52,39 +52,39 @@ function FeaturedCompare({lang,go}){
     {od:"Ichki nazorat", is:"Shariat kengashi", icon:"shieldCheck"},
   ];
   return (
-    <div className="card view-enter feat-cmp" style={{padding:0,overflow:’hidden’,animationDelay:’.1s’,boxShadow:’var(--shadow-lg)’}}>
-      <div style={{background:’var(--navy)’,color:’#fff’,padding:’20px 24px 22px’,position:’relative’,overflow:’hidden’}}>
+    <div className="card view-enter feat-cmp" style={{padding:0,overflow:'hidden',animationDelay:'.1s',boxShadow:'var(--shadow-lg)'}}>
+      <div style={{background:'var(--navy)',color:'#fff',padding:'20px 24px 22px',position:'relative',overflow:'hidden'}}>
         <div className="geo-bg" style={{opacity:.12}}></div>
-        <div style={{position:’relative’,display:’flex’,alignItems:’flex-start’,justifyContent:’space-between’,gap:12}}>
+        <div style={{position:'relative',display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:12}}>
           <div>
-            <div className="mono" style={{color:’#43C997’,marginBottom:5}}>Taqqoslash</div>
-            <div style={{fontFamily:’var(--font-display)’,fontWeight:800,fontSize:19,lineHeight:1.2}}>{t.featured_cmp}</div>
+            <div className="mono" style={{color:'#43C997',marginBottom:5}}>Taqqoslash</div>
+            <div style={{fontFamily:'var(--font-display)',fontWeight:800,fontSize:19,lineHeight:1.2}}>{t.featured_cmp}</div>
           </div>
-          <span className="badge" style={{background:’rgba(67,201,151,.16)’,color:’#7ce0b5’,flex:’0 0 auto’}}>Asoslar</span>
+          <span className="badge" style={{background:'rgba(67,201,151,.16)',color:'#7ce0b5',flex:'0 0 auto'}}>Asoslar</span>
         </div>
       </div>
-      <div className="feat-head" style={{display:’grid’,gridTemplateColumns:’minmax(0,1fr) minmax(0,1fr)’}}>
-        <div className="feat-cell" style={{padding:’14px 20px’,borderRight:’1px solid var(--line)’,minWidth:0}}>
-          <div style={{display:’flex’,alignItems:’center’,gap:7,color:’var(--ink-2)’,fontWeight:700,fontSize:14,marginBottom:6}}>
-            <span style={{width:8,height:8,borderRadius:2,background:’var(--navy-soft)’,flexShrink:0}}></span>{t.odatiy}
+      <div className="feat-head" style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) minmax(0,1fr)'}}>
+        <div className="feat-cell" style={{padding:'14px 20px',borderRight:'1px solid var(--line)'}}>
+          <div style={{display:'flex',alignItems:'center',gap:7,color:'var(--ink-2)',fontWeight:700,fontSize:14,marginBottom:6}}>
+            <span style={{width:8,height:8,borderRadius:2,background:'var(--navy-soft)'}}></span>{t.odatiy}
           </div>
         </div>
-        <div className="feat-cell" style={{padding:’14px 20px’,background:’var(--emerald-wash)’,minWidth:0}}>
-          <div style={{display:’flex’,alignItems:’center’,gap:7,color:’var(--emerald-2)’,fontWeight:700,fontSize:14,marginBottom:6}}>
-            <span style={{width:8,height:8,borderRadius:2,background:’var(--emerald)’,flexShrink:0}}></span>{t.islamic_bank}
+        <div className="feat-cell" style={{padding:'14px 20px',background:'var(--emerald-wash)'}}>
+          <div style={{display:'flex',alignItems:'center',gap:7,color:'var(--emerald-2)',fontWeight:700,fontSize:14,marginBottom:6}}>
+            <span style={{width:8,height:8,borderRadius:2,background:'var(--emerald)'}}></span>{t.islamic_bank}
           </div>
         </div>
       </div>
       {rows.map((r,i)=>(
-        <div key={i} className="feat-row" style={{display:’grid’,gridTemplateColumns:’minmax(0,1fr) minmax(0,1fr)’,borderTop:’1px solid var(--line)’}}>
-          <div className="feat-cell" style={{padding:’13px 20px’,fontSize:14,color:’var(--ink-2)’,borderRight:’1px solid var(--line)’,minWidth:0,wordBreak:’break-word’}}>{r.od}</div>
-          <div className="feat-cell" style={{padding:’13px 20px’,fontSize:14,color:’var(--emerald-2)’,fontWeight:600,background:’var(--emerald-wash)’,display:’flex’,alignItems:’center’,gap:8,minWidth:0}}>
-            <Icon name={r.icon} size={15} style={{flexShrink:0}}/><span style={{minWidth:0,wordBreak:’break-word’}}>{r.is}</span>
+        <div key={i} className="feat-row" style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) minmax(0,1fr)',borderTop:'1px solid var(--line)'}}>
+          <div className="feat-cell" style={{padding:'13px 20px',fontSize:14,color:'var(--ink-2)',borderRight:'1px solid var(--line)',minWidth:0,wordBreak:'break-word'}}>{r.od}</div>
+          <div className="feat-cell" style={{padding:'13px 20px',fontSize:14,color:'var(--emerald-2)',fontWeight:600,background:'var(--emerald-wash)',display:'flex',alignItems:'center',gap:8,minWidth:0}}>
+            <Icon name={r.icon} size={15} style={{flexShrink:0}}/><span style={{minWidth:0,wordBreak:'break-word'}}>{r.is}</span>
           </div>
         </div>
       ))}
-      <button onClick={()=>go({name:’article’,id:’7-farq’})} style={{width:’100%’,padding:’15px’,borderTop:’1px solid var(--line)’,display:’flex’,alignItems:’center’,justifyContent:’center’,gap:8,fontFamily:’var(--font-display)’,fontWeight:600,color:’var(--emerald-2)’,fontSize:14.5}}>
-        To’liq taqqoslashni o’qish <Icon name="arrowRight" size={17}/>
+      <button onClick={()=>go({name:'article',id:'7-farq'})} style={{width:'100%',padding:'15px',borderTop:'1px solid var(--line)',display:'flex',alignItems:'center',justifyContent:'center',gap:8,fontFamily:'var(--font-display)',fontWeight:600,color:'var(--emerald-2)',fontSize:14.5}}>
+        To‘liq taqqoslashni o‘qish <Icon name="arrowRight" size={17}/>
       </button>
     </div>
   );
