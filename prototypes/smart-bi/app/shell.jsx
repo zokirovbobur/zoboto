@@ -97,9 +97,6 @@ function Topbar({ t, lang, setLang, theme, setTheme, openAI, role, navigate, tog
         <input className="input" placeholder={t('search')} />
       </div>
       <div className="grow" />
-      <button className="btn btn-sm" onClick={onMobile} style={{ gap:6 }} title="Mobile preview">
-        <Icon name="phone" size={15} />{!mobile && <span style={{display:window.innerWidth<900?'none':'inline'}}>Mobile</span>}
-      </button>
       {/* language */}
       <LangSwitch lang={lang} setLang={setLang} />
       {/* theme */}

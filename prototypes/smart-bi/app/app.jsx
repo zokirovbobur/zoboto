@@ -123,7 +123,7 @@ function App() {
   const [logged, setLogged] = AUS(false);
   const [roleId, setRoleId] = AUS('CEO');
   const [screen, setScreen] = AUS('dashboard');
-  const [lang, setLang] = AUS('en');
+  const [lang, setLang] = AUS('uz');
   const [theme, setTheme] = AUS('dark');
   const [aiOpen, setAiOpen] = AUS(false);
   const [collapsed, setCollapsed] = AUS(false);
