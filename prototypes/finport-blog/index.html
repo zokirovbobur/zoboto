@@ -9,6 +9,30 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="finport.css?v=3"/>
+<style>
+/* Mobile overflow fix — inline so cache can't block it */
+.feat-cmp .feat-head,
+.feat-cmp .feat-row {
+  display: grid !important;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr) !important;
+}
+.feat-cmp .feat-cell {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+.feat-cmp .feat-cell > span {
+  flex: 1 !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+@media (max-width: 600px) {
+  .hero-btns { flex-direction: column !important; }
+  .hero-btns .btn { width: 100% !important; justify-content: center !important; }
+  .hero-search { max-width: 100% !important; }
+}
+</style>
 </head>
 <body>
 <div id="root"></div>
