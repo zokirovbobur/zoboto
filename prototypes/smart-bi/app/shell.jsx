@@ -112,7 +112,7 @@ function Topbar({ t, lang, setLang, theme, setTheme, openAI, role, navigate, tog
           <Icon name="bell" size={17} />
           <span style={{ position:'absolute', top:5, right:6, width:7, height:7, borderRadius:99, background:'var(--neg)', border:'2px solid var(--surface)' }} />
         </button>
-        {notifOpen && <NotifPanel navigate={navigate} close={()=>setNotifOpen(false)} />}
+        {notifOpen && <NotifPanel navigate={navigate} close={()=>setNotifOpen(false)} t={t} />}
       </div>
       {/* AI button */}
       <button className="btn btn-sm btn-accent2" onClick={openAI} style={{ paddingLeft:11 }}>
@@ -123,7 +123,7 @@ function Topbar({ t, lang, setLang, theme, setTheme, openAI, role, navigate, tog
         <button onClick={() => { setProfileOpen(!profileOpen); setNotifOpen(false); }} className="row gap-8" style={{ paddingLeft:6 }}>
           <span className="avatar" style={{ background:`linear-gradient(135deg, ${role.color}, var(--accent-2))`, width:34, height:34 }}>{role.initials}</span>
         </button>
-        {profileOpen && <ProfileMenu role={role} navigate={navigate} close={()=>setProfileOpen(false)} onLogout={onLogout} />}
+        {profileOpen && <ProfileMenu role={role} navigate={navigate} close={()=>setProfileOpen(false)} onLogout={onLogout} t={t} />}
       </div>
     </header>
   );
@@ -153,25 +153,26 @@ function LangSwitch({ lang, setLang }) {
   );
 }
 
-function NotifPanel({ navigate, close }) {
+function NotifPanel({ navigate, close, t }) {
+  t = t || ((k) => (window.I18N && window.I18N[window._lang||'en'] && window.I18N[window._lang||'en'][k]) || (window.I18N && window.I18N.en[k]) || k);
   const items = [
-    { icon:'alert', tone:'var(--neg)', title:'Fergana sales dropped 18%', time:'2h ago', go:'alerts' },
-    { icon:'sparkle', tone:'var(--accent-2)', title:'Weekly CEO summary is ready', time:'4h ago', go:'reports' },
-    { icon:'database', tone:'var(--warn)', title:'CRM sync failed', time:'1d ago', go:'connectors' },
-    { icon:'check', tone:'var(--pos)', title:'Banking Core synced', time:'1d ago', go:'connectors' },
+    { icon:'alert', tone:'var(--neg)', titleKey:'notif1_title', time:'2h ago', go:'alerts' },
+    { icon:'sparkle', tone:'var(--accent-2)', titleKey:'notif2_title', time:'4h ago', go:'reports' },
+    { icon:'database', tone:'var(--warn)', titleKey:'notif3_title', time:'1d ago', go:'connectors' },
+    { icon:'check', tone:'var(--pos)', titleKey:'notif4_title', time:'1d ago', go:'connectors' },
   ];
   return <>
     <div style={{ position:'fixed', inset:0, zIndex:50 }} onClick={close} />
     <div className="card scale-in" style={{ position:'absolute', right:0, top:46, width:320, zIndex:51, boxShadow:'var(--shadow-3)', background:'var(--elevated)', overflow:'hidden' }}>
       <div className="row between" style={{ padding:'13px 15px', borderBottom:'1px solid var(--border)' }}>
-        <span style={{ fontWeight:700, fontSize:14 }}>Notifications</span><span className="badge badge-accent">4 new</span>
+        <span style={{ fontWeight:700, fontSize:14 }}>{t('notif_header')}</span><span className="badge badge-accent">4 {t('notif_n_new')}</span>
       </div>
       <div className="col" style={{ maxHeight:330, overflowY:'auto' }}>
         {items.map((n,i) => (
           <button key={i} onClick={() => { navigate(n.go); close(); }} className="row gap-10" style={{ padding:'12px 15px', borderBottom:'1px solid var(--border)', textAlign:'left' }}
             onMouseEnter={e=>e.currentTarget.style.background='var(--hover)'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
             <span style={{ width:30, height:30, borderRadius:8, flexShrink:0, background:'var(--surface)', color:n.tone, display:'flex', alignItems:'center', justifyContent:'center' }}><Icon name={n.icon} size={15} /></span>
-            <div className="col gap-2 grow"><span style={{ fontSize:12.8, fontWeight:500 }}>{n.title}</span><span className="dim" style={{ fontSize:11 }}>{n.time}</span></div>
+            <div className="col gap-2 grow"><span style={{ fontSize:12.8, fontWeight:500 }}>{t(n.titleKey)}</span><span className="dim" style={{ fontSize:11 }}>{n.time}</span></div>
           </button>
         ))}
       </div>
@@ -179,11 +180,12 @@ function NotifPanel({ navigate, close }) {
   </>;
 }
 
-function ProfileMenu({ role, navigate, close, onLogout }) {
+function ProfileMenu({ role, navigate, close, onLogout, t }) {
+  t = t || ((k) => (window.I18N && window.I18N[window._lang||'en'] && window.I18N[window._lang||'en'][k]) || (window.I18N && window.I18N.en[k]) || k);
   const items = [
-    { icon:'admin', label:'Admin & Access', go:'admin' },
-    { icon:'settings', label:'Settings', go:'settings' },
-    { icon:'audit', label:'Audit Log', go:'audit' },
+    { icon:'admin', labelKey:'profile_admin_access', go:'admin' },
+    { icon:'settings', labelKey:'nav_settings', go:'settings' },
+    { icon:'audit', labelKey:'nav_audit', go:'audit' },
   ];
   return <>
     <div style={{ position:'fixed', inset:0, zIndex:50 }} onClick={close} />
@@ -196,13 +198,13 @@ function ProfileMenu({ role, navigate, close, onLogout }) {
         {items.map(it => (
           <button key={it.go} onClick={() => { navigate(it.go); close(); }} className="row gap-10" style={{ padding:'9px 11px', borderRadius:8, fontSize:13, color:'var(--text-2)' }}
             onMouseEnter={e=>e.currentTarget.style.background='var(--hover)'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
-            <Icon name={it.icon} size={16} />{it.label}
+            <Icon name={it.icon} size={16} />{t(it.labelKey)}
           </button>
         ))}
         <div style={{ height:1, background:'var(--border)', margin:'5px 8px' }} />
         <button onClick={onLogout} className="row gap-10" style={{ padding:'9px 11px', borderRadius:8, fontSize:13, color:'var(--neg)' }}
           onMouseEnter={e=>e.currentTarget.style.background='var(--neg-soft)'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
-          <Icon name="logout" size={16} />Sign out & switch role
+          <Icon name="logout" size={16} />{t('profile_sign_out')}
         </button>
       </div>
     </div>
@@ -230,7 +232,7 @@ function MobileTopbar({ role, theme, setTheme, openAI, navigate, notifOpen, setN
           <Icon name="bell" size={17} />
           <span style={{ position: 'absolute', top: 5, right: 6, width: 7, height: 7, borderRadius: 99, background: 'var(--neg)', border: '2px solid var(--surface)' }} />
         </button>
-        {notifOpen && <NotifPanel navigate={navigate} close={() => setNotifOpen(false)} />}
+        {notifOpen && <NotifPanel navigate={navigate} close={() => setNotifOpen(false)} t={null} />}
       </div>
       <button className="btn btn-sm btn-accent2" onClick={openAI} style={{ paddingLeft: 10, paddingRight: 12, height: 34 }}>
         <Icon name="sparkle" size={14} /><span style={{ fontSize: 12.5 }}>AI</span>
@@ -244,15 +246,15 @@ function MobileTopbar({ role, theme, setTheme, openAI, navigate, notifOpen, setN
 }
 
 /* ---------- Mobile Bottom Navigation ---------- */
-const MOBILE_NAV_ITEMS = [
-  { id: 'dashboard', icon: 'dashboard', label: 'Home' },
-  { id: 'ai', icon: 'ai', label: 'AI', glow: true },
-  { id: 'alerts', icon: 'alerts', label: 'Alerts', badge: '7' },
-  { id: 'library', icon: 'library', label: 'Boards' },
-  { id: 'connectors', icon: 'connectors', label: 'Data' },
-];
-
-function MobileBottomNav({ screen, navigate }) {
+function MobileBottomNav({ screen, navigate, t }) {
+  t = t || ((k) => (window.I18N && window.I18N[window._lang||'en'] && window.I18N[window._lang||'en'][k]) || (window.I18N && window.I18N.en[k]) || k);
+  const MOBILE_NAV_ITEMS = [
+    { id: 'dashboard', icon: 'dashboard', labelKey: 'mobile_home' },
+    { id: 'ai', icon: 'ai', labelKey: 'mobile_ai_label', glow: true },
+    { id: 'alerts', icon: 'alerts', labelKey: 'mobile_alerts_label', badge: '7' },
+    { id: 'library', icon: 'library', labelKey: 'mobile_boards' },
+    { id: 'connectors', icon: 'connectors', labelKey: 'mobile_data_label' },
+  ];
   return (
     <nav style={{ height: 58, flexShrink: 0, borderTop: '1px solid var(--border)',
       background: 'color-mix(in srgb, var(--surface) 95%, transparent)',
@@ -276,7 +278,7 @@ function MobileBottomNav({ screen, navigate }) {
                   justifyContent: 'center', border: '1.5px solid var(--surface)' }}>{item.badge}</span>
               )}
             </span>
-            <span style={{ fontSize: 9.5, fontWeight: active ? 700 : 500 }}>{item.label}</span>
+            <span style={{ fontSize: 9.5, fontWeight: active ? 700 : 500 }}>{t(item.labelKey)}</span>
           </button>
         );
       })}

@@ -22,7 +22,8 @@ function KpiCard({ k, onClick }) {
   );
 }
 
-function DashboardScreen({ navigate, openAI, toast, role }) {
+function DashboardScreen({ navigate, openAI, toast, role, t }) {
+  t = t || ((k) => (window.I18N.en[k] || k));
   const D = window.DATA;
   const [region, setRegion] = dUS(null);
   const [drill, setDrill] = dUS(null);
@@ -31,46 +32,49 @@ function DashboardScreen({ navigate, openAI, toast, role }) {
   const visKpis = D.KPIS.filter(k => !hidden[k.id]);
   const filteredLabel = region ? D.REGIONS.find(r=>r.id===region)?.name : null;
 
+  const kpiLabel = (id) => t('kpi_'+id) || id;
+  const localizedKpis = visKpis.map(k => ({ ...k, label: kpiLabel(k.id) }));
+
   return (
     <div className="screen">
       {/* header */}
       <div className="screen-head row between wrap gap-16">
         <div className="col gap-2">
           <div className="row gap-10" style={{ alignItems:'center' }}>
-            <h1 className="screen-title">Executive Dashboard</h1>
-            {filteredLabel && <span className="badge badge-accent">Filtered: {filteredLabel} <button onClick={()=>setRegion(null)} style={{display:'flex',marginLeft:2}}><Icon name="close" size={12}/></button></span>}
+            <h1 className="screen-title">{t('nav_dashboard')}</h1>
+            {filteredLabel && <span className="badge badge-accent">{t('lbl_filtered')} {filteredLabel} <button onClick={()=>setRegion(null)} style={{display:'flex',marginLeft:2}}><Icon name="close" size={12}/></button></span>}
           </div>
-          <div className="screen-sub">Welcome back, {role.name.split(' ')[0]} · Company performance · Updated 12 min ago</div>
+          <div className="screen-sub">{t('dash_welcome')} {role.name.split(' ')[0]} · {t('dash_sub')}</div>
         </div>
         <div className="row gap-8 wrap">
-          <Segmented options={[{value:'mtd',label:'MTD'},{value:'qtd',label:'QTD'},{value:'ytd',label:'YTD'}]} value="qtd" onChange={()=>toast('Period changed')} size="sm" />
-          <button className="btn btn-sm" onClick={()=>toast('Dashboard exported')}><Icon name="download" size={15}/>Export</button>
-          <button className="btn btn-sm" onClick={()=>setCustomize(true)}><Icon name="widget" size={15}/>Customize</button>
-          <button className="btn btn-sm btn-accent2" onClick={openAI}><Icon name="sparkle" size={15}/>Ask AI</button>
+          <Segmented options={[{value:'mtd',label:'MTD'},{value:'qtd',label:'QTD'},{value:'ytd',label:'YTD'}]} value="qtd" onChange={()=>toast(t('dash_period_changed'))} size="sm" />
+          <button className="btn btn-sm" onClick={()=>toast(t('dash_exported'))}><Icon name="download" size={15}/>{t('btn_export')}</button>
+          <button className="btn btn-sm" onClick={()=>setCustomize(true)}><Icon name="widget" size={15}/>{t('btn_customize')}</button>
+          <button className="btn btn-sm btn-accent2" onClick={openAI}><Icon name="sparkle" size={15}/>{t('btn_ask_ai')}</button>
         </div>
       </div>
 
       {/* KPI grid */}
       <div className="grid" style={{ gridTemplateColumns:'repeat(4, 1fr)', marginBottom:16 }}>
-        {visKpis.map(k => <KpiCard key={k.id} k={k} onClick={()=>setDrill(k)} />)}
+        {localizedKpis.map(k => <KpiCard key={k.id} k={k} onClick={()=>setDrill(k)} />)}
       </div>
 
       {/* charts row 1 */}
       <div className="dash-grid" style={{ marginBottom:16 }}>
         <div className="card card-pad" style={{ gridColumn:'span 8' }}>
           <div className="row between" style={{ marginBottom:14 }}>
-            <div className="col gap-2"><span className="section-title">Revenue trend</span><span className="dim" style={{ fontSize:12 }}>Actual vs plan · bn UZS · 12 months</span></div>
+            <div className="col gap-2"><span className="section-title">{t('dash_rev_trend')}</span><span className="dim" style={{ fontSize:12 }}>{t('dash_rev_sub')}</span></div>
             <div className="row gap-14" style={{ fontSize:12 }}>
-              <span className="row gap-6"><span style={{ width:14, height:3, borderRadius:9, background:'linear-gradient(90deg,var(--accent),var(--accent-2))' }} />Actual</span>
-              <span className="row gap-6"><span style={{ width:14, height:0, borderTop:'2px dashed var(--text-3)' }} />Plan</span>
+              <span className="row gap-6"><span style={{ width:14, height:3, borderRadius:9, background:'linear-gradient(90deg,var(--accent),var(--accent-2))' }} />{t('legend_actual')}</span>
+              <span className="row gap-6"><span style={{ width:14, height:0, borderTop:'2px dashed var(--text-3)' }} />{t('legend_plan')}</span>
             </div>
           </div>
           <AreaChart series={D.REV_TREND} planData={D.PLAN_TREND} labels={D.MONTHS} h={240} />
         </div>
-        <div className="card card-pad clickable card-hover" style={{ gridColumn:'span 4' }} onClick={()=>setDrill({label:'AI Insight'})}>
+        <div className="card card-pad clickable card-hover" style={{ gridColumn:'span 4' }} onClick={()=>setDrill({label:t('ai_insights')})}>
           <div className="row between" style={{ marginBottom:12 }}>
-            <span className="section-title row gap-8"><span style={{ width:24, height:24, borderRadius:7, background:'linear-gradient(135deg,var(--accent),var(--accent-2))', display:'flex', alignItems:'center', justifyContent:'center' }}><Icon name="sparkle" size={13} style={{color:'#fff'}}/></span>AI Insights</span>
-            <span className="badge badge-info">3 new</span>
+            <span className="section-title row gap-8"><span style={{ width:24, height:24, borderRadius:7, background:'linear-gradient(135deg,var(--accent),var(--accent-2))', display:'flex', alignItems:'center', justifyContent:'center' }}><Icon name="sparkle" size={13} style={{color:'#fff'}}/></span>{t('ai_insights')}</span>
+            <span className="badge badge-info">3 {t('lbl_new')}</span>
           </div>
           <div className="col gap-10">
             {D.INSIGHTS.map((ins,i) => (
@@ -87,23 +91,23 @@ function DashboardScreen({ navigate, openAI, toast, role }) {
       <div className="dash-grid" style={{ marginBottom:16 }}>
         <div className="card card-pad" style={{ gridColumn:'span 5' }}>
           <div className="row between" style={{ marginBottom:14 }}>
-            <span className="section-title">Regional performance</span>
-            <button className="btn btn-sm btn-ghost" onClick={()=>navigate('factor')}>Details<Icon name="arrowRight" size={13}/></button>
+            <span className="section-title">{t('regional_perf')}</span>
+            <button className="btn btn-sm btn-ghost" onClick={()=>navigate('factor')}>{t('details')}<Icon name="arrowRight" size={13}/></button>
           </div>
           <RegionBars regions={D.REGIONS} activeId={region} onClick={(r)=>setRegion(region===r.id?null:r.id)} />
         </div>
         <div className="card card-pad" style={{ gridColumn:'span 4' }}>
-          <div className="col gap-2" style={{ marginBottom:14 }}><span className="section-title">Plan vs Fact</span><span className="dim" style={{ fontSize:12 }}>By product line · bn UZS</span></div>
+          <div className="col gap-2" style={{ marginBottom:14 }}><span className="section-title">{t('plan_vs_fact')}</span><span className="dim" style={{ fontSize:12 }}>{t('pvf_sub')}</span></div>
           <BarPlanFact data={D.PRODUCTS} h={210} />
         </div>
         <div className="card card-pad" style={{ gridColumn:'span 3' }}>
-          <div className="col gap-2" style={{ marginBottom:8 }}><span className="section-title">Operational efficiency</span></div>
+          <div className="col gap-2" style={{ marginBottom:8 }}><span className="section-title">{t('op_efficiency')}</span></div>
           <div className="center" style={{ flexDirection:'column' }}>
-            <Gauge value={87.5} max={100} label="vs 90% target" size={170} />
+            <Gauge value={87.5} max={100} label={t('eff_target')} size={170} />
             <div className="row gap-16" style={{ marginTop:8 }}>
-              <div className="col center"><span className="mono" style={{ fontSize:15, fontWeight:700 }}>4.62%</span><span className="dim" style={{ fontSize:11 }}>Conversion</span></div>
+              <div className="col center"><span className="mono" style={{ fontSize:15, fontWeight:700 }}>4.62%</span><span className="dim" style={{ fontSize:11 }}>{t('label_conv')}</span></div>
               <div style={{ width:1, background:'var(--border)' }} />
-              <div className="col center"><span className="mono" style={{ fontSize:15, fontWeight:700, color:'var(--neg)' }}>7</span><span className="dim" style={{ fontSize:11 }}>Alerts</span></div>
+              <div className="col center"><span className="mono" style={{ fontSize:15, fontWeight:700, color:'var(--neg)' }}>7</span><span className="dim" style={{ fontSize:11 }}>{t('label_alerts')}</span></div>
             </div>
           </div>
         </div>
@@ -113,12 +117,12 @@ function DashboardScreen({ navigate, openAI, toast, role }) {
       <div className="dash-grid">
         <div className="card card-pad" style={{ gridColumn:'span 7' }}>
           <div className="row between" style={{ marginBottom:8 }}>
-            <span className="section-title">Product / category performance</span>
-            <button className="btn btn-sm btn-ghost" onClick={()=>setDrill({label:'Products'})}>Open report<Icon name="arrowRight" size={13}/></button>
+            <span className="section-title">{t('prod_perf')}</span>
+            <button className="btn btn-sm btn-ghost" onClick={()=>setDrill({label:t('tbl_product')})}>{t('open_report')}<Icon name="arrowRight" size={13}/></button>
           </div>
           <div className="tbl-scroll">
             <table className="tbl">
-              <thead><tr><th>Product line</th><th className="num">Revenue</th><th className="num">Plan</th><th className="num">vs Plan</th><th className="num">Growth</th></tr></thead>
+              <thead><tr><th>{t('tbl_product')}</th><th className="num">{t('tbl_revenue')}</th><th className="num">{t('tbl_plan')}</th><th className="num">{t('tbl_vs_plan')}</th><th className="num">{t('tbl_growth')}</th></tr></thead>
               <tbody>
                 {D.PRODUCTS.map((p,i) => { const vp = ((p.rev/p.plan-1)*100); return (
                   <tr key={i} className="clickable" onClick={()=>setDrill({label:p.name})}>
@@ -134,8 +138,8 @@ function DashboardScreen({ navigate, openAI, toast, role }) {
         </div>
         <div className="card card-pad" style={{ gridColumn:'span 5' }}>
           <div className="row between" style={{ marginBottom:12 }}>
-            <span className="section-title row gap-8"><Icon name="alerts" size={16} style={{color:'var(--neg)'}}/>Active alerts</span>
-            <button className="btn btn-sm btn-ghost" onClick={()=>navigate('alerts')}>View all<Icon name="arrowRight" size={13}/></button>
+            <span className="section-title row gap-8"><Icon name="alerts" size={16} style={{color:'var(--neg)'}}/>{t('active_alerts_title')}</span>
+            <button className="btn btn-sm btn-ghost" onClick={()=>navigate('alerts')}>{t('view_all')}<Icon name="arrowRight" size={13}/></button>
           </div>
           <div className="col gap-8">
             {D.ALERTS.filter(a=>a.status!=='Resolved').slice(0,4).map(a => (
@@ -156,11 +160,11 @@ function DashboardScreen({ navigate, openAI, toast, role }) {
       </div>
 
       {/* Drill-down modal */}
-      <Modal open={!!drill} onClose={()=>setDrill(null)} title={drill?.label || ''} sub="Drill-down detail · mock data" width={720}
-        footer={<><button className="btn" onClick={()=>setDrill(null)}>Close</button><button className="btn btn-primary" onClick={()=>{setDrill(null); openAI();}}><Icon name="sparkle" size={15}/>Ask AI about this</button></>}>
+      <Modal open={!!drill} onClose={()=>setDrill(null)} title={drill?.label || ''} sub={t('drill_sub')} width={720}
+        footer={<><button className="btn" onClick={()=>setDrill(null)}>{t('close')}</button><button className="btn btn-primary" onClick={()=>{setDrill(null); openAI();}}><Icon name="sparkle" size={15}/>{t('ask_ai_this')}</button></>}>
         <div className="col gap-16">
           <div className="row gap-12 wrap">
-            {[['This period','568 bn','+6.8%'],['Last period','532 bn','+2.1%'],['vs Plan','+1.4%','ahead'],['Forecast','591 bn','+4.0%']].map((s,i)=>(
+            {[[t('this_period'),'568 bn','+6.8%'],[t('last_period'),'532 bn','+2.1%'],[t('tbl_vs_plan'),'+1.4%','ahead'],[t('forecast'),'591 bn','+4.0%']].map((s,i)=>(
               <div key={i} className="card card-pad" style={{ flex:1, minWidth:130, background:'var(--card-2)' }}>
                 <div className="dim" style={{ fontSize:11.5 }}>{s[0]}</div>
                 <div className="mono" style={{ fontSize:20, fontWeight:800, marginTop:4 }}>{s[1]}</div>
@@ -168,22 +172,22 @@ function DashboardScreen({ navigate, openAI, toast, role }) {
               </div>
             ))}
           </div>
-          <div className="card card-pad"><div className="section-title" style={{ marginBottom:10 }}>Trend breakdown</div><AreaChart series={D.REV_TREND} planData={D.PLAN_TREND} labels={D.MONTHS} h={200} /></div>
+          <div className="card card-pad"><div className="section-title" style={{ marginBottom:10 }}>{t('trend_breakdown')}</div><AreaChart series={D.REV_TREND} planData={D.PLAN_TREND} labels={D.MONTHS} h={200} /></div>
           <div className="card card-pad" style={{ borderLeft:'2px solid var(--accent-2)' }}>
-            <div className="eyebrow" style={{ color:'var(--accent-2)', marginBottom:6 }}>AI interpretation</div>
-            <p style={{ margin:0, fontSize:13.5, lineHeight:1.55 }}>Performance is 1.4% ahead of plan, led by mobile transfers and card issuance. Fergana remains the single largest drag; recovering it would add ~13.5 bn UZS this quarter.</p>
+            <div className="eyebrow" style={{ color:'var(--accent-2)', marginBottom:6 }}>{t('ai_interpretation')}</div>
+            <p style={{ margin:0, fontSize:13.5, lineHeight:1.55 }}>{t('ai_drill_text')}</p>
           </div>
         </div>
       </Modal>
 
       {/* Customize panel */}
-      <Drawer open={customize} onClose={()=>setCustomize(false)} title="Customize dashboard" sub="Toggle KPI cards and widgets"
-        footer={<><button className="btn" onClick={()=>setHidden({})}>Reset</button><button className="btn btn-primary" onClick={()=>{setCustomize(false); toast('Dashboard layout saved');}}>Save layout</button></>}>
+      <Drawer open={customize} onClose={()=>setCustomize(false)} title={t('customize_title')} sub={t('customize_sub')}
+        footer={<><button className="btn" onClick={()=>setHidden({})}>{t('reset')}</button><button className="btn btn-primary" onClick={()=>{setCustomize(false); toast(t('dash_layout_saved'));}}>{t('save_layout')}</button></>}>
         <div className="col gap-10">
-          <div className="eyebrow">KPI cards</div>
+          <div className="eyebrow">{t('lbl_kpi_cards')}</div>
           {D.KPIS.map(k => (
             <label key={k.id} className="row between card card-pad clickable" style={{ padding:'12px 14px', cursor:'pointer' }}>
-              <span className="row gap-10"><span className="kpi-icon"><Icon name={k.icon} size={15}/></span><span style={{ fontWeight:600, fontSize:13.5 }}>{k.label}</span></span>
+              <span className="row gap-10"><span className="kpi-icon"><Icon name={k.icon} size={15}/></span><span style={{ fontWeight:600, fontSize:13.5 }}>{kpiLabel(k.id)}</span></span>
               <span onClick={(e)=>{e.preventDefault(); setHidden(h=>({...h,[k.id]:!h[k.id]}));}} style={{ width:40, height:23, borderRadius:99, position:'relative', background: hidden[k.id]?'var(--border-strong)':'linear-gradient(90deg,var(--accent),var(--accent-2))', transition:'background .2s' }}>
                 <span style={{ position:'absolute', top:2.5, left: hidden[k.id]?2.5:19.5, width:18, height:18, borderRadius:99, background:'#fff', transition:'left .2s', boxShadow:'0 1px 3px rgba(0,0,0,0.3)' }} />
               </span>

@@ -3,11 +3,13 @@
    ============================================================ */
 function LoginScreen({ onEnter, lang, setLang, theme, setTheme }) {
   const [sel, setSel] = React.useState('CEO');
+  const t = (k) => (window.I18N[lang] && window.I18N[lang][k]) || window.I18N.en[k] || k;
+
   const roles = [
-    { id:'CEO', name:'CEO', desc:'Chairman / Top manager', icon:'crown', color:'#3b82f6' },
-    { id:'Analyst', name:'Analyst', desc:'Business & data analyst', icon:'metrics', color:'#22d3ee' },
-    { id:'Department Head', name:'Department Head', desc:'Regional & finance lead', icon:'layers', color:'#34d399' },
-    { id:'Data Admin', name:'Data Admin', desc:'IT & platform admin', icon:'shield', color:'#a78bfa' },
+    { id:'CEO',              name:'CEO',              descKey:'role_ceo_desc',     icon:'crown',   color:'#3b82f6' },
+    { id:'Analyst',          name:'Analyst',          descKey:'role_analyst_desc', icon:'metrics', color:'#22d3ee' },
+    { id:'Department Head',  name:'Department Head',  descKey:'role_dhead_desc',   icon:'layers',  color:'#34d399' },
+    { id:'Data Admin',       name:'Data Admin',       descKey:'role_dadmin_desc',  icon:'shield',  color:'#a78bfa' },
   ];
   const langs = [{id:'uz',l:'Oʻzbekcha'},{id:'ru',l:'Русский'},{id:'en',l:'English'}];
 
@@ -26,24 +28,24 @@ function LoginScreen({ onEnter, lang, setLang, theme, setTheme }) {
         </div>
 
         <div className="col gap-20" style={{ maxWidth:480 }}>
-          <span className="badge badge-info" style={{ alignSelf:'flex-start' }}><Icon name="sparkle" size={12} />AI-native Business Intelligence</span>
+          <span className="badge badge-info" style={{ alignSelf:'flex-start' }}><Icon name="sparkle" size={12} />{t('login_brand_tag')}</span>
           <h1 style={{ fontSize:42, fontWeight:800, letterSpacing:'-0.035em', lineHeight:1.05, margin:0 }}>
-            Decisions, driven by<br/><span style={{ background:'linear-gradient(120deg,var(--accent),var(--accent-2))', WebkitBackgroundClip:'text', backgroundClip:'text', color:'transparent' }}>data you can trust.</span>
+            {t('login_hero1')}<br/><span style={{ background:'linear-gradient(120deg,var(--accent),var(--accent-2))', WebkitBackgroundClip:'text', backgroundClip:'text', color:'transparent' }}>{t('login_hero2')}</span>
           </h1>
           <p className="muted" style={{ fontSize:15, lineHeight:1.6, margin:0 }}>
-            Connect every source, ask questions in plain language, detect deviations before they cost you, and brief your board in seconds — built for banks, retail, fintech and government across Uzbekistan.
+            {t('login_hero_desc')}
           </p>
           <div className="row gap-20 wrap" style={{ marginTop:6 }}>
-            {[['16+','Data connectors'],['7','Industry templates'],['<2s','AI answers']].map((s,i)=>(
+            {[['16+',t('login_stat_connectors')],['7',t('login_stat_templates')],['<2s',t('login_stat_ai')]].map((s,i)=>(
               <div key={i} className="col"><span className="mono" style={{ fontSize:24, fontWeight:800 }}>{s[0]}</span><span className="dim" style={{ fontSize:12 }}>{s[1]}</span></div>
             ))}
           </div>
         </div>
 
         <div className="row gap-16 dim" style={{ fontSize:11.5 }}>
-          <span className="row gap-6"><Icon name="shield" size={13} />On-premise ready</span>
-          <span className="row gap-6"><Icon name="lock" size={13} />Data residency in UZ</span>
-          <span className="row gap-6"><Icon name="audit" size={13} />Full audit trail</span>
+          <span className="row gap-6"><Icon name="shield" size={13} />{t('login_onprem')}</span>
+          <span className="row gap-6"><Icon name="lock" size={13} />{t('login_residency')}</span>
+          <span className="row gap-6"><Icon name="audit" size={13} />{t('login_audit_trail')}</span>
         </div>
 
         <div aria-hidden style={{ position:'absolute', right:-120, top:'50%', transform:'translateY(-50%)', width:340, height:340, borderRadius:'50%', background:'conic-gradient(from 180deg, var(--accent), var(--accent-2), var(--purple), var(--accent))', filter:'blur(80px)', opacity:0.20 }} />
@@ -56,8 +58,8 @@ function LoginScreen({ onEnter, lang, setLang, theme, setTheme }) {
         </div>
         <div className="col gap-24" style={{ width:'100%', maxWidth:420 }}>
           <div className="col gap-6">
-            <h2 style={{ fontSize:24, fontWeight:800, letterSpacing:'-0.025em', margin:0 }}>Enter the demo</h2>
-            <p className="muted" style={{ fontSize:14, margin:0 }}>Choose a role to preview a tailored experience.</p>
+            <h2 style={{ fontSize:24, fontWeight:800, letterSpacing:'-0.025em', margin:0 }}>{t('login_title')}</h2>
+            <p className="muted" style={{ fontSize:14, margin:0 }}>{t('login_sub')}</p>
           </div>
 
           <div className="grid" style={{ gridTemplateColumns:'1fr 1fr', gap:12 }}>
@@ -76,23 +78,23 @@ function LoginScreen({ onEnter, lang, setLang, theme, setTheme }) {
                     </span>
                   </div>
                   <div style={{ fontWeight:700, fontSize:14.5 }}>{r.name}</div>
-                  <div className="dim" style={{ fontSize:12, marginTop:2 }}>{r.desc}</div>
+                  <div className="dim" style={{ fontSize:12, marginTop:2 }}>{t(r.descKey)}</div>
                 </button>
               );
             })}
           </div>
 
           <div className="col gap-8">
-            <span className="field-label">Language</span>
+            <span className="field-label">{t('login_lang_label')}</span>
             <div className="tabs">
               {langs.map(l => <button key={l.id} className={`tab ${lang===l.id?'active':''}`} style={{ flex:1, justifyContent:'center' }} onClick={() => setLang(l.id)}>{l.l}</button>)}
             </div>
           </div>
 
           <button className="btn btn-lg btn-primary" style={{ width:'100%' }} onClick={() => onEnter(sel)}>
-            Enter demo as {roles.find(r=>r.id===sel).name}<Icon name="arrowRight" size={17} />
+            {t('login_enter_as')} {roles.find(r=>r.id===sel).name}<Icon name="arrowRight" size={17} />
           </button>
-          <p className="dim" style={{ fontSize:11.5, textAlign:'center', margin:0 }}>Demo environment · mock data only · no authentication</p>
+          <p className="dim" style={{ fontSize:11.5, textAlign:'center', margin:0 }}>{t('login_note')}</p>
         </div>
       </div>
     </div>
