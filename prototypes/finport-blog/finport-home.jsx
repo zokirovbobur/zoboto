@@ -14,13 +14,13 @@ function Hero({lang,go,onSearch}){
           <h1 style={{fontSize:'clamp(34px,5vw,56px)',fontWeight:800,lineHeight:1.04,letterSpacing:'-.03em'}}>{t.hero_title}</h1>
           <p style={{fontSize:'clamp(17px,2vw,20px)',color:'var(--ink-2)',marginTop:20,maxWidth:520,lineHeight:1.5}}>{t.hero_sub}</p>
 
-          <div onClick={onSearch} style={{marginTop:28,display:'flex',alignItems:'center',gap:12,background:'var(--surface)',border:'1px solid var(--line-2)',borderRadius:999,padding:'7px 7px 7px 20px',maxWidth:520,boxShadow:'var(--shadow-sm)',cursor:'text'}}>
+          <div className="hero-search" onClick={onSearch} style={{marginTop:28,display:'flex',alignItems:'center',gap:12,background:'var(--surface)',border:'1px solid var(--line-2)',borderRadius:999,padding:'7px 7px 7px 20px',maxWidth:520,boxShadow:'var(--shadow-sm)',cursor:'text'}}>
             <Icon name="search" size={20} style={{color:'var(--faint)',flex:'0 0 auto'}}/>
             <span style={{color:'var(--faint)',fontSize:15.5,flex:1,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{t.search_ph}</span>
             <button className="btn btn-navy btn-sm" style={{flex:'0 0 auto'}}>Qidirish</button>
           </div>
 
-          <div style={{display:'flex',gap:12,marginTop:24,flexWrap:'wrap'}}>
+          <div className="hero-btns" style={{display:'flex',gap:12,marginTop:24,flexWrap:'wrap'}}>
             <button className="btn btn-primary" onClick={()=>go({name:'category',id:'vs'})}>{t.cta1}<Icon name="arrowRight" size={18}/></button>
             <button className="btn btn-ghost" onClick={()=>go({name:'tools'})}>{t.cta2}</button>
             <button className="btn btn-ghost" onClick={()=>go({name:'tools'})}>{t.cta3}</button>
@@ -52,7 +52,7 @@ function FeaturedCompare({lang,go}){
     {od:"Ichki nazorat", is:"Shariat kengashi", icon:"shieldCheck"},
   ];
   return (
-    <div className="card view-enter" style={{padding:0,overflow:'hidden',animationDelay:'.1s',boxShadow:'var(--shadow-lg)'}}>
+    <div className="card view-enter feat-cmp" style={{padding:0,overflow:'hidden',animationDelay:'.1s',boxShadow:'var(--shadow-lg)'}}>
       <div style={{background:'var(--navy)',color:'#fff',padding:'20px 24px 22px',position:'relative',overflow:'hidden'}}>
         <div className="geo-bg" style={{opacity:.12}}></div>
         <div style={{position:'relative',display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:12}}>
@@ -63,22 +63,22 @@ function FeaturedCompare({lang,go}){
           <span className="badge" style={{background:'rgba(67,201,151,.16)',color:'#7ce0b5',flex:'0 0 auto'}}>Asoslar</span>
         </div>
       </div>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr'}}>
-        <div style={{padding:'14px 20px',borderRight:'1px solid var(--line)'}}>
+      <div className="feat-head" style={{display:'grid',gridTemplateColumns:'1fr 1fr'}}>
+        <div className="feat-cell" style={{padding:'14px 20px',borderRight:'1px solid var(--line)'}}>
           <div style={{display:'flex',alignItems:'center',gap:7,color:'var(--ink-2)',fontWeight:700,fontSize:14,marginBottom:6}}>
             <span style={{width:8,height:8,borderRadius:2,background:'var(--navy-soft)'}}></span>{t.odatiy}
           </div>
         </div>
-        <div style={{padding:'14px 20px',background:'var(--emerald-wash)'}}>
+        <div className="feat-cell" style={{padding:'14px 20px',background:'var(--emerald-wash)'}}>
           <div style={{display:'flex',alignItems:'center',gap:7,color:'var(--emerald-2)',fontWeight:700,fontSize:14,marginBottom:6}}>
             <span style={{width:8,height:8,borderRadius:2,background:'var(--emerald)'}}></span>{t.islamic_bank}
           </div>
         </div>
       </div>
       {rows.map((r,i)=>(
-        <div key={i} style={{display:'grid',gridTemplateColumns:'1fr 1fr',borderTop:'1px solid var(--line)'}}>
-          <div style={{padding:'13px 20px',fontSize:14,color:'var(--ink-2)',borderRight:'1px solid var(--line)'}}>{r.od}</div>
-          <div style={{padding:'13px 20px',fontSize:14,color:'var(--emerald-2)',fontWeight:600,background:'var(--emerald-wash)',display:'flex',alignItems:'center',gap:8}}>
+        <div key={i} className="feat-row" style={{display:'grid',gridTemplateColumns:'1fr 1fr',borderTop:'1px solid var(--line)'}}>
+          <div className="feat-cell" style={{padding:'13px 20px',fontSize:14,color:'var(--ink-2)',borderRight:'1px solid var(--line)'}}>{r.od}</div>
+          <div className="feat-cell" style={{padding:'13px 20px',fontSize:14,color:'var(--emerald-2)',fontWeight:600,background:'var(--emerald-wash)',display:'flex',alignItems:'center',gap:8}}>
             <Icon name={r.icon} size={15}/>{r.is}
           </div>
         </div>
