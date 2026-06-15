@@ -16,8 +16,8 @@ function Brand({ small }) {
         </svg>
       </div>
       {!small && (
-        <div className="brand-name">Tijara
-          <small>Shariah-Compliant Advance</small>
+        <div className="brand-name">{window.t ? window.t('brand_name') : 'Tijara'}
+          <small>{window.t ? window.t('brand_sub') : 'Shariah-Compliant Advance'}</small>
         </div>
       )}
     </div>
@@ -249,6 +249,23 @@ function Modal({ open, onClose, children, title, width = 520 }) {
   );
 }
 
+/* ---- Language Switcher ---- */
+function LangSwitcher() {
+  const cur = window._lang || "en";
+  return (
+    <div className="row" style={{ gap: 2, flexShrink: 0 }}>
+      {["en", "uz", "ru"].map(l => (
+        <button key={l}
+          className={"btn btn-sm " + (cur === l ? "btn-primary" : "btn-quiet")}
+          style={{ padding: "3px 8px", fontSize: 11, fontWeight: 700, minWidth: 0, lineHeight: 1.4 }}
+          onClick={() => window.setLang && window.setLang(l)}>
+          {l.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 /* ---- Field ---- */
 function Field({ label, req, hint, error, children, prefix }) {
   return (
@@ -296,7 +313,8 @@ function Topbar({ title, sub, role, user, onSwitch, right, onMenu }) {
         {sub && <div className="tiny muted">{sub}</div>}
       </div>
       {right}
-      <button className="btn btn-ghost btn-sm" onClick={onSwitch}><Icon name="refresh" size={14} /><span className="topbar-switch-label"> Switch role</span></button>
+      <LangSwitcher />
+      <button className="btn btn-ghost btn-sm" onClick={onSwitch}><Icon name="refresh" size={14} /><span className="topbar-switch-label"> {window.t ? window.t('switch_role') : 'Switch role'}</span></button>
       <div className="topbar-divider" style={{ width: 1, height: 26, background: "var(--line)" }} />
       <div className="row" style={{ gap: 10 }}>
         <div className="stack topbar-user-text" style={{ alignItems: "flex-end", lineHeight: 1.25 }}>
@@ -349,5 +367,5 @@ function DocThumb({ label, h = 120 }) {
 Object.assign(window, {
   Brand, Btn, Badge, StatusBadge, Card, CardHead, Stat, Steps, CheckRow, Confidence,
   RiskGauge, Avatar, KV, BarChart, Donut, ToastHost, useToast, Modal, Field,
-  Sidebar, Topbar, Portal, PageHead, DocThumb, STATUS_MAP,
+  Sidebar, Topbar, Portal, PageHead, DocThumb, LangSwitcher, STATUS_MAP,
 });

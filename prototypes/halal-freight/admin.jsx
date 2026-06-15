@@ -7,22 +7,21 @@ const { Portal, PageHead, Stat, Card, CardHead, Btn, Badge, StatusBadge, Icon,
   CheckRow, RiskGauge, KV, BarChart, Donut, useToast, Modal } = window;
 const D = window.HFF_DATA;
 
-const ADMIN_NAV = [
-  { items: [
-    { id: "admin/dashboard", icon: "dashboard", label: "Dashboard" },
-    { id: "admin/review-queue", icon: "list", label: "Review Queue", badge: 4 },
-  ]},
-  { label: "Risk & Compliance", items: [
-    { id: "admin/scoring", icon: "gauge", label: "Scoring Engine" },
-    { id: "admin/shariah", icon: "scale", label: "Shariah Compliance" },
-  ]},
-  { label: "Money", items: [
-    { id: "admin/collections", icon: "coins", label: "Collections" },
-    { id: "admin/reports", icon: "chart", label: "Reports" },
-  ]},
-];
-
-function AdminApp({ route, params, nav }) {
+function AdminApp({ route, params, nav, lang }) {
+  const ADMIN_NAV = [
+    { items: [
+      { id: "admin/dashboard", icon: "dashboard", label: window.t('anav_dashboard') },
+      { id: "admin/review-queue", icon: "list", label: window.t('anav_queue'), badge: 4 },
+    ]},
+    { label: window.t('anav_risk'), items: [
+      { id: "admin/scoring", icon: "gauge", label: window.t('anav_scoring') },
+      { id: "admin/shariah", icon: "scale", label: window.t('anav_shariah') },
+    ]},
+    { label: window.t('anav_money'), items: [
+      { id: "admin/collections", icon: "coins", label: window.t('anav_collections') },
+      { id: "admin/reports", icon: "chart", label: window.t('anav_reports') },
+    ]},
+  ];
   const screens = {
     "admin/dashboard": <AdminDashboard nav={nav} />,
     "admin/review-queue": <ReviewQueue nav={nav} />,
@@ -33,19 +32,19 @@ function AdminApp({ route, params, nav }) {
     "admin/reports": window.Reports ? <window.Reports /> : null,
   };
   const titles = {
-    "admin/dashboard": ["Underwriting Console", "Portfolio overview"],
-    "admin/review-queue": ["Review Queue", "Funding requests awaiting decision"],
-    "admin/request-review": ["Underwriting Review", params?.id || "FR-20431"],
-    "admin/scoring": ["Scoring Engine", "Model weights & decision rules"],
-    "admin/shariah": ["Shariah Compliance", "Structure, board review & audit trail"],
-    "admin/collections": ["Collections & Settlement", "Broker payments & reserve release"],
-    "admin/reports": ["Reports & Analytics", "Portfolio performance"],
+    "admin/dashboard": [window.t('admin_title'), window.t('admin_sub')],
+    "admin/review-queue": [window.t('queue_title'), window.t('rev_crumb')],
+    "admin/request-review": [window.t('rev_title'), params?.id || "FR-20431"],
+    "admin/scoring": [window.t('scoring_title'), window.t('scoring_sub')],
+    "admin/shariah": [window.t('shariah_title'), window.t('shariah_sub')],
+    "admin/collections": [window.t('coll_title'), window.t('coll_sub')],
+    "admin/reports": [window.t('rep_title'), window.t('rep_sub')],
   };
   const navActive = route === "admin/request-review" ? "admin/review-queue" : route;
-  const [t, s] = titles[route] || ["", ""];
+  const [pageTitle, pageSub] = titles[route] || ["", ""];
   return (
     <Portal nav={ADMIN_NAV} active={navActive} onNav={(id) => nav(id)}
-      title={t} sub={s} role="Underwriter" user="Maryam Iqbal" onSwitch={() => nav("login")}
+      title={pageTitle} sub={pageSub} role="Underwriter" user="Maryam Iqbal" onSwitch={() => nav("login")}
       topRight={<Btn kind="ghost" size="sm" icon="bell">3 alerts</Btn>}>
       {screens[route]}
     </Portal>
@@ -54,37 +53,43 @@ function AdminApp({ route, params, nav }) {
 
 /* ---------------- Admin dashboard ---------------- */
 function AdminDashboard({ nav }) {
+  const alerts = [
+    ["flag", "red", window.t('alert_fraud'), window.t('alert_fraud_d')],
+    ["scale", "amber", window.t('alert_shariah'), window.t('alert_shariah_d')],
+    ["building", "red", window.t('alert_overdue'), window.t('alert_overdue_d')],
+    ["clock", "amber", window.t('alert_manual'), window.t('alert_manual_d')],
+  ];
   return (
     <div>
-      <PageHead title="Underwriting Console" sub="Today · June 15, 2026"
-        actions={<><Btn kind="ghost" icon="download">Export</Btn><Btn kind="primary" icon="list" onClick={() => nav("admin/review-queue")}>Open review queue</Btn></>} />
+      <PageHead title={window.t('admin_title')} sub={window.t('admin_sub')}
+        actions={<><Btn kind="ghost" icon="download">{window.t('btn_export')}</Btn><Btn kind="primary" icon="list" onClick={() => nav("admin/review-queue")}>{window.t('btn_open_queue')}</Btn></>} />
 
       <div className="grid g-4">
-        <Stat label="Total portfolio exposure" value="$1.28M" icon="layers" tone="blue" sub="Across 214 active advances" />
-        <Stat label="Today's funding volume" value="$300K" icon="wallet" tone="green" sub={<><Icon name="trending" size={13} style={{ color: "var(--green-strong)" }} /> +16% vs. yesterday</>} />
-        <Stat label="Pending review queue" value="4" icon="clock" tone="amber" sub="2 manual · 1 high risk · 1 docs" />
-        <Stat label="Avg broker days-to-pay" value="33" icon="building" tone="blue" sub="Weighted across portfolio" />
+        <Stat label={window.t('astat1')} value="$1.28M" icon="layers" tone="blue" sub={window.t('astat1s')} />
+        <Stat label={window.t('astat2')} value="$300K" icon="wallet" tone="green" sub={<><Icon name="trending" size={13} style={{ color: "var(--green-strong)" }} /> {window.t('astat2s')}</>} />
+        <Stat label={window.t('astat3')} value="4" icon="clock" tone="amber" sub={window.t('astat3s')} />
+        <Stat label={window.t('astat4')} value="33" icon="building" tone="blue" sub={window.t('astat4s')} />
       </div>
 
       <div className="grid g-4" style={{ marginTop: 18 }}>
-        <Stat label="Auto-approved (today)" value="78%" icon="checkCircle" tone="green" sub="14 of 18 requests" />
-        <Stat label="Manual review required" value="22%" icon="eye" tone="amber" sub="4 requests" />
-        <Stat label="Overdue broker payments" value="3" icon="alert" tone="red" sub={D.fmt(17600) + " exposure"} />
-        <Stat label="Fraud alerts" value="1" icon="flag" tone="red" sub="Duplicate invoice flagged" />
+        <Stat label={window.t('astat5')} value="78%" icon="checkCircle" tone="green" sub={window.t('astat5s')} />
+        <Stat label={window.t('astat6')} value="22%" icon="eye" tone="amber" sub={window.t('astat6s')} />
+        <Stat label={window.t('astat7')} value="3" icon="alert" tone="red" sub={window.t('astat7s').replace('{0}', D.fmt(17600))} />
+        <Stat label={window.t('astat8')} value="1" icon="flag" tone="red" sub={window.t('astat8s')} />
       </div>
 
       <div className="grid" style={{ gridTemplateColumns: "1.4fr 1fr", marginTop: 18 }}>
         <Card>
-          <CardHead icon="chart" title="Funding volume" sub="Last 6 months ($K)" right={<Badge tone="green" dot>Trending up</Badge>} />
+          <CardHead icon="chart" title={window.t('card_volume')} sub={window.t('card_volume_sub')} right={<Badge tone="green" dot>{window.t('card_trending')}</Badge>} />
           <div className="card-pad"><BarChart data={D.reports.monthly} height={170} suffix="K" /></div>
         </Card>
         <Card>
-          <CardHead icon="alert" title="Needs attention" />
+          <CardHead icon="alert" title={window.t('card_attention')} />
           <div className="card-pad" style={{ paddingTop: 6 }}>
-            {[["flag", "red", "Fraud alert", "Duplicate invoice on FR-20425", "high"], ["scale", "amber", "Shariah exception", "Penalty flag auto-removed · FR-20419", "shariah"], ["building", "red", "Broker overdue", "Summit · 3 invoices, 6 days late", "overdue"], ["clock", "amber", "Manual review", "FR-20431 · MC age < 6 months", "manual"]].map(([ic, tone, t, d], i, arr) => (
-              <div key={t} className="row" style={{ gap: 12, padding: "12px 0", borderBottom: i < arr.length - 1 ? "1px solid var(--line)" : "none", cursor: "pointer" }} onClick={() => nav("admin/review-queue")}>
+            {alerts.map(([ic, tone, alertTitle, d], i, arr) => (
+              <div key={alertTitle} className="row" style={{ gap: 12, padding: "12px 0", borderBottom: i < arr.length - 1 ? "1px solid var(--line)" : "none", cursor: "pointer" }} onClick={() => nav("admin/review-queue")}>
                 <div className="check-ico" style={{ background: tone === "red" ? "var(--danger-soft)" : "var(--warn-soft)", color: tone === "red" ? "var(--danger)" : "oklch(0.55 0.13 70)" }}><Icon name={ic} size={14} /></div>
-                <div style={{ flex: 1 }}><div className="small strong">{t}</div><div className="tiny muted">{d}</div></div>
+                <div style={{ flex: 1 }}><div className="small strong">{alertTitle}</div><div className="tiny muted">{d}</div></div>
                 <Icon name="chevronRight" size={15} style={{ color: "var(--ink-4)" }} />
               </div>
             ))}
@@ -96,17 +101,22 @@ function AdminDashboard({ nav }) {
 }
 
 /* ---------------- Review Queue ---------------- */
-const FILTERS = [
-  ["all", "All"], ["auto", "Auto approve"], ["manual", "Manual review"], ["high", "High risk"], ["docs", "Awaiting documents"], ["overdue", "Broker overdue"],
-];
 function ReviewQueue({ nav }) {
+  const FILTERS = [
+    ["all", window.t('fil_all')],
+    ["auto", window.t('fil_auto')],
+    ["manual", window.t('fil_manual')],
+    ["high", window.t('fil_high')],
+    ["docs", window.t('fil_docs')],
+    ["overdue", window.t('fil_overdue')],
+  ];
   const [filter, setFilter] = useState("all");
   const rows = D.adminQueue.filter(r => filter === "all" || r.flag === filter);
   const counts = {}; D.adminQueue.forEach(r => counts[r.flag] = (counts[r.flag] || 0) + 1);
   return (
     <div>
-      <PageHead title="Review Queue" sub={`${D.adminQueue.length} funding requests`}
-        actions={<><Btn kind="ghost" icon="filter">More filters</Btn><Btn kind="ghost" icon="download">Export</Btn></>} />
+      <PageHead title={window.t('queue_title')} sub={window.t('queue_sub').replace('{0}', D.adminQueue.length)}
+        actions={<><Btn kind="ghost" icon="filter">{window.t('btn_more_filters')}</Btn><Btn kind="ghost" icon="download">{window.t('btn_export')}</Btn></>} />
 
       <div className="filters" style={{ marginBottom: 16 }}>
         {FILTERS.map(([id, label]) => (
@@ -119,7 +129,7 @@ function ReviewQueue({ nav }) {
       <Card style={{ overflow: "hidden" }}>
         <div style={{ overflowX: "auto" }}>
           <table className="tbl">
-            <thead><tr><th>Request ID</th><th>Carrier</th><th>Broker</th><th className="right">Invoice</th><th>Risk score</th><th>Verification</th><th className="right">Advance</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th>Request ID</th><th>{window.t('tbl_carrier')}</th><th>{window.t('tbl_broker')}</th><th className="right">{window.t('tbl_invoice')}</th><th>{window.t('tbl_risk')}</th><th>{window.t('tbl_verify')}</th><th className="right">{window.t('tbl_advance')}</th><th>{window.t('tbl_status')}</th><th></th></tr></thead>
             <tbody>
               {rows.map(r => (
                 <tr key={r.id} className="clickable" onClick={() => nav("admin/request-review", { id: r.id })}>
@@ -131,7 +141,7 @@ function ReviewQueue({ nav }) {
                   <td className="small muted nowrap">{r.verify}</td>
                   <td className="right mono num strong">{r.advance ? D.fmt(r.advance) : "—"}</td>
                   <td><StatusBadge status={r.status} /></td>
-                  <td><Btn kind="ghost" size="sm" onClick={(e) => { e.stopPropagation(); nav("admin/request-review", { id: r.id }); }}>Review</Btn></td>
+                  <td><Btn kind="ghost" size="sm" onClick={(e) => { e.stopPropagation(); nav("admin/request-review", { id: r.id }); }}>{window.t('btn_review')}</Btn></td>
                 </tr>
               ))}
             </tbody>
@@ -166,16 +176,15 @@ function RequestReview({ nav, params }) {
 
   return (
     <div>
-      <PageHead title={`Underwriting Review · ${f.id}`}
-        crumb={<div className="crumb"><span className="lnk" onClick={() => nav("admin/review-queue")}>Review Queue</span><span className="sep">/</span><span>{f.id}</span></div>}
+      <PageHead title={window.t('rev_title') + ' · ' + f.id}
+        crumb={<div className="crumb"><span className="lnk" onClick={() => nav("admin/review-queue")}>{window.t('rev_crumb')}</span><span className="sep">/</span><span>{f.id}</span></div>}
         sub={`${f.carrier} · ${f.broker} · ${D.fmt(f.invoice)}`}
-        actions={decision ? <Badge tone={decision.tone} icon="check">{decision.label}</Badge> : <Badge tone="amber" dot>Awaiting decision</Badge>} />
+        actions={decision ? <Badge tone={decision.tone} icon="check">{decision.label}</Badge> : <Badge tone="amber" dot>{window.t('rev_awaiting')}</Badge>} />
 
       <div className="grid" style={{ gridTemplateColumns: "1fr 320px" }}>
         <div className="stack" style={{ gap: 18 }}>
-          {/* carrier risk */}
           <Card>
-            <CardHead icon="truck" title="Carrier risk profile" right={<Badge tone="green" dot>Score 90</Badge>} />
+            <CardHead icon="truck" title={window.t('rev_carrier_risk')} right={<Badge tone="green" dot>Score 90</Badge>} />
             <div className="card-pad" style={{ paddingTop: 6 }}>
               <div className="grid g-2" style={{ gap: 0, columnGap: 28 }}>
                 <div><KV k="DOT status" v={<Badge tone="green" icon="check">Active</Badge>} /><KV k="MC authority age" v={D.carrier.mcAge} /><KV k="Safety status" v={<Badge tone="green" dot>{D.carrier.safety}</Badge>} /></div>
@@ -184,9 +193,8 @@ function RequestReview({ nav, params }) {
             </div>
           </Card>
 
-          {/* broker risk */}
           <Card>
-            <CardHead icon="building" title="Broker risk profile" right={<Badge tone="green" dot>Score 88</Badge>} />
+            <CardHead icon="building" title={window.t('rev_broker_risk')} right={<Badge tone="green" dot>Score 88</Badge>} />
             <div className="card-pad" style={{ paddingTop: 6 }}>
               <div className="strong" style={{ marginBottom: 6 }}>{b.name} <span className="tiny muted mono">{b.mc}</span></div>
               <div className="grid g-2" style={{ gap: 0, columnGap: 28 }}>
@@ -196,9 +204,8 @@ function RequestReview({ nav, params }) {
             </div>
           </Card>
 
-          {/* document risk */}
           <Card>
-            <CardHead icon="layers" title="Invoice / document risk" right={<Badge tone="green" dot>Score 79</Badge>} />
+            <CardHead icon="layers" title={window.t('rev_doc_risk')} right={<Badge tone="green" dot>Score 79</Badge>} />
             <div className="card-pad" style={{ paddingTop: 4, paddingBottom: 8 }}>
               <CheckRow status="ok" label="BOL / POD match" meta="BOL-558120" />
               <CheckRow status="ok" label="POD signature detected" meta="R. Mason · Jun 05" />
@@ -208,9 +215,8 @@ function RequestReview({ nav, params }) {
             </div>
           </Card>
 
-          {/* score breakdown */}
           <Card>
-            <CardHead icon="gauge" title="Risk score breakdown" />
+            <CardHead icon="gauge" title={window.t('rev_score_breakdown')} />
             <div className="card-pad">
               {D.scoring.map(s => (
                 <div key={s.key} style={{ marginBottom: 14 }}>
@@ -230,7 +236,7 @@ function RequestReview({ nav, params }) {
           <Card pad><div className="center"><RiskGauge score={f.score} /><div className="small muted" style={{ marginTop: 8 }}>Weighted across 4 risk factors</div></div></Card>
 
           <Card pad>
-            <div className="small strong" style={{ marginBottom: 10 }}>Requested terms</div>
+            <div className="small strong" style={{ marginBottom: 10 }}>{window.t('rev_terms')}</div>
             <KV k="Invoice" v={<span className="mono num">{D.fmt(f.invoice)}</span>} />
             <KV k="Requested advance" v={<span className="mono num strong">{D.fmt(f.advance)} (90%)</span>} />
             <KV k="Wakalah fee" v={<span className="mono num">{D.fmt(f.fee)}</span>} />
@@ -238,14 +244,14 @@ function RequestReview({ nav, params }) {
           </Card>
 
           <Card pad>
-            <div className="small strong" style={{ marginBottom: 12 }}>Underwriting decision</div>
+            <div className="small strong" style={{ marginBottom: 12 }}>{window.t('rev_decision')}</div>
             <div className="stack" style={{ gap: 9 }}>
-              <Btn kind="primary" block icon="check" onClick={() => decide("Approved", "Request approved at 90% advance", "green")}>Approve</Btn>
-              <Btn kind="ghost" block icon="coins" onClick={() => decide("Approved · lower advance", "Approved at reduced 80% advance", "amber")}>Approve with lower advance</Btn>
-              <Btn kind="ghost" block icon="file" onClick={() => decide("More documents requested", "Document request sent to carrier", "blue")}>Request more documents</Btn>
-              <Btn kind="danger" block icon="x" onClick={() => decide("Rejected", "Request rejected", "red")}>Reject</Btn>
+              <Btn kind="primary" block icon="check" onClick={() => decide(window.t('dec_approved'), window.t('toast_approved'), "green")}>{window.t('btn_approve')}</Btn>
+              <Btn kind="ghost" block icon="coins" onClick={() => decide(window.t('dec_approved_lower'), window.t('toast_approved_lower'), "amber")}>{window.t('btn_approve_lower')}</Btn>
+              <Btn kind="ghost" block icon="file" onClick={() => decide(window.t('dec_more_docs'), window.t('toast_more_docs'), "blue")}>{window.t('btn_more_docs')}</Btn>
+              <Btn kind="danger" block icon="x" onClick={() => decide(window.t('dec_rejected'), window.t('toast_rejected'), "red")}>{window.t('btn_reject')}</Btn>
             </div>
-            {decision && <div className="row fade-in" style={{ gap: 8, marginTop: 12, padding: "10px 12px", background: "var(--surface-sunken)", borderRadius: "var(--r-sm)" }}><Icon name="checkCircle" size={15} style={{ color: "var(--green-strong)" }} /><span className="tiny strong">Decision recorded: {decision.label}</span></div>}
+            {decision && <div className="row fade-in" style={{ gap: 8, marginTop: 12, padding: "10px 12px", background: "var(--surface-sunken)", borderRadius: "var(--r-sm)" }}><Icon name="checkCircle" size={15} style={{ color: "var(--green-strong)" }} /><span className="tiny strong">{window.t('decision_recorded').replace('{0}', decision.label)}</span></div>}
           </Card>
         </div>
       </div>
