@@ -8,18 +8,38 @@ const D = window.HFF_DATA;
 
 /* ---------- Public top nav ---------- */
 function PublicNav({ nav }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const NAV_LINKS = ["How it works", "Why halal", "For trucking", "Compliance"];
   return (
     <header style={{ position: "sticky", top: 0, zIndex: 30, background: "oklch(1 0 0 / 0.82)", backdropFilter: "blur(12px)", borderBottom: "1px solid var(--line)" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 28px", height: 70, display: "flex", alignItems: "center", gap: 24 }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 20px", height: 70, display: "flex", alignItems: "center", gap: 16 }}>
         <Brand />
-        <nav className="row" style={{ gap: 26, marginLeft: 28, flex: 1 }}>
-          {["How it works", "Why halal", "For trucking", "Compliance"].map(t => (
+        <nav className="pub-nav-links row" style={{ gap: 26, marginLeft: 28, flex: 1 }}>
+          {NAV_LINKS.map(t => (
             <a key={t} href={"#" + t.replace(/\s/g, "")} className="small" style={{ fontWeight: 600, color: "var(--ink-2)" }}>{t}</a>
           ))}
         </nav>
-        <Btn kind="ghost" size="sm" onClick={() => nav("login")}>Sign in</Btn>
-        <Btn kind="primary" size="sm" icon="arrowRight" onClick={() => nav("login", { intent: "carrier" })}>Start Funding Request</Btn>
+        <div className="pub-nav-ctas row" style={{ gap: 8 }}>
+          <Btn kind="ghost" size="sm" onClick={() => nav("login")}>Sign in</Btn>
+          <Btn kind="primary" size="sm" icon="arrowRight" onClick={() => nav("login", { intent: "carrier" })}>Start Funding Request</Btn>
+        </div>
+        <button className="btn btn-quiet btn-sm pub-nav-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu" style={{ padding: 0, width: 38 }}>
+          <Icon name={menuOpen ? "x" : "menu"} size={20} />
+        </button>
       </div>
+      {menuOpen && (
+        <div style={{ background: "var(--surface)", borderTop: "1px solid var(--line)", padding: "8px 20px 20px" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {NAV_LINKS.map(t => (
+              <a key={t} href={"#" + t.replace(/\s/g, "")} style={{ fontWeight: 600, fontSize: 14, color: "var(--ink-2)", padding: "12px 0", borderBottom: "1px solid var(--line)" }} onClick={() => setMenuOpen(false)}>{t}</a>
+            ))}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 16 }}>
+            <Btn kind="ghost" block onClick={() => { nav("login"); setMenuOpen(false); }}>Sign in</Btn>
+            <Btn kind="primary" block icon="arrowRight" onClick={() => { nav("login", { intent: "carrier" }); setMenuOpen(false); }}>Start Funding Request</Btn>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
@@ -38,10 +58,10 @@ function Hero({ nav }) {
         </defs>
         <rect width="100%" height="100%" fill="url(#grid)" />
       </svg>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "76px 28px 84px", position: "relative", display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 56, alignItems: "center" }} className="hero-grid">
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 20px 64px", position: "relative", display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 56, alignItems: "center" }} className="hero-grid">
         <div className="fade-up">
           <Badge tone="green" icon="shieldCheck">Shariah-reviewed contract structure</Badge>
-          <h1 style={{ fontSize: 50, lineHeight: 1.04, margin: "20px 0 0", letterSpacing: "-0.035em" }}>
+          <h1 className="hero-h1" style={{ fontSize: 50, lineHeight: 1.04, margin: "20px 0 0", letterSpacing: "-0.035em" }}>
             Get paid faster for completed loads — <span style={{ color: "var(--green-strong)" }}>halal and transparent.</span>
           </h1>
           <p className="lead" style={{ marginTop: 20, maxWidth: 540 }}>
@@ -109,7 +129,7 @@ const STEPS = [
 ];
 function HowItWorks() {
   return (
-    <section id="Howitworks" style={{ maxWidth: 1200, margin: "0 auto", padding: "84px 28px" }}>
+    <section id="Howitworks" style={{ maxWidth: 1200, margin: "0 auto", padding: "84px 28px" }} className="section-inner section-pad">
       <SectionHead eyebrow="How it works" title="From completed load to cash — in one clear flow" sub="Seven transparent steps. You always see exactly what you receive and what you owe." />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 0, marginTop: 40 }} className="how-grid">
         {STEPS.map(([t, ic, d], i) => (
@@ -136,7 +156,7 @@ function WhyHalal() {
   const trad = ["Discount rate applied to invoice value", "Advance treated as interest-bearing debt", "Effective APR often 20–40%+", "Fees compound the longer the broker takes", "Opaque reserve and chargeback terms", "Hidden settlement deductions"];
   return (
     <section id="Whyhalal" style={{ background: "var(--bg-2)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "84px 28px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "84px 28px" }} className="section-inner section-pad">
         <SectionHead eyebrow="Why halal" title="A fixed service fee — not interest, not a discount" sub="The platform acts as your agent (Wakil) to administer and collect the invoice. The fee is a fixed service fee, not interest or a discount on debt." />
         <div className="grid g-2" style={{ marginTop: 40 }}>
           <Card style={{ borderColor: "var(--green-line)", overflow: "hidden" }}>
@@ -170,7 +190,7 @@ function ForTrucking() {
     ["Payment tracking", "route", "Follow every invoice from submission through broker payment to settlement."],
   ];
   return (
-    <section id="Fortrucking" style={{ maxWidth: 1200, margin: "0 auto", padding: "84px 28px" }}>
+    <section id="Fortrucking" style={{ maxWidth: 1200, margin: "0 auto", padding: "84px 28px" }} className="section-inner section-pad">
       <SectionHead eyebrow="Built for trucking" title="Underwriting that understands freight" sub="Purpose-built for owner-operators and small fleets moving real loads across the US." />
       <div className="grid g-4" style={{ marginTop: 40 }}>
         {feats.map(([t, ic, d]) => (
@@ -190,7 +210,7 @@ function Audience() {
   const users = [["Owner-operators", "user", "One truck, one invoice at a time — get paid the day you deliver."], ["Small fleets", "truck", "2–20 trucks. Manage every load's funding from one dashboard."], ["Trucking companies", "building", "Scale advance volume with risk-based limits and repeat funding."]];
   return (
     <section style={{ background: "var(--ink)", color: "#fff" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 28px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 20px" }} className="section-pad">
         <div className="grid g-3">
           {users.map(([t, ic, d]) => (
             <div key={t}>
@@ -201,7 +221,7 @@ function Audience() {
           ))}
         </div>
         <div className="hr" style={{ background: "oklch(1 0 0 / 0.1)", margin: "48px 0 36px" }} />
-        <div className="row wrap" style={{ gap: 40, justifyContent: "space-between" }}>
+        <div className="row wrap audience-row" style={{ gap: 40, justifyContent: "space-between" }}>
           {[["Compliance-ready", "shieldCheck"], ["Bank-grade document security", "lock"], ["Risk-based underwriting", "gauge"], ["Shariah board oversight", "scale"]].map(([t, ic]) => (
             <div key={t} className="row" style={{ gap: 10 }}><Icon name={ic} size={20} style={{ color: "var(--green)" }} /><span style={{ fontWeight: 500, color: "oklch(0.92 0.01 248)" }}>{t}</span></div>
           ))}
@@ -213,8 +233,8 @@ function Audience() {
 
 function CTA({ nav }) {
   return (
-    <section id="Compliance" style={{ maxWidth: 1200, margin: "0 auto", padding: "84px 28px" }}>
-      <div className="card" style={{ padding: "56px 48px", textAlign: "center", background: "var(--green-soft)", borderColor: "var(--green-line)", position: "relative", overflow: "hidden" }}>
+    <section id="Compliance" style={{ maxWidth: 1200, margin: "0 auto", padding: "84px 20px" }} className="section-pad">
+      <div className="card cta-card" style={{ padding: "56px 48px", textAlign: "center", background: "var(--green-soft)", borderColor: "var(--green-line)", position: "relative", overflow: "hidden" }}>
         <h2 style={{ fontSize: 34, letterSpacing: "-0.03em" }}>Turn your completed loads into cash — the halal way.</h2>
         <p className="lead" style={{ maxWidth: 560, margin: "14px auto 28px" }}>Set up your carrier profile in minutes and submit your first funding request today.</p>
         <div className="row" style={{ gap: 12, justifyContent: "center" }}>
@@ -262,9 +282,18 @@ function Landing({ nav }) {
       <Footer />
       <style>{`
         @media (max-width: 900px) {
-          .hero-grid { grid-template-columns: 1fr !important; gap: 36px !important; }
+          .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
           .how-grid { grid-template-columns: repeat(2,1fr) !important; gap: 28px 12px !important; }
           .how-connector { display: none; }
+        }
+        @media (max-width: 768px) {
+          .hero-h1 { font-size: 32px !important; }
+          .hero-grid { padding-top: 40px !important; padding-bottom: 44px !important; }
+          .section-pad { padding-top: 52px !important; padding-bottom: 52px !important; }
+          .section-inner { padding-left: 20px !important; padding-right: 20px !important; }
+          .cta-card { padding: 36px 22px !important; }
+          .cta-card h2 { font-size: 24px !important; }
+          .audience-row { gap: 20px !important; flex-direction: column !important; }
         }
         .lift:hover { box-shadow: var(--sh-md); transform: translateY(-2px); }
       `}</style>

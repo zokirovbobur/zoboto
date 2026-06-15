@@ -404,3 +404,62 @@ textarea.input { height: auto; padding: 11px 13px; resize: vertical; line-height
 .strong { font-weight: 700; }
 .center { text-align: center; }
 .nowrap { white-space: nowrap; }
+
+/* ============================================================
+   Mobile responsive (max-width: 768px)
+   Desktop view unchanged — all rules below are additive only
+   ============================================================ */
+
+/* Hamburger button — hidden on desktop, shown on mobile */
+.topbar-menu-btn { display: none !important; }
+.pub-nav-hamburger { display: none !important; }
+
+@media (max-width: 768px) {
+  /* --- Sidebar becomes a fixed overlay --- */
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    height: 100vh;
+    transition: left 0.25s cubic-bezier(.2, .7, .2, 1);
+    z-index: 40;
+  }
+  .sidebar.mobile-open {
+    left: 0;
+    box-shadow: var(--sh-pop);
+  }
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: oklch(0.27 0.035 248 / 0.42);
+    backdrop-filter: blur(2px);
+    z-index: 35;
+    animation: fade .2s;
+  }
+
+  /* --- Topbar --- */
+  .topbar { padding: 0 14px; gap: 10px; }
+  .topbar-menu-btn { display: flex !important; flex: 0 0 auto; }
+  .topbar-switch-label { display: none; }
+  .topbar-user-text { display: none; }
+  .topbar-divider { display: none; }
+
+  /* --- Portal body --- */
+  .portal-body { padding: 18px 16px 56px; }
+
+  /* --- Page header --- */
+  .page-title { font-size: 20px !important; }
+  .page-head { margin-bottom: 16px; }
+
+  /* --- Stat card value --- */
+  .stat-value { font-size: 22px !important; }
+
+  /* --- Steps — scroll horizontally on small screens --- */
+  .steps { overflow-x: auto; padding-bottom: 6px; flex-wrap: nowrap; }
+  .step-label { font-size: 11px; white-space: nowrap; }
+
+  /* --- Public nav --- */
+  .pub-nav-links { display: none !important; }
+  .pub-nav-ctas { display: none !important; }
+  .pub-nav-hamburger { display: flex !important; margin-left: auto; }
+}

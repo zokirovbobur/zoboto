@@ -262,9 +262,9 @@ function Field({ label, req, hint, error, children, prefix }) {
 }
 
 /* ---- Sidebar / portal layout ---- */
-function Sidebar({ items, active, onNav, footer }) {
+function Sidebar({ items, active, onNav, footer, open }) {
   return (
-    <aside className="sidebar">
+    <aside className={"sidebar" + (open ? " mobile-open" : "")}>
       <div style={{ padding: "18px 18px 6px" }}><Brand /></div>
       <div style={{ flex: 1, overflowY: "auto", paddingBottom: 12 }}>
         {items.map((group, gi) => (
@@ -285,18 +285,21 @@ function Sidebar({ items, active, onNav, footer }) {
   );
 }
 
-function Topbar({ title, sub, role, user, onSwitch, right }) {
+function Topbar({ title, sub, role, user, onSwitch, right, onMenu }) {
   return (
     <header className="topbar">
+      <button className="btn btn-quiet btn-sm topbar-menu-btn" onClick={onMenu} aria-label="Open navigation" style={{ padding: 0, width: 36 }}>
+        <Icon name="menu" size={20} />
+      </button>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontFamily: "var(--display)", fontWeight: 600, fontSize: 17, letterSpacing: "-0.02em" }}>{title}</div>
+        <div style={{ fontFamily: "var(--display)", fontWeight: 600, fontSize: 17, letterSpacing: "-0.02em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{title}</div>
         {sub && <div className="tiny muted">{sub}</div>}
       </div>
       {right}
-      <button className="btn btn-ghost btn-sm" onClick={onSwitch}><Icon name="refresh" size={14} /> Switch role</button>
-      <div style={{ width: 1, height: 26, background: "var(--line)" }} />
+      <button className="btn btn-ghost btn-sm" onClick={onSwitch}><Icon name="refresh" size={14} /><span className="topbar-switch-label"> Switch role</span></button>
+      <div className="topbar-divider" style={{ width: 1, height: 26, background: "var(--line)" }} />
       <div className="row" style={{ gap: 10 }}>
-        <div className="stack" style={{ alignItems: "flex-end", lineHeight: 1.25 }}>
+        <div className="stack topbar-user-text" style={{ alignItems: "flex-end", lineHeight: 1.25 }}>
           <span style={{ fontWeight: 600, fontSize: 13 }}>{user}</span>
           <span className="tiny muted">{role}</span>
         </div>
@@ -308,11 +311,14 @@ function Topbar({ title, sub, role, user, onSwitch, right }) {
 
 /* Portal scaffold */
 function Portal({ nav, active, onNav, title, sub, role, user, onSwitch, topRight, navFooter, children }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const handleNav = (id) => { onNav(id); setSidebarOpen(false); };
   return (
     <div className="portal">
-      <Sidebar items={nav} active={active} onNav={onNav} footer={navFooter} />
+      {sidebarOpen && <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)} />}
+      <Sidebar items={nav} active={active} onNav={handleNav} footer={navFooter} open={sidebarOpen} />
       <div className="portal-main">
-        <Topbar title={title} sub={sub} role={role} user={user} onSwitch={onSwitch} right={topRight} />
+        <Topbar title={title} sub={sub} role={role} user={user} onSwitch={onSwitch} right={topRight} onMenu={() => setSidebarOpen(o => !o)} />
         <div className="portal-body fade-in" key={active}>{children}</div>
       </div>
     </div>
