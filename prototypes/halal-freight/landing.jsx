@@ -29,6 +29,7 @@ function PublicNav({ nav }) {
           <Btn kind="ghost" size="sm" onClick={() => nav("login")}>{window.t('nav_signin')}</Btn>
           <Btn kind="primary" size="sm" icon="arrowRight" onClick={() => nav("login", { intent: "carrier" })}>{window.t('nav_start')}</Btn>
         </div>
+        <div className="pub-lang-mobile"><LangSwitcher /></div>
         <button className="btn btn-quiet btn-sm pub-nav-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu" style={{ padding: 0, width: 38 }}>
           <Icon name={menuOpen ? "x" : "menu"} size={20} />
         </button>
@@ -40,10 +41,7 @@ function PublicNav({ nav }) {
               <a key={id} href={"#" + id} style={{ fontWeight: 600, fontSize: 14, color: "var(--ink-2)", padding: "12px 0", borderBottom: "1px solid var(--line)" }} onClick={() => setMenuOpen(false)}>{label}</a>
             ))}
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 12, paddingBottom: 4 }}>
-            <LangSwitcher />
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 8 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 12 }}>
             <Btn kind="ghost" block onClick={() => { nav("login"); setMenuOpen(false); }}>{window.t('nav_signin')}</Btn>
             <Btn kind="primary" block icon="arrowRight" onClick={() => { nav("login", { intent: "carrier" }); setMenuOpen(false); }}>{window.t('nav_start')}</Btn>
           </div>

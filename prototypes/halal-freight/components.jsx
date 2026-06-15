@@ -250,19 +250,22 @@ function Modal({ open, onClose, children, title, width = 520 }) {
 }
 
 /* ---- Language Switcher ---- */
-function LangSwitcher() {
+function LangSwitcher({ style }) {
   const cur = window._lang || "en";
   return (
-    <div className="row" style={{ gap: 2, flexShrink: 0 }}>
-      {["en", "uz", "ru"].map(l => (
-        <button key={l}
-          className={"btn btn-sm " + (cur === l ? "btn-primary" : "btn-quiet")}
-          style={{ padding: "3px 8px", fontSize: 11, fontWeight: 700, minWidth: 0, lineHeight: 1.4 }}
-          onClick={() => window.setLang && window.setLang(l)}>
-          {l.toUpperCase()}
-        </button>
-      ))}
-    </div>
+    <select
+      value={cur}
+      onChange={e => window.setLang && window.setLang(e.target.value)}
+      style={{
+        height: 32, padding: "0 28px 0 10px", fontSize: 13, fontWeight: 600,
+        border: "1px solid var(--line-2)", borderRadius: "var(--r-xs)",
+        background: "var(--surface)", color: "var(--ink)", cursor: "pointer",
+        appearance: "auto", flexShrink: 0, ...style
+      }}>
+      <option value="en">EN</option>
+      <option value="uz">UZ</option>
+      <option value="ru">RU</option>
+    </select>
   );
 }
 

@@ -413,6 +413,7 @@ textarea.input { height: auto; padding: 11px 13px; resize: vertical; line-height
 /* Hamburger button — hidden on desktop, shown on mobile */
 .topbar-menu-btn { display: none !important; }
 .pub-nav-hamburger { display: none !important; }
+.pub-lang-mobile { display: none !important; }
 
 @media (max-width: 768px) {
   /* --- Sidebar becomes a fixed overlay --- */
@@ -461,5 +462,6 @@ textarea.input { height: auto; padding: 11px 13px; resize: vertical; line-height
   /* --- Public nav --- */
   .pub-nav-links { display: none !important; }
   .pub-nav-ctas { display: none !important; }
-  .pub-nav-hamburger { display: flex !important; margin-left: auto; }
+  .pub-nav-hamburger { display: flex !important; }
+  .pub-lang-mobile { display: flex !important; align-items: center; margin-left: auto; }
 }
