@@ -253,11 +253,20 @@ const PROTOTYPES = [
   {
     title: "Finport Blog",
     product: "Finport",
-    type: "Internal",
+    type: "External",
     status: "Demo",
     platforms: ["desktop", "mobile"],
     url: "prototypes/finport-blog/index.html",
     description: "Premium fintech editorial blog — moliyaviy savodxonlik platformasi. Hero + search, category grid, Islamic vs conventional banking comparison, 7 interactive calculators (budget, debt, zakat, murabaha, savings), article detail with sticky TOC, glossary, UZ/RU/EN language switch."
+  },
+  {
+    title: "Halal Freight Finance",
+    product: "Concept",
+    type: "External",
+    status: "Demo",
+    platforms: ["desktop"],
+    url: "prototypes/halal-freight/index.html",
+    description: "Shariah-compliant freight invoice financing platform — Wakalah + Qard Hasan structure. Carrier portal (7-step funding wizard, onboarding, request tracking), admin/underwriter console (scoring engine, Shariah compliance, collections, reports), and broker confirmation view. 15 interactive screens, no interest."
   },
 ];
 
