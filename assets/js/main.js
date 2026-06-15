@@ -259,6 +259,15 @@ const PROTOTYPES = [
     url: "prototypes/finport-blog/index.html",
     description: "Premium fintech editorial blog — moliyaviy savodxonlik platformasi. Hero + search, category grid, Islamic vs conventional banking comparison, 7 interactive calculators (budget, debt, zakat, murabaha, savings), article detail with sticky TOC, glossary, UZ/RU/EN language switch."
   },
+  {
+    title: "Halal Freight Finance",
+    product: "Concept",
+    type: "Internal",
+    status: "Demo",
+    platforms: ["desktop"],
+    url: "prototypes/halal-freight/index.html",
+    description: "Shariah-compliant freight factoring platform — carrier portal with 7-step Wakalah funding wizard, AI-powered broker risk scoring, admin underwriting queue, Shariah compliance log, and collections dashboard. Built for US trucking market with USD mock data."
+  },
 ];
 
 /* =========================== I18N ================================== */
