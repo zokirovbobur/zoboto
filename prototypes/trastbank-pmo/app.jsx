@@ -152,10 +152,7 @@ function App() {
                   onFocus={() => { if (!["portfolio", "board", "workload"].includes(route.name)) nav("portfolio"); }} />
               </div>
               <div className="topbar-spacer" />
-              <div className="topbar-meta">
-                <div><b>{t("lastUpdated")}:</b> {DATA.meta.generated}</div>
-                <div>{ALL_P.length} {t("projects")} · {DATA.employees.length} {t("employees")}</div>
-              </div>
+
               <div style={{position:"relative"}}>
                 <button onClick={() => setBellOpen(o => !o)} style={{
                   width:36, height:36, borderRadius:9, background: bellOpen ? "var(--accent-soft)" : "var(--bg)",
