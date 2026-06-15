@@ -161,7 +161,7 @@ function WhyHalal() {
         <div className="grid g-2" style={{ marginTop: 40 }}>
           <Card style={{ borderColor: "var(--green-line)", overflow: "hidden" }}>
             <div style={{ padding: "16px 22px", background: "var(--green-soft)", borderBottom: "1px solid var(--green-line)" }}>
-              <div className="row" style={{ gap: 9 }}><Icon name="shieldCheck" size={18} style={{ color: "var(--green-strong)" }} /><span style={{ fontWeight: 700, color: "var(--green-deep)" }}>Halal Freight Finance</span></div>
+              <div className="row" style={{ gap: 9 }}><Icon name="shieldCheck" size={18} style={{ color: "var(--green-strong)" }} /><span style={{ fontWeight: 700, color: "var(--green-deep)" }}>Tijara</span></div>
             </div>
             <div style={{ padding: "8px 22px 18px" }}>
               {halal.map(t => <div key={t} className="check-row"><div className="check-ico ok"><Icon name="check" size={13} /></div><span className="check-label">{t}</span></div>)}
@@ -252,7 +252,7 @@ function Footer() {
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px 28px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
         <Brand />
         <span className="tiny muted" style={{ marginLeft: "auto", textAlign: "right" }}>
-          © 2026 Halal Freight Finance · Wakalah + Qard Hasan structure · For demonstration only — mock data
+          © 2026 Tijara · Wakalah + Qard Hasan structure · For demonstration only — mock data
         </span>
       </div>
     </footer>
@@ -331,7 +331,7 @@ function Login({ nav, params }) {
             ))}
           </div>
         </div>
-        <div className="tiny" style={{ color: "oklch(0.65 0.02 248)" }}>© 2026 Halal Freight Finance</div>
+        <div className="tiny" style={{ color: "oklch(0.65 0.02 248)" }}>© 2026 Tijara</div>
       </div>
       {/* right role select */}
       <div style={{ display: "grid", placeItems: "center", padding: 40 }}>

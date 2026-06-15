@@ -260,7 +260,7 @@ const PROTOTYPES = [
     description: "Premium fintech editorial blog — moliyaviy savodxonlik platformasi. Hero + search, category grid, Islamic vs conventional banking comparison, 7 interactive calculators (budget, debt, zakat, murabaha, savings), article detail with sticky TOC, glossary, UZ/RU/EN language switch."
   },
   {
-    title: "Halal Freight Finance",
+    title: "Tijara",
     product: "Concept",
     type: "External",
     status: "Demo",

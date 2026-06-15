@@ -1,5 +1,5 @@
 /* ============================================================
-   Halal Freight Finance — Mock data
+   Tijara — Mock data
    ============================================================ */
 window.HFF_DATA = (function () {
   const fmt = (n) => "$" + Number(n).toLocaleString("en-US");

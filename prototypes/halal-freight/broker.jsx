@@ -44,7 +44,7 @@ function BrokerConfirm({ nav, state, setState }) {
               <Badge tone="amber" dot>Action required</Badge>
             </div>
             <p className="lead" style={{ fontSize: 15, maxWidth: 600, marginBottom: 24 }}>
-              <strong>{f.carrier}</strong> submitted an invoice for a completed load to Halal Freight Finance. Please confirm the details below so funds can be administered.
+              <strong>{f.carrier}</strong> submitted an invoice for a completed load to Tijara. Please confirm the details below so funds can be administered.
             </p>
 
             <Card style={{ overflow: "hidden", marginBottom: 18 }}>
@@ -77,10 +77,10 @@ function BrokerConfirm({ nav, state, setState }) {
                 <div style={{ flex: 1 }}>
                   <div className="strong" style={{ color: "var(--green-deep)" }}>Payment instruction</div>
                   <p className="small" style={{ color: "var(--green-deep)", marginTop: 6, lineHeight: 1.55 }}>
-                    Please pay this invoice to the <strong>Halal Freight Finance settlement account</strong>. The carrier has assigned payment to us as their agent (Wakil).
+                    Please pay this invoice to the <strong>Tijara settlement account</strong>. The carrier has assigned payment to us as their agent (Wakil).
                   </p>
                   <div className="grid g-2" style={{ gap: 0, columnGap: 24, marginTop: 10 }}>
-                    <KV k="Account name" v="HFF Settlement LLC" />
+                    <KV k="Account name" v="Tijara Settlement LLC" />
                     <KV k="Routing" v={<span className="mono">021000021</span>} />
                     <KV k="Account" v={<span className="mono">•••• 7730</span>} />
                     <KV k="Reference" v={<span className="mono">{f.id}</span>} />
@@ -123,12 +123,12 @@ function BrokerSuccess({ nav, kind }) {
       <h1 style={{ fontSize: 28, marginTop: 18 }}>{confirmed ? "Invoice confirmed" : "Dispute submitted"}</h1>
       <p className="lead" style={{ margin: "12px auto 0", fontSize: 15, maxWidth: 420 }}>
         {confirmed
-          ? <>Thank you. Please remit <strong>{D.fmt(f.invoice)}</strong> to the Halal Freight Finance settlement account, reference <strong>{f.id}</strong>.</>
+          ? <>Thank you. Please remit <strong>{D.fmt(f.invoice)}</strong> to the Tijara settlement account, reference <strong>{f.id}</strong>.</>
           : <>We've recorded your dispute on invoice <strong>{f.id}</strong>. Our team and the carrier have been notified and will follow up.</>}
       </p>
       {confirmed && (
         <Card pad style={{ margin: "24px 0", textAlign: "left", background: "var(--surface)" }}>
-          <KV k="Account name" v="HFF Settlement LLC" />
+          <KV k="Account name" v="Tijara Settlement LLC" />
           <KV k="Routing" v={<span className="mono">021000021</span>} />
           <KV k="Account" v={<span className="mono">•••• 7730</span>} />
           <KV k="Reference" v={<span className="mono">{f.id}</span>} />

@@ -16,7 +16,7 @@ function Brand({ small }) {
         </svg>
       </div>
       {!small && (
-        <div className="brand-name">Halal Freight Finance
+        <div className="brand-name">Tijara
           <small>Shariah-Compliant Advance</small>
         </div>
       )}
