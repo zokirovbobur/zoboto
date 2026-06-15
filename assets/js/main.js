@@ -266,7 +266,7 @@ const PROTOTYPES = [
     status: "Demo",
     platforms: ["desktop"],
     url: "prototypes/halal-freight/index.html",
-    description: "Shariah-compliant freight invoice financing platform — Wakalah + Qard Hasan structure. Carrier portal (7-step funding wizard, onboarding, request tracking), admin/underwriter console (scoring engine, Shariah compliance, collections, reports), and broker confirmation view. 15 interactive screens, no interest."
+    description: "Shariah-compliant freight factoring platform — carrier portal with 7-step Wakalah funding wizard, AI-powered broker risk scoring, admin underwriting queue, Shariah compliance log, and collections dashboard. Built for US trucking market with USD mock data."
   },
 ];
 

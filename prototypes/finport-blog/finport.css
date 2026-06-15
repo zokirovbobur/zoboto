@@ -236,7 +236,7 @@ ul{margin:0;padding:0;list-style:none}
   .cmp-c::before{content:"Odatiy: ";color:var(--faint);font-weight:600}
   .cmp-i{background:transparent;padding-bottom:14px!important}
   .ftr-grid{grid-template-columns:1fr 1fr!important}
-  .news-grid{padding:30px 26px!important;gap:26px!important}
+  .news-grid{grid-template-columns:1fr!important;padding:30px 26px!important;gap:26px!important}
   .path-side{padding:28px 24px!important}
 }
 
@@ -256,6 +256,27 @@ ul{margin:0;padding:0;list-style:none}
   /* prose sizes down a touch for comfortable reading */
   .prose{font-size:17px}
   .prose h2{font-size:23px;margin:34px 0 14px}
+
+  /* hero CTA buttons: each on its own row, full width */
+  .hero-btns{flex-direction:column!important}
+  .hero-btns .btn{width:100%;justify-content:center}
+
+  /* hero search bar: don't overflow narrow screen */
+  .hero-search{max-width:100%!important}
+
+  /* featured compare card: fix grid overflow + reduce cell size */
+  .feat-cmp .feat-head,
+  .feat-cmp .feat-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+  .feat-cmp .feat-cell{
+    min-width:0;
+    padding:9px 11px!important;
+    font-size:12.5px!important;
+    word-break:break-word;
+    overflow-wrap:break-word;
+  }
+
+  /* learning path: side panel stacks above steps */
+  .path-side{min-width:0}
 }
 
 /* ---- very small phones (≤380px): avoid header overflow ---- */
