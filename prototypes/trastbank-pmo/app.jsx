@@ -2,12 +2,18 @@
 const { useState: uSA, useEffect: uEA, useRef: uRA } = React;
 
 const SYNC_UPDATES = [
-  { type: "warn", date: "2026-06-15", text_uz: "⚠️ Visa Direct: data.js dagi status «Стоппер» bo'lsa ham, sheet va git da «В продакшне» — qo'lda tekshirish tavsiya etiladi", text_ru: "⚠️ Visa Direct: статус в data.js «Стоппер», хотя в sheet и git — «В продакшне» — рекомендуется проверить вручную" },
-  { type: "new", date: "2026-06-15", text_uz: "Yangi: Banking Middleware, ABS & Islamic Banking (Trastbank | Raqamli)", text_ru: "Добавлено: Banking Middleware, ABS & Islamic Banking (Trastbank | Raqamli)" },
-  { type: "new", date: "2026-06-15", text_uz: "Yangi: Sistema analizi uchun Prometheus va Grafana integratsiyasi (DBO)", text_ru: "Добавлено: Prometheus va Grafana для анализа системы (DBO)" },
-  { type: "new", date: "2026-06-15", text_uz: "Yangi: Camera card scan, Humo moment card, Tez QR (Trastpay 2.0)", text_ru: "Добавлено: Camera card scan, Humo moment card, Tez QR (Trastpay 2.0)" },
-  { type: "info", date: "2026-06-15", text_uz: "«interests - Trastpay» tab olib tashlandi — 18 ta qiziqish arxivlandi", text_ru: "Вкладка «interests - Trastpay» удалена — 18 интересов архивировано" },
-  { type: "info", date: "2026-06-15", text_uz: "Tab nomlari yangilandi: Trastpay 2.0, DBO, Trastbank | Raqamli", text_ru: "Обновлены названия вкладок: Trastpay 2.0, DBO, Trastbank | Raqamli" },
+  { type: "warn", date: "2026-06-15", text_uz: "⚠️ P054 Интеграция с ОФД — Raqamli Bozor: status «В разработке» dan «Discovery» ga tushdi — ehtimol regressiya, qo'lda tekshiring", text_ru: "⚠️ P054 Интеграция с ОФД — Raqamli Bozor: статус регрессировал «В разработке» → «Discovery» — возможна ошибка в Sheet, проверьте вручную" },
+  { type: "warn", date: "2026-06-15", text_uz: "⚠️ P055 Биометрическая верификация ЦБ (Liveness): Sheet da «Blocker» statusi — norm mapping da yo'q, mavjud norm «progress» saqlab qolindi", text_ru: "⚠️ P055 Биометрическая верификация ЦБ (Liveness): статус «Blocker» в Sheet — нет в norm-маппинге, норма «progress» сохранена" },
+  { type: "update", date: "2026-06-15", text_uz: "Status yangilandi: Синхронизация статусов платежей → In Prod", text_ru: "Обновлён статус: Синхронизация статусов платежей → In Prod" },
+  { type: "update", date: "2026-06-15", text_uz: "Status yangilandi: Цифровой рынок — MVP (Raqamli Bozor) → Done", text_ru: "Обновлён статус: Цифровой рынок — MVP (Raqamli Bozor) → Done" },
+  { type: "update", date: "2026-06-15", text_uz: "Status yangilandi: Онлайн-заявка на открытие расчётного счёта → Done", text_ru: "Обновлён статус: Онлайн-заявка на открытие расчётного счёта → Done" },
+  { type: "update", date: "2026-06-15", text_uz: "Status yangilandi: Антифрод-система Group IB (ДБО) → In Process", text_ru: "Обновлён статус: Антифрод-система Group IB (ДБО) → In Process" },
+  { type: "update", date: "2026-06-15", text_uz: "Status yangilandi: Интеграция с ОФД — Raqamli Bozor → Discovery", text_ru: "Обновлён статус: Интеграция с ОФД — Raqamli Bozor → Discovery" },
+  { type: "update", date: "2026-06-15", text_uz: "Status yangilandi: Биометрическая верификация ЦБ (Liveness) → Blocker", text_ru: "Обновлён статус: Биометрическая верификация ЦБ (Liveness) → Blocker" },
+  { type: "update", date: "2026-06-15", text_uz: "Status yangilandi: Синхронизация удалённых платежей iABS с ДБО → Discovery", text_ru: "Обновлён статус: Синхронизация удалённых платежей iABS с ДБО → Discovery" },
+  { type: "update", date: "2026-06-15", text_uz: "Status yangilandi: Выплата зарплаты на счета в других банках → Discovery", text_ru: "Обновлён статус: Выплата зарплаты на счета в других банках → Discovery" },
+  { type: "update", date: "2026-06-15", text_uz: "Status yangilandi: Добавление новых арендных объектов FoodCity → Discovery", text_ru: "Обновлён статус: Добавление новых арендных объектов FoodCity → Discovery" },
+  { type: "update", date: "2026-06-15", text_uz: "Status yangilandi: Новый дизайн-прототип ДБО → Discovery", text_ru: "Обновлён статус: Новый дизайн-прототип ДБО → Discovery" },
 ];
 
 function BellPanel({ lang, onClose }) {
