@@ -313,7 +313,7 @@ function Topbar({ title, sub, role, user, onSwitch, right, onMenu }) {
       </button>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontFamily: "var(--display)", fontWeight: 600, fontSize: 17, letterSpacing: "-0.02em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{title}</div>
-        {sub && <div className="tiny muted">{sub}</div>}
+        {sub && <div className="tiny muted topbar-sub">{sub}</div>}
       </div>
       {right}
       <LangSwitcher />

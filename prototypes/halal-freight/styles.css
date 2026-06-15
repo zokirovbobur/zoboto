@@ -444,6 +444,7 @@ textarea.input { height: auto; padding: 11px 13px; resize: vertical; line-height
   .topbar-switch-label { display: none; }
   .topbar-user-text { display: none; }
   .topbar-divider { display: none; }
+  .topbar-sub { display: none; }
 
   /* --- Portal body --- */
   .portal-body { padding: 18px 16px 56px; }

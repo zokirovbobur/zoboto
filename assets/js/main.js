@@ -264,7 +264,7 @@ const PROTOTYPES = [
     product: "Concept",
     type: "External",
     status: "Demo",
-    platforms: ["desktop"],
+    platforms: ["desktop", "mobile"],
     url: "prototypes/halal-freight/index.html",
     description: "Shariah-compliant freight factoring platform — carrier portal with 7-step Wakalah funding wizard, AI-powered broker risk scoring, admin underwriting queue, Shariah compliance log, and collections dashboard. Built for US trucking market with USD mock data."
   },
