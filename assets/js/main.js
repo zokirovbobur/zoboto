@@ -253,7 +253,7 @@ const PROTOTYPES = [
   {
     title: "Finport Blog",
     product: "Finport",
-    type: "Internal",
+    type: "External",
     status: "Demo",
     platforms: ["desktop", "mobile"],
     url: "prototypes/finport-blog/index.html",
@@ -262,7 +262,7 @@ const PROTOTYPES = [
   {
     title: "Halal Freight Finance",
     product: "Concept",
-    type: "Internal",
+    type: "External",
     status: "Demo",
     platforms: ["desktop"],
     url: "prototypes/halal-freight/index.html",
