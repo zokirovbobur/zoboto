@@ -186,12 +186,12 @@ function prodShort(p) {
 // ---- Jira integration ----
 const JIRA_BASE = "https://test-tb.atlassian.net";
 const JIRA_BOARDS = {
-  "Trastpay":    { key: "SL",  url: JIRA_BASE + "/jira/software/projects/SL/boards" },
-  "ДБО":         { key: "KT",  url: JIRA_BASE + "/jira/software/projects/KT/boards" },
-  "Food City":   { key: "FC",  url: JIRA_BASE + "/jira/software/projects/FC/boards" },
-  "Middleware":  { key: "MW",  url: JIRA_BASE + "/jira/software/projects/MW/boards" },
-  "ABS":         { key: "ABS", url: JIRA_BASE + "/jira/software/projects/ABS/boards" },
-  "AI products": { key: "AI",  url: JIRA_BASE + "/jira/software/projects/AI/boards" },
+  "Trastpay":    { key: "SL",  color: "#2563EB", icon: "M3 10h18M7 15h.01M11 15h2M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z", url: JIRA_BASE + "/jira/software/projects/SL/boards" },
+  "ДБО":         { key: "KT",  color: "#138A5E", icon: "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2zM9 22V12h6v10", url: JIRA_BASE + "/jira/software/projects/KT/boards" },
+  "Food City":   { key: "FC",  color: "#D97706", icon: "M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0", url: JIRA_BASE + "/jira/software/projects/FC/boards" },
+  "Middleware":  { key: "MW",  color: "#7C3AED", icon: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5", url: JIRA_BASE + "/jira/software/projects/MW/boards" },
+  "ABS":         { key: "ABS", color: "#0E7490", icon: "M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01", url: JIRA_BASE + "/jira/software/projects/ABS/boards" },
+  "AI products": { key: "AI",  color: "#9333EA", icon: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z", url: JIRA_BASE + "/jira/software/projects/AI/boards" },
 };
 
 function JiraLink({ epicKey, product, style: extStyle }) {

@@ -22,6 +22,16 @@ function ProductCard({ product, projects }) {
     <div className="card" style={{ overflow: "hidden" }}>
       <div style={{ padding: "16px 20px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }}
            onClick={() => setOpen(o => !o)}>
+        {board && board.icon && (
+          <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center",
+                         width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+                         background: board.color + "18" }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke={board.color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d={board.icon} />
+            </svg>
+          </span>
+        )}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <span style={{ fontWeight: 700, fontSize: 15, color: "var(--ink)" }}>{product}</span>
@@ -29,8 +39,9 @@ function ProductCard({ product, projects }) {
               <a href={board.url} target="_blank" rel="noopener noreferrer"
                  onClick={e => e.stopPropagation()}
                  title={"Jira: " + board.key}
-                 style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "#E7EEFD",
-                          color: "#2563EB", borderRadius: 6, padding: "2px 8px", fontSize: 11,
+                 style={{ display: "inline-flex", alignItems: "center", gap: 4,
+                          background: (board.color || "#2563EB") + "18",
+                          color: board.color || "#2563EB", borderRadius: 6, padding: "2px 8px", fontSize: 11,
                           fontWeight: 600, textDecoration: "none", whiteSpace: "nowrap" }}>
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
