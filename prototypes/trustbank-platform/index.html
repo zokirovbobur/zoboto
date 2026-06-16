@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--accent);color:#fff}
+  input,select,textarea,button{font-family:inherit}
+  @keyframes tbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  @keyframes tbRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes tbSpin{to{transform:rotate(360deg)}}
+  .tb-scroll::-webkit-scrollbar{height:8px;width:8px}
+  .tb-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px}
+</style>
+</helmet>
+<div style="{{ shellStyle }}" class="tb-scroll">
+
+  <!-- ============ TOP UTILITY BAR ============ -->
+  <div style="background:var(--ink);color:var(--inkText)">
+    <div style="max-width:1280px;margin:0 auto;padding:0 28px;height:42px;display:flex;align-items:center;justify-content:space-between;font-size:13px">
+      <div style="display:flex;align-items:center;gap:22px;color:rgba(255,255,255,.62)">
+        <span style="display:flex;align-items:center;gap:7px"><span style="color:var(--accent);font-weight:700">1287</span> · Call-markaz 24/7</span>
+        <span style="opacity:.55">Ish tartibi: Du–Ju 09:00–18:00</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:18px">
+        <div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.07);border-radius:9px;padding:3px">
+          <sc-for list="{{ langs }}" as="lng" hint-placeholder-count="3">
+            <button onClick="{{ lng.pick }}" style="{{ lng.style }}">{{ lng.label }}</button>
+          </sc-for>
+        </div>
+        <button onClick="{{ toggleTheme }}" style="display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:none;color:var(--inkText);padding:6px 11px;border-radius:9px;cursor:pointer;font-size:12.5px;font-weight:600">
+          <span style="font-size:14px">{{ themeIcon }}</span>{{ themeLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MAIN NAV ============ -->
+  <header style="position:sticky;top:0;z-index:50;background:var(--surfaceGlass);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)">
+    <div style="max-width:1280px;margin:0 auto;padding:0 28px;height:74px;display:flex;align-items:center;gap:34px">
+      <button onClick="{{ goHome }}" style="display:flex;align-items:center;gap:12px;background:none;border:none;cursor:pointer;padding:0">
+        <span style="width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px -8px var(--accent);position:relative">
+          <span style="width:15px;height:15px;border:3px solid #fff;border-radius:50%;border-right-color:transparent;transform:rotate(-45deg)"></span>
+        </span>
+        <span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1">
+          <span style="font-family:'Space Grotesk';font-weight:700;font-size:19px;color:var(--text);letter-spacing:-.3px">Trustbank</span>
+          <span style="font-size:10px;color:var(--muted);letter-spacing:1.5px;font-weight:600;margin-top:3px">XAB · 1994</span>
+        </span>
+      </button>
+
+      <nav style="display:flex;align-items:center;gap:4px;margin-left:8px">
+        <sc-for list="{{ navItems }}" as="nav" hint-placeholder-count="5">
+          <button onClick="{{ nav.go }}" style="{{ nav.style }}">{{ nav.label }}</button>
+        </sc-for>
+      </nav>
+
+      <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+        <button onClick="{{ goCabinet }}" style="display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:10px 16px;border-radius:11px;font-weight:600;font-size:14px;cursor:pointer">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></span>{{ S.nav.login }}
+        </button>
+        <button onClick="{{ goCredit }}" style="background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:11px 20px;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 10px 24px -10px var(--accent)">{{ S.nav.apply }}</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <main>
+    <!-- HERO -->
+    <section style="position:relative;overflow:hidden;background:var(--ink)">
+      <div style="position:absolute;inset:0;background:radial-gradient(900px 500px at 78% 12%, rgba(31,190,147,.22), transparent 60%),radial-gradient(700px 600px at 10% 110%, rgba(15,163,127,.16), transparent 55%)"></div>
+      <div style="max-width:1280px;margin:0 auto;padding:78px 28px 92px;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;position:relative">
+        <div>
+          <span style="display:inline-flex;align-items:center;gap:9px;background:rgba(31,190,147,.14);border:1px solid rgba(31,190,147,.3);color:#5fe6bd;padding:8px 15px;border-radius:30px;font-size:13px;font-weight:600;margin-bottom:26px">
+            <span style="width:7px;height:7px;border-radius:50%;background:#1FBE93;box-shadow:0 0 10px #1FBE93"></span>{{ S.hero.badge }}
+          </span>
+          <h1 style="font-family:'Space Grotesk';font-size:60px;line-height:1.04;letter-spacing:-1.5px;color:#fff;font-weight:700;margin-bottom:22px;text-wrap:balance">{{ S.hero.title }}</h1>
+          <p style="font-size:19px;line-height:1.55;color:rgba(255,255,255,.66);max-width:520px;margin-bottom:34px">{{ S.hero.subtitle }}</p>
+          <div style="display:flex;gap:14px;margin-bottom:46px">
+            <button onClick="{{ goCredit }}" style="background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:16px 30px;border-radius:13px;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 16px 34px -12px var(--accent)">{{ S.hero.cta1 }}</button>
+            <button onClick="{{ goCabinet }}" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#fff;padding:16px 28px;border-radius:13px;font-weight:600;font-size:16px;cursor:pointer">{{ S.hero.cta2 }}</button>
+          </div>
+          <div style="display:flex;gap:40px">
+            <sc-for list="{{ heroStats }}" as="st" hint-placeholder-count="3">
+              <div>
+                <div style="font-family:'Space Grotesk';font-size:30px;font-weight:700;color:#fff">{{ st.value }}</div>
+                <div style="font-size:13.5px;color:rgba(255,255,255,.5);margin-top:3px">{{ st.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Hero card visual -->
+        <div style="position:relative;height:480px">
+          <div style="position:absolute;top:42px;right:18px;width:340px;height:214px;border-radius:22px;background:linear-gradient(135deg,#0d8f6e,#0b6f57);box-shadow:0 40px 80px -24px rgba(0,0,0,.6);padding:26px;color:#fff;animation:tbFloat 7s ease-in-out infinite;transform:rotate(4deg)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div style="font-family:'Space Grotesk';font-weight:700;font-size:17px;letter-spacing:.5px">Trustbank</div>
+              <div style="font-size:12px;opacity:.8;letter-spacing:2px">WORLD ELITE</div>
+            </div>
+            <div style="width:46px;height:34px;border-radius:7px;background:linear-gradient(135deg,#f4d58a,#caa24e);margin-top:30px"></div>
+            <div style="font-family:'Space Grotesk';letter-spacing:3px;font-size:18px;margin-top:18px">8600 •••• •••• 4291</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:12px">
+              <span style="opacity:.75">UMAR SOBIROV</span>
+              <span style="font-style:italic;font-weight:700;font-size:16px;letter-spacing:-.5px">Mastercard</span>
+            </div>
+          </div>
+          <div style="position:absolute;top:184px;left:6px;width:248px;border-radius:20px;background:var(--surface);box-shadow:0 30px 70px -24px rgba(0,0,0,.5);padding:20px;animation:tbFloat 7s ease-in-out infinite;animation-delay:.8s">
+            <div style="font-size:12.5px;color:var(--muted);font-weight:600">Jami balans</div>
+            <div style="font-family:'Space Grotesk';font-size:27px;font-weight:700;color:var(--text);margin-top:5px">42 850 000 <span style="font-size:15px;color:var(--muted)">so'm</span></div>
+            <div style="height:1px;background:var(--border);margin:16px 0"></div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="width:38px;height:38px;border-radius:11px;background:var(--accentSoft);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:800;font-size:18px">↑</span>
+              <div style="flex:1">
+                <div style="font-size:13.5px;font-weight:600;color:var(--text)">Depozit foizi</div>
+                <div style="font-size:12px;color:var(--muted)">Online-Universal · 20%</div>
+              </div>
+              <div style="color:var(--accent);font-weight:700;font-size:14px">+8.4%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="max-width:1280px;margin:0 auto;padding:0 28px 56px;position:relative">
+        <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:center;opacity:.55;color:#fff;font-size:13px;font-weight:600">
+          <span style="font-size:12px;letter-spacing:1.5px;opacity:.7">ISHONCH · 1994 — {{ year }}</span>
+          <span>Visa</span><span>Mastercard</span><span>UzCard</span><span>HUMO</span><span style="color:#5fe6bd">uzA++ reyting</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICK SERVICES -->
+    <section style="max-width:1280px;margin:0 auto;padding:64px 28px 12px">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px">
+        <sc-for list="{{ quickServices }}" as="q" hint-placeholder-count="4">
+          <button onClick="{{ q.go }}" style="text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;cursor:pointer;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-4px);box-shadow:0 20px 40px -22px var(--shadowStrong)">
+            <span style="width:48px;height:48px;border-radius:13px;background:var(--accentSoft);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:22px;margin-bottom:16px">{{ q.icon }}</span>
+            <div style="font-weight:700;font-size:16px;color:var(--text);margin-bottom:5px">{{ q.title }}</div>
+            <div style="font-size:13.5px;color:var(--muted);line-height:1.45">{{ q.desc }}</div>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- DEPOSITS -->
+    <section style="max-width:1280px;margin:0 auto;padding:64px 28px">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:30px">
+        <div>
+          <div style="color:var(--accent);font-weight:700;font-size:13.5px;letter-spacing:1px;margin-bottom:8px">{{ S.deposits.kicker }}</div>
+          <h2 style="font-family:'Space Grotesk';font-size:36px;color:var(--text);font-weight:700;letter-spacing:-.8px">{{ S.deposits.title }}</h2>
+        </div>
+        <div style="font-size:14px;color:var(--muted);max-width:340px;text-align:right">{{ S.deposits.note }}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <sc-for list="{{ deposits }}" as="d" hint-placeholder-count="3">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;right:0;width:130px;height:130px;background:radial-gradient(circle at 70% 30%,var(--accentSoft),transparent 70%)"></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
+              <div style="font-weight:700;font-size:18px;color:var(--text)">{{ d.name }}</div>
+              <span style="{{ d.badgeStyle }}">{{ d.badge }}</span>
+            </div>
+            <div style="display:flex;align-items:flex-end;gap:6px;margin:22px 0 4px">
+              <span style="font-family:'Space Grotesk';font-size:46px;font-weight:700;color:var(--accent);line-height:1">{{ d.rate }}</span>
+              <span style="font-size:18px;color:var(--accent);font-weight:700;margin-bottom:8px">%</span>
+              <span style="font-size:13.5px;color:var(--muted);margin-bottom:11px;margin-left:4px">yillik</span>
+            </div>
+            <div style="font-size:13.5px;color:var(--muted);margin-bottom:20px">Muddat: {{ d.term }}</div>
+            <button onClick="{{ d.go }}" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:11px;font-weight:600;font-size:14px;cursor:pointer">{{ S.common.details }}</button>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- CARDS strip -->
+    <section style="background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+      <div style="max-width:1280px;margin:0 auto;padding:60px 28px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px">
+          <h2 style="font-family:'Space Grotesk';font-size:36px;color:var(--text);font-weight:700;letter-spacing:-.8px">{{ S.cards.title }}</h2>
+          <button onClick="{{ goCredit }}" style="background:none;border:none;color:var(--accent);font-weight:700;font-size:14.5px;cursor:pointer">{{ S.cards.all }} →</button>
+        </div>
+        <div style="display:flex;gap:18px;overflow-x:auto;padding-bottom:8px" class="tb-scroll">
+          <sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
+            <div style="min-width:262px;flex:1">
+              <div style="{{ c.faceStyle }}">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                  <span style="font-family:'Space Grotesk';font-weight:700;font-size:15px;color:#fff;opacity:.92">Trustbank</span>
+                  <span style="font-size:11px;color:#fff;opacity:.7;letter-spacing:1.5px">{{ c.tier }}</span>
+                </div>
+                <div style="width:40px;height:30px;border-radius:6px;background:linear-gradient(135deg,#f4d58a,#caa24e);margin-top:24px"></div>
+                <div style="margin-top:auto;color:#fff;font-family:'Space Grotesk';letter-spacing:2px;font-size:14px;opacity:.85">•••• {{ c.last }}</div>
+              </div>
+              <div style="padding:14px 4px 0">
+                <div style="font-weight:700;font-size:15px;color:var(--text)">{{ c.name }}</div>
+                <div style="font-size:13px;color:var(--muted);margin-top:3px">{{ c.sub }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXCHANGE + NEWS -->
+    <section style="max-width:1280px;margin:0 auto;padding:64px 28px;display:grid;grid-template-columns:1fr 1fr;gap:36px">
+      <!-- rates -->
+      <div>
+        <h2 style="font-family:'Space Grotesk';font-size:28px;color:var(--text);font-weight:700;letter-spacing:-.6px;margin-bottom:6px">{{ S.rates.title }}</h2>
+        <div style="font-size:13.5px;color:var(--muted);margin-bottom:20px">{{ S.rates.note }} · {{ today }}</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;padding:14px 20px;background:var(--surface2);font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.4px">
+            <span>VALYUTA</span><span style="text-align:right">OLISH</span><span style="text-align:right">SOTISH</span><span style="text-align:right">MB</span>
+          </div>
+          <sc-for list="{{ rates }}" as="r" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;padding:14px 20px;border-top:1px solid var(--border);font-size:14.5px;align-items:center">
+              <span style="display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text)"><span style="font-size:18px">{{ r.flag }}</span>{{ r.cur }}</span>
+              <span style="text-align:right;color:var(--text);font-weight:600;font-variant-numeric:tabular-nums">{{ r.buy }}</span>
+              <span style="text-align:right;color:var(--text);font-weight:600;font-variant-numeric:tabular-nums">{{ r.sell }}</span>
+              <span style="text-align:right;color:var(--muted);font-variant-numeric:tabular-nums">{{ r.cb }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <!-- news -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <h2 style="font-family:'Space Grotesk';font-size:28px;color:var(--text);font-weight:700;letter-spacing:-.6px">{{ S.news.title }}</h2>
+          <button style="background:none;border:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer">{{ S.news.all }} →</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ news }}" as="n" hint-placeholder-count="4">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px;display:flex;gap:16px;align-items:center;cursor:pointer">
+              <div style="text-align:center;min-width:52px">
+                <div style="font-family:'Space Grotesk';font-size:24px;font-weight:700;color:var(--accent);line-height:1">{{ n.day }}</div>
+                <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">{{ n.mon }}</div>
+              </div>
+              <div style="width:1px;align-self:stretch;background:var(--border)"></div>
+              <div style="flex:1">
+                <span style="{{ n.tagStyle }}">{{ n.tag }}</span>
+                <div style="font-size:14.5px;font-weight:600;color:var(--text);line-height:1.4;margin-top:7px">{{ n.title }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA app -->
+    <section style="max-width:1280px;margin:0 auto;padding:20px 28px 80px">
+      <div style="background:var(--ink);border-radius:26px;padding:54px 56px;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;align-items:center;position:relative;overflow:hidden">
+        <div style="position:absolute;inset:0;background:radial-gradient(600px 400px at 90% 20%,rgba(31,190,147,.2),transparent 60%)"></div>
+        <div style="position:relative">
+          <h2 style="font-family:'Space Grotesk';font-size:38px;color:#fff;font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:16px">{{ S.app.title }}</h2>
+          <p style="font-size:17px;color:rgba(255,255,255,.66);max-width:440px;margin-bottom:28px;line-height:1.55">{{ S.app.subtitle }}</p>
+          <div style="display:flex;gap:13px">
+            <div style="display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);padding:12px 20px;border-radius:13px;cursor:pointer"><span style="font-size:22px"></span><div><div style="font-size:11px;color:rgba(255,255,255,.6)">App Store</div><div style="font-size:14px;color:#fff;font-weight:700">Trastpay</div></div></div>
+            <div style="display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);padding:12px 20px;border-radius:13px;cursor:pointer"><span style="font-size:22px">▶</span><div><div style="font-size:11px;color:rgba(255,255,255,.6)">Google Play</div><div style="font-size:14px;color:#fff;font-weight:700">Trastpay</div></div></div>
+          </div>
+        </div>
+        <div style="position:relative;display:flex;justify-content:center">
+          <div style="width:200px;height:300px;border-radius:30px;background:linear-gradient(160deg,#10201b,#0b6f57);border:6px solid rgba(255,255,255,.1);padding:18px;display:flex;flex-direction:column;animation:tbFloat 6s ease-in-out infinite">
+            <div style="font-size:12px;color:rgba(255,255,255,.6)">Salom, Umar 👋</div>
+            <div style="background:rgba(255,255,255,.1);border-radius:14px;padding:14px;margin-top:14px">
+              <div style="font-size:11px;color:rgba(255,255,255,.6)">Asosiy karta</div>
+              <div style="font-family:'Space Grotesk';font-size:20px;color:#fff;font-weight:700;margin-top:4px">12 480 000</div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <div style="flex:1;background:rgba(31,190,147,.3);border-radius:11px;height:54px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px">↑</div>
+              <div style="flex:1;background:rgba(255,255,255,.08);border-radius:11px;height:54px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px">⇄</div>
+              <div style="flex:1;background:rgba(255,255,255,.08);border-radius:11px;height:54px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px">+</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ============ CREDIT + CALCULATOR ============ -->
+  <sc-if value="{{ isCredit }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:1280px;margin:0 auto;padding:54px 28px 90px">
+    <div style="margin-bottom:38px">
+      <div style="color:var(--accent);font-weight:700;font-size:13.5px;letter-spacing:1px;margin-bottom:10px">{{ S.credit.kicker }}</div>
+      <h1 style="font-family:'Space Grotesk';font-size:44px;color:var(--text);font-weight:700;letter-spacing:-1.2px;max-width:680px;line-height:1.08">{{ S.credit.title }}</h1>
+    </div>
+
+    <!-- credit type tabs -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px">
+      <sc-for list="{{ creditTypes }}" as="ct" hint-placeholder-count="4">
+        <button onClick="{{ ct.pick }}" style="{{ ct.style }}">
+          <span style="font-size:18px">{{ ct.icon }}</span>
+          <div style="text-align:left">
+            <div style="font-weight:700;font-size:14.5px">{{ ct.name }}</div>
+            <div style="font-size:12px;opacity:.7">{{ ct.rateLabel }}</div>
+          </div>
+        </button>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:start">
+      <!-- calculator controls -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:32px">
+        <h3 style="font-family:'Space Grotesk';font-size:22px;color:var(--text);font-weight:700;margin-bottom:4px">{{ S.credit.calcTitle }}</h3>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:28px">{{ activeCredit.name }} · {{ activeCredit.rateLabel }}</p>
+
+        <!-- amount -->
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px">
+          <span style="font-size:14px;font-weight:600;color:var(--text)">{{ S.credit.amount }}</span>
+          <span style="font-family:'Space Grotesk';font-size:24px;font-weight:700;color:var(--accent)">{{ calc.amountFmt }} <span style="font-size:14px;color:var(--muted)">so'm</span></span>
+        </div>
+        <input type="range" min="{{ calc.amountMin }}" max="{{ calc.amountMax }}" step="1000000" value="{{ calc.amount }}" onInput="{{ setAmount }}" style="{{ sliderStyle }}">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:8px 0 26px">
+          <span>{{ calc.amountMinFmt }}</span><span>{{ calc.amountMaxFmt }}</span>
+        </div>
+
+        <!-- term -->
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px">
+          <span style="font-size:14px;font-weight:600;color:var(--text)">{{ S.credit.term }}</span>
+          <span style="font-family:'Space Grotesk';font-size:24px;font-weight:700;color:var(--accent)">{{ calc.term }} <span style="font-size:14px;color:var(--muted)">oy</span></span>
+        </div>
+        <input type="range" min="6" max="{{ calc.termMax }}" step="1" value="{{ calc.term }}" onInput="{{ setTerm }}" style="{{ sliderStyle }}">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:8px 0 26px">
+          <span>6 oy</span><span>{{ calc.termMax }} oy</span>
+        </div>
+
+        <!-- rate (fixed display) -->
+        <div style="display:flex;gap:14px;background:var(--surface2);border-radius:14px;padding:18px 20px">
+          <div style="flex:1">
+            <div style="font-size:12.5px;color:var(--muted);margin-bottom:4px">{{ S.credit.rate }}</div>
+            <div style="font-family:'Space Grotesk';font-size:22px;font-weight:700;color:var(--text)">{{ activeCredit.rate }}%</div>
+          </div>
+          <div style="width:1px;background:var(--border)"></div>
+          <div style="flex:1.4">
+            <div style="font-size:12.5px;color:var(--muted);margin-bottom:4px">{{ S.credit.method }}</div>
+            <div style="font-size:14.5px;font-weight:600;color:var(--text);margin-top:4px">{{ S.credit.annuity }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- result -->
+      <div style="background:var(--ink);border-radius:24px;padding:32px;color:#fff;position:relative;overflow:hidden">
+        <div style="position:absolute;inset:0;background:radial-gradient(500px 300px at 90% 0%,rgba(31,190,147,.22),transparent 60%)"></div>
+        <div style="position:relative">
+          <div style="font-size:13.5px;color:rgba(255,255,255,.6);margin-bottom:8px">{{ S.credit.monthly }}</div>
+          <div style="font-family:'Space Grotesk';font-size:42px;font-weight:700;letter-spacing:-1px;line-height:1">{{ calc.monthlyFmt }}</div>
+          <div style="font-size:14px;color:rgba(255,255,255,.6);margin-top:4px">so'm / oy</div>
+
+          <div style="height:1px;background:rgba(255,255,255,.12);margin:26px 0"></div>
+
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;justify-content:space-between;font-size:14.5px"><span style="color:rgba(255,255,255,.62)">{{ S.credit.principal }}</span><span style="font-weight:700;font-variant-numeric:tabular-nums">{{ calc.amountFmt }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:14.5px"><span style="color:rgba(255,255,255,.62)">{{ S.credit.overpay }}</span><span style="font-weight:700;color:#5fe6bd;font-variant-numeric:tabular-nums">{{ calc.overpayFmt }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:14.5px"><span style="color:rgba(255,255,255,.62)">{{ S.credit.total }}</span><span style="font-weight:700;font-variant-numeric:tabular-nums">{{ calc.totalFmt }}</span></div>
+          </div>
+
+          <!-- principal vs overpay bar -->
+          <div style="margin:24px 0 6px;height:12px;border-radius:8px;overflow:hidden;display:flex;background:rgba(255,255,255,.1)">
+            <div style="height:100%;background:linear-gradient(90deg,#1FBE93,#0d8f6e);width:{{ calc.principalPct }}%"></div>
+            <div style="height:100%;background:rgba(255,255,255,.28);width:{{ calc.overpayPct }}%"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.55)">
+            <span>Asosiy qarz {{ calc.principalPct }}%</span><span>Ortiqcha to'lov {{ calc.overpayPct }}%</span>
+          </div>
+
+          <button onClick="{{ startWizard }}" style="width:100%;margin-top:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:16px;border-radius:13px;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 16px 30px -14px var(--accent)">{{ S.credit.applyNow }}</button>
+          <div style="text-align:center;font-size:12.5px;color:rgba(255,255,255,.5);margin-top:12px">{{ S.credit.disclaimer }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- amortization preview -->
+    <div style="margin-top:28px;background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:30px">
+      <h3 style="font-family:'Space Grotesk';font-size:20px;color:var(--text);font-weight:700;margin-bottom:20px">{{ S.credit.schedule }}</h3>
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:8px;align-items:end;height:140px;margin-bottom:20px">
+        <sc-for list="{{ scheduleBars }}" as="b" hint-placeholder-count="12">
+          <div style="display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:2px" title="{{ b.label }}">
+            <div style="background:rgba(120,140,134,.32);border-radius:3px 3px 0 0;height:{{ b.interestH }}%"></div>
+            <div style="background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:0 0 3px 3px;height:{{ b.principalH }}%"></div>
+            <div style="text-align:center;font-size:10px;color:var(--muted);margin-top:4px">{{ b.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:24px;font-size:13px;color:var(--muted)">
+        <span style="display:flex;align-items:center;gap:7px"><span style="width:11px;height:11px;border-radius:3px;background:var(--accent)"></span>Asosiy qarz</span>
+        <span style="display:flex;align-items:center;gap:7px"><span style="width:11px;height:11px;border-radius:3px;background:rgba(120,140,134,.4)"></span>Foiz to'lovi</span>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ============ WIZARD ============ -->
+  <sc-if value="{{ isWizard }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:880px;margin:0 auto;padding:48px 28px 90px">
+    <button onClick="{{ goCredit }}" style="background:none;border:none;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer;margin-bottom:24px">← {{ S.wizard.back }}</button>
+
+    <!-- stepper -->
+    <div style="display:flex;align-items:center;margin-bottom:38px">
+      <sc-for list="{{ wizardSteps }}" as="ws" hint-placeholder-count="5">
+        <div style="display:flex;align-items:center;flex:{{ ws.flex }}">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;min-width:46px">
+            <div style="{{ ws.dotStyle }}">{{ ws.mark }}</div>
+            <div style="{{ ws.labelStyle }}">{{ ws.label }}</div>
+          </div>
+          <sc-if value="{{ ws.hasLine }}" hint-placeholder-val="{{ true }}">
+            <div style="{{ ws.lineStyle }}"></div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:38px">
+      <!-- STEP 1 -->
+      <sc-if value="{{ wizStep1 }}" hint-placeholder-val="{{ true }}">
+        <h2 style="font-family:'Space Grotesk';font-size:26px;color:var(--text);font-weight:700;margin-bottom:6px">{{ S.wizard.s1title }}</h2>
+        <p style="font-size:14.5px;color:var(--muted);margin-bottom:28px">{{ S.wizard.s1sub }}</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px">
+          <sc-for list="{{ creditTypes }}" as="ct" hint-placeholder-count="4">
+            <button onClick="{{ ct.pick }}" style="{{ ct.wizStyle }}">
+              <span style="font-size:22px">{{ ct.icon }}</span>
+              <div style="text-align:left"><div style="font-weight:700;font-size:15px;color:var(--text)">{{ ct.name }}</div><div style="font-size:12.5px;color:var(--muted)">{{ ct.rateLabel }}</div></div>
+            </button>
+          </sc-for>
+        </div>
+        <div style="background:var(--surface2);border-radius:16px;padding:22px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+            <span style="font-size:14px;font-weight:600;color:var(--text)">{{ S.credit.amount }}</span>
+            <span style="font-family:'Space Grotesk';font-size:20px;font-weight:700;color:var(--accent)">{{ calc.amountFmt }} so'm</span>
+          </div>
+          <input type="range" min="{{ calc.amountMin }}" max="{{ calc.amountMax }}" step="1000000" value="{{ calc.amount }}" onInput="{{ setAmount }}" style="{{ sliderStyle }}">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin:20px 0 10px">
+            <span style="font-size:14px;font-weight:600;color:var(--text)">{{ S.credit.term }}</span>
+            <span style="font-family:'Space Grotesk';font-size:20px;font-weight:700;color:var(--accent)">{{ calc.term }} oy</span>
+          </div>
+          <input type="range" min="6" max="{{ calc.termMax }}" step="1" value="{{ calc.term }}" onInput="{{ setTerm }}" style="{{ sliderStyle }}">
+          <div style="display:flex;justify-content:space-between;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)">
+            <span style="font-size:14px;color:var(--muted)">{{ S.credit.monthly }}</span>
+            <span style="font-family:'Space Grotesk';font-size:18px;font-weight:700;color:var(--text)">{{ calc.monthlyFmt }} so'm</span>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- STEP 2 personal -->
+      <sc-if value="{{ wizStep2 }}" hint-placeholder-val="{{ true }}">
+        <h2 style="font-family:'Space Grotesk';font-size:26px;color:var(--text);font-weight:700;margin-bottom:6px">{{ S.wizard.s2title }}</h2>
+        <p style="font-size:14.5px;color:var(--muted);margin-bottom:28px">{{ S.wizard.s2sub }}</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <sc-for list="{{ personalFields }}" as="f" hint-placeholder-count="6">
+            <label style="{{ f.wrapStyle }}">
+              <span style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;display:block">{{ f.label }}</span>
+              <input type="{{ f.type }}" placeholder="{{ f.ph }}" value="{{ f.value }}" onInput="{{ f.onInput }}" style="{{ inputStyle }}">
+            </label>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- STEP 3 income -->
+      <sc-if value="{{ wizStep3 }}" hint-placeholder-val="{{ true }}">
+        <h2 style="font-family:'Space Grotesk';font-size:26px;color:var(--text);font-weight:700;margin-bottom:6px">{{ S.wizard.s3title }}</h2>
+        <p style="font-size:14.5px;color:var(--muted);margin-bottom:28px">{{ S.wizard.s3sub }}</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px">
+          <sc-for list="{{ incomeFields }}" as="f" hint-placeholder-count="4">
+            <label style="{{ f.wrapStyle }}">
+              <span style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;display:block">{{ f.label }}</span>
+              <input type="{{ f.type }}" placeholder="{{ f.ph }}" value="{{ f.value }}" onInput="{{ f.onInput }}" style="{{ inputStyle }}">
+            </label>
+          </sc-for>
+        </div>
+        <div style="background:var(--accentSoft);border:1px solid var(--accent);border-radius:14px;padding:18px 20px;display:flex;gap:14px;align-items:center">
+          <span style="font-size:24px">📊</span>
+          <div style="flex:1">
+            <div style="font-size:13px;color:var(--accent2);font-weight:600">{{ S.wizard.dtiLabel }}</div>
+            <div style="font-size:14.5px;color:var(--text);margin-top:2px">{{ wizard.dtiText }}</div>
+          </div>
+          <div style="font-family:'Space Grotesk';font-size:26px;font-weight:700;color:var(--accent2)">{{ wizard.dti }}%</div>
+        </div>
+      </sc-if>
+
+      <!-- STEP 4 documents -->
+      <sc-if value="{{ wizStep4 }}" hint-placeholder-val="{{ true }}">
+        <h2 style="font-family:'Space Grotesk';font-size:26px;color:var(--text);font-weight:700;margin-bottom:6px">{{ S.wizard.s4title }}</h2>
+        <p style="font-size:14.5px;color:var(--muted);margin-bottom:28px">{{ S.wizard.s4sub }}</p>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ docs }}" as="dc" hint-placeholder-count="3">
+            <button onClick="{{ dc.toggle }}" style="{{ dc.style }}">
+              <span style="{{ dc.iconStyle }}">{{ dc.icon }}</span>
+              <div style="flex:1;text-align:left">
+                <div style="font-weight:600;font-size:14.5px;color:var(--text)">{{ dc.name }}</div>
+                <div style="font-size:12.5px;color:var(--muted)">{{ dc.hint }}</div>
+              </div>
+              <span style="{{ dc.statusStyle }}">{{ dc.status }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- STEP 5 review/result -->
+      <sc-if value="{{ wizStep5 }}" hint-placeholder-val="{{ true }}">
+        <div style="text-align:center;padding:10px 0 6px">
+          <div style="width:84px;height:84px;border-radius:50%;background:var(--accentSoft);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;position:relative">
+            <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px">✓</div>
+          </div>
+          <h2 style="font-family:'Space Grotesk';font-size:28px;color:var(--text);font-weight:700;margin-bottom:8px">{{ S.wizard.s5title }}</h2>
+          <p style="font-size:15px;color:var(--muted);max-width:460px;margin:0 auto 28px;line-height:1.55">{{ S.wizard.s5sub }}</p>
+        </div>
+        <div style="background:var(--surface2);border-radius:16px;padding:24px;margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+            <span style="font-size:14px;font-weight:600;color:var(--text)">{{ S.wizard.scoring }}</span>
+            <span style="font-family:'Space Grotesk';font-size:20px;font-weight:700;color:var(--accent)">{{ wizard.score }}/100</span>
+          </div>
+          <div style="height:10px;border-radius:6px;background:var(--border);overflow:hidden;margin-bottom:8px">
+            <div style="height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:{{ wizard.score }}%"></div>
+          </div>
+          <div style="font-size:13px;color:var(--muted)">{{ wizard.scoreText }}</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <sc-for list="{{ resultSummary }}" as="rs" hint-placeholder-count="4">
+            <div style="background:var(--surface2);border-radius:14px;padding:18px">
+              <div style="font-size:12.5px;color:var(--muted);margin-bottom:5px">{{ rs.label }}</div>
+              <div style="font-family:'Space Grotesk';font-size:18px;font-weight:700;color:var(--text)">{{ rs.value }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="text-align:center;font-size:13px;color:var(--muted);margin-top:22px">{{ S.wizard.appId }}: <b style="color:var(--text)">{{ wizard.appId }}</b></div>
+      </sc-if>
+
+      <!-- nav buttons -->
+      <div style="display:flex;justify-content:space-between;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)">
+        <button onClick="{{ wizardBack }}" style="{{ wizBackStyle }}">← {{ S.wizard.prev }}</button>
+        <button onClick="{{ wizardNext }}" style="background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:14px 30px;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer">{{ wizard.nextLabel }}</button>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ============ CABINET ============ -->
+  <sc-if value="{{ isCabinet }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:1280px;margin:0 auto;padding:40px 28px 90px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:30px">
+      <div>
+        <div style="font-size:14px;color:var(--muted)">{{ S.cab.greeting }}</div>
+        <h1 style="font-family:'Space Grotesk';font-size:32px;color:var(--text);font-weight:700;letter-spacing:-.6px">Umar Sobirov</h1>
+      </div>
+      <div style="display:flex;gap:12px">
+        <button style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:11px 18px;border-radius:11px;font-weight:600;font-size:14px;cursor:pointer">{{ S.cab.history }}</button>
+        <button onClick="{{ goCredit }}" style="background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:11px 20px;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer">+ {{ S.cab.newCredit }}</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:24px;margin-bottom:24px">
+      <!-- balance -->
+      <div style="background:var(--ink);border-radius:22px;padding:30px;color:#fff;position:relative;overflow:hidden">
+        <div style="position:absolute;inset:0;background:radial-gradient(500px 300px at 90% 10%,rgba(31,190,147,.2),transparent 60%)"></div>
+        <div style="position:relative">
+          <div style="font-size:13.5px;color:rgba(255,255,255,.6)">{{ S.cab.totalBalance }}</div>
+          <div style="font-family:'Space Grotesk';font-size:46px;font-weight:700;letter-spacing:-1px;margin:6px 0 24px">42 850 000 <span style="font-size:22px;color:rgba(255,255,255,.5)">so'm</span></div>
+          <div style="display:flex;gap:14px">
+            <sc-for list="{{ cabCards }}" as="cc" hint-placeholder-count="2">
+              <div style="{{ cc.style }}">
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;opacity:.85;font-weight:600">{{ cc.type }}</span><span style="font-size:11px;opacity:.7">{{ cc.last }}</span></div>
+                <div style="font-family:'Space Grotesk';font-size:20px;font-weight:700;margin-top:18px">{{ cc.balance }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <!-- quick actions -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:26px">
+        <div style="font-weight:700;font-size:16px;color:var(--text);margin-bottom:18px">{{ S.cab.quickActions }}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <sc-for list="{{ cabActions }}" as="a" hint-placeholder-count="4">
+            <button onClick="{{ a.go }}" style="display:flex;flex-direction:column;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;text-align:left">
+              <span style="width:40px;height:40px;border-radius:11px;background:var(--accentSoft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px">{{ a.icon }}</span>
+              <span style="font-size:13.5px;font-weight:600;color:var(--text)">{{ a.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:24px">
+      <!-- transactions -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:26px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+          <div style="font-weight:700;font-size:16px;color:var(--text)">{{ S.cab.transactions }}</div>
+          <button style="background:none;border:none;color:var(--accent);font-weight:600;font-size:13.5px;cursor:pointer">{{ S.common.all }}</button>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ transactions }}" as="t" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-top:1px solid var(--border)">
+              <span style="{{ t.iconStyle }}">{{ t.icon }}</span>
+              <div style="flex:1"><div style="font-size:14.5px;font-weight:600;color:var(--text)">{{ t.name }}</div><div style="font-size:12.5px;color:var(--muted)">{{ t.date }}</div></div>
+              <div style="{{ t.amtStyle }}">{{ t.amount }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <!-- active credit -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:26px">
+        <div style="font-weight:700;font-size:16px;color:var(--text);margin-bottom:18px">{{ S.cab.activeCredit }}</div>
+        <div style="background:var(--surface2);border-radius:16px;padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:14px;font-weight:700;color:var(--text)">Avtokredit · BYD</span><span style="font-size:12px;color:var(--accent);font-weight:700;background:var(--accentSoft);padding:4px 10px;border-radius:20px">Faol</span></div>
+          <div style="font-size:12.5px;color:var(--muted);margin-bottom:18px">22.9% · 60 oy</div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:7px"><span>To'langan</span><span style="color:var(--text);font-weight:600">18 / 60 oy</span></div>
+          <div style="height:8px;border-radius:5px;background:var(--border);overflow:hidden;margin-bottom:18px"><div style="height:100%;width:30%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:5px"></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12px;color:var(--muted)">Keyingi to'lov</div><div style="font-family:'Space Grotesk';font-size:18px;font-weight:700;color:var(--text)">3 240 000 so'm</div></div><button style="background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer">To'lash</button></div>
+        </div>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ============ COMPLIANCE / MUROJAAT ============ -->
+  <sc-if value="{{ isCompliance }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:1280px;margin:0 auto;padding:48px 28px 90px">
+    <div style="margin-bottom:36px">
+      <div style="color:var(--accent);font-weight:700;font-size:13.5px;letter-spacing:1px;margin-bottom:10px">{{ S.comp.kicker }}</div>
+      <h1 style="font-family:'Space Grotesk';font-size:42px;color:var(--text);font-weight:700;letter-spacing:-1px;max-width:640px;line-height:1.1">{{ S.comp.title }}</h1>
+    </div>
+
+    <!-- stats -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:32px">
+      <sc-for list="{{ compStats }}" as="cs" hint-placeholder-count="4">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px">
+          <div style="font-family:'Space Grotesk';font-size:34px;font-weight:700;color:{{ cs.color }}">{{ cs.value }}</div>
+          <div style="font-size:13.5px;color:var(--muted);margin-top:5px">{{ cs.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:start">
+      <!-- form -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:34px">
+        <h3 style="font-family:'Space Grotesk';font-size:22px;color:var(--text);font-weight:700;margin-bottom:24px">{{ S.comp.formTitle }}</h3>
+        <div style="display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap">
+          <sc-for list="{{ appealTypes }}" as="at" hint-placeholder-count="4">
+            <button onClick="{{ at.pick }}" style="{{ at.style }}">{{ at.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px">
+          <sc-for list="{{ compFields }}" as="f" hint-placeholder-count="4">
+            <label style="{{ f.wrapStyle }}">
+              <span style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;display:block">{{ f.label }}</span>
+              <input type="{{ f.type }}" placeholder="{{ f.ph }}" style="{{ inputStyle }}">
+            </label>
+          </sc-for>
+        </div>
+        <label style="display:block;margin-bottom:22px">
+          <span style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;display:block">{{ S.comp.message }}</span>
+          <textarea placeholder="{{ S.comp.messagePh }}" style="{{ inputStyle }};min-height:120px;resize:vertical"></textarea>
+        </label>
+        <button onClick="{{ submitAppeal }}" style="background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:15px 28px;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer">{{ S.comp.submit }}</button>
+        <sc-if value="{{ appealSent }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:18px;background:var(--accentSoft);border:1px solid var(--accent);border-radius:12px;padding:16px 18px;display:flex;gap:12px;align-items:center">
+            <span style="color:var(--accent);font-size:20px">✓</span>
+            <span style="font-size:14px;color:var(--text)">{{ S.comp.sentMsg }} <b>{{ appealRef }}</b></span>
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- status checker + channels -->
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px">
+          <h3 style="font-family:'Space Grotesk';font-size:18px;color:var(--text);font-weight:700;margin-bottom:16px">{{ S.comp.statusTitle }}</h3>
+          <div style="display:flex;gap:10px;margin-bottom:14px">
+            <input placeholder="MUR-000000" style="{{ inputStyle }};flex:1">
+            <button onClick="{{ checkStatus }}" style="background:var(--accent);border:none;color:#fff;padding:0 20px;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer">{{ S.comp.check }}</button>
+          </div>
+          <sc-if value="{{ statusShown }}" hint-placeholder-val="{{ false }}">
+            <div style="background:var(--surface2);border-radius:14px;padding:18px">
+              <sc-for list="{{ statusSteps }}" as="ss" hint-placeholder-count="3">
+                <div style="display:flex;gap:12px;align-items:flex-start;padding:6px 0">
+                  <span style="{{ ss.dotStyle }}"></span>
+                  <div><div style="font-size:13.5px;font-weight:600;color:var(--text)">{{ ss.label }}</div><div style="font-size:12px;color:var(--muted)">{{ ss.time }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <div style="background:var(--ink);border-radius:24px;padding:28px;color:#fff">
+          <h3 style="font-family:'Space Grotesk';font-size:18px;font-weight:700;margin-bottom:18px">{{ S.comp.channels }}</h3>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ channels }}" as="ch" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:13px">
+                <span style="width:40px;height:40px;border-radius:11px;background:rgba(31,190,147,.16);color:#5fe6bd;display:flex;align-items:center;justify-content:center;font-size:18px">{{ ch.icon }}</span>
+                <div><div style="font-size:12px;color:rgba(255,255,255,.55)">{{ ch.label }}</div><div style="font-size:14.5px;font-weight:700">{{ ch.value }}</div></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ============ ADMIN CRM ============ -->
+  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:1280px;margin:0 auto;padding:40px 28px 90px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:26px">
+      <div>
+        <div style="font-size:13px;color:var(--accent);font-weight:700;letter-spacing:1px">CRM · LEAD BOSHQARUVI</div>
+        <h1 style="font-family:'Space Grotesk';font-size:30px;color:var(--text);font-weight:700;letter-spacing:-.5px">Kredit arizalari</h1>
+      </div>
+      <div style="display:flex;gap:10px">
+        <sc-for list="{{ leadFilters }}" as="lf" hint-placeholder-count="4">
+          <button onClick="{{ lf.pick }}" style="{{ lf.style }}">{{ lf.label }} <span style="opacity:.6">{{ lf.count }}</span></button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:22px;align-items:start">
+      <!-- leads table -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr .8fr;padding:14px 22px;background:var(--surface2);font-size:11.5px;font-weight:700;color:var(--muted);letter-spacing:.5px">
+          <span>MIJOZ</span><span>MAHSULOT</span><span>SUMMA</span><span>HOLAT</span>
+        </div>
+        <sc-for list="{{ leads }}" as="l" hint-placeholder-count="6">
+          <button onClick="{{ l.select }}" style="{{ l.rowStyle }}">
+            <div style="text-align:left"><div style="font-size:14px;font-weight:600;color:var(--text)">{{ l.name }}</div><div style="font-size:12px;color:var(--muted)">{{ l.phone }}</div></div>
+            <span style="font-size:13.5px;color:var(--text);align-self:center">{{ l.product }}</span>
+            <span style="font-size:13.5px;color:var(--text);align-self:center;font-weight:600;font-variant-numeric:tabular-nums">{{ l.amount }}</span>
+            <span style="align-self:center"><span style="{{ l.statusStyle }}">{{ l.statusLabel }}</span></span>
+          </button>
+        </sc-for>
+      </div>
+
+      <!-- detail panel -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px;position:sticky;top:96px">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
+          <span style="width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:18px">{{ selectedLead.initials }}</span>
+          <div><div style="font-size:17px;font-weight:700;color:var(--text)">{{ selectedLead.name }}</div><div style="font-size:13px;color:var(--muted)">{{ selectedLead.phone }}</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+          <sc-for list="{{ selectedLead.fields }}" as="sf" hint-placeholder-count="4">
+            <div style="background:var(--surface2);border-radius:12px;padding:14px"><div style="font-size:11.5px;color:var(--muted);margin-bottom:4px">{{ sf.label }}</div><div style="font-size:14px;font-weight:600;color:var(--text)">{{ sf.value }}</div></div>
+          </sc-for>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Holatni o'zgartirish</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px">
+          <sc-for list="{{ statusOptions }}" as="so" hint-placeholder-count="4">
+            <button onClick="{{ so.apply }}" style="{{ so.style }}">{{ so.label }}</button>
+          </sc-for>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Izohlar</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;max-height:160px;overflow-y:auto" class="tb-scroll">
+          <sc-for list="{{ selectedLead.comments }}" as="cm" hint-placeholder-count="2">
+            <div style="background:var(--surface2);border-radius:12px;padding:12px 14px"><div style="font-size:13px;color:var(--text);line-height:1.45">{{ cm.text }}</div><div style="font-size:11px;color:var(--muted);margin-top:5px">{{ cm.author }} · {{ cm.time }}</div></div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:10px">
+          <input placeholder="Izoh qo'shing..." value="{{ commentDraft }}" onInput="{{ setComment }}" style="{{ inputStyle }};flex:1">
+          <button onClick="{{ addComment }}" style="background:var(--accent);border:none;color:#fff;padding:0 18px;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer">→</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="background:var(--ink);color:rgba(255,255,255,.6);margin-top:20px">
+    <div style="max-width:1280px;margin:0 auto;padding:54px 28px 30px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <span style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center"><span style="width:14px;height:14px;border:3px solid #fff;border-radius:50%;border-right-color:transparent;transform:rotate(-45deg)"></span></span>
+          <span style="font-family:'Space Grotesk';font-weight:700;font-size:18px;color:#fff">Trustbank</span>
+        </div>
+        <p style="font-size:13.5px;line-height:1.6;max-width:280px">{{ S.footer.about }}</p>
+        <div style="display:flex;gap:10px;margin-top:18px">
+          <sc-for list="{{ socials }}" as="s" hint-placeholder-count="4">
+            <span style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;font-size:15px">{{ s }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <sc-for list="{{ footerCols }}" as="fc" hint-placeholder-count="3">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:16px;letter-spacing:.3px">{{ fc.title }}</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <sc-for list="{{ fc.links }}" as="lk" hint-placeholder-count="4">
+              <span style="font-size:13.5px;cursor:pointer">{{ lk }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.08)">
+      <div style="max-width:1280px;margin:0 auto;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;flex-wrap:wrap;gap:10px">
+        <span>1994 – {{ year }} © «Trustbank» XAB · MB litsenziyasi № 44</span>
+        <div style="display:flex;gap:18px">
+          <span style="display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent)"></span>uzA++ reyting</span>
+          <span>Demo · konseptual dizayn</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = {
+    theme: 'light', lang: 'uz', screen: 'home',
+    amount: 50000000, term: 36, creditId: 'auto',
+    wizardStep: 1, docs: { passport:false, income:false, collateral:false },
+    person: { name:'', birth:'', pinfl:'', phone:'', address:'', email:'' },
+    income: { salary:'', employer:'', experience:'', extra:'' },
+    appealType: 'complaint', appealSent:false, statusShown:false,
+    leadFilter:'all', selectedLeadId: 1, commentDraft:'',
+    leads: [
+      { id:1, name:"Aziza Karimova", phone:"+998 90 123-45-67", product:"Avtokredit", amountN:180000000, status:"new", score:78, income:"14 500 000", term:"60 oy", region:"Toshkent sh.",
+        comments:[{text:"Mijoz BYD Song Plus uchun ariza qoldirdi. Boshlang'ich to'lov 30%.",author:"Operator",time:"10:24"}] },
+      { id:2, name:"Bobur Aliyev", phone:"+998 93 887-22-10", product:"Universal", amountN:45000000, status:"review", score:64, income:"8 200 000", term:"24 oy", region:"Samarqand",
+        comments:[{text:"Daromad ma'lumotlari tekshirilmoqda.",author:"Anderrayter",time:"09:10"}] },
+      { id:3, name:"Dilnoza Yusupova", phone:"+998 99 444-18-05", product:"Ipoteka", amountN:520000000, status:"approved", score:91, income:"26 000 000", term:"120 oy", region:"Toshkent sh.",
+        comments:[{text:"Skoring yuqori. Tasdiqlandi, shartnomaga taklif qilindi.",author:"Menejer",time:"Kecha"}] },
+      { id:4, name:"Sardor Rashidov", phone:"+998 91 200-77-33", product:"Mikroqarz", amountN:12000000, status:"new", score:55, income:"5 400 000", term:"12 oy", region:"Farg'ona",
+        comments:[{text:"Telegram bot orqali keldi.",author:"Bot",time:"08:45"}] },
+      { id:5, name:"Madina Tosheva", phone:"+998 97 615-09-21", product:"Avtokredit", amountN:240000000, status:"rejected", score:38, income:"6 800 000", term:"60 oy", region:"Andijon",
+        comments:[{text:"DTI juda yuqori. Rad etildi.",author:"Anderrayter",time:"Kecha"}] },
+      { id:6, name:"Jasur Komilov", phone:"+998 94 333-50-12", product:"Universal", amountN:70000000, status:"review", score:72, income:"11 200 000", term:"36 oy", region:"Buxoro",
+        comments:[{text:"Hujjatlar qabul qilindi.",author:"Operator",time:"Bugun"}] },
+    ],
+  };
+
+  STR = {
+    uz: {
+      nav:{ login:"Kabinet", apply:"Ariza qoldirish", items:["Bosh sahifa","Kreditlar","Murojaat","CRM Panel"] },
+      hero:{ badge:"O'zbekistonning ishonchli banki · 1994 yildan", title:"Pulingiz uchun zamonaviy raqamli bank", subtitle:"Onlayn kredit, omonat va karta — barchasi bir necha daqiqada. uzA++ reytingli bank bilan moliyangizni boshqaring.", cta1:"Kredit olish", cta2:"Kabinetga kirish" },
+      deposits:{ kicker:"OMONATLAR", title:"Daromadli omonatlar", note:"Barcha omonatlar Davlat kafolat fondi himoyasida" },
+      cards:{ title:"Plastik kartalar", all:"Barcha kartalar" },
+      rates:{ title:"Valyuta kurslari", note:"Markaziy bank kursi" },
+      news:{ title:"Bank yangiliklari", all:"Barchasi" },
+      app:{ title:"Trastpay — har doim yoningizda", subtitle:"Kartadan kartaga o'tkazma, onlayn mikroqarz, depozit ochish va 2% gacha keshbek — bitta ilovada." },
+      credit:{ kicker:"KREDITLASH", title:"O'zingizga mos kreditni hisoblang va ariza qoldiring", calcTitle:"Kredit kalkulyatori", amount:"Kredit summasi", term:"Muddat", rate:"Yillik foiz", method:"Hisoblash usuli", annuity:"Annuitet to'lov", monthly:"Oylik to'lov", principal:"Asosiy qarz", overpay:"Ortiqcha to'lov", total:"Jami to'lov", applyNow:"Hozir ariza qoldirish", disclaimer:"Hisob-kitob taxminiy. Yakuniy shartlar skoringdan keyin.", schedule:"To'lov grafigi (yillar bo'yicha)" },
+      wizard:{ back:"Kalkulyatorga qaytish", prev:"Orqaga", s1title:"Kredit turi va summasi", s1sub:"Maqsadingizga mos kredit turini tanlang", s2title:"Shaxsiy ma'lumotlar", s2sub:"Pasport ma'lumotlaringizni kiriting", s3title:"Daromad va ish joyi", s3sub:"To'lov qobiliyatini baholash uchun", dtiLabel:"Qarz/daromad nisbati (DTI)", s4title:"Hujjatlar", s4sub:"Quyidagi hujjatlarni yuklang", s5title:"Ariza qabul qilindi!", s5sub:"Arizangiz ko'rib chiqilmoqda. Skoring natijasi bo'yicha menejer 1 ish kuni ichida bog'lanadi.", scoring:"Skoring bahosi", appId:"Ariza raqami" },
+      cab:{ greeting:"Xush kelibsiz,", history:"Tarix", newCredit:"Yangi kredit", totalBalance:"Jami balans", quickActions:"Tezkor amallar", transactions:"So'nggi operatsiyalar", activeCredit:"Faol kredit" },
+      comp:{ kicker:"KOMPLAYANS · MUROJAAT", title:"Murojaat, shikoyat va takliflaringizni yuboring", formTitle:"Murojaat yuborish", message:"Murojaat matni", messagePh:"Muammo yoki taklifingizni batafsil yozing...", submit:"Murojaatni yuborish", sentMsg:"Murojaatingiz qabul qilindi. Raqam:", statusTitle:"Ariza holatini tekshirish", check:"Tekshirish", channels:"Boshqa kanallar", statusTitle2:"" },
+      footer:{ about:"«Trustbank» xususiy aksiyadorlik banki — 1994 yildan beri O'zbekiston fuqarolari va bizneslariga ishonchli moliyaviy xizmat ko'rsatadi." },
+      common:{ details:"Batafsil", all:"Barchasi", apply:"Ariza" },
+    },
+    ru: {
+      nav:{ login:"Кабинет", apply:"Оставить заявку", items:["Главная","Кредиты","Обращение","CRM Панель"] },
+      hero:{ badge:"Надёжный банк Узбекистана · с 1994", title:"Современный цифровой банк для ваших денег", subtitle:"Онлайн-кредит, вклад и карта — всё за несколько минут. Управляйте финансами с банком рейтинга uzA++.", cta1:"Получить кредит", cta2:"Войти в кабинет" },
+      deposits:{ kicker:"ВКЛАДЫ", title:"Выгодные вклады", note:"Все вклады под защитой Государственного фонда гарантий" },
+      cards:{ title:"Пластиковые карты", all:"Все карты" },
+      rates:{ title:"Курсы валют", note:"Курс ЦБ" },
+      news:{ title:"Новости банка", all:"Все" },
+      app:{ title:"Trastpay — всегда рядом", subtitle:"Переводы с карты на карту, онлайн-микрозайм, открытие депозита и кешбэк до 2% — в одном приложении." },
+      credit:{ kicker:"КРЕДИТОВАНИЕ", title:"Рассчитайте подходящий кредит и оставьте заявку", calcTitle:"Кредитный калькулятор", amount:"Сумма кредита", term:"Срок", rate:"Годовая ставка", method:"Метод расчёта", annuity:"Аннуитетный платёж", monthly:"Ежемесячный платёж", principal:"Основной долг", overpay:"Переплата", total:"Всего к оплате", applyNow:"Оставить заявку", disclaimer:"Расчёт примерный. Финальные условия после скоринга.", schedule:"График платежей (по годам)" },
+      wizard:{ back:"К калькулятору", prev:"Назад", s1title:"Тип и сумма кредита", s1sub:"Выберите подходящий тип кредита", s2title:"Личные данные", s2sub:"Введите паспортные данные", s3title:"Доход и место работы", s3sub:"Для оценки платёжеспособности", dtiLabel:"Соотношение долг/доход (DTI)", s4title:"Документы", s4sub:"Загрузите следующие документы", s5title:"Заявка принята!", s5sub:"Заявка рассматривается. Менеджер свяжется в течение 1 рабочего дня.", scoring:"Скоринговый балл", appId:"Номер заявки" },
+      cab:{ greeting:"Добро пожаловать,", history:"История", newCredit:"Новый кредит", totalBalance:"Общий баланс", quickActions:"Быстрые действия", transactions:"Последние операции", activeCredit:"Активный кредит" },
+      comp:{ kicker:"КОМПЛАЕНС · ОБРАЩЕНИЕ", title:"Отправьте обращение, жалобу или предложение", formTitle:"Отправить обращение", message:"Текст обращения", messagePh:"Опишите проблему или предложение подробно...", submit:"Отправить обращение", sentMsg:"Обращение принято. Номер:", statusTitle:"Проверить статус заявки", check:"Проверить", channels:"Другие каналы" },
+      footer:{ about:"«Trustbank» частный акционерный банк — с 1994 года надёжно обслуживает граждан и бизнес Узбекистана." },
+      common:{ details:"Подробнее", all:"Все", apply:"Заявка" },
+    },
+    en: {
+      nav:{ login:"Cabinet", apply:"Apply now", items:["Home","Loans","Appeal","CRM Panel"] },
+      hero:{ badge:"Trusted bank of Uzbekistan · since 1994", title:"A modern digital bank for your money", subtitle:"Online loans, deposits and cards — all in minutes. Manage your finances with a uzA++ rated bank.", cta1:"Get a loan", cta2:"Open cabinet" },
+      deposits:{ kicker:"DEPOSITS", title:"Rewarding deposits", note:"All deposits protected by the State Guarantee Fund" },
+      cards:{ title:"Payment cards", all:"All cards" },
+      rates:{ title:"Exchange rates", note:"Central Bank rate" },
+      news:{ title:"Bank news", all:"View all" },
+      app:{ title:"Trastpay — always with you", subtitle:"Card-to-card transfers, instant micro-loans, deposits and up to 2% cashback — in one app." },
+      credit:{ kicker:"LENDING", title:"Calculate the right loan and submit your application", calcTitle:"Loan calculator", amount:"Loan amount", term:"Term", rate:"Annual rate", method:"Calculation", annuity:"Annuity payment", monthly:"Monthly payment", principal:"Principal", overpay:"Overpayment", total:"Total payable", applyNow:"Apply now", disclaimer:"Estimate only. Final terms after scoring.", schedule:"Payment schedule (by year)" },
+      wizard:{ back:"Back to calculator", prev:"Back", s1title:"Loan type & amount", s1sub:"Choose the loan type that fits your goal", s2title:"Personal details", s2sub:"Enter your passport details", s3title:"Income & employment", s3sub:"To assess your ability to pay", dtiLabel:"Debt-to-income ratio (DTI)", s4title:"Documents", s4sub:"Upload the following documents", s5title:"Application received!", s5sub:"Your application is under review. A manager will contact you within 1 business day.", scoring:"Scoring result", appId:"Application ID" },
+      cab:{ greeting:"Welcome,", history:"History", newCredit:"New loan", totalBalance:"Total balance", quickActions:"Quick actions", transactions:"Recent transactions", activeCredit:"Active loan" },
+      comp:{ kicker:"COMPLIANCE · APPEAL", title:"Send an appeal, complaint or suggestion", formTitle:"Submit an appeal", message:"Message", messagePh:"Describe your issue or suggestion in detail...", submit:"Submit appeal", sentMsg:"Appeal received. Reference:", statusTitle:"Check application status", check:"Check", channels:"Other channels" },
+      footer:{ about:"«Trustbank» joint-stock bank — reliably serving the citizens and businesses of Uzbekistan since 1994." },
+      common:{ details:"Details", all:"All", apply:"Apply" },
+    },
+  };
+
+  CREDITS = [
+    { id:'auto', name:"Avtokredit", icon:"🚗", rate:22.9, max:600000000, termMax:60 },
+    { id:'universal', name:"Universal iste'mol", icon:"🛍️", rate:26, max:100000000, termMax:36 },
+    { id:'micro', name:"Mikroqarz", icon:"⚡", rate:28, max:50000000, termMax:24 },
+    { id:'mortgage', name:"Ipoteka", icon:"🏠", rate:18, max:1500000000, termMax:240 },
+  ];
+
+  fmt(n){ return Math.round(n).toLocaleString('ru-RU').replace(/,/g,' '); }
+  fmtShort(n){ if(n>=1e9) return (n/1e9).toFixed(1).replace('.0','')+' mlrd'; if(n>=1e6) return (n/1e6).toFixed(0)+' mln'; return this.fmt(n); }
+
+  get active(){ return this.CREDITS.find(c=>c.id===this.state.creditId) || this.CREDITS[0]; }
+
+  calcResult(){
+    const P = this.state.amount, n = this.state.term, r = this.active.rate/100/12;
+    const monthly = r>0 ? P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1) : P/n;
+    const total = monthly*n, overpay = total-P;
+    return { P, n, monthly, total, overpay,
+      principalPct: Math.round(P/total*100), overpayPct: Math.round(overpay/total*100) };
+  }
+
+  scheduleBars(){
+    const { P, n } = this.calcResult();
+    const r = this.active.rate/100/12;
+    const monthly = r>0 ? P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1) : P/n;
+    let bal = P; const years = Math.max(1, Math.ceil(n/12)); const bars=[];
+    let maxYearTotal = 0; const raw=[];
+    for(let y=0;y<Math.min(years,12);y++){
+      let pr=0, intr=0;
+      for(let m=0;m<12 && (y*12+m)<n;m++){ const i=bal*r; const pp=monthly-i; bal-=pp; pr+=pp; intr+=i; }
+      raw.push({pr,intr,total:pr+intr}); maxYearTotal=Math.max(maxYearTotal,pr+intr);
+    }
+    return raw.map((d,i)=>({ label:(i+1)+"y",
+      principalH: Math.max(3, d.pr/maxYearTotal*100*(d.total/maxYearTotal)),
+      interestH: Math.max(2, d.intr/maxYearTotal*100*(d.total/maxYearTotal)) }));
+  }
+
+  dti(){
+    const sal = parseFloat(String(this.state.income.salary).replace(/\s/g,''))||10000000;
+    const monthly = this.calcResult().monthly;
+    return Math.min(99, Math.round(monthly/sal*100));
+  }
+  score(){
+    const dti = this.dti();
+    let s = 100 - dti*0.7;
+    if(this.state.docs.passport) s+=4; if(this.state.docs.income) s+=6; if(this.state.docs.collateral) s+=5;
+    return Math.max(20, Math.min(98, Math.round(s)));
+  }
+
+  go(screen){ this.setState({ screen }); if(typeof window!=='undefined') window.scrollTo(0,0); }
+
+  renderVals(){
+    const S = this.STR[this.state.lang];
+    const c = this.calcResult();
+    const dark = this.state.theme==='dark';
+    const L = dark ? {
+      bg:'#070F0D', surface:'#0F1C18', surface2:'#152620', surfaceGlass:'rgba(15,28,24,.82)', text:'#EAF2EF', muted:'#8DA29B', border:'#1E2F28',
+      accent:'#1FBE93', accent2:'#15A07B', accentSoft:'#10271F', ink:'#0B1714', inkText:'#EAF2EF', shadow:'rgba(0,0,0,.45)', shadowStrong:'rgba(0,0,0,.6)'
+    } : {
+      bg:'#EAF0ED', surface:'#FFFFFF', surface2:'#F4F8F6', surfaceGlass:'rgba(255,255,255,.82)', text:'#0B1A15', muted:'#5C6E68', border:'#E3EAE7',
+      accent:'#0FA37F', accent2:'#0B7A5E', accentSoft:'#E4F6EF', ink:'#0B1A15', inkText:'#EAF2EF', shadow:'rgba(11,26,21,.08)', shadowStrong:'rgba(11,26,21,.18)'
+    };
+    const shellStyle = `min-height:100vh;background:${L.bg};color:${L.text};--bg:${L.bg};--surface:${L.surface};--surface2:${L.surface2};--surfaceGlass:${L.surfaceGlass};--text:${L.text};--muted:${L.muted};--border:${L.border};--accent:${L.accent};--accent2:${L.accent2};--accentSoft:${L.accentSoft};--ink:${L.ink};--inkText:${L.inkText};--shadow:${L.shadow};--shadowStrong:${L.shadowStrong};transition:background .3s`;
+
+    const sliderStyle = `width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent)) no-repeat;background-color:var(--border);outline:none;cursor:pointer;accent-color:${L.accent}`;
+    const inputStyle = `width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:12px 14px;font-size:14.5px;color:var(--text);outline:none`;
+
+    // langs
+    const langs = ['uz','ru','en'].map(lg=>({ label:lg.toUpperCase(),
+      pick:()=>this.setState({lang:lg}),
+      style:`background:${this.state.lang===lg?'rgba(255,255,255,.16)':'transparent'};border:none;color:${this.state.lang===lg?'#fff':'rgba(255,255,255,.6)'};padding:5px 11px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700` }));
+
+    // nav
+    const screens=['home','credit','compliance','admin'];
+    const navItems = S.nav.items.map((label,i)=>({ label,
+      go:()=>this.go(screens[i]),
+      style:`background:${this.state.screen===screens[i]?'var(--accentSoft)':'transparent'};border:none;color:${this.state.screen===screens[i]?'var(--accent)':'var(--text)'};padding:9px 15px;border-radius:10px;cursor:pointer;font-size:14.5px;font-weight:600` }));
+
+    // credit type chips
+    const creditTypes = this.CREDITS.map(ct=>({ ...ct, rateLabel:`${ct.rate}% dan`,
+      pick:()=>this.setState({creditId:ct.id, amount:Math.min(this.state.amount,ct.max), term:Math.min(this.state.term,ct.termMax)}),
+      style:`display:flex;align-items:center;gap:11px;background:${this.state.creditId===ct.id?'var(--accentSoft)':'var(--surface)'};border:1.5px solid ${this.state.creditId===ct.id?'var(--accent)':'var(--border)'};color:var(--text);padding:13px 18px;border-radius:14px;cursor:pointer`,
+      wizStyle:`display:flex;align-items:center;gap:12px;background:${this.state.creditId===ct.id?'var(--accentSoft)':'var(--surface2)'};border:1.5px solid ${this.state.creditId===ct.id?'var(--accent)':'var(--border)'};padding:16px;border-radius:14px;cursor:pointer` }));
+
+    const calc = {
+      amount:this.state.amount, amountFmt:this.fmt(this.state.amount),
+      amountMin:5000000, amountMax:this.active.max, amountMinFmt:this.fmtShort(5000000), amountMaxFmt:this.fmtShort(this.active.max),
+      term:this.state.term, termMax:this.active.termMax,
+      monthlyFmt:this.fmt(c.monthly), overpayFmt:this.fmt(c.overpay), totalFmt:this.fmt(c.total),
+      principalPct:c.principalPct, overpayPct:c.overpayPct,
+    };
+
+    // wizard
+    const step=this.state.wizardStep;
+    const wizLabels=['Tur','Shaxsiy','Daromad','Hujjat','Natija'];
+    const wizardSteps = wizLabels.map((label,i)=>{ const num=i+1; const done=num<step; const cur=num===step;
+      return { label, flex: i<4?'1':'0 0 auto', hasLine:i<4, mark: done?'✓':String(num),
+        dotStyle:`width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;${cur?'background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff':done?'background:var(--accentSoft);color:var(--accent)':'background:var(--surface2);color:var(--muted);border:1px solid var(--border)'}`,
+        labelStyle:`font-size:12px;font-weight:600;color:${cur?'var(--text)':'var(--muted)'};white-space:nowrap`,
+        lineStyle:`flex:1;height:2px;margin:0 6px;margin-bottom:24px;background:${done?'var(--accent)':'var(--border)'}` };
+    });
+
+    const personalFields = [
+      { key:'name', label:"F.I.Sh.", ph:"Sobirov Umar", type:"text" },
+      { key:'birth', label:"Tug'ilgan sana", ph:"01.01.1990", type:"text" },
+      { key:'pinfl', label:"JSHSHIR (PINFL)", ph:"14 raqam", type:"text" },
+      { key:'phone', label:"Telefon", ph:"+998 90 000-00-00", type:"tel" },
+      { key:'address', label:"Manzil", ph:"Toshkent sh., ...", type:"text" },
+      { key:'email', label:"Email", ph:"umar@mail.uz", type:"email" },
+    ].map(f=>({ ...f, value:this.state.person[f.key],
+      wrapStyle:'display:block', onInput:(e)=>this.setState({person:{...this.state.person,[f.key]:e.target.value}}) }));
+
+    const incomeFields = [
+      { key:'salary', label:"Oylik daromad (so'm)", ph:"12 000 000", type:"text" },
+      { key:'employer', label:"Ish joyi", ph:"Tashkilot nomi", type:"text" },
+      { key:'experience', label:"Ish staji (oy)", ph:"24", type:"text" },
+      { key:'extra', label:"Qo'shimcha daromad", ph:"0", type:"text" },
+    ].map(f=>({ ...f, value:this.state.income[f.key], wrapStyle:'display:block',
+      onInput:(e)=>this.setState({income:{...this.state.income,[f.key]:e.target.value}}) }));
+
+    const docDefs=[
+      {key:'passport',name:"Pasport / ID karta",hint:"Old va orqa tomoni",icon:"🪪"},
+      {key:'income',name:"Daromad ma'lumotnomasi",hint:"So'nggi 6 oy uchun",icon:"📄"},
+      {key:'collateral',name:"Garov hujjatlari",hint:"Avtokredit / ipoteka uchun",icon:"📑"},
+    ];
+    const docs = docDefs.map(d=>{ const on=this.state.docs[d.key];
+      return { ...d, status:on?"Yuklandi ✓":"Yuklash",
+        toggle:()=>this.setState({docs:{...this.state.docs,[d.key]:!on}}),
+        style:`display:flex;align-items:center;gap:14px;background:${on?'var(--accentSoft)':'var(--surface2)'};border:1.5px solid ${on?'var(--accent)':'var(--border)'};border-radius:14px;padding:16px 18px;cursor:pointer;text-align:left;width:100%`,
+        iconStyle:`width:44px;height:44px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:20px`,
+        statusStyle:`font-size:13px;font-weight:700;color:${on?'var(--accent)':'var(--muted)'}` };
+    });
+
+    const dti=this.dti(), score=this.score();
+    const wizard = {
+      dti, dtiText: dti<35?"A'lo — past yuklama":dti<50?"Maqbul daraja":"Yuqori — qayta ko'rib chiqing",
+      score, scoreText: score>=80?"Yuqori ehtimollik bilan tasdiqlanadi":score>=60?"Tasdiqlanishi mumkin, hujjatlar muhim":"Qo'shimcha kafolat talab qilinishi mumkin",
+      appId:"TB-"+(2026000+this.state.selectedLeadId*137%9000),
+      nextLabel: step>=5 ? "Kabinetga o'tish" : (step===4?"Arizani yuborish":"Davom etish"),
+    };
+    const resultSummary=[
+      { label:S.credit.amount, value:this.fmt(this.state.amount)+" so'm" },
+      { label:S.credit.monthly, value:this.fmt(c.monthly)+" so'm" },
+      { label:"Muddat", value:this.state.term+" oy" },
+      { label:"Mahsulot", value:this.active.name },
+    ];
+
+    // home data
+    const deposits=[
+      { name:"Online-Universal", rate:"20", term:"24 oy", badge:"Onlayn", tone:1 },
+      { name:"Universal", rate:"20", term:"24 oy", badge:"Filialda", tone:0 },
+      { name:"Bolajon", rate:"14", term:"260 hafta", badge:"Bolalar", tone:0 },
+    ].map(d=>({...d, go:()=>this.go('credit'),
+      badgeStyle:`font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px;background:${d.tone?'var(--accent)':'var(--accentSoft)'};color:${d.tone?'#fff':'var(--accent)'}` }));
+
+    const cardFaces=['linear-gradient(135deg,#1a1a2e,#16213e)','linear-gradient(135deg,#0d8f6e,#0b6f57)','linear-gradient(135deg,#3a2d5c,#1f1a3a)','linear-gradient(135deg,#2c3e50,#1a242f)'];
+    const cards=[
+      { name:"MasterCard World Elite", sub:"Premium · imtiyozlar", tier:"WORLD ELITE", last:"4291", f:0 },
+      { name:"VISA Infinite", sub:"Premium · consierj", tier:"INFINITE", last:"7733", f:2 },
+      { name:"Visa-Humo Co-badge", sub:"Ikki to'lov tizimi", tier:"CO-BADGE", last:"1180", f:1 },
+      { name:"MasterCard Standard", sub:"Kundalik to'lovlar", tier:"STANDARD", last:"5502", f:3 },
+    ].map(c=>({...c, faceStyle:`height:166px;border-radius:18px;padding:20px;display:flex;flex-direction:column;background:${cardFaces[c.f]};box-shadow:0 16px 34px -18px rgba(0,0,0,.5)` }));
+
+    const rates=[
+      { cur:"USD", flag:"🇺🇸", buy:"11 970", sell:"12 070", cb:"11 979" },
+      { cur:"EUR", flag:"🇪🇺", buy:"13 400", sell:"13 970", cb:"13 904" },
+      { cur:"GBP", flag:"🇬🇧", buy:"15 750", sell:"16 400", cb:"16 085" },
+      { cur:"RUB", flag:"🇷🇺", buy:"110", sell:"173", cb:"164" },
+      { cur:"CNY", flag:"🇨🇳", buy:"1 620", sell:"1 930", cb:"1 772" },
+    ];
+
+    const newsTags=['Tender','Reyting','Yangilik','E\'lon'];
+    const news=[
+      { day:"16", mon:"Iyun", tag:"Tender", title:"Diqqat, tender! Yangi xaridlar bo'yicha e'lon", t:0 },
+      { day:"15", mon:"Iyun", tag:"Reyting", title:"Trustbank kreditga layoqatlilik reytingi uzA++ darajasiga ko'tarildi", t:1 },
+      { day:"15", mon:"Iyun", tag:"Yutuq", title:"Xalqaro e'tirof: «Eng qulay muhit» yaratgan bank", t:2 },
+      { day:"10", mon:"Iyun", tag:"Aksiya", title:"«Lixiang Li 7» avtomobili o'z egasiga topshirildi", t:3 },
+    ].map(n=>({...n, tagStyle:`display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;background:var(--accentSoft);color:var(--accent)` }));
+
+    const quickServices=[
+      { icon:"💳", title:"Karta ochish", desc:"Visa, Mastercard, UzCard, HUMO — onlayn buyurtma", go:()=>this.go('credit') },
+      { icon:"💰", title:"Omonat ochish", desc:"20% gacha yillik daromad, onlayn", go:()=>this.go('credit') },
+      { icon:"🚗", title:"Avtokredit", desc:"22.9% dan, 60 oygacha muddatga", go:()=>this.go('credit') },
+      { icon:"🏢", title:"Biznes hisob", desc:"Korporativ mijozlar uchun ochish", go:()=>this.go('credit') },
+    ];
+
+    const heroStats=[
+      { value:"1.2M+", label:"faol mijozlar" },
+      { value:"653", label:"bankomat" },
+      { value:"30+", label:"yillik tajriba" },
+    ];
+
+    // cabinet
+    const cabCards=[
+      { type:"World Elite", last:"4291", balance:"28 400 000", style:"flex:1;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:14px;padding:16px;color:#fff" },
+      { type:"Humo", last:"1180", balance:"14 450 000", style:"flex:1;background:linear-gradient(135deg,#0d8f6e,#0b6f57);border-radius:14px;padding:16px;color:#fff" },
+    ];
+    const cabActions=[
+      { icon:"⇄", label:"O'tkazma", go:()=>{} },
+      { icon:"💳", label:"Karta to'ldirish", go:()=>{} },
+      { icon:"📱", label:"To'lovlar", go:()=>{} },
+      { icon:"💰", label:"Depozit", go:()=>this.go('credit') },
+    ];
+    const transactions=[
+      { name:"Korzinka.uz", date:"Bugun, 14:20", amount:"−248 000", dir:-1, icon:"🛒" },
+      { name:"Oylik maosh", date:"Bugun, 09:00", amount:"+12 400 000", dir:1, icon:"💼" },
+      { name:"Uzmobile to'lov", date:"Kecha, 18:42", amount:"−55 000", dir:-1, icon:"📱" },
+      { name:"Kartadan o'tkazma", date:"Kecha, 12:10", amount:"−1 200 000", dir:-1, icon:"⇄" },
+      { name:"Keshbek", date:"14 Iyun", amount:"+38 400", dir:1, icon:"🎁" },
+    ].map(t=>({...t,
+      iconStyle:`width:42px;height:42px;border-radius:12px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:18px`,
+      amtStyle:`font-family:'Space Grotesk';font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;color:${t.dir>0?'var(--accent)':'var(--text)'}` }));
+
+    // compliance
+    const compStats=[
+      { value:"75", label:"Jami murojaatlar", color:'var(--text)' },
+      { value:"99%", label:"Yakunlangan", color:'var(--accent)' },
+      { value:"91%", label:"Jismoniy shaxs", color:'var(--text)' },
+      { value:"1.2 kun", label:"O'rtacha javob", color:'var(--accent)' },
+    ];
+    const appealLabels={complaint:"Shikoyat",suggestion:"Taklif",question:"Savol",gratitude:"Minnatdorchilik"};
+    const appealTypes=Object.keys(appealLabels).map(k=>({ label:appealLabels[k],
+      pick:()=>this.setState({appealType:k}),
+      style:`background:${this.state.appealType===k?'var(--accent)':'var(--surface2)'};border:1px solid ${this.state.appealType===k?'var(--accent)':'var(--border)'};color:${this.state.appealType===k?'#fff':'var(--text)'};padding:9px 16px;border-radius:10px;font-weight:600;font-size:13.5px;cursor:pointer` }));
+    const compFields=[
+      { label:"F.I.Sh.", ph:"To'liq ism", type:"text" },
+      { label:"Telefon", ph:"+998 90 000-00-00", type:"tel" },
+      { label:"Email", ph:"mail@example.uz", type:"email" },
+      { label:"Filial", ph:"Toshkent sh.", type:"text" },
+    ].map(f=>({...f, wrapStyle:'display:block'}));
+    const statusSteps=[
+      { label:"Qabul qilindi", time:"14 Iyun, 10:24", on:true },
+      { label:"Ko'rib chiqilmoqda", time:"15 Iyun, 09:10", on:true },
+      { label:"Javob tayyorlanmoqda", time:"Kutilmoqda", on:false },
+    ].map(s=>({...s, dotStyle:`width:12px;height:12px;border-radius:50%;margin-top:4px;${s.on?'background:var(--accent)':'background:var(--border)'}` }));
+    const channels=[
+      { icon:"📞", label:"Call-markaz", value:"1287" },
+      { icon:"✉️", label:"Ishonch telefoni", value:"+998 71 207-36-45" },
+      { icon:"💬", label:"Telegram", value:"@Trust_Bank_Bot" },
+    ];
+
+    // admin
+    const statusMeta={ new:{l:"Yangi",c:'#2A7FFF',bg:'rgba(42,127,255,.14)'}, review:{l:"Ko'rib chiqilmoqda",c:'#E08A1E',bg:'rgba(224,138,30,.14)'}, approved:{l:"Tasdiqlandi",c:'var(--accent)',bg:'var(--accentSoft)'}, rejected:{l:"Rad etildi",c:'#E5484D',bg:'rgba(229,72,77,.14)'} };
+    const counts={ all:this.state.leads.length };
+    ['new','review','approved','rejected'].forEach(s=>counts[s]=this.state.leads.filter(l=>l.status===s).length);
+    const leadFilters=[{k:'all',l:'Hammasi'},{k:'new',l:'Yangi'},{k:'review',l:'Jarayonda'},{k:'approved',l:'Tasdiqlangan'}].map(f=>({ label:f.l, count:counts[f.k],
+      pick:()=>this.setState({leadFilter:f.k}),
+      style:`background:${this.state.leadFilter===f.k?'var(--accent)':'var(--surface)'};border:1px solid ${this.state.leadFilter===f.k?'var(--accent)':'var(--border)'};color:${this.state.leadFilter===f.k?'#fff':'var(--text)'};padding:9px 15px;border-radius:10px;font-weight:600;font-size:13.5px;cursor:pointer` }));
+
+    const visibleLeads=this.state.leads.filter(l=>this.state.leadFilter==='all'||l.status===this.state.leadFilter);
+    const leads=visibleLeads.map(l=>{ const m=statusMeta[l.status]; const sel=l.id===this.state.selectedLeadId;
+      return { ...l, amount:this.fmtShort(l.amountN), statusLabel:m.l,
+        select:()=>this.setState({selectedLeadId:l.id}),
+        rowStyle:`display:grid;grid-template-columns:1.4fr 1fr 1fr .8fr;padding:15px 22px;border-top:1px solid var(--border);background:${sel?'var(--accentSoft)':'transparent'};cursor:pointer;width:100%;border-left:3px solid ${sel?'var(--accent)':'transparent'}`,
+        statusStyle:`font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:20px;background:${m.bg};color:${m.c};white-space:nowrap` };
+    });
+
+    const sl=this.state.leads.find(l=>l.id===this.state.selectedLeadId)||this.state.leads[0];
+    const selectedLead={ name:sl.name, phone:sl.phone, initials:sl.name.split(' ').map(w=>w[0]).join('').slice(0,2),
+      fields:[ {label:"Mahsulot",value:sl.product},{label:"Summa",value:this.fmtShort(sl.amountN)},{label:"Daromad",value:sl.income},{label:"Skoring",value:sl.score+"/100"},{label:"Muddat",value:sl.term},{label:"Hudud",value:sl.region} ],
+      comments:sl.comments };
+    const statusOptions=['new','review','approved','rejected'].map(s=>{ const m=statusMeta[s]; const on=sl.status===s;
+      return { label:m.l, apply:()=>this.setState({leads:this.state.leads.map(x=>x.id===sl.id?{...x,status:s}:x)}),
+        style:`background:${on?m.bg:'var(--surface2)'};border:1px solid ${on?m.c:'var(--border)'};color:${on?m.c:'var(--text)'};padding:8px 13px;border-radius:9px;font-weight:600;font-size:12.5px;cursor:pointer` };
+    });
+
+    const footerCols=[
+      { title:"Mahsulotlar", links:["Omonatlar","Kreditlar","Plastik kartalar","Pul o'tkazmalari","Valyuta ayirboshlash"] },
+      { title:"Bank haqida", links:["Bank tarixi","Reytinglar","Litsenziya","Vakansiyalar","Rekvizitlar"] },
+      { title:"Yordam", links:["Call-markaz 1287","Murojaat yuborish","Filiallar","Kalkulyatorlar","FAQ"] },
+    ];
+
+    return {
+      S, shellStyle, sliderStyle, inputStyle, langs, navItems,
+      themeIcon: dark?'☀':'☾', themeLabel: dark?'Light':'Dark', toggleTheme:()=>this.setState({theme:dark?'light':'dark'}),
+      goHome:()=>this.go('home'), goCredit:()=>this.go('credit'), goCabinet:()=>this.go('cabinet'),
+      year:2026, today:"16.06.2026", 
+      isHome:this.state.screen==='home', isCredit:this.state.screen==='credit', isWizard:this.state.screen==='wizard',
+      isCabinet:this.state.screen==='cabinet', isCompliance:this.state.screen==='compliance', isAdmin:this.state.screen==='admin',
+      creditTypes, activeCredit:{...this.active, rateLabel:this.active.rate+'% dan'}, calc,
+      setAmount:(e)=>this.setState({amount:parseInt(e.target.value)}), setTerm:(e)=>this.setState({term:parseInt(e.target.value)}),
+      scheduleBars:this.scheduleBars(), startWizard:()=>{this.setState({wizardStep:1});this.go('wizard');},
+      wizStep1:step===1,wizStep2:step===2,wizStep3:step===3,wizStep4:step===4,wizStep5:step===5,
+      wizardSteps, personalFields, incomeFields, docs, wizard, resultSummary,
+      wizardNext:()=>{ if(step>=5){this.go('cabinet');return;} this.setState({wizardStep:step+1}); window.scrollTo(0,0); },
+      wizardBack:()=>{ if(step<=1){this.go('credit');return;} this.setState({wizardStep:step-1}); window.scrollTo(0,0); },
+      wizBackStyle:`background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:14px 24px;border-radius:12px;font-weight:600;font-size:15px;cursor:pointer;visibility:${step<=1?'hidden':'visible'}`,
+      deposits, cards, rates, news, quickServices, heroStats,
+      cabCards, cabActions, transactions,
+      compStats, appealTypes, compFields, statusSteps, channels,
+      appealSent:this.state.appealSent, appealRef:"MUR-"+(100000+this.state.selectedLeadId*73),
+      submitAppeal:()=>this.setState({appealSent:true}),
+      statusShown:this.state.statusShown, checkStatus:()=>this.setState({statusShown:true}),
+      leadFilters, leads, selectedLead, statusOptions,
+      commentDraft:this.state.commentDraft, setComment:(e)=>this.setState({commentDraft:e.target.value}),
+      addComment:()=>{ const txt=this.state.commentDraft.trim(); if(!txt)return;
+        this.setState({ commentDraft:'', leads:this.state.leads.map(x=>x.id===sl.id?{...x,comments:[...x.comments,{text:txt,author:"Siz",time:"Hozir"}]}:x) }); },
+      footerCols, socials:['✈','◎','f','▶'],
+    };
+  }
+}
+</script>
+</body>
+</html>
