@@ -61,6 +61,7 @@ const IconPaths = {
   workload: "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21a7 7 0 0 1 14 0M18 8v6M21 11h-6",
   risks: "M12 3l9 16H3zM12 10v4M12 17h.01",
   reports: "M6 3h9l4 4v14H6zM14 3v5h5M9 13h6M9 17h6",
+  products: "M3 6h18M3 12h18M3 18h18M7 6v12",
 };
 function Icon({ name, size = 18 }) {
   const stroke = ["portfolio", "board", "roadmap", "workload", "risks", "reports"].includes(name);
@@ -78,6 +79,7 @@ const NAV = [
     { id: "dashboard", icon: "dashboard", label: "nav_dashboard" },
     { id: "portfolio", icon: "portfolio", label: "nav_portfolio", count: () => ALL_P.length },
     { id: "board", icon: "board", label: "nav_board" },
+    { id: "products", icon: "products", label: "nav_products" },
     { id: "roadmap", icon: "roadmap", label: "nav_roadmap" },
   ]},
   { group: "nav_group_people", items: [
@@ -92,6 +94,7 @@ const NAV = [
 const PAGES = {
   dashboard: Dashboard, portfolio: Portfolio, board: StatusBoard, roadmap: Roadmap,
   workload: Workload, employee: EmployeeProfile, project: ProjectDetail, risks: Risks, reports: Reports,
+  products: Products,
 };
 // which sidebar item is highlighted for a given route
 const ACTIVE_OF = { project: "portfolio", employee: "workload" };

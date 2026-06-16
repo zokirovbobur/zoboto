@@ -183,8 +183,42 @@ function prodShort(p) {
   return p.length > 22 ? p.slice(0, 21) + "…" : p;
 }
 
+// ---- Jira integration ----
+const JIRA_BASE = "https://test-tb.atlassian.net";
+const JIRA_BOARDS = {
+  "Trastpay":    { key: "SL",  url: JIRA_BASE + "/jira/software/projects/SL/boards" },
+  "ДБО":         { key: "KT",  url: JIRA_BASE + "/jira/software/projects/KT/boards" },
+  "Food City":   { key: "FC",  url: JIRA_BASE + "/jira/software/projects/FC/boards" },
+  "Middleware":  { key: "MW",  url: JIRA_BASE + "/jira/software/projects/MW/boards" },
+  "ABS":         { key: "ABS", url: JIRA_BASE + "/jira/software/projects/ABS/boards" },
+  "AI products": { key: "AI",  url: JIRA_BASE + "/jira/software/projects/AI/boards" },
+};
+
+function JiraLink({ epicKey, product, style: extStyle }) {
+  const url = epicKey
+    ? JIRA_BASE + "/browse/" + epicKey
+    : (JIRA_BOARDS[product] ? JIRA_BOARDS[product].url : null);
+  if (!url) return null;
+  const label = epicKey || (JIRA_BOARDS[product] ? JIRA_BOARDS[product].key : "");
+  return (
+    <a href={url} target="_blank" rel="noopener noreferrer"
+       onClick={e => e.stopPropagation()}
+       title={"Jira: " + label}
+       style={{ display:"inline-flex", alignItems:"center", gap:3, marginLeft:5,
+                color:"#2563EB", opacity:.65, flexShrink:0, textDecoration:"none",
+                fontSize:10, fontWeight:600, verticalAlign:"middle", ...extStyle }}>
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+      {epicKey && <span style={{fontSize:9.5}}>{epicKey}</span>}
+    </a>
+  );
+}
+
 Object.assign(window, {
   AppCtx, useApp, useT, STATUS, STATUS_ORDER, progressOf, parseDate, fmtDate, isOverdue, fmtSum,
   NOW, MONTHS, EMP, PROJ, initials, avColor, Avatar, StatusBadge, Progress, Pill, KPI,
-  Chart_, ToastHost, useToast, PageHead, prodShort,
+  Chart_, ToastHost, useToast, PageHead, prodShort, JIRA_BASE, JIRA_BOARDS, JiraLink,
 });
