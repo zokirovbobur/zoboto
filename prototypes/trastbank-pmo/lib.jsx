@@ -110,16 +110,60 @@ function KPI({ label, value, tone, sub, onClick, accent }) {
   );
 }
 
+// ---- theme hook (watches data-theme attribute) ----
+function useTheme() {
+  const [theme, setTheme] = useState(() => document.documentElement.getAttribute("data-theme") || "light");
+  useEffect(() => {
+    const obs = new MutationObserver(() =>
+      setTheme(document.documentElement.getAttribute("data-theme") || "light")
+    );
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => obs.disconnect();
+  }, []);
+  return theme;
+}
+
+// patch hardcoded light grid colors to dark equivalents; leave custom colors untouched
+function patchScales(scales, gridC, tickC) {
+  if (!scales) return scales;
+  const out = {};
+  for (const [k, v] of Object.entries(scales)) {
+    out[k] = { ...v };
+    if (v.grid) {
+      out[k].grid = { ...v.grid };
+      if (v.grid.color === "#EEF2F8") out[k].grid.color = gridC;
+    }
+    out[k].ticks = { color: tickC, ...(v.ticks || {}) };
+  }
+  return out;
+}
+
 // ---- Chart.js wrapper ----
 function Chart_({ type, data, options, height = 260, onClickIndex }) {
   const ref = useRef(null);
   const inst = useRef(null);
   const cb = useRef(onClickIndex);
   cb.current = onClickIndex;
+  const theme = useTheme();
+  const dark = theme === "dark";
   useEffect(() => {
     if (!ref.current || !window.Chart) return;
     const existing = window.Chart.getChart(ref.current);
     if (existing) existing.destroy();
+    const gridC  = dark ? "rgba(255,255,255,0.09)" : "#EEF2F8";
+    const tickC  = dark ? "#8A96AE" : "#888";
+    const legC   = dark ? "#A8B4CC" : "#555";
+    const patchedOpts = options ? {
+      ...options,
+      scales: patchScales(options.scales, gridC, tickC),
+      plugins: options.plugins ? {
+        ...options.plugins,
+        legend: options.plugins.legend ? {
+          ...options.plugins.legend,
+          labels: { color: legC, ...(options.plugins.legend.labels || {}) },
+        } : options.plugins.legend,
+      } : options.plugins,
+    } : options;
     inst.current = new window.Chart(ref.current, {
       type, data,
       options: {
@@ -128,13 +172,13 @@ function Chart_({ type, data, options, height = 260, onClickIndex }) {
         onClick: (evt, els) => {
           if (els && els.length && cb.current) cb.current(els[0].index);
         },
-        ...options,
+        ...patchedOpts,
       },
     });
     // container can measure 0 on first commit inside grid/flex — force a resize + draw
     const raf = requestAnimationFrame(() => { if (inst.current) { inst.current.resize(); inst.current.draw(); } });
     return () => { cancelAnimationFrame(raf); if (inst.current) inst.current.destroy(); };
-  }, [JSON.stringify(data), type]);
+  }, [JSON.stringify(data), type, theme]);
   return <div style={{ height, position: "relative", width: "100%", minWidth: 0 }}><canvas ref={ref} /></div>;
 }
 

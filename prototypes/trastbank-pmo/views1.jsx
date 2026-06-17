@@ -72,7 +72,7 @@ function Dashboard() {
       <PageHead title={t("nav_dashboard")} sub={t("appSub")} />
 
       {stoppers.length > 0 && (
-        <div style={{
+        <div className="ticker-banner" style={{
           display: "flex", alignItems: "stretch", marginBottom: 16,
           background: "#FEF2F2", border: "1px solid #FCA5A5",
           borderRadius: 10, overflow: "hidden", height: 38,
@@ -86,10 +86,10 @@ function Dashboard() {
                     background: SEV_C[s.sev] + "22", borderRadius: 4,
                     padding: "1px 5px", marginRight: 6, letterSpacing: ".2px",
                   }}>{s.sev}</span>
-                  <span style={{ color: "#7F1D1D", fontWeight: 600, fontSize: 13 }}>
+                  <span className="ticker-text" style={{ color: "#7F1D1D", fontWeight: 600, fontSize: 13 }}>
                     {lang === "ru" ? s.title_ru : s.title_uz}
                   </span>
-                  <span style={{ margin: "0 20px", color: "#FCA5A5", fontSize: 16 }}>·</span>
+                  <span className="ticker-dot" style={{ margin: "0 20px", color: "#FCA5A5", fontSize: 16 }}>·</span>
                 </span>
               ))}
             </div>
