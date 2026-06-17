@@ -17,7 +17,6 @@ const RECENT_LAUNCHES = [
       { key: "SL-212", summary: "Привязка номера телефона к кошелку счет (22616)", done: true },
       { key: "SL-213", summary: "[back] BM > p2p/info", done: true },
       { key: "SL-214", summary: "[back] BM > p2p/pay", done: true },
-      { key: "SL-238", summary: "A2A > Text UX ga to'ri holatda mobilkaga berilishi kerak", done: false },
     ],
   },
   {
