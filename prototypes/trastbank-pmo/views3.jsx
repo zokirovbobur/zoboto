@@ -160,6 +160,7 @@ function Risks() {
 
       <Section title={t("overdue")} items={overdue} tone="red" />
       <Section title={t("st_paused")} items={paused} tone="red" />
+      <Section title={t("kpi_noowner")} items={noOwner} tone="amber" />
       <Section title={t("noDeadline")} items={noDeadline} tone="amber" />
     </div>
   );
