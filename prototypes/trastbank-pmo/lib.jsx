@@ -194,6 +194,22 @@ const JIRA_BOARDS = {
   "AI products": { key: "AI",  color: "#9333EA", icon: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z", url: JIRA_BASE + "/jira/software/projects/AI/summary" },
 };
 
+function PurchasedBadge({ tooltip }) {
+  return (
+    <span title={tooltip}
+          style={{ display:"inline-flex", alignItems:"center", marginLeft:5,
+                   color:"#7C3AED", opacity:.75, flexShrink:0, cursor:"default",
+                   verticalAlign:"middle" }}>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+    </span>
+  );
+}
+
 function JiraLink({ epicKey, product, style: extStyle }) {
   const url = epicKey
     ? JIRA_BASE + "/browse/" + epicKey
@@ -220,5 +236,5 @@ function JiraLink({ epicKey, product, style: extStyle }) {
 Object.assign(window, {
   AppCtx, useApp, useT, STATUS, STATUS_ORDER, progressOf, parseDate, fmtDate, isOverdue, fmtSum,
   NOW, MONTHS, EMP, PROJ, initials, avColor, Avatar, StatusBadge, Progress, Pill, KPI,
-  Chart_, ToastHost, useToast, PageHead, prodShort, JIRA_BASE, JIRA_BOARDS, JiraLink,
+  Chart_, ToastHost, useToast, PageHead, prodShort, JIRA_BASE, JIRA_BOARDS, JiraLink, PurchasedBadge,
 });

@@ -144,6 +144,7 @@ window.TB_I18N = {
     exported: "Tayyorlanmoqda — bu prototip namoyishi",
     copied: "Xulosa nusxalandi",
     summary: "Xulosa",
+    purchased_tooltip: "Sotib olingan mahsulot.\nJira'da bu task mavjud emas.",
   },
   ru: {
     _name: "Русский",
@@ -279,6 +280,7 @@ window.TB_I18N = {
     exported: "Подготовка — демонстрация прототипа",
     copied: "Сводка скопирована",
     summary: "Сводка",
+    purchased_tooltip: "Приобретённый продукт.\nЭтот task отсутствует в Jira.",
   },
   en: {
     _name: "English",
@@ -414,6 +416,7 @@ window.TB_I18N = {
     exported: "Preparing — prototype demonstration",
     copied: "Summary copied",
     summary: "Summary",
+    purchased_tooltip: "Purchased product.\nThis task does not exist in Jira.",
   },
 };
 window.TB_LANGS = ["uz","ru","en"];

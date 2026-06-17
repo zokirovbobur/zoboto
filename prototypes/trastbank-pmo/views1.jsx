@@ -295,6 +295,7 @@ function Portfolio() {
                 <tr key={p.id} onClick={() => nav("project", { id: p.id })}>
                   <td className="cell-proj">
                     {p.name}
+                    {p.purchased && <PurchasedBadge tooltip={t("purchased_tooltip")} />}
                     <JiraLink epicKey={p.jiraEpicKey} product={p.product} />
                     {isOverdue(p) && <small style={{ color: "#C0392B" }}>● {t("overdue")}</small>}
                   </td>
@@ -337,7 +338,7 @@ function StatusBoard() {
             </div>
             {c.items.map(p => (
               <div className="kcard" key={p.id} style={{ "--kc": STATUS[c.norm].color }} onClick={() => nav("project", { id: p.id })}>
-                <div className="kcard-t">{p.name}<JiraLink epicKey={p.jiraEpicKey} product={p.product} /></div>
+                <div className="kcard-t">{p.name}{p.purchased && <PurchasedBadge tooltip={t("purchased_tooltip")} />}<JiraLink epicKey={p.jiraEpicKey} product={p.product} /></div>
                 <div className="kcard-meta">
                   <span className="tag">{prodShort(p.product)}</span>
                   {p.pm && <span className="row" style={{ gap: 5 }}><Avatar name={p.pm} size={18} /> {p.pm}</span>}
