@@ -198,54 +198,15 @@ const JIRA_TYPE_COLOR = { Bug: "#E11D48", Story: "#0EA5E9", Task: "#6366F1", Sub
 const JIRA_STATUS_COLOR = { "To Do": "#64748B", "In Progress": "#2563EB", "Done": "#138A5E", "In Review": "#D97706", "Blocked": "#E11D48" };
 
 function JiraSection({ epicKey, product }) {
-  const t = useT();
-  const [creds, setCreds] = React.useState(() => ({
-    email: localStorage.getItem("jira_email") || "",
-    token: localStorage.getItem("jira_token") || "",
-  }));
-  const [showForm, setShowForm] = React.useState(false);
-  const [items, setItems] = React.useState(null);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-
   const board = JIRA_BOARDS[product];
   const epicUrl = epicKey ? JIRA_BASE + "/browse/" + epicKey : (board ? board.url : null);
-  const hasAuth = creds.email && creds.token;
 
-  const fetchIssues = React.useCallback(async (email, token) => {
-    if (!epicKey) return;
-    setLoading(true); setError(null);
-    try {
-      const auth = btoa(email + ":" + token);
-      const jql = encodeURIComponent(`"Epic Link"="${epicKey}" OR parent="${epicKey}" ORDER BY issuetype ASC, status ASC`);
-      const url = `${JIRA_BASE}/rest/api/3/search?jql=${jql}&fields=summary,status,issuetype,assignee&maxResults=50`;
-      const res = await fetch(url, { headers: { Authorization: "Basic " + auth, Accept: "application/json" } });
-      if (!res.ok) throw new Error(res.status === 401 ? "auth" : "fetch");
-      const data = await res.json();
-      setItems(data.issues || []);
-    } catch (e) {
-      setError(e.message === "auth" ? "auth" : "error");
-    } finally { setLoading(false); }
-  }, [epicKey]);
-
-  React.useEffect(() => {
-    if (hasAuth && epicKey) fetchIssues(creds.email, creds.token);
-  }, []);
-
-  const saveAndFetch = (e) => {
-    e.preventDefault();
-    const email = e.target.email.value.trim();
-    const token = e.target.token.value.trim();
-    localStorage.setItem("jira_email", email);
-    localStorage.setItem("jira_token", token);
-    setCreds({ email, token });
-    setShowForm(false);
-    fetchIssues(email, token);
-  };
+  // Use pre-fetched static data if available
+  const staticItems = epicKey && window.TB_JIRA_ISSUES && window.TB_JIRA_ISSUES[epicKey];
 
   return (
     <div className="card">
-      <div className="card-h" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="card-h">
         <h3 style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
@@ -259,60 +220,31 @@ function JiraSection({ epicKey, product }) {
             {epicKey} ↗
           </a>}
         </h3>
-        <span style={{ display: "flex", gap: 6 }}>
-          {hasAuth && epicKey && <button className="btn" style={{ fontSize: 11, padding: "3px 10px" }}
-            onClick={() => fetchIssues(creds.email, creds.token)}>↺ Yangilash</button>}
-          <button className="btn" style={{ fontSize: 11, padding: "3px 10px" }}
-            onClick={() => setShowForm(v => !v)}>
-            {hasAuth ? "⚙ Sozlamalar" : "🔑 Ulash"}
-          </button>
-        </span>
+        {staticItems && <span className="hint">{staticItems.length} ta issue</span>}
       </div>
-
-      {showForm && (
-        <form onSubmit={saveAndFetch} className="card-pad" style={{ borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: 8 }}>
-          <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 2 }}>
-            Atlassian email va API token kiriting (<a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank" style={{ color: "#2563EB" }}>token olish ↗</a>)
-          </div>
-          <input name="email" type="email" defaultValue={creds.email} placeholder="email@trastbank.uz"
-            style={{ padding: "6px 10px", border: "1px solid var(--border)", borderRadius: 6, fontSize: 13 }} required />
-          <input name="token" type="password" defaultValue={creds.token} placeholder="API token"
-            style={{ padding: "6px 10px", border: "1px solid var(--border)", borderRadius: 6, fontSize: 13 }} required />
-          <button type="submit" className="btn btn-primary" style={{ alignSelf: "flex-start" }}>Saqlash va yuklash</button>
-        </form>
-      )}
 
       <div className="card-pad">
         {!epicKey && <div className="muted" style={{ fontSize: 13 }}>Bu loyiha uchun Jira epic belgilanmagan.</div>}
-        {epicKey && !hasAuth && !showForm && (
-          <div className="muted" style={{ fontSize: 13 }}>
-            Jira issue larni ko'rish uchun <button className="btn" style={{ fontSize: 12, padding: "2px 8px" }}
-              onClick={() => setShowForm(true)}>Jira ga ulaning</button>
-          </div>
+        {epicKey && !staticItems && (
+          <div className="muted" style={{ fontSize: 13 }}>Bu epic da issue topilmadi.</div>
         )}
-        {loading && <div className="muted" style={{ fontSize: 13 }}>Yuklanmoqda…</div>}
-        {error === "auth" && <div style={{ color: "#E11D48", fontSize: 13 }}>⚠ Autentifikatsiya xatosi. Credentials ni tekshiring.</div>}
-        {error === "error" && <div style={{ color: "#E11D48", fontSize: 13 }}>⚠ Jira ga ulanib bo'lmadi.</div>}
-        {items && items.length === 0 && <div className="muted" style={{ fontSize: 13 }}>Bu epic da issue topilmadi.</div>}
-        {items && items.length > 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 2 }}>{items.length} ta issue</div>
-            {items.map(iss => {
-              const type = iss.fields.issuetype?.name || "Task";
-              const status = iss.fields.status?.name || "";
-              const tc = JIRA_TYPE_COLOR[type] || "#64748B";
-              const sc = JIRA_STATUS_COLOR[status] || "#64748B";
+        {staticItems && staticItems.length > 0 && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {staticItems.map(iss => {
+              const tc = JIRA_TYPE_COLOR[iss.type] || "#64748B";
+              const sc = JIRA_STATUS_COLOR[iss.status] || "#64748B";
               return (
                 <a key={iss.key} href={JIRA_BASE + "/browse/" + iss.key} target="_blank" rel="noopener noreferrer"
-                   style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "7px 0",
-                            borderBottom: "1px solid var(--border)", textDecoration: "none", color: "inherit" }}>
+                   onClick={e => e.stopPropagation()}
+                   style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 0",
+                            borderBottom: "1px solid var(--line-2)", textDecoration: "none", color: "inherit" }}>
                   <span style={{ fontSize: 10, fontWeight: 700, color: tc, background: tc + "18",
-                                 borderRadius: 4, padding: "2px 5px", flexShrink: 0, marginTop: 1 }}>{type}</span>
-                  <span style={{ flex: 1, fontSize: 13 }}>{iss.fields.summary}</span>
+                                 borderRadius: 4, padding: "2px 5px", flexShrink: 0 }}>{iss.type}</span>
+                  <span style={{ flex: 1, fontSize: 12.5, color: iss.done ? "var(--muted)" : "var(--ink)",
+                                 textDecoration: iss.done ? "line-through" : "none", lineHeight: 1.35 }}>{iss.summary}</span>
                   <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 3, flexShrink: 0 }}>
                     <span style={{ fontSize: 10, fontWeight: 600, color: "#2563EB" }}>{iss.key}</span>
-                    <span style={{ fontSize: 10, color: sc, background: sc + "18",
-                                   borderRadius: 4, padding: "1px 5px" }}>{status}</span>
+                    <span style={{ fontSize: 10, color: sc, background: sc + "18", borderRadius: 4, padding: "1px 5px", whiteSpace: "nowrap" }}>{iss.status}</span>
                   </span>
                 </a>
               );
