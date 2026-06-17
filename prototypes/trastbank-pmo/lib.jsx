@@ -87,7 +87,9 @@ function Avatar({ name, size = 30 }) {
 // ---- small components ----
 function StatusBadge({ norm, mini }) {
   const t = useT(); const s = STATUS[norm];
-  return <span className="badge" style={{ color: s.color, background: s.bg }}>
+  const dark = useTheme() === "dark";
+  const bg = dark ? s.color + "22" : s.bg;
+  return <span className="badge" style={{ color: dark ? s.dot : s.color, background: bg }}>
     <span className="badge-dot" style={{ background: s.dot }} />{t(mini ? s.short : s.short)}
   </span>;
 }
