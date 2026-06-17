@@ -191,14 +191,17 @@ function Workload() {
             options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 10, font: { size: 11 } } } } }} />
           ); })()}
         </div></div>
-        <div className="card"><div className="card-h"><h3>{t("ch_load")}</h3><span className="hint">TOP-10</span></div><div className="card-pad">
-          <Chart_ type="pie" height={250}
+        <div className="card"><div className="card-h"><h3>{t("ch_load")}</h3><span className="hint">{t("col_active")} / {t("col_done")}</span></div><div className="card-pad">
+          <Chart_ type="bar" height={230}
             onClickIndex={(i) => nav("employee", { id: top[i].id })}
             data={{
               labels: top.map(e => e.shortName),
-              datasets: [{ data: top.map(e => e.totalMatched), backgroundColor: ["#2563EB","#138A5E","#6D5CD6","#C2410C","#0E7490","#D97706","#9333EA","#0E9C8E","#B45309","#64748B"], borderWidth: 2, borderColor: "#fff", hoverOffset: 4 }],
+              datasets: [
+                { label: t("col_active"), data: top.map(e => e.statusCounts.progress + e.statusCounts.planned), backgroundColor: "#2563EB", borderRadius: 3, maxBarThickness: 20, stack: "s" },
+                { label: t("col_done"), data: top.map(e => e.statusCounts.completed), backgroundColor: "#138A5E", borderRadius: 3, maxBarThickness: 20, stack: "s" },
+              ],
             }}
-            options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 10, font: { size: 11 } } } } }} />
+            options={{ indexAxis: "y", plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", font: { size: 11 } } } }, scales: { x: { stacked: true, grid: { color: "#EEF2F8" } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 11 } } } } }} />
         </div></div>
       </div>
 
