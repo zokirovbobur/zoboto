@@ -198,6 +198,7 @@ const JIRA_TYPE_COLOR = { Bug: "#E11D48", Story: "#0EA5E9", Task: "#6366F1", Sub
 const JIRA_STATUS_COLOR = { "To Do": "#64748B", "In Progress": "#2563EB", "Done": "#138A5E", "In Review": "#D97706", "Blocked": "#E11D48" };
 
 function JiraSection({ epicKey, product }) {
+  const t = useT();
   const board = JIRA_BOARDS[product];
   const epicUrl = epicKey ? JIRA_BASE + "/browse/" + epicKey : (board ? board.url : null);
 
@@ -220,13 +221,13 @@ function JiraSection({ epicKey, product }) {
             {epicKey} ↗
           </a>}
         </h3>
-        {staticItems && <span className="hint">{staticItems.length} ta issue</span>}
+        {staticItems && <span className="hint">{staticItems.length} {t("jira_issues_count")}</span>}
       </div>
 
       <div className="card-pad">
-        {!epicKey && <div className="muted" style={{ fontSize: 13 }}>Bu loyiha uchun Jira epic belgilanmagan.</div>}
+        {!epicKey && <div className="muted" style={{ fontSize: 13 }}>{t("jira_no_epic")}</div>}
         {epicKey && !staticItems && (
-          <div className="muted" style={{ fontSize: 13 }}>Bu epic da issue topilmadi.</div>
+          <div className="muted" style={{ fontSize: 13 }}>{t("jira_no_issues")}</div>
         )}
         {staticItems && staticItems.length > 0 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>

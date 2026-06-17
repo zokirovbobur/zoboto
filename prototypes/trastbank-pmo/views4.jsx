@@ -160,9 +160,9 @@ function Products() {
   return (
     <div className="fade-in">
       <PageHead
-        title="Mahsulotlar"
-        sub="Jira doskalariga ulangan mahsulotlar va ularning loyihalari"
-        crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: "Mahsulotlar" }]}
+        title={t("nav_products")}
+        sub={t("products_sub")}
+        crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("nav_products") }]}
         right={
           <button className={"chip" + (showPmoOnly ? " on" : "")} onClick={() => setShowPmoOnly(v => !v)}>
             PMO only ({allPmo.length})

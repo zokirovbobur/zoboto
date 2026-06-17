@@ -1,5 +1,6 @@
 // ===== views5: Ohirgi o'zgarishlar (Recent Changes / Launches) =====
 const { useState: uS5 } = React;
+const useT5 = () => { const { lang } = useApp(); const d = window.TB_I18N[lang]; return k => d && d[k] != null ? d[k] : k; };
 
 const RECENT_LAUNCHES = [
   {
@@ -42,6 +43,7 @@ const RECENT_LAUNCHES = [
 
 function LaunchCard({ item, lang }) {
   const [open, setOpen] = uS5(false);
+  const t = useT5();
   const board = JIRA_BOARDS[item.product];
   const name = lang === "ru" ? item.name_ru : item.name_uz;
   const doneTasks = item.tasks.filter(t => t.done);
@@ -71,7 +73,7 @@ function LaunchCard({ item, lang }) {
               fontSize: 11, fontWeight: 700, color: "#138A5E",
               background: "#E4F3EB", borderRadius: 6, padding: "2px 8px",
               textTransform: "uppercase", letterSpacing: ".4px"
-            }}>Ishga tushdi</span>
+            }}>{t("launched")}</span>
             <span style={{ fontSize: 11, color: "var(--muted-2)" }}>{item.date}</span>
             {board && (
               <span style={{
@@ -105,10 +107,10 @@ function LaunchCard({ item, lang }) {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d={open ? "M6 9l6 6 6-6" : "M6 15l6-6 6 6"}/>
             </svg>
-            {item.tasks.length} ta task
+            {item.tasks.length} {t("tasks_count")}
             {openTasks.length > 0 && (
               <span style={{ marginLeft: 2, color: "#D97706", fontWeight: 600 }}>
-                · {openTasks.length} ochiq
+                · {openTasks.length} {t("tasks_open")}
               </span>
             )}
           </button>
@@ -156,13 +158,13 @@ function RecentChanges() {
     <div className="fade-in">
       <PageHead
         title={t("nav_changes")}
-        sub={lang === "ru" ? "Запущенные продукты и фичи с историей задач" : "Ishga tushirilgan mahsulotlar va xususiyatlar, task tarixi bilan"}
+        sub={t("changes_sub")}
         crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("nav_changes") }]}
       />
 
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
         <span style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)", textTransform: "uppercase", letterSpacing: ".4px" }}>
-          2026-yil iyun
+          {t("month_label")}
         </span>
         <div style={{ flex: 1, height: 1, background: "var(--line-2)" }} />
       </div>
