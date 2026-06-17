@@ -36,7 +36,7 @@ const NAV = [
     { id: "workload", icon: "workload", label: "nav_workload", count: () => DATA.employees.length },
   ]},
   { group: "nav_group_control", items: [
-    { id: "risks", icon: "risks", label: "nav_risks", count: () => ALL_P.filter(p => p.norm === "paused" || isOverdue(p)).length },
+    { id: "risks", icon: "risks", label: "nav_risks", warn: true, count: () => ALL_P.filter(p => p.norm === "paused" || isOverdue(p)).length },
     { id: "reports", icon: "reports", label: "nav_reports" },
   ]},
 ];
@@ -90,7 +90,7 @@ function App() {
                     <button key={it.id} className={"nav-item" + (activeId === it.id ? " active" : "")} onClick={() => nav(it.id)}>
                       <Icon name={it.icon} />
                       <span>{t(it.label)}</span>
-                      {it.count && <span className="badge-n">{it.count()}</span>}
+                      {it.count && <span className={"badge-n" + (it.warn ? " badge-n-warn" : "")}>{it.count()}</span>}
                     </button>
                   ))}
                 </div>
