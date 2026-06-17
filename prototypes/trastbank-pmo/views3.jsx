@@ -292,21 +292,138 @@ function Risks() {
   );
 }
 
+// ---------- PMO REPORT TABLE ----------
+function PmoReport({ onBack, lang }) {
+  const t = useT();
+
+  const PMO_COLS = [
+    { key: "num",      label: "№",               w: 40 },
+    { key: "name",     label: "Loyiha nomi",      w: 220 },
+    { key: "product",  label: "Mahsulot",         w: 100 },
+    { key: "status",   label: "Status",           w: 110 },
+    { key: "pm",       label: "PO",               w: 90 },
+    { key: "exp_dl",   label: "Exp. Deadline",    w: 100 },
+    { key: "prod_dl",  label: "Prod. Deadline",   w: 100 },
+    { key: "started",  label: "Started at",       w: 90 },
+    { key: "completed",label: "Completed",        w: 90 },
+    { key: "stake",    label: "Stakeholder",      w: 110 },
+    { key: "exec",     label: "Execution",        w: 160 },
+    { key: "comment",  label: "Comment",          w: 140 },
+  ];
+
+  const STATUS_LABEL = {
+    completed: "Done", progress: "In Dev", planned: "Backlog", paused: "В ожидании",
+  };
+
+  const rows = ALL_P.map((p, i) => ({
+    num:       i + 1,
+    name:      p.name,
+    product:   p.product,
+    status:    p.originalStatus || STATUS_LABEL[p.norm] || p.norm,
+    pm:        p.pm || "—",
+    exp_dl:    p.endDate || "",
+    prod_dl:   "",
+    started:   p.startDate || "",
+    completed: p.norm === "completed" ? (p.endDate || "") : "",
+    stake:     p.customer || "",
+    exec:      (p.team || []).join(", "),
+    comment:   "",
+  }));
+
+  const exportExcel = () => {
+    const header = PMO_COLS.map(c => c.label);
+    const dataRows = rows.map(r => PMO_COLS.map(c => r[c.key] ?? ""));
+    const csvRows = [header, ...dataRows].map(row =>
+      row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+    );
+    const bom = "﻿";
+    const blob = new Blob([bom + csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "PMO_Reestr_" + new Date().toISOString().slice(0,10) + ".csv";
+    a.click(); URL.revokeObjectURL(url);
+  };
+
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const thBg = isDark ? "#1A2230" : "#F0F4FA";
+  const altBg = isDark ? "#171F2E" : "#F7F9FD";
+
+  return (
+    <div className="fade-in">
+      <PageHead
+        title={t("rep_pmo")}
+        crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("reportsTitle"), to: null }, { label: t("rep_pmo") }]}
+        right={
+          <div className="wrap">
+            <button className="btn" onClick={onBack}>← {t("reportsTitle")}</button>
+            <button className="btn btn-primary" onClick={exportExcel}>⬇ Excel export</button>
+          </div>
+        }
+      />
+      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)", marginBottom: 16 }}>
+        <KPI label={t("summary")} value={ALL_P.length} accent="#6D5CD6" />
+        {STATUS_ORDER.map(s => {
+          const cnt = ALL_P.filter(p => p.norm === s).length;
+          return <KPI key={s} label={t(STATUS[s].short)} value={cnt} accent={STATUS[s].color} />;
+        })}
+      </div>
+      <div className="card" style={{ overflow: "hidden" }}>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 12 }}>
+            <thead>
+              <tr>
+                {PMO_COLS.map(c => (
+                  <th key={c.key} style={{
+                    background: thBg, color: "var(--muted)", fontWeight: 600, fontSize: 11,
+                    padding: "9px 10px", textAlign: "left", whiteSpace: "nowrap",
+                    borderBottom: "2px solid var(--line)", minWidth: c.w,
+                    position: c.key === "name" ? "sticky" : "static", left: c.key === "name" ? 40 : "auto",
+                  }}>{c.label}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, i) => (
+                <tr key={i} style={{ background: i % 2 === 1 ? altBg : "transparent" }}>
+                  {PMO_COLS.map(c => (
+                    <td key={c.key} style={{
+                      padding: "8px 10px", borderBottom: "1px solid var(--line-2)",
+                      color: c.key === "num" ? "var(--muted)" : "var(--ink)",
+                      fontWeight: c.key === "name" ? 500 : 400,
+                      whiteSpace: c.key === "exec" || c.key === "comment" ? "normal" : "nowrap",
+                      maxWidth: c.key === "exec" ? 200 : "none",
+                      fontSize: c.key === "exec" ? 11 : 12,
+                    }}>
+                      {c.key === "status"
+                        ? <StatusBadge norm={ALL_P[i].norm} />
+                        : r[c.key] || <span style={{ color: "var(--muted-2)", fontSize: 11 }}>—</span>
+                      }
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ---------- REPORTS ----------
 function Reports() {
   const t = useT(); const { nav, lang } = useApp(); const toast = useToast();
   const [active, setActive] = uS3(null);
 
   const REPORTS = [
-    { id: "board", icon: "🏛", color: "#0E2A52", filter: p => true, key: "rep_board" },
-    { id: "ceo", icon: "⚡", color: "#2563EB", filter: p => p.norm !== "planned", key: "rep_ceo" },
-    { id: "pmo", icon: "📋", color: "#6D5CD6", filter: p => true, key: "rep_pmo" },
-    { id: "problem", icon: "⚠", color: "#C0392B", filter: p => p.norm === "paused" || isOverdue(p) || !p.pm, key: "rep_problem" },
-    { id: "demo", icon: "✓", color: "#138A5E", filter: p => p.demoReady, key: "rep_demo" },
+    { id: "pmo",     icon: "📋", color: "#6D5CD6", filter: p => true,             key: "rep_pmo" },
+    { id: "problem", icon: "⚠",  color: "#C0392B", filter: p => p.norm === "paused" || isOverdue(p) || !p.pm, key: "rep_problem" },
+    { id: "demo",    icon: "✓",  color: "#138A5E", filter: p => p.demoReady,      key: "rep_demo" },
   ];
 
-  const exp = (label) => toast(label + " — " + t("exported"));
-  const copy = () => toast(t("copied"));
+  if (active === "pmo") {
+    return <PmoReport onBack={() => setActive(null)} lang={lang} />;
+  }
 
   if (active) {
     const rep = REPORTS.find(r => r.id === active);
@@ -317,31 +434,29 @@ function Reports() {
         <PageHead title={t(rep.key)} crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("reportsTitle"), to: null }, { label: t(rep.key) }]}
           right={<div className="wrap">
             <button className="btn" onClick={() => setActive(null)}>← {t("reportsTitle")}</button>
-            <button className="btn" onClick={() => exp(t("exportPdf"))}>⬇ {t("exportPdf")}</button>
-            <button className="btn" onClick={() => exp(t("exportExcel"))}>⬇ {t("exportExcel")}</button>
-            <button className="btn" onClick={copy}>⧉ {t("copySummary")}</button>
-            <button className="btn btn-primary" onClick={() => exp(t("presentMode"))}>▶ {t("presentMode")}</button>
           </div>} />
         <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
           <KPI label={t("summary")} value={items.length} accent={rep.color} />
           {STATUS_ORDER.map(s => <KPI key={s} label={t(STATUS[s].short)} value={by[s]} accent={STATUS[s].color} />)}
         </div>
-        <div className="grid" style={{ gridTemplateColumns: "1fr 1.6fr", marginTop: 16 }}>
-          <div className="card"><div className="card-h"><h3>{t("ch_status")}</h3></div><div className="card-pad">
-            <Chart_ type="doughnut" height={230} data={{ labels: STATUS_ORDER.map(s => t(STATUS[s].short)), datasets: [{ data: STATUS_ORDER.map(s => by[s]), backgroundColor: STATUS_ORDER.map(s => STATUS[s].color), borderWidth: 3, borderColor: "#fff" }] }}
-              options={{ cutout: "60%", plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", font: { size: 11 } } } } }} />
-          </div></div>
-          <div className="card"><div className="tbl-wrap"><table className="tbl">
-            <thead><tr><th className="no-sort">{t("col_project")}</th><th className="no-sort">{t("col_product")}</th><th className="no-sort">{t("col_status")}</th><th className="no-sort">{t("col_pm")}</th><th className="no-sort">{t("col_deadline")}</th></tr></thead>
-            <tbody>{items.map(p => (
-              <tr key={p.id} onClick={() => nav("project", { id: p.id })}>
-                <td className="cell-proj">{p.name}</td><td><span className="tag">{prodShort(p.product)}</span></td>
-                <td><StatusBadge norm={p.norm} /></td><td className="t-muted">{p.pm || "—"}</td>
-                <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
-              </tr>
-            ))}</tbody>
-          </table></div></div>
-        </div>
+        <div className="card"><div className="tbl-wrap"><table className="tbl">
+          <thead><tr>
+            <th className="no-sort">{t("col_project")}</th>
+            <th className="no-sort">{t("col_product")}</th>
+            <th className="no-sort">{t("col_status")}</th>
+            <th className="no-sort">{t("col_pm")}</th>
+            <th className="no-sort">{t("col_deadline")}</th>
+          </tr></thead>
+          <tbody>{items.map(p => (
+            <tr key={p.id} onClick={() => nav("project", { id: p.id })}>
+              <td className="cell-proj">{p.name}</td>
+              <td><span className="tag">{prodShort(p.product)}</span></td>
+              <td><StatusBadge norm={p.norm} /></td>
+              <td className="t-muted">{p.pm || "—"}</td>
+              <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
+            </tr>
+          ))}</tbody>
+        </table></div></div>
       </div>
     );
   }
