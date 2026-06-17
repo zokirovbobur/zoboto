@@ -162,7 +162,7 @@ function Dashboard() {
                 datasets: [{
                   data: stackData.map(d => d[1]),
                   backgroundColor: ["#2563EB","#138A5E","#6D5CD6","#C2410C","#0E7490","#D97706","#9333EA","#0E9C8E","#B45309","#64748B","#1D4ED8","#065F46","#4C1D95","#7F1D1D","#0C4A6E"],
-                  borderWidth: 2, borderColor: "#fff", hoverOffset: 4,
+                  borderWidth: 0, hoverOffset: 4,
                 }],
               }}
               options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 10, font: { size: 11 } } } } }} />
