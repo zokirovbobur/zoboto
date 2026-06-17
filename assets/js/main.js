@@ -602,7 +602,7 @@ const I18N = {
       const statusLabel = isSoon ? tr.proto_btn_soon : p.status;
       const statusBadge = p.platforms
         ? p.platforms.map(function(pl) {
-            return '<span class="badge badge--platform badge--platform-' + pl + '" title="' + (pl === "desktop" ? "Desktop" : "Mobile") + '">' + (pl === "desktop" ? deskSVG : mobSVG) + '</span>';
+            return '<span class="badge badge--platform badge--platform-' + pl + '" data-tooltip="' + (pl === "desktop" ? "Desktop ready" : "Mobile ready") + '">' + (pl === "desktop" ? deskSVG : mobSVG) + '</span>';
           }).join("")
         : '<span class="badge ' + stClass + '">' + statusLabel + '</span>';
       const action = isSoon
