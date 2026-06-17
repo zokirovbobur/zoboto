@@ -64,9 +64,50 @@ function Dashboard() {
     { label: t("kpi_incidents"), value: a.incidents, accent: "#C0392B", go: () => nav("risks", {}) },
   ];
 
+  const stoppers = (window.STOPPERS || []).filter(s => s.open);
+  const SEV_C = { P0: "#C0392B", P1: "#E0792F", P2: "#B45309" };
+
   return (
     <div className="fade-in">
       <PageHead title={t("nav_dashboard")} sub={t("appSub")} />
+
+      {stoppers.length > 0 && (
+        <div style={{
+          display: "flex", alignItems: "stretch", marginBottom: 16,
+          background: "#FEF2F2", border: "1px solid #FCA5A5",
+          borderRadius: 10, overflow: "hidden", height: 38,
+        }}>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 7, padding: "0 14px",
+            background: "#C0392B", flexShrink: 0, borderRight: "1px solid #9B1C1C",
+          }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", whiteSpace: "nowrap", letterSpacing: ".3px" }}>
+              STOPPER
+            </span>
+          </div>
+          <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
+            <div className="ticker-track">
+              {[...stoppers, ...stoppers].map((s, i) => (
+                <span key={i} className="ticker-item" onClick={() => nav("risks")} style={{ cursor: "pointer" }}>
+                  <span style={{
+                    fontSize: 10, fontWeight: 800, color: SEV_C[s.sev],
+                    background: SEV_C[s.sev] + "22", borderRadius: 4,
+                    padding: "1px 5px", marginRight: 6, letterSpacing: ".2px",
+                  }}>{s.sev}</span>
+                  <span style={{ color: "#7F1D1D", fontWeight: 600, fontSize: 13 }}>
+                    {lang === "ru" ? s.title_ru : s.title_uz}
+                  </span>
+                  <span style={{ margin: "0 20px", color: "#FCA5A5", fontSize: 16 }}>·</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
         {kpis.slice(5).map((k, i) => <KPI key={i} {...k} onClick={k.go} accent={k.accent} />)}
