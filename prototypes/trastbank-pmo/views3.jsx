@@ -1,5 +1,26 @@
 // ===== views3: Roadmap, Risks & Incidents, Reports =====
-const { useState: uS3, useMemo: uM3, useEffect: uE3 } = React;
+const { useState: uS3, useMemo: uM3, useEffect: uE3, useRef: uR3, useCallback: uCB3 } = React;
+
+function useDragScroll() {
+  const ref = uR3(null);
+  const drag = uR3({ active: false, x: 0, sl: 0 });
+  const onDown = uCB3(e => {
+    const el = ref.current; if (!el) return;
+    drag.current = { active: true, x: e.clientX, sl: el.scrollLeft };
+    el.style.cursor = "grabbing"; el.style.userSelect = "none";
+  }, []);
+  const onMove = uCB3(e => {
+    if (!drag.current.active) return;
+    const el = ref.current; if (!el) return;
+    el.scrollLeft = drag.current.sl - (e.clientX - drag.current.x);
+  }, []);
+  const onUp = uCB3(() => {
+    drag.current.active = false;
+    const el = ref.current; if (!el) return;
+    el.style.cursor = "grab"; el.style.userSelect = "";
+  }, []);
+  return { ref, onMouseDown: onDown, onMouseMove: onMove, onMouseUp: onUp, onMouseLeave: onUp };
+}
 
 function useTheme3() {
   const [t, setT] = uS3(() => document.documentElement.getAttribute("data-theme") || "light");
@@ -295,6 +316,7 @@ function Risks() {
 // ---------- PMO REPORT TABLE ----------
 function PmoReport({ onBack, lang }) {
   const t = useT();
+  const dragScroll = useDragScroll();
 
   const PMO_COLS = [
     { key: "num",      label: "№",               w: 40 },
@@ -368,7 +390,13 @@ function PmoReport({ onBack, lang }) {
         })}
       </div>
       <div className="card" style={{ overflow: "hidden" }}>
-        <div style={{ overflowX: "auto" }}>
+        <div style={{ overflowX: "auto", cursor: "grab" }}
+          ref={dragScroll.ref}
+          onMouseDown={dragScroll.onMouseDown}
+          onMouseMove={dragScroll.onMouseMove}
+          onMouseUp={dragScroll.onMouseUp}
+          onMouseLeave={dragScroll.onMouseLeave}
+        >
           <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 12 }}>
             <thead>
               <tr>
