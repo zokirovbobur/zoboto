@@ -164,8 +164,14 @@ function Chart_({ type, data, options, height = 260, onClickIndex }) {
         } : options.plugins.legend,
       } : options.plugins,
     } : options;
+    const patchedData = dark ? {
+      ...data,
+      datasets: (data.datasets || []).map(ds =>
+        ds.borderColor === "#fff" ? { ...ds, borderColor: "transparent", borderWidth: 0 } : ds
+      ),
+    } : data;
     inst.current = new window.Chart(ref.current, {
-      type, data,
+      type: type, data: patchedData,
       options: {
         responsive: true, maintainAspectRatio: false,
         animation: false, animations: { colors: false, x: false, y: false },
