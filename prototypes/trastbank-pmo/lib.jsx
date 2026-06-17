@@ -168,9 +168,14 @@ function Chart_({ type, data, options, height = 260, onClickIndex }) {
     } : options;
     const patchedData = dark ? {
       ...data,
-      datasets: (data.datasets || []).map(ds =>
-        ds.borderColor === "#fff" ? { ...ds, borderColor: "transparent", borderWidth: 0 } : ds
-      ),
+      datasets: (data.datasets || []).map(ds => {
+        let d = ds;
+        if (d.borderColor === "#fff") d = { ...d, borderColor: "transparent", borderWidth: 0 };
+        if (Array.isArray(d.backgroundColor)) {
+          d = { ...d, backgroundColor: d.backgroundColor.map(c => c === "#D0D6E0" ? "#2A3450" : c) };
+        }
+        return d;
+      }),
     } : data;
     inst.current = new window.Chart(ref.current, {
       type: type, data: patchedData,
