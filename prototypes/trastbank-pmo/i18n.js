@@ -145,6 +145,8 @@ window.TB_I18N = {
     copied: "Xulosa nusxalandi",
     summary: "Xulosa",
     purchased_tooltip: "Sotib olingan mahsulot.\nJira'da bu task mavjud emas.",
+    total_label: "Jami loyihalar",
+    bell_title: "Ohirgi o'zgarishlar",
   },
   ru: {
     _name: "Русский",
@@ -281,6 +283,8 @@ window.TB_I18N = {
     copied: "Сводка скопирована",
     summary: "Сводка",
     purchased_tooltip: "Приобретённый продукт.\nЭтот task отсутствует в Jira.",
+    total_label: "Всего проектов",
+    bell_title: "Последние изменения",
   },
   en: {
     _name: "English",
@@ -417,6 +421,8 @@ window.TB_I18N = {
     copied: "Summary copied",
     summary: "Summary",
     purchased_tooltip: "Purchased product.\nThis task does not exist in Jira.",
+    total_label: "Total projects",
+    bell_title: "Recent changes",
   },
 };
 window.TB_LANGS = ["uz","ru","en"];

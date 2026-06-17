@@ -54,6 +54,14 @@ function App() {
   const [route, setRoute] = uSA({ name: "dashboard" });
   const [search, setSearch] = uSA("");
   const [sideOpen, setSideOpen] = uSA(false);
+  const [bellOpen, setBellOpen] = uSA(false);
+  const bellRef = uRA(null);
+  uEA(() => {
+    if (!bellOpen) return;
+    const handler = (e) => { if (bellRef.current && !bellRef.current.contains(e.target)) setBellOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [bellOpen]);
 
   uEA(() => { localStorage.setItem("tb_lang", lang); document.documentElement.lang = lang; }, [lang]);
   uEA(() => { window.scrollTo(0, 0); const m = document.querySelector(".main"); if (m) m.scrollTop = 0; }, [route]);
@@ -104,6 +112,48 @@ function App() {
                   onFocus={() => { if (!["portfolio", "board", "workload"].includes(route.name)) nav("portfolio"); }} />
               </div>
               <div className="topbar-spacer" />
+
+              <div style={{ position: "relative" }} ref={bellRef}>
+                <button className="btn" style={{ padding: "0 10px", height: 38, position: "relative" }}
+                  onClick={() => setBellOpen(o => !o)} title={t("bell_title")}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
+                  {(window.RECENT_LAUNCHES || []).length > 0 && (
+                    <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: "#138A5E", border: "1.5px solid #fff" }} />
+                  )}
+                </button>
+                {bellOpen && (
+                  <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, width: 320, background: "#fff",
+                                borderRadius: 12, border: "1px solid var(--line)", boxShadow: "0 12px 40px rgba(16,30,60,.16)",
+                                zIndex: 100, overflow: "hidden" }}>
+                    <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--line-2)", fontWeight: 600, fontSize: 13, color: "var(--ink)" }}>
+                      {t("bell_title")}
+                    </div>
+                    <div style={{ maxHeight: 320, overflowY: "auto" }}>
+                      {(window.RECENT_LAUNCHES || []).map(item => {
+                        const board = JIRA_BOARDS[item.product];
+                        const name = lang === "ru" ? item.name_ru : item.name_uz;
+                        return (
+                          <div key={item.id} style={{ padding: "10px 16px", borderBottom: "1px solid var(--line-2)", cursor: "pointer" }}
+                            onClick={() => { nav("changes"); setBellOpen(false); }}>
+                            <div style={{ fontSize: 11, color: "var(--muted-2)", marginBottom: 3 }}>{item.date}</div>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)", lineHeight: 1.35, marginBottom: 5 }}>{name}</div>
+                            {board && <span style={{ fontSize: 11, fontWeight: 600, color: board.color, background: board.color + "18", borderRadius: 4, padding: "1px 7px" }}>{item.product}</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div style={{ padding: "10px 16px", borderTop: "1px solid var(--line-2)" }}>
+                      <button className="btn btn-ghost" style={{ width: "100%", justifyContent: "center", fontSize: 12 }}
+                        onClick={() => { nav("changes"); setBellOpen(false); }}>
+                        {t("viewAll")} →
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <div className="lang-switch">
                 {window.TB_LANGS.map(l => (

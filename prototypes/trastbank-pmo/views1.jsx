@@ -76,7 +76,9 @@ function Dashboard() {
         <div className="card">
           <div className="card-h">
             <h3>{t("ch_status")}</h3>
-            <span style={{ fontWeight: 700, fontSize: 18, color: "var(--ink)" }}>{a.total}</span>
+            <span style={{ fontSize: 13, color: "var(--muted)", fontWeight: 500 }}>
+              {t("total_label")} — <span style={{ fontWeight: 700, fontSize: 18, color: "var(--ink)" }}>{a.total}</span>
+            </span>
           </div>
           <div className="card-pad">
             <Chart_ type="bar" height={200}
@@ -124,14 +126,17 @@ function Dashboard() {
         <div className="card">
           <div className="card-h"><h3>{t("ch_stack")}</h3><span className="hint">{t("clickHint")}</span></div>
           <div className="card-pad">
-            <Chart_ type="bar" height={250}
+            <Chart_ type="pie" height={250}
               onClickIndex={(i) => nav("workload", { stack: stackData[i][0] })}
               data={{
                 labels: stackData.map(d => d[0]),
-                datasets: [{ data: stackData.map(d => d[1]), backgroundColor: "#2563EB", borderRadius: 5, maxBarThickness: 30 }],
+                datasets: [{
+                  data: stackData.map(d => d[1]),
+                  backgroundColor: ["#2563EB","#138A5E","#6D5CD6","#C2410C","#0E7490","#D97706","#9333EA","#0E9C8E","#B45309","#64748B","#1D4ED8","#065F46","#4C1D95","#7F1D1D","#0C4A6E"],
+                  borderWidth: 2, borderColor: "#fff", hoverOffset: 4,
+                }],
               }}
-              options={{ plugins: { legend: { display: false } },
-                scales: { y: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, x: { grid: { display: false }, ticks: { font: { size: 10.5 }, maxRotation: 50, minRotation: 35 } } } }} />
+              options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 10, font: { size: 11 } } } } }} />
           </div>
         </div>
 

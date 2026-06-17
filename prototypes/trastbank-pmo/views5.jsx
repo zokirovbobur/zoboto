@@ -177,4 +177,4 @@ function RecentChanges() {
   );
 }
 
-Object.assign(window, { RecentChanges });
+Object.assign(window, { RecentChanges, RECENT_LAUNCHES });
