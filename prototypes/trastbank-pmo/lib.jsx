@@ -111,30 +111,61 @@ function KPI({ label, value, tone, sub, onClick, accent }) {
 }
 
 // ---- Chart.js wrapper ----
+function useTheme() {
+  const [theme, setTheme] = useState(() => document.documentElement.getAttribute("data-theme") || "light");
+  useEffect(() => {
+    const obs = new MutationObserver(() => {
+      setTheme(document.documentElement.getAttribute("data-theme") || "light");
+    });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => obs.disconnect();
+  }, []);
+  return theme;
+}
+
 function Chart_({ type, data, options, height = 260, onClickIndex }) {
   const ref = useRef(null);
   const inst = useRef(null);
   const cb = useRef(onClickIndex);
   cb.current = onClickIndex;
+  const theme = useTheme();
+  const dark = theme === "dark";
+  const gridColor = dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)";
+  const tickColor = dark ? "#7A8499" : "#888";
+  const legendColor = dark ? "#A8B4CC" : "#555";
   useEffect(() => {
     if (!ref.current || !window.Chart) return;
     const existing = window.Chart.getChart(ref.current);
     if (existing) existing.destroy();
-    inst.current = new window.Chart(ref.current, {
-      type, data,
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        animation: false, animations: { colors: false, x: false, y: false },
-        onClick: (evt, els) => {
-          if (els && els.length && cb.current) cb.current(els[0].index);
-        },
-        ...options,
+    const scaleDefaults = {
+      grid: { color: gridColor, borderColor: gridColor },
+      ticks: { color: tickColor },
+    };
+    const merged = {
+      responsive: true, maintainAspectRatio: false,
+      animation: false, animations: { colors: false, x: false, y: false },
+      plugins: { legend: { labels: { color: legendColor } } },
+      scales: { x: { ...scaleDefaults }, y: { ...scaleDefaults } },
+      onClick: (evt, els) => {
+        if (els && els.length && cb.current) cb.current(els[0].index);
       },
-    });
+      ...options,
+    };
+    // deep-merge scales so caller overrides aren't wiped
+    if (options && options.scales) {
+      merged.scales = {};
+      for (const k of new Set([...Object.keys(scaleDefaults.x ? { x: 1, y: 1 } : {}), ...Object.keys(options.scales)])) {
+        merged.scales[k] = { ...scaleDefaults, ...(options.scales[k] || {}), grid: { ...scaleDefaults.grid, ...((options.scales[k] || {}).grid || {}) }, ticks: { ...scaleDefaults.ticks, ...((options.scales[k] || {}).ticks || {}) } };
+      }
+    }
+    if (options && options.plugins) {
+      merged.plugins = { legend: { labels: { color: legendColor } }, ...options.plugins };
+    }
+    inst.current = new window.Chart(ref.current, { type, data, options: merged });
     // container can measure 0 on first commit inside grid/flex — force a resize + draw
     const raf = requestAnimationFrame(() => { if (inst.current) { inst.current.resize(); inst.current.draw(); } });
     return () => { cancelAnimationFrame(raf); if (inst.current) inst.current.destroy(); };
-  }, [JSON.stringify(data), type]);
+  }, [JSON.stringify(data), type, theme]);
   return <div style={{ height, position: "relative", width: "100%", minWidth: 0 }}><canvas ref={ref} /></div>;
 }
 

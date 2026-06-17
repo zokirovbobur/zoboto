@@ -65,7 +65,14 @@ function Dashboard() {
   ];
 
   const stoppers = (window.STOPPERS || []).filter(s => s.open);
-  const SEV_C = { P0: "#C0392B", P1: "#E0792F", P2: "#B45309" };
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const SEV_C = isDark
+    ? { P0: "#F05252", P1: "#F59E3F", P2: "#D97706" }
+    : { P0: "#C0392B", P1: "#E0792F", P2: "#B45309" };
+  const tickerBg    = isDark ? "#2A1515" : "#FEF2F2";
+  const tickerBor   = isDark ? "#5B2020" : "#FCA5A5";
+  const tickerText  = isDark ? "#FFBBBB" : "#7F1D1D";
+  const tickerDot   = isDark ? "#7B3535" : "#FCA5A5";
 
   return (
     <div className="fade-in">
@@ -74,7 +81,7 @@ function Dashboard() {
       {stoppers.length > 0 && (
         <div style={{
           display: "flex", alignItems: "stretch", marginBottom: 16,
-          background: "#FEF2F2", border: "1px solid #FCA5A5",
+          background: tickerBg, border: `1px solid ${tickerBor}`,
           borderRadius: 10, overflow: "hidden", height: 38,
         }}>
           <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
@@ -83,13 +90,13 @@ function Dashboard() {
                 <span key={i} className="ticker-item" onClick={() => nav("risks")} style={{ cursor: "pointer" }}>
                   <span style={{
                     fontSize: 10, fontWeight: 800, color: SEV_C[s.sev],
-                    background: SEV_C[s.sev] + "22", borderRadius: 4,
+                    background: SEV_C[s.sev] + "28", borderRadius: 4,
                     padding: "1px 5px", marginRight: 6, letterSpacing: ".2px",
                   }}>{s.sev}</span>
-                  <span style={{ color: "#7F1D1D", fontWeight: 600, fontSize: 13 }}>
+                  <span style={{ color: tickerText, fontWeight: 600, fontSize: 13 }}>
                     {lang === "ru" ? s.title_ru : s.title_uz}
                   </span>
-                  <span style={{ margin: "0 20px", color: "#FCA5A5", fontSize: 16 }}>·</span>
+                  <span style={{ margin: "0 20px", color: tickerDot, fontSize: 16 }}>·</span>
                 </span>
               ))}
             </div>
