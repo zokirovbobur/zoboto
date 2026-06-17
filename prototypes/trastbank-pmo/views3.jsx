@@ -244,6 +244,8 @@ function Risks() {
         <KPI label={t("kpi_incidents")} value={DATA.incidents.length} accent="#C0392B" />
       </div>
 
+      <StopperSection stoppers={STOPPERS} t={t} lang={lang} />
+
       <div className="grid" style={{ gridTemplateColumns: "1.3fr 1fr", margin: "16px 0" }}>
         <div className="card">
           <div className="card-h"><h3>{t("incidentsBy")}</h3></div>
@@ -261,14 +263,12 @@ function Risks() {
             ))}</tbody>
           </table></div>
         </div>
-        <div className="card"><div className="card-h"><h3>{t("openBlockers")} · {t("col_pm")}</h3></div><div className="card-pad">
+        <div className="card"><div className="card-h"><h3>{t("st_paused")} · {t("col_pm")}</h3></div><div className="card-pad">
           <Chart_ type="bar" height={230}
             data={{ labels: blockedByOwner.map(d => d[0]), datasets: [{ data: blockedByOwner.map(d => d[1]), backgroundColor: "#C2410C", borderRadius: 5, maxBarThickness: 26 }] }}
             options={{ indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { grid: { display: false } } } }} />
         </div></div>
       </div>
-
-      <StopperSection stoppers={STOPPERS} t={t} lang={lang} />
       <Section title={t("overdue")} items={overdue} tone="red" />
       <Section title={t("st_paused")} items={paused} tone="red" />
       <Section title={t("kpi_noowner")} items={noOwner} tone="amber" />
