@@ -192,16 +192,16 @@ function Workload() {
           ); })()}
         </div></div>
         <div className="card"><div className="card-h"><h3>{t("ch_load")}</h3><span className="hint">{t("col_active")} / {t("col_done")}</span></div><div className="card-pad">
-          <Chart_ type="bar" height={230}
+          <Chart_ type="bar" height={320}
             onClickIndex={(i) => nav("employee", { id: top[i].id })}
             data={{
               labels: top.map(e => e.shortName),
               datasets: [
-                { label: t("col_active"), data: top.map(e => e.statusCounts.progress + e.statusCounts.planned), backgroundColor: "#2563EB", borderRadius: 3, maxBarThickness: 20, stack: "s" },
-                { label: t("col_done"), data: top.map(e => e.statusCounts.completed), backgroundColor: "#138A5E", borderRadius: 3, maxBarThickness: 20, stack: "s" },
+                { label: t("col_active"), data: top.map(e => e.statusCounts.progress + e.statusCounts.planned), backgroundColor: "#2563EB", borderRadius: 3, maxBarThickness: 14, stack: "s" },
+                { label: t("col_done"), data: top.map(e => e.statusCounts.completed), backgroundColor: "#138A5E", borderRadius: 3, maxBarThickness: 14, stack: "s" },
               ],
             }}
-            options={{ indexAxis: "y", plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", font: { size: 11 } } } }, scales: { x: { stacked: true, grid: { color: "#EEF2F8" } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 11 } } } } }} />
+            options={{ indexAxis: "y", plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", font: { size: 11 } } } }, scales: { x: { stacked: true, grid: { color: "#EEF2F8" } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 } } } } }} />
         </div></div>
       </div>
 
