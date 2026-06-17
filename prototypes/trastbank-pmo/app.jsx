@@ -126,12 +126,12 @@ function App() {
                     <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                   </svg>
                   {(window.RECENT_LAUNCHES || []).length > 0 && (
-                    <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: "#138A5E", border: "1.5px solid #fff" }} />
+                    <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: "#138A5E", border: "1.5px solid var(--card)" }} />
                   )}
                 </button>
                 {bellOpen && (
-                  <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, width: 320, background: "#fff",
-                                borderRadius: 12, border: "1px solid var(--line)", boxShadow: "0 12px 40px rgba(16,30,60,.16)",
+                  <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, width: 320, background: "var(--modal-bg)",
+                                borderRadius: 12, border: "1px solid var(--line)", boxShadow: "var(--shadow-lg)",
                                 zIndex: 100, overflow: "hidden" }}>
                     <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--line-2)", fontWeight: 600, fontSize: 13, color: "var(--ink)" }}>
                       {t("bell_title")}

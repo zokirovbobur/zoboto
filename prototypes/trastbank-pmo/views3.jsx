@@ -1,5 +1,15 @@
 // ===== views3: Roadmap, Risks & Incidents, Reports =====
-const { useState: uS3, useMemo: uM3 } = React;
+const { useState: uS3, useMemo: uM3, useEffect: uE3 } = React;
+
+function useTheme3() {
+  const [t, setT] = uS3(() => document.documentElement.getAttribute("data-theme") || "light");
+  uE3(() => {
+    const obs = new MutationObserver(() => setT(document.documentElement.getAttribute("data-theme") || "light"));
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => obs.disconnect();
+  }, []);
+  return t;
+}
 
 const STOPPERS = [
   {
@@ -154,8 +164,12 @@ function Risks() {
 
   const SEV_COLOR = { P0: "#C0392B", P1: "#E0792F", P2: "#B45309" };
   const SEV_BG    = { P0: "#FEF2F2", P1: "#FFF7ED", P2: "#FFFBEB" };
+  const SEV_BG_DK = { P0: "#2D1414", P1: "#2A1A08", P2: "#251A05" };
 
-  const StopperSection = ({ stoppers, t, lang }) => (
+  const StopperSection = ({ stoppers, t, lang }) => {
+    const isDark = useTheme3() === "dark";
+    const bg = isDark ? SEV_BG_DK : SEV_BG;
+    return (
     <div className="card" style={{ marginBottom: 16, overflow: "hidden" }}>
       <div className="card-h">
         <h3>{t("stoppers")}</h3>
@@ -170,7 +184,7 @@ function Risks() {
           }}>
             {/* Sev badge column */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center",
-                          background: SEV_BG[s.sev], borderRight: "1px solid var(--line-2)", padding: "14px 0" }}>
+                          background: bg[s.sev], borderRight: "1px solid var(--line-2)", padding: "14px 0" }}>
               <span style={{ fontSize: 11, fontWeight: 800, color: SEV_COLOR[s.sev],
                              background: SEV_COLOR[s.sev] + "22", borderRadius: 6,
                              padding: "3px 7px", letterSpacing: ".2px" }}>{s.sev}</span>
@@ -192,7 +206,7 @@ function Risks() {
               )}
             </div>
             {/* Consequence */}
-            <div style={{ padding: "14px 16px", background: SEV_BG[s.sev] }}>
+            <div style={{ padding: "14px 16px", background: bg[s.sev] }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: SEV_COLOR[s.sev],
                              textTransform: "uppercase", letterSpacing: ".4px", marginBottom: 6 }}>
                 ⚠ {t("stopper_consequence")}
@@ -213,7 +227,8 @@ function Risks() {
         ))}
       </div>
     </div>
-  );
+    );
+  };
 
   const Section = ({ title, items, tone }) => items.length > 0 && (
     <div className="card" style={{ marginBottom: 16 }}>
