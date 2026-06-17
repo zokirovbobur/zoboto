@@ -36,7 +36,7 @@ const NAV = [
     { id: "workload", icon: "workload", label: "nav_workload", count: () => DATA.employees.length },
   ]},
   { group: "nav_group_control", items: [
-    { id: "risks", icon: "risks", label: "nav_risks", warn: true, count: () => ALL_P.filter(p => p.norm === "paused" || isOverdue(p)).length },
+    { id: "risks", icon: "risks", label: "nav_risks", warn: true, count: () => (window.STOPPERS || []).filter(s => s.open).length },
     { id: "reports", icon: "reports", label: "nav_reports" },
   ]},
 ];

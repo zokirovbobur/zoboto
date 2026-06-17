@@ -236,11 +236,10 @@ function Risks() {
   return (
     <div className="fade-in">
       <PageHead title={t("risksTitle")} crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("nav_risks") }]} />
-      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(6,1fr)" }}>
+      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
         <KPI label={t("stoppers")} value={STOPPERS.filter(s => s.open).length} accent="#C0392B" />
         <KPI label={t("overdue")} value={overdue.length} accent="#C0392B" />
-        <KPI label={t("openBlockers")} value={paused.length} accent="#C2410C" />
-        <KPI label={t("waiting")} value={waiting.length} accent="#B45309" />
+        <KPI label={t("st_paused")} value={paused.length} accent="#C2410C" />
         <KPI label={t("kpi_noowner")} value={noOwner.length} accent="#B45309" />
         <KPI label={t("kpi_incidents")} value={DATA.incidents.length} accent="#C0392B" />
       </div>
@@ -352,4 +351,4 @@ function Reports() {
   );
 }
 
-Object.assign(window, { Roadmap, Risks, Reports });
+Object.assign(window, { Roadmap, Risks, Reports, STOPPERS });
