@@ -69,24 +69,34 @@ function Dashboard() {
       <PageHead title={t("nav_dashboard")} sub={t("appSub")} />
 
       <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
-        {kpis.slice(0, 5).map((k, i) => <KPI key={i} {...k} onClick={k.go} accent={k.accent} />)}
-      </div>
-      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
         {kpis.slice(5).map((k, i) => <KPI key={i} {...k} onClick={k.go} accent={k.accent} />)}
       </div>
 
       <div className="grid" style={{ gridTemplateColumns: "1.1fr 1.4fr", marginTop: 18 }}>
         <div className="card">
-          <div className="card-h"><h3>{t("ch_status")}</h3><span className="hint">{t("clickHint")}</span></div>
+          <div className="card-h">
+            <h3>{t("ch_status")}</h3>
+            <span style={{ fontWeight: 700, fontSize: 18, color: "var(--ink)" }}>{a.total}</span>
+          </div>
           <div className="card-pad">
-            <Chart_ type="doughnut" height={230}
+            <Chart_ type="bar" height={200}
               onClickIndex={(i) => nav("portfolio", { status: STATUS_ORDER[i] })}
               data={{
-                labels: STATUS_ORDER.map(s => t(STATUS[s].short)),
-                datasets: [{ data: STATUS_ORDER.map(s => a.by[s]),
-                  backgroundColor: STATUS_ORDER.map(s => STATUS[s].color), borderWidth: 3, borderColor: "#fff", hoverOffset: 6 }],
+                labels: STATUS_ORDER.map(s => t(STATUS[s].short) + "   —   " + a.by[s]),
+                datasets: [{
+                  data: STATUS_ORDER.map(s => a.by[s]),
+                  backgroundColor: STATUS_ORDER.map(s => STATUS[s].color),
+                  borderRadius: 5, maxBarThickness: 28,
+                }],
               }}
-              options={{ cutout: "62%", plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 14, font: { size: 12, family: "IBM Plex Sans" } } } } }} />
+              options={{
+                indexAxis: "y",
+                plugins: { legend: { display: false } },
+                scales: {
+                  x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } },
+                  y: { grid: { display: false }, ticks: { font: { size: 12 } } },
+                },
+              }} />
           </div>
         </div>
 
