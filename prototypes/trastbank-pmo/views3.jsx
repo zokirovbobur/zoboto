@@ -1,6 +1,53 @@
 // ===== views3: Roadmap, Risks & Incidents, Reports =====
 const { useState: uS3, useMemo: uM3 } = React;
 
+const STOPPERS = [
+  {
+    id: "ST-1",
+    area: "Trastpay",
+    sev: "P0",
+    title_uz: "Trastpay uchun Head of Product ishga olishda rahbariyat to'siqlari",
+    title_ru: "Блокировка найма Head of Product для Trastpay со стороны руководства",
+    consequence_uz: "Trastpay mahsulot strategiyasi boshqaruvsiz qoladi; roadmap kechikadi; jamoa fokusi yo'qoladi va raqobatchilardan orqada qolinadi",
+    consequence_ru: "Продуктовая стратегия Trastpay остаётся без управления; roadmap срывается; команда теряет фокус и отстаёт от конкурентов",
+    owner: "CPO / Boshqaruv kengashi",
+    open: true,
+  },
+  {
+    id: "ST-2",
+    area: "Islomiy banking",
+    sev: "P1",
+    title_uz: "Islom bankiga doir loyihalar to'xtab qolgan",
+    title_ru: "Проекты исламского банкинга приостановлены",
+    consequence_uz: "Regulyator oldidagi majburiyatlar bajarilmaydi; potentsial jarimalar va litsenziya muammolari yuzaga kelishi mumkin",
+    consequence_ru: "Не выполняются обязательства перед регулятором; возможны штрафы и проблемы с лицензированием",
+    owner: "—",
+    open: true,
+  },
+  {
+    id: "ST-3",
+    area: "Trastbank.uz",
+    sev: "P1",
+    title_uz: "trastbank.uz sayti loyihasi to'xtab qolgan",
+    title_ru: "Проект сайта trastbank.uz заморожен",
+    consequence_uz: "Bank imidji zarar ko'radi; mijozlar va hamkorlar uchun rasmiy ma'lumot manbai mavjud emas; marketing aktivliklari bloklanadi",
+    consequence_ru: "Имидж банка страдает; нет официального источника информации для клиентов и партнёров; блокируются маркетинговые активности",
+    owner: "—",
+    open: true,
+  },
+  {
+    id: "ST-4",
+    area: "Infratuzilma",
+    sev: "P0",
+    title_uz: "Dasturchilardan internet access uzib qo'yilgan",
+    title_ru: "У разработчиков отключён доступ в интернет",
+    consequence_uz: "Ishlab chiqish tezligi keskin pasayadi; zamonaviy kutubxonalar va yangilanishlardan foydalanish imkonsiz; xavfsizlik zaifliklarini bartaraf etish qiyinlashadi; eng yaxshi mutaxassislar kompaniyani tark etishi mumkin",
+    consequence_ru: "Скорость разработки резко падает; невозможно использовать современные библиотеки и обновления; устранение уязвимостей затрудняется; лучшие специалисты могут покинуть компанию",
+    owner: "IT infratuzilma",
+    open: true,
+  },
+];
+
 // ---------- ROADMAP / TIMELINE ----------
 function Roadmap() {
   const t = useT(); const { nav, lang } = useApp();
@@ -105,6 +152,69 @@ function Risks() {
     return Object.entries(m).sort((a, b) => b[1] - a[1]);
   }, [lang]);
 
+  const SEV_COLOR = { P0: "#C0392B", P1: "#E0792F", P2: "#B45309" };
+  const SEV_BG    = { P0: "#FEF2F2", P1: "#FFF7ED", P2: "#FFFBEB" };
+
+  const StopperSection = ({ stoppers, t, lang }) => (
+    <div className="card" style={{ marginBottom: 16, overflow: "hidden" }}>
+      <div className="card-h">
+        <h3>{t("stoppers")}</h3>
+        <span className="pill pill-red">{stoppers.filter(s => s.open).length}</span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        {stoppers.map((s, i) => (
+          <div key={s.id} style={{
+            display: "grid", gridTemplateColumns: "56px 1fr 1fr auto",
+            gap: 0, alignItems: "stretch",
+            borderBottom: i < stoppers.length - 1 ? "1px solid var(--line-2)" : "none",
+          }}>
+            {/* Sev badge column */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center",
+                          background: SEV_BG[s.sev], borderRight: "1px solid var(--line-2)", padding: "14px 0" }}>
+              <span style={{ fontSize: 11, fontWeight: 800, color: SEV_COLOR[s.sev],
+                             background: SEV_COLOR[s.sev] + "22", borderRadius: 6,
+                             padding: "3px 7px", letterSpacing: ".2px" }}>{s.sev}</span>
+            </div>
+            {/* Problem */}
+            <div style={{ padding: "14px 16px", borderRight: "1px solid var(--line-2)" }}>
+              <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>
+                <span style={{ fontWeight: 600, color: "var(--ink)" }}>{s.id}</span>
+                <span style={{ margin: "0 6px", opacity: .4 }}>·</span>
+                <span className="tag" style={{ fontSize: 10 }}>{s.area}</span>
+              </div>
+              <div style={{ fontWeight: 600, fontSize: 13, color: "var(--ink)", lineHeight: 1.4 }}>
+                {lang === "ru" ? s.title_ru : s.title_uz}
+              </div>
+              {s.owner && s.owner !== "—" && (
+                <div style={{ marginTop: 6, fontSize: 11, color: "var(--muted)" }}>
+                  {t("stopper_owner")}: <b style={{ color: "var(--ink)" }}>{s.owner}</b>
+                </div>
+              )}
+            </div>
+            {/* Consequence */}
+            <div style={{ padding: "14px 16px", background: SEV_BG[s.sev] }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: SEV_COLOR[s.sev],
+                             textTransform: "uppercase", letterSpacing: ".4px", marginBottom: 6 }}>
+                ⚠ {t("stopper_consequence")}
+              </div>
+              <div style={{ fontSize: 12, color: "var(--ink)", lineHeight: 1.5, opacity: .85 }}>
+                {lang === "ru" ? s.consequence_ru : s.consequence_uz}
+              </div>
+            </div>
+            {/* Status dot */}
+            <div style={{ display: "flex", alignItems: "center", padding: "0 16px",
+                          borderLeft: "1px solid var(--line-2)" }}>
+              <span style={{ width: 10, height: 10, borderRadius: "50%",
+                             background: s.open ? SEV_COLOR[s.sev] : "#138A5E",
+                             boxShadow: s.open ? "0 0 0 3px " + SEV_COLOR[s.sev] + "33" : "none",
+                             display: "inline-block" }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   const Section = ({ title, items, tone }) => items.length > 0 && (
     <div className="card" style={{ marginBottom: 16 }}>
       <div className="card-h"><h3>{title}</h3><span className={"pill pill-" + tone}>{items.length}</span></div>
@@ -126,7 +236,8 @@ function Risks() {
   return (
     <div className="fade-in">
       <PageHead title={t("risksTitle")} crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("nav_risks") }]} />
-      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
+      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(6,1fr)" }}>
+        <KPI label={t("stoppers")} value={STOPPERS.filter(s => s.open).length} accent="#C0392B" />
         <KPI label={t("overdue")} value={overdue.length} accent="#C0392B" />
         <KPI label={t("openBlockers")} value={paused.length} accent="#C2410C" />
         <KPI label={t("waiting")} value={waiting.length} accent="#B45309" />
@@ -158,6 +269,7 @@ function Risks() {
         </div></div>
       </div>
 
+      <StopperSection stoppers={STOPPERS} t={t} lang={lang} />
       <Section title={t("overdue")} items={overdue} tone="red" />
       <Section title={t("st_paused")} items={paused} tone="red" />
       <Section title={t("kpi_noowner")} items={noOwner} tone="amber" />
