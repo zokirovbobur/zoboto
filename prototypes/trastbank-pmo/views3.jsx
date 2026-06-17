@@ -84,6 +84,7 @@ function Roadmap() {
   const t = useT(); const { nav, lang } = useApp();
   const [product, setProduct] = uS3("all");
   const [status, setStatus] = uS3("all");
+  const dragScroll = useDragScroll();
 
   const dated = uM3(() => ALL_P.filter(p => parseDate(p.startDate) && parseDate(p.endDate)), []);
   const range = uM3(() => {
@@ -130,7 +131,13 @@ function Roadmap() {
         </div>
       </div>
 
-      <div className="card card-pad" style={{ overflowX: "auto" }}>
+      <div className="card card-pad" style={{ overflowX: "auto", cursor: "grab" }}
+        ref={dragScroll.ref}
+        onMouseDown={dragScroll.onMouseDown}
+        onMouseMove={dragScroll.onMouseMove}
+        onMouseUp={dragScroll.onMouseUp}
+        onMouseLeave={dragScroll.onMouseLeave}
+      >
         <div style={{ minWidth: 760, position: "relative" }}>
           {/* month header */}
           <div style={{ position: "relative", height: 22, marginLeft: 220, borderBottom: "1px solid var(--line)", marginBottom: 8 }}>
