@@ -102,6 +102,8 @@ function ProjectDetail() {
             </div>
           </div>
 
+          <JiraSection epicKey={p.jiraEpicKey} product={p.product} />
+
           <div className="card">
             <div className="card-h"><h3>{t("riskCard")}</h3></div>
             <div className="card-pad">
