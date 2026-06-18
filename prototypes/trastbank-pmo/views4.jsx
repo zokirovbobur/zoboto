@@ -3,7 +3,7 @@ const { useState: uS4, useMemo: uM4 } = React;
 
 const BOARD_ORDER = ["Trastpay", "ДБО", "Food City", "Middleware", "ABS", "AI products"];
 const PMO_ONLY_ORDER = ["Цифровые сервисы", "ABS / HR", "Исламский банкинг",
-  "Приобретённые продукты", "Trast Business", "Прочее", "Trastbank"];
+  "Приобретённые продукты", "Trast Business", "Прочее"];
 
 function ProductCard({ product, projects }) {
   const t = useT(); const { nav } = useApp();
