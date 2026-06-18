@@ -142,44 +142,85 @@ function Workload() {
   const t = useT(); const { nav, route, search } = useApp();
   const [stack, setStack] = uS2(route.stack || "all");
   const [grade, setGrade] = uS2("all");
-  const [sort, setSort] = uS2({ k: "totalMatched", dir: -1 });
+  const [loadFilter, setLoadFilter] = uS2("all"); // "all" | "overloaded" | "noActive"
+  const DEFAULT_SORT = { k: "totalMatched", dir: -1 };
+  const [sort, setSort] = uS2(DEFAULT_SORT);
 
   const stacks = uM2(() => [...new Set(DATA.employees.map(e => e.stack).filter(Boolean))].sort(), []);
   const grades = uM2(() => [...new Set(DATA.employees.map(e => e.grade).filter(Boolean))], []);
+
+  // computed sort value for special keys
+  const sortVal = (e, k) => {
+    if (k === "active") return e.statusCounts.progress + e.statusCounts.planned;
+    if (k === "completed_col") return e.statusCounts.completed;
+    const v = e[k];
+    return typeof v === "string" ? v.toLowerCase() : (v ?? 0);
+  };
 
   const rows = uM2(() => {
     let r = DATA.employees.filter(e => {
       if (stack !== "all" && e.stack !== stack) return false;
       if (grade !== "all" && e.grade !== grade) return false;
+      if (loadFilter === "overloaded" && e.loadLevel !== "critical" && e.loadLevel !== "high") return false;
+      if (loadFilter === "noActive" && (e.statusCounts.progress + e.statusCounts.planned) > 0) return false;
       if (search && !e.fullName.toLowerCase().includes(search.toLowerCase())) return false;
       return true;
     });
+    if (sort.dir === 0) return r;
     return [...r].sort((a, b) => {
-      const k = sort.k; let x = a[k], y = b[k];
-      if (typeof x === "string") { x = x.toLowerCase(); y = (y || "").toLowerCase(); }
+      const x = sortVal(a, sort.k), y = sortVal(b, sort.k);
       return (x < y ? -1 : x > y ? 1 : 0) * sort.dir;
     });
-  }, [stack, grade, search, sort]);
+  }, [stack, grade, loadFilter, search, sort]);
+
+  // 3-state sort: none → asc → desc → none
+  const cycleSort = (k) => setSort(s => {
+    if (s.k !== k) return { k, dir: 1 };
+    if (s.dir === 1) return { k, dir: -1 };
+    return DEFAULT_SORT;
+  });
+
+  const resetFilters = () => { setStack("all"); setGrade("all"); setLoadFilter("all"); setSort(DEFAULT_SORT); };
 
   const overloaded = DATA.employees.filter(e => e.loadLevel === "critical" || e.loadLevel === "high").length;
-  const noActive = DATA.employees.filter(e => e.statusCounts.progress === 0).length;
+  const noActive = DATA.employees.filter(e => (e.statusCounts.progress + e.statusCounts.planned) === 0).length;
 
-  // current vs completed (top 10)
-  const top = [...DATA.employees].sort((a, b) => b.totalMatched - a.totalMatched).slice(0, 10);
+  // top 12 for charts
+  const topActive = [...DATA.employees].sort((a, b) => (b.statusCounts.progress + b.statusCounts.planned) - (a.statusCounts.progress + a.statusCounts.planned)).slice(0, 12);
+  const topDone   = [...DATA.employees].sort((a, b) => b.statusCounts.completed - a.statusCounts.completed).slice(0, 12);
+
   const LOAD = { low: { k: "load_low", t: "neutral" }, normal: { k: "load_normal", t: "blue" }, high: { k: "load_high", t: "amber" }, critical: { k: "load_critical", t: "red" } };
-  const SortTh = ({ k, label }) => <th onClick={() => setSort(s => ({ k, dir: s.k === k ? -s.dir : 1 }))}>{label}{sort.k === k && <span className="arr">{sort.dir > 0 ? "▲" : "▼"}</span>}</th>;
+
+  const SortTh = ({ k, label }) => {
+    const active = sort.k === k && sort.dir !== 0;
+    return (
+      <th onClick={() => cycleSort(k)} style={{ cursor: "pointer" }}>
+        {label}
+        {active && <span className="arr">{sort.dir > 0 ? "▲" : "▼"}</span>}
+      </th>
+    );
+  };
+
+  const kpiStyle = (active) => ({ cursor: "pointer", outline: active ? "2px solid var(--accent)" : "none", borderRadius: 12 });
 
   return (
     <div className="fade-in">
       <PageHead title={t("workloadTitle")} crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("workloadTitle") }]} />
+
       <div className="kpi-row" style={{ gridTemplateColumns: "repeat(4,1fr)" }}>
-        <KPI label={t("kpi_employees")} value={DATA.employees.length} accent="#2563EB" />
-        <KPI label={t("overloaded")} value={overloaded} accent="#C0392B" />
-        <KPI label={t("noActive")} value={noActive} accent="#B45309" />
+        <div style={kpiStyle(loadFilter === "all")} onClick={resetFilters}>
+          <KPI label={t("kpi_employees")} value={DATA.employees.length} accent="#2563EB" />
+        </div>
+        <div style={kpiStyle(loadFilter === "overloaded")} onClick={() => setLoadFilter(f => f === "overloaded" ? "all" : "overloaded")}>
+          <KPI label={t("overloaded")} value={overloaded} accent="#C0392B" />
+        </div>
+        <div style={kpiStyle(loadFilter === "noActive")} onClick={() => setLoadFilter(f => f === "noActive" ? "all" : "noActive")}>
+          <KPI label={t("noActive")} value={noActive} accent="#B45309" />
+        </div>
         <KPI label={t("col_stack")} value={stacks.length} accent="#0E9C8E" />
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: "1fr 1fr", marginBottom: 16 }}>
+      <div className="grid" style={{ gridTemplateColumns: "1fr 1fr 1fr", marginBottom: 16 }}>
         <div className="card"><div className="card-h"><h3>{t("ch_stack")}</h3></div><div className="card-pad">
           {(() => { const sd = stacks.map(s => [s, DATA.employees.filter(e => e.stack === s).length]).sort((a, b) => b[1] - a[1]); return (
           <Chart_ type="pie" height={250}
@@ -191,17 +232,19 @@ function Workload() {
             options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 10, font: { size: 11 } } } } }} />
           ); })()}
         </div></div>
-        <div className="card"><div className="card-h"><h3>{t("ch_load")}</h3><span className="hint">{t("col_active")} / {t("col_done")}</span></div><div className="card-pad">
+
+        <div className="card"><div className="card-h"><h3>{t("col_active")} (TOP-12)</h3></div><div className="card-pad">
           <Chart_ type="bar" height={320}
-            onClickIndex={(i) => nav("employee", { id: top[i].id })}
-            data={{
-              labels: top.map(e => e.shortName),
-              datasets: [
-                { label: t("col_active"), data: top.map(e => e.statusCounts.progress + e.statusCounts.planned), backgroundColor: "#2563EB", borderRadius: 3, maxBarThickness: 14, stack: "s" },
-                { label: t("col_done"), data: top.map(e => e.statusCounts.completed), backgroundColor: "#138A5E", borderRadius: 3, maxBarThickness: 14, stack: "s" },
-              ],
-            }}
-            options={{ indexAxis: "y", plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", font: { size: 11 } } } }, scales: { x: { stacked: true, grid: { color: "#EEF2F8" } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 } } } } }} />
+            onClickIndex={(i) => nav("employee", { id: topActive[i].id })}
+            data={{ labels: topActive.map(e => e.shortName), datasets: [{ label: t("col_active"), data: topActive.map(e => e.statusCounts.progress + e.statusCounts.planned), backgroundColor: "#2563EB", borderRadius: 3, maxBarThickness: 14 }] }}
+            options={{ indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } } }} />
+        </div></div>
+
+        <div className="card"><div className="card-h"><h3>{t("col_done")} (TOP-12)</h3></div><div className="card-pad">
+          <Chart_ type="bar" height={320}
+            onClickIndex={(i) => nav("employee", { id: topDone[i].id })}
+            data={{ labels: topDone.map(e => e.shortName), datasets: [{ label: t("col_done"), data: topDone.map(e => e.statusCounts.completed), backgroundColor: "#138A5E", borderRadius: 3, maxBarThickness: 14 }] }}
+            options={{ indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } } }} />
         </div></div>
       </div>
 
@@ -210,7 +253,7 @@ function Workload() {
           <option value="all">{t("col_stack")}: {t("all")}</option>{stacks.map(s => <option key={s}>{s}</option>)}</select></div>
         <div className="sel"><select className="f-sel" value={grade} onChange={e => setGrade(e.target.value)}>
           <option value="all">{t("emp_grade")}: {t("all")}</option>{grades.map(g => <option key={g}>{g}</option>)}</select></div>
-        <button className="btn btn-ghost" onClick={() => { setStack("all"); setGrade("all"); }}>↺ {t("resetFilters")}</button>
+        <button className="btn btn-ghost" onClick={resetFilters}>↺ {t("resetFilters")}</button>
         <span className="tag" style={{ marginLeft: "auto" }}>{rows.length} {t("employees")}</span>
       </div>
 
@@ -221,8 +264,8 @@ function Workload() {
             <SortTh k="product" label={t("emp_product")} />
             <SortTh k="stack" label={t("col_stack")} />
             <SortTh k="grade" label={t("emp_grade")} />
-            <th className="no-sort">{t("col_active")}</th>
-            <th className="no-sort">{t("col_done")}</th>
+            <SortTh k="active" label={t("col_active")} />
+            <SortTh k="completed_col" label={t("col_done")} />
             <SortTh k="totalMatched" label="Σ" />
             <th className="no-sort">{t("col_load")}</th>
           </tr></thead>
