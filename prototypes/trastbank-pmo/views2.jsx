@@ -338,54 +338,36 @@ function EmployeeProfile() {
           onClick={() => toggleStatus("planned")} tone={statusFilter === "planned" ? "active" : null} />
         <KPI label={t("st_paused_s")} value={e.statusCounts.paused} accent={STATUS.paused.color}
           onClick={() => toggleStatus("paused")} tone={statusFilter === "paused" ? "active" : null} />
-        <KPI label="Σ" value={e.totalMatched} accent="#0E2A52"
+        <KPI label="Σ" value={e.totalMatched}
           onClick={() => setStatusFilter("all")} tone={statusFilter === "all" ? "active" : null} />
       </div>
 
-      <div className="detail-grid" style={{ marginTop: 16 }}>
-        <div className="card">
-          <div className="card-h">
-            <h3>{t("emp_projects")}</h3>
-            <span className="hint">{filteredProjs.length}{statusFilter !== "all" ? " / " + allProjs.length : ""} {t("projects")}</span>
-          </div>
-          <div className="tbl-wrap">
-            <table className="tbl" style={{ fontSize: 12.5 }}>
-              <thead><tr>
-                <th style={{ fontSize: 10.5 }}>{t("col_status") || "Status"}</th>
-                <th style={{ fontSize: 10.5 }}>{t("nav_portfolio")}</th>
-                <th style={{ fontSize: 10.5 }}>{t("emp_product")}</th>
-              </tr></thead>
-              <tbody>
-                {filteredProjs.map(p => (
-                  <tr key={p.id} onClick={() => nav("project", { id: p.id })}>
-                    <td style={{ whiteSpace: "nowrap" }}><StatusBadge norm={p.norm} /></td>
-                    <td style={{ fontWeight: 600 }}>{p.name}</td>
-                    <td><span className="tag">{prodShort(p.product)}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {!filteredProjs.length && <div className="empty" style={{ padding: 20 }}>{t("noData")}</div>}
-          </div>
+      <div className="card" style={{ marginTop: 16 }}>
+        <div className="card-h">
+          <h3>{t("emp_projects")}</h3>
+          <span className="hint">{filteredProjs.length}{statusFilter !== "all" ? " / " + allProjs.length : ""} {t("projects")}</span>
+          {statusFilter !== "all" && (
+            <button className="btn btn-ghost" style={{ fontSize: 11, marginLeft: "auto" }} onClick={() => setStatusFilter("all")}>↺ {t("resetFilters")}</button>
+          )}
         </div>
-
-        <div className="card">
-          <div className="card-h"><h3>{t("distByStatus")}</h3></div>
-          <div className="card-pad">
-            <Chart_ type="bar" height={180}
-              onClickIndex={(i) => toggleStatus(STATUS_ORDER[i])}
-              data={{
-                labels: STATUS_ORDER.map((s, i) => t(STATUS[s].short) + "   —   " + statusCounts[i]),
-                datasets: [{ data: statusCounts, backgroundColor: STATUS_ORDER.map((s, i) => statusFilter === "all" || statusFilter === s ? STATUS[s].color : STATUS[s].color + "44"), borderRadius: 5, maxBarThickness: 22 }]
-              }}
-              options={{ indexAxis: "y", plugins: { legend: { display: false } },
-                scales: { x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 11 } } } } }} />
-            {statusFilter !== "all" && (
-              <div style={{ textAlign: "center", marginTop: 8 }}>
-                <button className="btn btn-ghost" style={{ fontSize: 11 }} onClick={() => setStatusFilter("all")}>↺ {t("resetFilters")}</button>
-              </div>
-            )}
-          </div>
+        <div className="tbl-wrap">
+          <table className="tbl" style={{ fontSize: 12.5 }}>
+            <thead><tr>
+              <th style={{ fontSize: 10.5 }}>{t("col_status")}</th>
+              <th style={{ fontSize: 10.5 }}>{t("nav_portfolio")}</th>
+              <th style={{ fontSize: 10.5 }}>{t("emp_product")}</th>
+            </tr></thead>
+            <tbody>
+              {filteredProjs.map(p => (
+                <tr key={p.id} onClick={() => nav("project", { id: p.id })}>
+                  <td style={{ whiteSpace: "nowrap" }}><StatusBadge norm={p.norm} /></td>
+                  <td style={{ fontWeight: 600 }}>{p.name}</td>
+                  <td><span className="tag">{prodShort(p.product)}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {!filteredProjs.length && <div className="empty" style={{ padding: 20 }}>{t("noData")}</div>}
         </div>
       </div>
     </div>
