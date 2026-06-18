@@ -279,11 +279,12 @@ function Portfolio() {
         <div className="card">
           <div className="card-h"><h3>{t("col_status")}</h3></div>
           <div className="card-pad">
-            <Chart_ type="doughnut" height={160}
+            <Chart_ type="bar" height={160}
               onClickIndex={i => setStatus(status === STATUS_ORDER[i] ? "all" : STATUS_ORDER[i])}
-              data={{ labels: STATUS_ORDER.map(s => t(STATUS[s].short)),
-                datasets:[{ data: statusCounts, backgroundColor: STATUS_ORDER.map(s=>STATUS[s].color), borderWidth:2, borderColor:"#fff", hoverOffset:4 }] }}
-              options={{ cutout:"60%", plugins:{ legend:{ position:"bottom", labels:{ usePointStyle:true, pointStyle:"circle", padding:8, font:{ size:10.5 } } } } }} />
+              data={{ labels: STATUS_ORDER.map((s,i) => t(STATUS[s].short) + "   —   " + statusCounts[i]),
+                datasets:[{ data: statusCounts, backgroundColor: STATUS_ORDER.map(s=>STATUS[s].color), borderRadius:5, maxBarThickness:22 }] }}
+              options={{ indexAxis:"y", plugins:{ legend:{ display:false } },
+                scales:{ x:{ grid:{ color:"#EEF2F8" }, ticks:{ precision:0 } }, y:{ grid:{ display:false }, ticks:{ font:{ size:11 } } } } }} />
           </div>
         </div>
         <div className="card">
