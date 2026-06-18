@@ -20,8 +20,7 @@ window.TB_DATA = {
     "AI products",
     "Прочее",
     "Middleware",
-    "Исламский банкинг",
-    "Trastbank"
+    "Исламский банкинг"
   ],
   "projects": [
     {
