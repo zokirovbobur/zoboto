@@ -5,68 +5,153 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Safa — Tez kunda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg: #0B1120;
-      --card: #111827;
-      --border: #1F2D42;
-      --accent: #22C55E;
-      --accent-soft: rgba(34,197,94,.12);
-      --ink: #F1F5F9;
-      --muted: #94A3B8;
-      --muted2: #475569;
+      --bg:      #0A1E2B;
+      --bg2:     #0D2535;
+      --gold:    #C9A86A;
+      --gold-s:  rgba(201,168,106,.12);
+      --green:   #137A57;
+      --green-s: rgba(19,122,87,.15);
+      --ink:     #EDE8DC;
+      --muted:   #7A9AAD;
+      --border:  rgba(201,168,106,.2);
     }
+
     body {
       background: var(--bg);
       color: var(--ink);
-      font-family: 'Newsreader', Georgia, serif;
+      font-family: 'Inter', sans-serif;
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 32px 24px;
+      overflow: hidden;
+    }
+
+    /* geometric background */
+    .geo {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .geo svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(700px, 120vw);
+      opacity: .07;
     }
 
     .wrap {
-      max-width: 560px;
+      position: relative;
+      z-index: 1;
+      max-width: 520px;
       width: 100%;
       text-align: center;
     }
 
-    .icon {
-      width: 72px;
-      height: 72px;
-      border-radius: 20px;
-      background: var(--accent-soft);
-      border: 1px solid var(--accent);
+    /* top badge */
+    .badge {
       display: inline-flex;
       align-items: center;
+      gap: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--border);
+      background: var(--gold-s);
+      padding: 5px 14px;
+      border-radius: 99px;
+      margin-bottom: 28px;
+    }
+    .badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: .7;
+    }
+
+    /* diamond icon */
+    .diamond-wrap {
+      margin: 0 auto 28px;
+      width: 72px;
+      height: 72px;
+      position: relative;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      margin-bottom: 32px;
-      font-size: 34px;
+    }
+    .diamond-wrap svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .diamond-wrap .emoji {
+      position: relative;
+      font-size: 28px;
+      line-height: 1;
     }
 
     h1 {
-      font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 600;
-      letter-spacing: -0.02em;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.4rem, 7vw, 3.4rem);
+      font-weight: 500;
+      letter-spacing: -0.01em;
       line-height: 1.1;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      color: var(--ink);
     }
-
-    h1 span { color: var(--accent); }
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
 
     .sub {
-      font-size: 1.05rem;
+      font-size: 14px;
+      font-weight: 300;
       color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 40px;
-      font-style: italic;
+      line-height: 1.7;
+      margin-bottom: 36px;
+      letter-spacing: .01em;
     }
 
+    /* divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 auto 32px;
+      max-width: 300px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider span {
+      font-size: 10px;
+      color: var(--gold);
+      opacity: .6;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    /* tags */
     .tags {
       display: flex;
       flex-wrap: wrap;
@@ -75,85 +160,77 @@
       margin-bottom: 40px;
     }
     .tag {
-      font-family: -apple-system, sans-serif;
       font-size: 12px;
-      font-weight: 500;
-      padding: 5px 12px;
-      border-radius: 99px;
-      background: var(--card);
+      font-weight: 400;
+      padding: 5px 13px;
+      border-radius: 4px;
+      background: var(--bg2);
       border: 1px solid var(--border);
       color: var(--muted);
+      letter-spacing: .01em;
     }
-    .tag.active {
-      background: var(--accent-soft);
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .badge {
-      display: inline-block;
-      font-family: -apple-system, sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 99px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      margin-bottom: 20px;
+    .tag.hi {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: var(--gold-s);
     }
 
     .back {
-      font-family: -apple-system, sans-serif;
-      font-size: 13px;
-      color: var(--muted2);
+      font-size: 12px;
+      color: var(--muted);
       text-decoration: none;
-      margin-top: 48px;
-      display: inline-block;
-      transition: color .15s;
-    }
-    .back:hover { color: var(--muted); }
-
-    .pitch-link {
-      font-family: -apple-system, sans-serif;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--accent);
-      text-decoration: none;
-      padding: 8px 18px;
-      border-radius: 8px;
-      border: 1px solid var(--accent);
-      background: var(--accent-soft);
+      letter-spacing: .03em;
+      opacity: .6;
       transition: opacity .15s;
     }
-    .pitch-link:hover { opacity: .8; }
+    .back:hover { opacity: 1; }
   </style>
 </head>
 <body>
+
+  <div class="geo">
+    <svg viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="200" y="200" width="200" height="200" stroke="#C9A86A" stroke-width="1.5"/>
+      <rect x="200" y="200" width="200" height="200" stroke="#C9A86A" stroke-width="1.5" transform="rotate(45 300 300)"/>
+      <rect x="150" y="150" width="300" height="300" stroke="#C9A86A" stroke-width=".6" transform="rotate(22.5 300 300)"/>
+      <circle cx="300" cy="300" r="150" stroke="#C9A86A" stroke-width=".5"/>
+      <circle cx="300" cy="300" r="100" stroke="#137A57" stroke-width=".5"/>
+    </svg>
+  </div>
+
   <div class="wrap">
-    <div class="icon">🕌</div>
     <div class="badge">Tez kunda</div>
-    <h1>Safa — <span>Islomiy kundalik</span></h1>
+
+    <div class="diamond-wrap">
+      <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="4" width="64" height="64" stroke="#C9A86A" stroke-width="1.2" transform="rotate(45 36 36)"/>
+        <rect x="10" y="10" width="52" height="52" stroke="#137A57" stroke-width=".7" transform="rotate(45 36 36)" opacity=".5"/>
+      </svg>
+      <span class="emoji">🕌</span>
+    </div>
+
+    <h1>Safa — <em>Islomiy kundalik</em></h1>
+
     <p class="sub">
-      Namoz vaqtlari, Qibla yo'nalishi, zikr, sadaqa, zakot va boshqa<br/>
-      kundalik islomiy amallar uchun yagona platforma.
+      Namoz vaqtlari, Qibla yo'nalishi, zikr, sadaqa, zakot<br/>
+      va boshqa kundalik islomiy amallar uchun yagona platforma.
     </p>
+
+    <div class="divider"><span>◆</span></div>
+
     <div class="tags">
-      <span class="tag active">🕐 Namoz vaqtlari</span>
-      <span class="tag active">🧭 Qibla</span>
-      <span class="tag active">📿 Zikr</span>
-      <span class="tag active">💚 Sadaqa</span>
-      <span class="tag active">📊 Zakot</span>
+      <span class="tag hi">🕐 Namoz vaqtlari</span>
+      <span class="tag hi">🧭 Qibla</span>
+      <span class="tag hi">📿 Zikr</span>
+      <span class="tag hi">💚 Sadaqa</span>
+      <span class="tag hi">📊 Zakot</span>
       <span class="tag">Ro'za</span>
       <span class="tag">Qur'on</span>
       <span class="tag">Hadis</span>
     </div>
+
+    <a class="back" href="/">← zoboto.uz ga qaytish</a>
   </div>
-  <a class="back" href="/">← zoboto.uz ga qaytish</a>
+
 </body>
 </html>
