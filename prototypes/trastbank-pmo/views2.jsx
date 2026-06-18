@@ -299,7 +299,7 @@ function EmployeeProfile() {
   const e = EMP[route.id];
   if (!e) return <div className="empty">{t("noData")}</div>;
 
-  const allProjs = e.projectIds.map(id => PROJ[id]);
+  const allProjs = e.projectIds.map(id => PROJ[id]).filter(Boolean);
   const filteredProjs = statusFilter === "all" ? allProjs : allProjs.filter(p => p.norm === statusFilter);
   const ledProjs = ALL_P.filter(p => p.pmId === e.id);
   const LOAD = { low: "load_low", normal: "load_normal", high: "load_high", critical: "load_critical" };

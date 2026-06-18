@@ -67,6 +67,23 @@ function fmtSum(s) {
 // ---- people helpers ----
 const EMP = {}; window.TB_DATA.employees.forEach(e => { EMP[e.id] = e; });
 const PROJ = {}; window.TB_DATA.projects.forEach(p => { PROJ[p.id] = p; });
+// Keep employee workload data consistent even if projects are removed independently.
+window.TB_DATA.employees.forEach(e => {
+  e.projectIds = (e.projectIds || []).filter(id => PROJ[id]);
+  e.statusCounts = { completed: 0, progress: 0, planned: 0, paused: 0 };
+  e.projectIds.forEach(id => {
+    const norm = PROJ[id].norm;
+    if (e.statusCounts[norm] !== undefined) e.statusCounts[norm]++;
+  });
+  e.totalMatched = e.projectIds.length;
+  e.loadLevel = e.totalMatched >= 20 ? "critical" : e.totalMatched >= 12 ? "high" : e.totalMatched >= 6 ? "normal" : "low";
+});
+function projectPmKey(p) {
+  return p.pmId && EMP[p.pmId] ? p.pmId : (p.pm || "");
+}
+function projectPmName(p) {
+  return p.pmId && EMP[p.pmId] ? EMP[p.pmId].shortName : (p.pm || "");
+}
 function initials(name) {
   const parts = String(name).trim().split(/\s+/);
   return ((parts[0]||"")[0] || "") + ((parts[1]||"")[0] || "");

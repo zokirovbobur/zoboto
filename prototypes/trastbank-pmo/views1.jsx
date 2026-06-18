@@ -213,19 +213,26 @@ function Portfolio() {
   const [demoOnly, setDemoOnly] = uS1(!!route.demo);
   const [sort, setSort] = uS1({ k: "name", dir: 1 });
 
-  const pms = uM1(() => [...new Set(ALL_P.map(p => p.pm).filter(Boolean))].sort(), []);
+  const pms = uM1(() => {
+    const m = {};
+    ALL_P.forEach(p => {
+      const key = projectPmKey(p);
+      if (key) m[key] = projectPmName(p);
+    });
+    return Object.entries(m).sort((a, b) => a[1].localeCompare(b[1]));
+  }, []);
   const prods = DATA.products;
 
   const rows = uM1(() => {
     let r = ALL_P.filter(p => {
       if (status !== "all" && p.norm !== status) return false;
       if (product !== "all" && p.product !== product) return false;
-      if (pm !== "all" && p.pm !== pm) return false;
+      if (pm !== "all" && projectPmKey(p) !== pm) return false;
       if (demoOnly && !p.demoReady) return false;
       if (search) {
         const q = search.toLowerCase();
         if (!(p.name.toLowerCase().includes(q) || p.product.toLowerCase().includes(q) ||
-              (p.pm || "").toLowerCase().includes(q) || (p.customer || "").toLowerCase().includes(q))) return false;
+              projectPmName(p).toLowerCase().includes(q) || (p.customer || "").toLowerCase().includes(q))) return false;
       }
       return true;
     });
@@ -234,6 +241,7 @@ function Portfolio() {
       let a, b;
       if (k === "deadline") { a = parseDate(x.endDate) || 0; b = parseDate(y.endDate) || 0; }
       else if (k === "status") { a = STATUS_ORDER.indexOf(x.norm); b = STATUS_ORDER.indexOf(y.norm); }
+      else if (k === "pm") { a = projectPmName(x).toLowerCase(); b = projectPmName(y).toLowerCase(); }
       else { a = (x[k] || "").toString().toLowerCase(); b = (y[k] || "").toString().toLowerCase(); }
       return (a < b ? -1 : a > b ? 1 : 0) * sort.dir;
     });
@@ -243,7 +251,17 @@ function Portfolio() {
   // chart data — derived from filtered rows
   const statusCounts  = uM1(() => STATUS_ORDER.map(s => rows.filter(p => p.norm === s).length), [rows]);
   const prodChart     = uM1(() => { const m = {}; rows.forEach(p => m[p.product] = (m[p.product]||0)+1); return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6); }, [rows]);
-  const pmChart       = uM1(() => { const m = {}; rows.forEach(p => { if(p.pm) m[p.pm]=(m[p.pm]||0)+1; }); return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6); }, [rows]);
+  const pmChart       = uM1(() => {
+    const m = {};
+    rows.forEach(p => {
+      const key = projectPmKey(p);
+      if (key) {
+        if (!m[key]) m[key] = { name: projectPmName(p), count: 0 };
+        m[key].count++;
+      }
+    });
+    return Object.entries(m).map(([key, v]) => [key, v.name, v.count]).sort((a,b)=>b[2]-a[2]).slice(0,6);
+  }, [rows]);
   const demoCounts    = uM1(() => [rows.filter(p=>p.demoReady).length, rows.filter(p=>!p.demoReady).length], [rows]);
 
   const reset = () => { setStatus("all"); setProduct("all"); setPm("all"); setDemoOnly(false); };
@@ -269,7 +287,7 @@ function Portfolio() {
         </select></div>
         <div className="sel"><select className="f-sel" value={pm} onChange={e => setPm(e.target.value)}>
           <option value="all">{t("col_pm")}: {t("all")}</option>
-          {pms.map(p => <option key={p} value={p}>{p}</option>)}
+          {pms.map(([key, name]) => <option key={key} value={key}>{name}</option>)}
         </select></div>
         <button className={"chip" + (demoOnly ? " on" : "")} onClick={() => setDemoOnly(v => !v)}>{t("kpi_demo")}</button>
         <button className="btn btn-ghost" onClick={reset}>↺ {t("resetFilters")}</button>
@@ -303,8 +321,8 @@ function Portfolio() {
           <div className="card-pad">
             <Chart_ type="bar" height={160}
               onClickIndex={i => setPm(pm === pmChart[i][0] ? "all" : pmChart[i][0])}
-              data={{ labels: pmChart.map(d=>d[0].split(" ")[0]),
-                datasets:[{ data: pmChart.map(d=>d[1]), backgroundColor: pmChart.map(d=> pm==="all"||pm===d[0] ? "#6D5CD6" : "#D4CEF5"), borderRadius:4, maxBarThickness:16 }] }}
+              data={{ labels: pmChart.map(d=>d[1]),
+                datasets:[{ data: pmChart.map(d=>d[2]), backgroundColor: pmChart.map(d=> pm==="all"||pm===d[0] ? "#6D5CD6" : "#D4CEF5"), borderRadius:4, maxBarThickness:16 }] }}
               options={{ indexAxis:"y", plugins:{ legend:{ display:false } },
                 scales:{ x:{ grid:{ color:"#EEF2F8" }, ticks:{ precision:0, font:{ size:10 } } }, y:{ grid:{ display:false }, ticks:{ font:{ size:10 } } } } }} />
           </div>
@@ -348,7 +366,7 @@ function Portfolio() {
                   <td><StatusBadge norm={p.norm} /></td>
                   <td className="t-muted" style={{ fontSize: 12 }}>{p.originalStatus}</td>
                   <td style={{ minWidth: 90 }}><Progress value={progressOf(p)} norm={p.norm} /></td>
-                  <td>{p.pm ? <span className="row"><Avatar name={p.pm} size={24} /> {p.pm}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
+                  <td>{projectPmName(p) ? <span className="row"><Avatar name={projectPmName(p)} size={24} /> {projectPmName(p)}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
                   <td className="t-muted">{p.customer || "—"}</td>
                   <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
                   <td><span className="demo-dot"><span className="dot" style={{ background: p.demoReady ? "#1AA568" : "#D0D6E0" }} />{p.demoReady ? t("yes") : t("no")}</span></td>
