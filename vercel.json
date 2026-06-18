@@ -4,8 +4,5 @@
   "redirects": [
     { "source": "/protos", "destination": "/#prototypes", "permanent": false },
     { "source": "/about", "destination": "/#top", "permanent": false }
-  ],
-  "rewrites": [
-    { "source": "/prototypes/trastbank-pmo/:path+", "destination": "/prototypes/trastbank-pmo/index.html" }
   ]
 }

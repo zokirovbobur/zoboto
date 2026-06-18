@@ -1,24 +1,24 @@
 // ===== app shell: sidebar, topbar, language, routing =====
 const { useState: uSA, useEffect: uEA, useRef: uRA } = React;
 
-const BASE_PATH = "/prototypes/trastbank-pmo";
-
-function parseRouteFromURL() {
-  const path = window.location.pathname.slice(BASE_PATH.length).replace(/^\//, "");
-  const parts = path.split("/");
-  const name = parts[0] || "dashboard";
+function parseRouteFromHash() {
+  const hash = window.location.hash.replace(/^#\/?/, "");
+  if (!hash) return { name: "dashboard" };
+  const parts = hash.split("/");
+  const name = parts[0];
   if ((name === "project" || name === "employee") && parts[1]) {
     return { name, id: parts[1] };
   }
-  return { name: (window.PAGES_MAP && window.PAGES_MAP[name]) ? name : (name || "dashboard") };
+  if (window.PAGES_MAP && window.PAGES_MAP[name]) return { name };
+  return { name: "dashboard" };
 }
 
-function routeToURL(name, params) {
-  if (name === "dashboard" || !name) return BASE_PATH;
+function routeToHash(name, params) {
+  if (!name || name === "dashboard") return "#";
   if ((name === "project" || name === "employee") && params && params.id) {
-    return BASE_PATH + "/" + name + "/" + params.id;
+    return "#" + name + "/" + params.id;
   }
-  return BASE_PATH + "/" + name;
+  return "#" + name;
 }
 
 const IconPaths = {
@@ -72,7 +72,7 @@ const ACTIVE_OF = { project: "portfolio", employee: "workload" };
 
 function App() {
   const [lang, setLang] = uSA(() => localStorage.getItem("tb_lang") || "uz");
-  const [route, setRoute] = uSA(() => parseRouteFromURL());
+  const [route, setRoute] = uSA(() => parseRouteFromHash());
   const [search, setSearch] = uSA("");
   const [sideOpen, setSideOpen] = uSA(false);
   const [bellOpen, setBellOpen] = uSA(false);
@@ -93,14 +93,13 @@ function App() {
   uEA(() => { window.scrollTo(0, 0); const m = document.querySelector(".main"); if (m) m.scrollTop = 0; }, [route]);
 
   uEA(() => {
-    const onPop = () => setRoute(parseRouteFromURL());
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
+    const onHash = () => setRoute(parseRouteFromHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
   const nav = (name, params = {}) => {
-    const url = routeToURL(name, params);
-    history.pushState({}, "", url);
+    window.location.hash = routeToHash(name, params);
     setSearch(""); setRoute({ name, ...params }); setSideOpen(false);
   };
   const dict = window.TB_I18N[lang];
