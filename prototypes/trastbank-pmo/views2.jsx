@@ -290,11 +290,17 @@ function Workload() {
 // ---------- EMPLOYEE PROFILE ----------
 function EmployeeProfile() {
   const t = useT(); const { nav, route, lang } = useApp();
+  const [statusFilter, setStatusFilter] = uS2("all");
   const e = EMP[route.id];
   if (!e) return <div className="empty">{t("noData")}</div>;
-  const projs = e.projectIds.map(id => PROJ[id]);
+
+  const allProjs = e.projectIds.map(id => PROJ[id]);
+  const filteredProjs = statusFilter === "all" ? allProjs : allProjs.filter(p => p.norm === statusFilter);
   const ledProjs = ALL_P.filter(p => p.pmId === e.id);
   const LOAD = { low: "load_low", normal: "load_normal", high: "load_high", critical: "load_critical" };
+  const toggleStatus = (norm) => setStatusFilter(f => f === norm ? "all" : norm);
+
+  const statusCounts = STATUS_ORDER.map(s => e.statusCounts[s]);
 
   return (
     <div className="fade-in">
@@ -324,36 +330,61 @@ function EmployeeProfile() {
       </div>
 
       <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
-        <KPI label={t("st_completed_s")} value={e.statusCounts.completed} accent={STATUS.completed.color} />
-        <KPI label={t("st_progress_s")} value={e.statusCounts.progress} accent={STATUS.progress.color} />
-        <KPI label={t("st_planned_s")} value={e.statusCounts.planned} accent={STATUS.planned.color} />
-        <KPI label={t("st_paused_s")} value={e.statusCounts.paused} accent={STATUS.paused.color} />
-        <KPI label="Σ" value={e.totalMatched} accent="#0E2A52" />
+        <KPI label={t("st_completed_s")} value={e.statusCounts.completed} accent={STATUS.completed.color}
+          onClick={() => toggleStatus("completed")} tone={statusFilter === "completed" ? "active" : null} />
+        <KPI label={t("st_progress_s")} value={e.statusCounts.progress} accent={STATUS.progress.color}
+          onClick={() => toggleStatus("progress")} tone={statusFilter === "progress" ? "active" : null} />
+        <KPI label={t("st_planned_s")} value={e.statusCounts.planned} accent={STATUS.planned.color}
+          onClick={() => toggleStatus("planned")} tone={statusFilter === "planned" ? "active" : null} />
+        <KPI label={t("st_paused_s")} value={e.statusCounts.paused} accent={STATUS.paused.color}
+          onClick={() => toggleStatus("paused")} tone={statusFilter === "paused" ? "active" : null} />
+        <KPI label="Σ" value={e.totalMatched} accent="#0E2A52"
+          onClick={() => setStatusFilter("all")} tone={statusFilter === "all" ? "active" : null} />
       </div>
 
       <div className="detail-grid" style={{ marginTop: 16 }}>
         <div className="card">
-          <div className="card-h"><h3>{t("emp_projects")}</h3><span className="hint">{projs.length} {t("projects")}</span></div>
-          <div className="card-pad" style={{ maxHeight: 460, overflow: "auto" }}>
-            {projs.map(p => (
-              <div className="member-row" key={p.id} onClick={() => nav("project", { id: p.id })} style={{ cursor: "pointer" }}>
-                <span className="kc-dot" style={{ width: 9, height: 9, borderRadius: 3, background: STATUS[p.norm].color }} />
-                <span style={{ fontWeight: 500 }}>{p.name}</span>
-                <span className="member-role"><span className="tag">{prodShort(p.product)}</span></span>
-              </div>
-            ))}
-            {!projs.length && <div className="empty">{t("noData")}</div>}
+          <div className="card-h">
+            <h3>{t("emp_projects")}</h3>
+            <span className="hint">{filteredProjs.length}{statusFilter !== "all" ? " / " + allProjs.length : ""} {t("projects")}</span>
+          </div>
+          <div className="tbl-wrap">
+            <table className="tbl" style={{ fontSize: 12.5 }}>
+              <thead><tr>
+                <th style={{ fontSize: 10.5 }}>{t("col_status") || "Status"}</th>
+                <th style={{ fontSize: 10.5 }}>{t("nav_portfolio")}</th>
+                <th style={{ fontSize: 10.5 }}>{t("emp_product")}</th>
+              </tr></thead>
+              <tbody>
+                {filteredProjs.map(p => (
+                  <tr key={p.id} onClick={() => nav("project", { id: p.id })}>
+                    <td style={{ whiteSpace: "nowrap" }}><StatusBadge norm={p.norm} /></td>
+                    <td style={{ fontWeight: 600 }}>{p.name}</td>
+                    <td><span className="tag">{prodShort(p.product)}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {!filteredProjs.length && <div className="empty" style={{ padding: 20 }}>{t("noData")}</div>}
           </div>
         </div>
+
         <div className="card">
           <div className="card-h"><h3>{t("distByStatus")}</h3></div>
           <div className="card-pad">
-            <Chart_ type="doughnut" height={250}
+            <Chart_ type="bar" height={180}
+              onClickIndex={(i) => toggleStatus(STATUS_ORDER[i])}
               data={{
-                labels: STATUS_ORDER.map(s => t(STATUS[s].short)),
-                datasets: [{ data: STATUS_ORDER.map(s => e.statusCounts[s]), backgroundColor: STATUS_ORDER.map(s => STATUS[s].color), borderWidth: 3, borderColor: "#fff" }],
+                labels: STATUS_ORDER.map((s, i) => t(STATUS[s].short) + "   —   " + statusCounts[i]),
+                datasets: [{ data: statusCounts, backgroundColor: STATUS_ORDER.map((s, i) => statusFilter === "all" || statusFilter === s ? STATUS[s].color : STATUS[s].color + "44"), borderRadius: 5, maxBarThickness: 22 }]
               }}
-              options={{ cutout: "60%", plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", padding: 12, font: { size: 11.5 } } } } }} />
+              options={{ indexAxis: "y", plugins: { legend: { display: false } },
+                scales: { x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 11 } } } } }} />
+            {statusFilter !== "all" && (
+              <div style={{ textAlign: "center", marginTop: 8 }}>
+                <button className="btn btn-ghost" style={{ fontSize: 11 }} onClick={() => setStatusFilter("all")}>↺ {t("resetFilters")}</button>
+              </div>
+            )}
           </div>
         </div>
       </div>
