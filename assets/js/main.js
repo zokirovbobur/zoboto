@@ -268,6 +268,15 @@ const PROTOTYPES = [
     url: "prototypes/halal-freight/index.html",
     description: "Shariah-compliant freight factoring platform — carrier portal with 7-step Wakalah funding wizard, AI-powered broker risk scoring, admin underwriting queue, Shariah compliance log, and collections dashboard. Built for US trucking market with USD mock data."
   },
+  {
+    title: "Safa",
+    product: "Concept",
+    type: "Internal",
+    status: "Coming Soon",
+    platforms: ["desktop", "mobile"],
+    url: "prototypes/safa/index.html",
+    description: "Daily Islamic Activities app — namoz vaqtlari, Qibla yo'nalishi, zikr, sadaqa, zakot va boshqa kundalik islomiy amallar uchun yagona platforma."
+  },
 ];
 
 /* =========================== I18N ================================== */
