@@ -4,5 +4,9 @@
   "redirects": [
     { "source": "/protos", "destination": "/#prototypes", "permanent": false },
     { "source": "/about", "destination": "/#top", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/prototypes/trastbank-pmo/(dashboard|portfolio|board|roadmap|workload|risks|reports|products|changes)", "destination": "/prototypes/trastbank-pmo/index.html" },
+    { "source": "/prototypes/trastbank-pmo/(project|employee)/:id", "destination": "/prototypes/trastbank-pmo/index.html" }
   ]
 }

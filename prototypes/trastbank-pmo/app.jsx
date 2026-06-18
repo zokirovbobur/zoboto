@@ -1,6 +1,26 @@
 // ===== app shell: sidebar, topbar, language, routing =====
 const { useState: uSA, useEffect: uEA, useRef: uRA } = React;
 
+const BASE_PATH = "/prototypes/trastbank-pmo";
+
+function parseRouteFromURL() {
+  const path = window.location.pathname.slice(BASE_PATH.length).replace(/^\//, "");
+  const parts = path.split("/");
+  const name = parts[0] || "dashboard";
+  if ((name === "project" || name === "employee") && parts[1]) {
+    return { name, id: parts[1] };
+  }
+  return { name: (window.PAGES_MAP && window.PAGES_MAP[name]) ? name : (name || "dashboard") };
+}
+
+function routeToURL(name, params) {
+  if (name === "dashboard" || !name) return BASE_PATH;
+  if ((name === "project" || name === "employee") && params && params.id) {
+    return BASE_PATH + "/" + name + "/" + params.id;
+  }
+  return BASE_PATH + "/" + name;
+}
+
 const IconPaths = {
   dashboard: "M3 3h7v7H3zM14 3h7v4h-7zM14 10h7v11h-7zM3 13h7v8H3z",
   portfolio: "M4 5h16M4 12h16M4 19h16",
@@ -46,12 +66,13 @@ const PAGES = {
   workload: Workload, employee: EmployeeProfile, project: ProjectDetail, risks: Risks, reports: Reports,
   products: Products, changes: RecentChanges,
 };
+window.PAGES_MAP = PAGES;
 // which sidebar item is highlighted for a given route
 const ACTIVE_OF = { project: "portfolio", employee: "workload" };
 
 function App() {
   const [lang, setLang] = uSA(() => localStorage.getItem("tb_lang") || "uz");
-  const [route, setRoute] = uSA({ name: "dashboard" });
+  const [route, setRoute] = uSA(() => parseRouteFromURL());
   const [search, setSearch] = uSA("");
   const [sideOpen, setSideOpen] = uSA(false);
   const [bellOpen, setBellOpen] = uSA(false);
@@ -71,7 +92,17 @@ function App() {
   }, [dark]);
   uEA(() => { window.scrollTo(0, 0); const m = document.querySelector(".main"); if (m) m.scrollTop = 0; }, [route]);
 
-  const nav = (name, params = {}) => { setSearch(""); setRoute({ name, ...params }); setSideOpen(false); };
+  uEA(() => {
+    const onPop = () => setRoute(parseRouteFromURL());
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  const nav = (name, params = {}) => {
+    const url = routeToURL(name, params);
+    history.pushState({}, "", url);
+    setSearch(""); setRoute({ name, ...params }); setSideOpen(false);
+  };
   const dict = window.TB_I18N[lang];
   const t = (k) => (dict && dict[k] != null ? dict[k] : k);
   const activeId = ACTIVE_OF[route.name] || route.name;
