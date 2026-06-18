@@ -272,7 +272,7 @@ const PROTOTYPES = [
     title: "Safa",
     product: "Concept",
     type: "Internal",
-    status: "Coming Soon",
+    status: "Demo",
     platforms: ["desktop", "mobile"],
     url: "prototypes/safa/index.html",
     description: "Daily Islamic Activities app — namoz vaqtlari, Qibla yo'nalishi, zikr, sadaqa, zakot va boshqa kundalik islomiy amallar uchun yagona platforma."
