@@ -104,7 +104,7 @@ function Pill({ children, tone }) {
 // ---- KPI card ----
 function KPI({ label, value, tone, sub, onClick, accent }) {
   return (
-    <button className={"kpi" + (onClick ? " kpi-click" : "")} onClick={onClick} style={accent ? { "--kpi-accent": accent } : null}>
+    <button className={"kpi" + (onClick ? " kpi-click" : "") + (tone === "active" ? " kpi-active" : "")} onClick={onClick} style={accent ? { "--kpi-accent": accent } : null}>
       <div className="kpi-val" style={accent ? { color: accent } : null}>{value}</div>
       <div className="kpi-label">{label}</div>
       {sub != null && <div className="kpi-sub">{sub}</div>}

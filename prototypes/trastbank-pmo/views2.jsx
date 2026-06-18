@@ -149,10 +149,13 @@ function Workload() {
   const stacks = uM2(() => [...new Set(DATA.employees.map(e => e.stack).filter(Boolean))].sort(), []);
   const grades = uM2(() => [...new Set(DATA.employees.map(e => e.grade).filter(Boolean))], []);
 
+  const LOAD_RANK = { low: 0, normal: 1, high: 2, critical: 3 };
+
   // computed sort value for special keys
   const sortVal = (e, k) => {
     if (k === "active") return e.statusCounts.progress + e.statusCounts.planned;
     if (k === "completed_col") return e.statusCounts.completed;
+    if (k === "loadLevel") return LOAD_RANK[e.loadLevel] ?? 0;
     const v = e[k];
     return typeof v === "string" ? v.toLowerCase() : (v ?? 0);
   };
@@ -201,22 +204,17 @@ function Workload() {
     );
   };
 
-  const kpiStyle = (active) => ({ cursor: "pointer", outline: active ? "2px solid var(--accent)" : "none", borderRadius: 12 });
-
   return (
     <div className="fade-in">
       <PageHead title={t("workloadTitle")} crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("workloadTitle") }]} />
 
       <div className="kpi-row" style={{ gridTemplateColumns: "repeat(4,1fr)" }}>
-        <div style={kpiStyle(loadFilter === "all")} onClick={resetFilters}>
-          <KPI label={t("kpi_employees")} value={DATA.employees.length} accent="#2563EB" />
-        </div>
-        <div style={kpiStyle(loadFilter === "overloaded")} onClick={() => setLoadFilter(f => f === "overloaded" ? "all" : "overloaded")}>
-          <KPI label={t("overloaded")} value={overloaded} accent="#C0392B" />
-        </div>
-        <div style={kpiStyle(loadFilter === "noActive")} onClick={() => setLoadFilter(f => f === "noActive" ? "all" : "noActive")}>
-          <KPI label={t("noActive")} value={noActive} accent="#B45309" />
-        </div>
+        <KPI label={t("kpi_employees")} value={DATA.employees.length} accent="#2563EB"
+          onClick={resetFilters} tone={loadFilter === "all" ? "active" : null} />
+        <KPI label={t("overloaded")} value={overloaded} accent="#C0392B"
+          onClick={() => setLoadFilter(f => f === "overloaded" ? "all" : "overloaded")} tone={loadFilter === "overloaded" ? "active" : null} />
+        <KPI label={t("noActive")} value={noActive} accent="#B45309"
+          onClick={() => setLoadFilter(f => f === "noActive" ? "all" : "noActive")} tone={loadFilter === "noActive" ? "active" : null} />
         <KPI label={t("col_stack")} value={stacks.length} accent="#0E9C8E" />
       </div>
 
@@ -267,7 +265,7 @@ function Workload() {
             <SortTh k="active" label={t("col_active")} />
             <SortTh k="completed_col" label={t("col_done")} />
             <SortTh k="totalMatched" label="Σ" />
-            <th className="no-sort">{t("col_load")}</th>
+            <SortTh k="loadLevel" label={t("col_load")} />
           </tr></thead>
           <tbody>
             {rows.map(e => (
