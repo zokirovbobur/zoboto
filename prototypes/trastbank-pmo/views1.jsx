@@ -346,7 +346,6 @@ function Portfolio() {
               <SortTh k="name" label={t("col_project")} />
               <SortTh k="product" label={t("col_product")} />
               <SortTh k="status" label={t("col_status")} />
-              <th className="no-sort">{t("origStatus")}</th>
               <th className="no-sort">Progress</th>
               <SortTh k="pm" label={t("col_pm")} />
               <SortTh k="customer" label={t("col_customer")} />
@@ -364,7 +363,6 @@ function Portfolio() {
                   </td>
                   <td><span className="tag">{prodShort(p.product)}</span></td>
                   <td><StatusBadge norm={p.norm} /></td>
-                  <td className="t-muted" style={{ fontSize: 12 }}>{p.originalStatus}</td>
                   <td style={{ minWidth: 90 }}><Progress value={progressOf(p)} norm={p.norm} /></td>
                   <td>{projectPmName(p) ? <span className="row"><Avatar name={projectPmName(p)} size={24} /> {projectPmName(p)}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
                   <td className="t-muted">{p.customer || "—"}</td>
@@ -372,7 +370,7 @@ function Portfolio() {
                   <td><span className="demo-dot"><span className="dot" style={{ background: p.demoReady ? "#1AA568" : "#D0D6E0" }} />{p.demoReady ? t("yes") : t("no")}</span></td>
                 </tr>
               ))}
-              {!rows.length && <tr><td colSpan="9" className="empty">{t("noData")}</td></tr>}
+              {!rows.length && <tr><td colSpan="8" className="empty">{t("noData")}</td></tr>}
             </tbody>
           </table>
         </div>

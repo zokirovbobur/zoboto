@@ -172,8 +172,8 @@ function Risks() {
   const t = useT(); const { nav, lang } = useApp();
   const overdue = ALL_P.filter(p => isOverdue(p));
   const paused = ALL_P.filter(p => p.norm === "paused");
-  const waiting = ALL_P.filter(p => /ожидани|kutil/i.test(p.originalStatus));
-  const cancelled = ALL_P.filter(p => /отмен|cancel|joriy etilmadi|фойда/i.test(p.originalStatus));
+  const waiting = ALL_P.filter(p => p.norm === "paused" && p.pauseReason);
+  const cancelled = ALL_P.filter(p => p.norm === "paused");
   const noOwner = ALL_P.filter(p => !p.pm);
   const noDeadline = ALL_P.filter(p => p.norm !== "completed" && p.norm !== "paused" && !parseDate(p.endDate));
 
@@ -259,7 +259,6 @@ function Risks() {
           <tr key={p.id} onClick={() => nav("project", { id: p.id })}>
             <td className="cell-proj">{p.name}</td>
             <td><span className="tag">{prodShort(p.product)}</span></td>
-            <td className="t-muted">{p.originalStatus}</td>
             <td className="t-muted" style={{ fontSize: 12, maxWidth: 360 }}>{p.pauseReason || "—"}</td>
             <td>{p.pm ? <span className="row"><Avatar name={p.pm} size={22} />{p.pm}</span> : <span className="pill pill-amber">{t("kpi_noowner")}</span>}</td>
             <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
@@ -341,7 +340,7 @@ function PmoReport({ onBack, lang }) {
     num:       i + 1,
     name:      p.name,
     product:   p.product,
-    status:    p.originalStatus || STATUS_LABEL[p.norm] || p.norm,
+    status:    STATUS_LABEL[p.norm] || p.norm,
     pm:        p.pm || "—",
     exp_dl:    p.endDate || "",
     prod_dl:   "",

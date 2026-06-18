@@ -34,7 +34,7 @@ function ProjectDetail() {
     <div className="fade-in">
       <PageHead title={p.name}
         crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("nav_portfolio"), to: "portfolio" }, { label: p.id }]}
-        sub={<span className="row" style={{ gap: 8, marginTop: 4 }}><span className="tag">{p.product}</span><StatusBadge norm={p.norm} /><span className="muted" style={{ fontSize: 12 }}>{t("origStatus")}: {p.originalStatus}</span></span>}
+        sub={<span className="row" style={{ gap: 8, marginTop: 4 }}><span className="tag">{p.product}</span><StatusBadge norm={p.norm} /></span>}
         right={<button className="btn" onClick={() => nav("portfolio", {})}>← {t("nav_portfolio")}</button>} />
 
       <div className="detail-grid">
@@ -116,7 +116,7 @@ function ProjectDetail() {
                 {isOverdue(p) && <span className="pill pill-red">⚠ {t("overdue")}</span>}
                 {!p.pm && <span className="pill pill-amber">{t("kpi_noowner")}</span>}
                 {!p.endDate && <span className="pill pill-amber">{t("noDeadline")}</span>}
-                {p.norm === "paused" && <span className="pill pill-red">{p.originalStatus}</span>}
+                {p.norm === "paused" && <span className="pill pill-red">⏸ {t("st_paused_s")}</span>}
                 {h === "good" && !isOverdue(p) && <span className="pill pill-green">✓ {t("health_good")}</span>}
               </div>
               {p.pauseReason && <div style={{ marginTop: 14 }}>
