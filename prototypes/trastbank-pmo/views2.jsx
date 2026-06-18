@@ -43,7 +43,12 @@ function ProjectDetail() {
             <div className="card-h"><h3>{t("keyFacts")}</h3><span className="hint">{t("passport")} · {p.id}</span></div>
             <div className="card-pad">
               <div className="facts">
-                <Fact l={t("col_pm")} v={p.pm || t("notSpecified")} />
+                <Fact l={t("col_pm")} v={
+                  p.pmId && EMP[p.pmId]
+                    ? <span className="link-text" style={{ cursor: "pointer", color: "var(--accent)", fontWeight: 600 }}
+                        onClick={() => nav("employee", { id: p.pmId })}>{EMP[p.pmId].fullName}</span>
+                    : (p.pm || t("notSpecified"))
+                } />
                 <Fact l={t("col_dept")} v={p.department || "—"} sm />
                 <Fact l={t("col_customer")} v={p.customer || t("notSpecified")} />
                 <Fact l={t("col_supplier")} v={p.supplier || t("none")} />
