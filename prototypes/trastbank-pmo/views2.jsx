@@ -353,16 +353,16 @@ function EmployeeProfile() {
         <div className="tbl-wrap">
           <table className="tbl" style={{ fontSize: 12.5 }}>
             <thead><tr>
-              <th style={{ fontSize: 10.5 }}>{t("col_status")}</th>
               <th style={{ fontSize: 10.5 }}>{t("nav_portfolio")}</th>
               <th style={{ fontSize: 10.5 }}>{t("emp_product")}</th>
+              <th style={{ fontSize: 10.5 }}>{t("col_status")}</th>
             </tr></thead>
             <tbody>
               {filteredProjs.map(p => (
                 <tr key={p.id} onClick={() => nav("project", { id: p.id })}>
-                  <td style={{ whiteSpace: "nowrap" }}><StatusBadge norm={p.norm} /></td>
                   <td style={{ fontWeight: 600 }}>{p.name}</td>
                   <td><span className="tag">{prodShort(p.product)}</span></td>
+                  <td style={{ whiteSpace: "nowrap" }}><StatusBadge norm={p.norm} /></td>
                 </tr>
               ))}
             </tbody>
