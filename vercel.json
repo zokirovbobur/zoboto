@@ -1,8 +1,5 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "redirects": [
-    { "source": "/protos", "destination": "/#prototypes", "permanent": false },
-    { "source": "/about", "destination": "/#top", "permanent": false }
-  ]
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install"
 }

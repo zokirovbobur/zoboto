@@ -1,0 +1,4 @@
+/* Root Next.js app — minimal global styles; PMO-FS has its own CSS scope */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body { font-family: system-ui, sans-serif; }
