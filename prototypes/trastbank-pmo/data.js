@@ -1653,8 +1653,8 @@ window.TB_DATA = {
                   "endDate": "",
                   "sum": "ГПХ",
                   "paidFact": "",
-                  "norm": "progress",
-                  "originalStatus": "В разработке",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
                   "pm": "Azizbek",
                   "demoReady": false,
                   "info": "Mahsulot: Trast AI. Real-time monitoring mijozlar oqimi, xizmat sifati",
@@ -1671,7 +1671,8 @@ window.TB_DATA = {
                         "Zokirov Bobur (CPO)"
                   ],
                   "pmId": "E22",
-                  "origin": "Google Sheet"
+                  "jiraEpicKey": "FC-32",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P059",
