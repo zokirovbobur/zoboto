@@ -210,6 +210,7 @@ function Portfolio() {
   const [status, setStatus] = uS1(route.status || "all");
   const [product, setProduct] = uS1(route.product || "all");
   const [pm, setPm] = uS1("all");
+  const [origin, setOrigin] = uS1("all");
   const [demoOnly, setDemoOnly] = uS1(!!route.demo);
   const [sort, setSort] = uS1({ k: "name", dir: 1 });
 
@@ -228,6 +229,7 @@ function Portfolio() {
       if (status !== "all" && p.norm !== status) return false;
       if (product !== "all" && p.product !== product) return false;
       if (pm !== "all" && projectPmKey(p) !== pm) return false;
+      if (origin !== "all" && (p.origin || "Google Sheet") !== origin) return false;
       if (demoOnly && !p.demoReady) return false;
       if (search) {
         const q = search.toLowerCase();
@@ -246,7 +248,7 @@ function Portfolio() {
       return (a < b ? -1 : a > b ? 1 : 0) * sort.dir;
     });
     return r;
-  }, [status, product, pm, demoOnly, search, sort]);
+  }, [status, product, pm, origin, demoOnly, search, sort]);
 
   // chart data — derived from filtered rows
   const statusCounts  = uM1(() => STATUS_ORDER.map(s => rows.filter(p => p.norm === s).length), [rows]);
@@ -264,7 +266,10 @@ function Portfolio() {
   }, [rows]);
   const demoCounts    = uM1(() => [rows.filter(p=>p.demoReady).length, rows.filter(p=>!p.demoReady).length], [rows]);
 
-  const reset = () => { setStatus("all"); setProduct("all"); setPm("all"); setDemoOnly(false); };
+  const ORIGINS = ["Jira Epic", "Jira Story", "Google Sheet"];
+  const ORIGIN_COLOR = { "Jira Epic": "#2563EB", "Jira Story": "#7C3AED", "Google Sheet": "#0D7C56" };
+
+  const reset = () => { setStatus("all"); setProduct("all"); setPm("all"); setOrigin("all"); setDemoOnly(false); };
   const SortTh = ({ k, label, cls }) => (
     <th className={cls} onClick={() => setSort(s => ({ k, dir: s.k === k ? -s.dir : 1 }))}>
       {label}{sort.k === k && <span className="arr">{sort.dir > 0 ? "▲" : "▼"}</span>}
@@ -288,6 +293,10 @@ function Portfolio() {
         <div className="sel"><select className="f-sel" value={pm} onChange={e => setPm(e.target.value)}>
           <option value="all">{t("col_pm")}: {t("all")}</option>
           {pms.map(([key, name]) => <option key={key} value={key}>{name}</option>)}
+        </select></div>
+        <div className="sel"><select className="f-sel" value={origin} onChange={e => setOrigin(e.target.value)}>
+          <option value="all">Origin: {t("all")}</option>
+          {ORIGINS.map(o => <option key={o} value={o}>{o}</option>)}
         </select></div>
         <button className={"chip" + (demoOnly ? " on" : "")} onClick={() => setDemoOnly(v => !v)}>{t("kpi_demo")}</button>
         <button className="btn btn-ghost" onClick={reset}>↺ {t("resetFilters")}</button>
@@ -350,6 +359,7 @@ function Portfolio() {
               <SortTh k="pm" label={t("col_pm")} />
               <SortTh k="customer" label={t("col_customer")} />
               <SortTh k="deadline" label={t("col_deadline")} />
+              <SortTh k="origin" label="Origin" />
               <th className="no-sort">{t("col_demo")}</th>
             </tr></thead>
             <tbody>
@@ -367,10 +377,17 @@ function Portfolio() {
                   <td>{projectPmName(p) ? <span className="row"><Avatar name={projectPmName(p)} size={24} /> {projectPmName(p)}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
                   <td className="t-muted">{p.customer || "—"}</td>
                   <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
+                  <td>
+                    {(() => {
+                      const org = p.origin || "Google Sheet";
+                      return <span style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6,
+                        background: ORIGIN_COLOR[org] + "18", color: ORIGIN_COLOR[org] }}>{org}</span>;
+                    })()}
+                  </td>
                   <td><span className="demo-dot"><span className="dot" style={{ background: p.demoReady ? "#1AA568" : "#D0D6E0" }} />{p.demoReady ? t("yes") : t("no")}</span></td>
                 </tr>
               ))}
-              {!rows.length && <tr><td colSpan="8" className="empty">{t("noData")}</td></tr>}
+              {!rows.length && <tr><td colSpan="9" className="empty">{t("noData")}</td></tr>}
             </tbody>
           </table>
         </div>

@@ -48,7 +48,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-9"
+                  "jiraEpicKey": "SL-9",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P002",
@@ -72,7 +73,8 @@ window.TB_DATA = {
                         "Toxirov Sarvar"
                   ],
                   "pmId": "E14",
-                  "jiraEpicKey": "SL-71"
+                  "jiraEpicKey": "SL-71",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P003",
@@ -99,7 +101,8 @@ window.TB_DATA = {
                         "Yuldashev Samatbek"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-107"
+                  "jiraEpicKey": "SL-107",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P004",
@@ -130,7 +133,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P005",
@@ -153,7 +157,8 @@ window.TB_DATA = {
                         "Mirzabayev Damir"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-104"
+                  "jiraEpicKey": "SL-104",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P006",
@@ -179,7 +184,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-16"
+                  "jiraEpicKey": "SL-16",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P007",
@@ -204,7 +210,8 @@ window.TB_DATA = {
                         "Valixonov Baxtiyor"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-128"
+                  "jiraEpicKey": "SL-128",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P008",
@@ -231,7 +238,8 @@ window.TB_DATA = {
                         "Yuldashev Samatbek"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-134"
+                  "jiraEpicKey": "SL-134",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P009",
@@ -280,7 +288,8 @@ window.TB_DATA = {
                         "Yuldashev Samatbek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P010",
@@ -324,7 +333,8 @@ window.TB_DATA = {
                         "Yuldashev Samatbek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P011",
@@ -352,7 +362,8 @@ window.TB_DATA = {
                         "Umarov Ulug'bek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P012",
@@ -385,7 +396,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P013",
@@ -414,7 +426,8 @@ window.TB_DATA = {
                         "Umarov Ulug'bek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P014",
@@ -442,7 +455,8 @@ window.TB_DATA = {
                         "Umarov Ulug'bek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P015",
@@ -475,7 +489,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P016",
@@ -497,7 +512,8 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [],
                   "pmId": "E10",
-                  "jiraEpicKey": "KT-24"
+                  "jiraEpicKey": "KT-24",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P017",
@@ -527,7 +543,8 @@ window.TB_DATA = {
                         "Umarov Ulug'bek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P018",
@@ -556,7 +573,8 @@ window.TB_DATA = {
                         "Umarov Ulug'bek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P019",
@@ -587,7 +605,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P020",
@@ -622,7 +641,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P021",
@@ -653,7 +673,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E19"
+                  "pmId": "E19",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P022",
@@ -703,7 +724,8 @@ window.TB_DATA = {
                         "Yuldashev Samatbek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P023",
@@ -738,7 +760,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P024",
@@ -768,7 +791,8 @@ window.TB_DATA = {
                         "Umarov Ulug'bek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P025",
@@ -798,7 +822,8 @@ window.TB_DATA = {
                         "Sunnatov Yaxyo",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E13"
+                  "pmId": "E13",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P026",
@@ -826,7 +851,8 @@ window.TB_DATA = {
                         "Valixonov Baxtiyor",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P027",
@@ -875,7 +901,8 @@ window.TB_DATA = {
                         "Yuldashev Samatbek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P028",
@@ -904,7 +931,8 @@ window.TB_DATA = {
                         "Umarov Ulug'bek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P029",
@@ -934,7 +962,8 @@ window.TB_DATA = {
                         "Umarov Ulug'bek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P030",
@@ -967,7 +996,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P031",
@@ -1016,7 +1046,8 @@ window.TB_DATA = {
                         "Yuldashev Samatbek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P032",
@@ -1040,7 +1071,8 @@ window.TB_DATA = {
                         "Borisov Sergey",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E12"
+                  "pmId": "E12",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P033",
@@ -1064,7 +1096,8 @@ window.TB_DATA = {
                         "Borisov Sergey",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E12"
+                  "pmId": "E12",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P034",
@@ -1088,7 +1121,8 @@ window.TB_DATA = {
                         "Borisov Sergey",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E12"
+                  "pmId": "E12",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P035",
@@ -1112,7 +1146,8 @@ window.TB_DATA = {
                         "Borisov Sergey",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E12"
+                  "pmId": "E12",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P036",
@@ -1136,7 +1171,8 @@ window.TB_DATA = {
                         "Borisov Sergey",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E12"
+                  "pmId": "E12",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P037",
@@ -1166,7 +1202,8 @@ window.TB_DATA = {
                         "Sunnatov Yaxyo",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P038",
@@ -1199,7 +1236,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P039",
@@ -1222,7 +1260,8 @@ window.TB_DATA = {
                   "team": [
                         "Borisov Sergey"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P040",
@@ -1245,7 +1284,8 @@ window.TB_DATA = {
                   "team": [
                         "Borisov Sergey"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P041",
@@ -1268,7 +1308,8 @@ window.TB_DATA = {
                   "team": [
                         "Borisov Sergey"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P042",
@@ -1291,7 +1332,8 @@ window.TB_DATA = {
                   "team": [
                         "Borisov Sergey"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P043",
@@ -1321,7 +1363,8 @@ window.TB_DATA = {
                         "Umarov Ulug'bek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P044",
@@ -1344,7 +1387,8 @@ window.TB_DATA = {
                   "team": [
                         "Borisov Sergey"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P045",
@@ -1367,7 +1411,8 @@ window.TB_DATA = {
                   "team": [
                         "Borisov Sergey"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P046",
@@ -1390,7 +1435,8 @@ window.TB_DATA = {
                   "team": [
                         "Borisov Sergey"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P047",
@@ -1413,7 +1459,8 @@ window.TB_DATA = {
                   "team": [
                         "Borisov Sergey"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P048",
@@ -1436,7 +1483,8 @@ window.TB_DATA = {
                   "team": [
                         "Borisov Sergey"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P049",
@@ -1462,7 +1510,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-194"
+                  "jiraEpicKey": "SL-194",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P050",
@@ -1489,7 +1538,8 @@ window.TB_DATA = {
                         "Valixonov Baxtiyor"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-119"
+                  "jiraEpicKey": "SL-119",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P051",
@@ -1515,7 +1565,8 @@ window.TB_DATA = {
                         "Umarov Ulug'bek"
                   ],
                   "pmId": "E33",
-                  "jiraEpicKey": "KT-29"
+                  "jiraEpicKey": "KT-29",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P054",
@@ -1537,7 +1588,8 @@ window.TB_DATA = {
                   "info": "Продукт: Raqamli Bozor",
                   "team": [],
                   "pmId": "E10",
-                  "jiraEpicKey": "FC-29"
+                  "jiraEpicKey": "FC-29",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P055",
@@ -1559,7 +1611,8 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [],
                   "pmId": "E10",
-                  "jiraEpicKey": "KT-30"
+                  "jiraEpicKey": "KT-30",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P056",
@@ -1584,7 +1637,8 @@ window.TB_DATA = {
                         "Yuldashev Samatbek"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-222"
+                  "jiraEpicKey": "SL-222",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P058",
@@ -1616,7 +1670,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E22"
+                  "pmId": "E22",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P059",
@@ -1649,7 +1704,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P060",
@@ -1673,7 +1729,8 @@ window.TB_DATA = {
                         "Mirzabayev Damir"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-243"
+                  "jiraEpicKey": "SL-243",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P061",
@@ -1703,7 +1760,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E14"
+                  "pmId": "E14",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P062",
@@ -1729,7 +1787,8 @@ window.TB_DATA = {
                         "Valixonov Baxtiyor",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E14"
+                  "pmId": "E14",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P063",
@@ -1753,7 +1812,8 @@ window.TB_DATA = {
                         "Mirzabayev Damir"
                   ],
                   "pmId": "E14",
-                  "jiraEpicKey": "SL-138"
+                  "jiraEpicKey": "SL-138",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P064",
@@ -1775,7 +1835,8 @@ window.TB_DATA = {
                   "info": "Продукт: Trastpay 2.0",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-170"
+                  "jiraEpicKey": "SL-170",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P065",
@@ -1797,7 +1858,8 @@ window.TB_DATA = {
                   "info": "Продукт: Trastpay 2.0",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-171"
+                  "jiraEpicKey": "SL-171",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P066",
@@ -1819,7 +1881,8 @@ window.TB_DATA = {
                   "info": "Продукт: Trastpay 2.0",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-140"
+                  "jiraEpicKey": "SL-140",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P067",
@@ -1841,7 +1904,8 @@ window.TB_DATA = {
                   "info": "Продукт: Trastpay 2.0",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-247"
+                  "jiraEpicKey": "SL-247",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P068",
@@ -1889,7 +1953,8 @@ window.TB_DATA = {
                         "Yuldashev Samatbek",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P069",
@@ -1911,7 +1976,8 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [],
                   "pmId": "E10",
-                  "jiraEpicKey": "KT-25"
+                  "jiraEpicKey": "KT-25",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P070",
@@ -1933,7 +1999,8 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [],
                   "pmId": "E10",
-                  "jiraEpicKey": "KT-26"
+                  "jiraEpicKey": "KT-26",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P071",
@@ -1955,7 +2022,8 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [],
                   "pmId": "E10",
-                  "jiraEpicKey": "KT-33"
+                  "jiraEpicKey": "KT-33",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P072",
@@ -1977,7 +2045,8 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [],
                   "pmId": "E10",
-                  "jiraEpicKey": "KT-34"
+                  "jiraEpicKey": "KT-34",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P073",
@@ -1999,7 +2068,8 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [],
                   "pmId": "E10",
-                  "jiraEpicKey": "KT-31"
+                  "jiraEpicKey": "KT-31",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P075",
@@ -2023,7 +2093,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux"
                   ],
                   "pmId": "E10",
-                  "jiraEpicKey": "FC-30"
+                  "jiraEpicKey": "FC-30",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P076",
@@ -2045,7 +2116,8 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [],
                   "pmId": "E10",
-                  "jiraEpicKey": "KT-32"
+                  "jiraEpicKey": "KT-32",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P077",
@@ -2079,7 +2151,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E43"
+                  "pmId": "E43",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P078",
@@ -2102,7 +2175,8 @@ window.TB_DATA = {
                   "team": [
                         "—"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P079",
@@ -2135,7 +2209,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E15"
+                  "pmId": "E15",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P080",
@@ -2158,7 +2233,8 @@ window.TB_DATA = {
                   "team": [
                         "—"
                   ],
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P081",
@@ -2183,7 +2259,8 @@ window.TB_DATA = {
                         "Saidov Jamshid (CTO)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E43"
+                  "pmId": "E43",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P082",
@@ -2208,7 +2285,8 @@ window.TB_DATA = {
                         "Saidov Jamshid (CTO)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E43"
+                  "pmId": "E43",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P083",
@@ -2242,7 +2320,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E43"
+                  "pmId": "E43",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P084",
@@ -2276,7 +2355,8 @@ window.TB_DATA = {
                         "Yodgorov Alibek (QA)",
                         "Zokirov Bobur (CPO)"
                   ],
-                  "pmId": "E43"
+                  "pmId": "E43",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P085",
@@ -2298,7 +2378,8 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [],
                   "pmId": "E10",
-                  "jiraEpicKey": "KT-28"
+                  "jiraEpicKey": "KT-28",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P086",
@@ -2322,7 +2403,8 @@ window.TB_DATA = {
                         "Davranbekov Almazbek"
                   ],
                   "pmId": "E10",
-                  "jiraEpicKey": "KT-27"
+                  "jiraEpicKey": "KT-27",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P087",
@@ -2345,7 +2427,8 @@ window.TB_DATA = {
                   "team": [
                         "—"
                   ],
-                  "pmId": ""
+                  "pmId": "",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P088",
@@ -2368,7 +2451,8 @@ window.TB_DATA = {
                   "team": [
                         "—"
                   ],
-                  "pmId": "E43"
+                  "pmId": "E43",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P089",
@@ -2391,7 +2475,8 @@ window.TB_DATA = {
                   "team": [
                         "—"
                   ],
-                  "pmId": "E32"
+                  "pmId": "E32",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P090",
@@ -2436,7 +2521,8 @@ window.TB_DATA = {
                         "Zokirov Bobur (CPO)"
                   ],
                   "pmId": "E15",
-                  "pauseReason": "Причина: ЦБ отменял требование"
+                  "pauseReason": "Причина: ЦБ отменял требование",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P091",
@@ -2462,7 +2548,8 @@ window.TB_DATA = {
                   ],
                   "pmId": "E15",
                   "pauseReason": "Причина: Отказ от вендора",
-                  "jiraEpicKey": "SL-7"
+                  "jiraEpicKey": "SL-7",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P092",
@@ -2487,7 +2574,8 @@ window.TB_DATA = {
                   ],
                   "pmId": "E15",
                   "pauseReason": "Причина: Отказ от самого банка в принятие проекта, из за риска возникновении фрода и NPL",
-                  "jiraEpicKey": "SL-5"
+                  "jiraEpicKey": "SL-5",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P093",
@@ -2537,7 +2625,8 @@ window.TB_DATA = {
                         "Zokirov Bobur (CPO)"
                   ],
                   "pmId": "E15",
-                  "pauseReason": "Нет спроса от пользователей"
+                  "pauseReason": "Нет спроса от пользователей",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P094",
@@ -2569,7 +2658,8 @@ window.TB_DATA = {
                         "Zokirov Bobur (CPO)"
                   ],
                   "pmId": "E22",
-                  "pauseReason": "Причина: Отсутсвие серверов ГПУ"
+                  "pauseReason": "Причина: Отсутсвие серверов ГПУ",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P095",
@@ -2601,7 +2691,8 @@ window.TB_DATA = {
                         "Zokirov Bobur (CPO)"
                   ],
                   "pmId": "E22",
-                  "pauseReason": "Причина: Отсутсвие серверов ГПУ"
+                  "pauseReason": "Причина: Отсутсвие серверов ГПУ",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P096",
@@ -2634,7 +2725,8 @@ window.TB_DATA = {
                         "Zokirov Bobur (CPO)"
                   ],
                   "pmId": "E22",
-                  "pauseReason": "Причина: Отсутсвие серверов ГПУ"
+                  "pauseReason": "Причина: Отсутсвие серверов ГПУ",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P097",
@@ -2665,7 +2757,8 @@ window.TB_DATA = {
                         "Zokirov Bobur (CPO)"
                   ],
                   "pmId": "E12",
-                  "pauseReason": "Причина: Не выделяется достаточно доступов для платформы"
+                  "pauseReason": "Причина: Не выделяется достаточно доступов для платформы",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P098",
@@ -2691,7 +2784,8 @@ window.TB_DATA = {
                         "Berdiyev Javohir"
                   ],
                   "pmId": "E12",
-                  "pauseReason": "Причина: Отказ от самого банка в принятие проекта"
+                  "pauseReason": "Причина: Отказ от самого банка в принятие проекта",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P099",
@@ -2717,7 +2811,8 @@ window.TB_DATA = {
                         "Abduraxmonov Islom"
                   ],
                   "pmId": "E15",
-                  "pauseReason": "Причина: Приоритеты во время не поставления из за возникновении другого приоритетного проекта: Онлайн кредит"
+                  "pauseReason": "Причина: Приоритеты во время не поставления из за возникновении другого приоритетного проекта: Онлайн кредит",
+                  "origin": "Google Sheet"
             },
             {
                   "id": "P100",
@@ -2739,7 +2834,8 @@ window.TB_DATA = {
                   "info": "Продукт: Trastpay 2.0; стоппер: не готов метод в ОФБ",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-168"
+                  "jiraEpicKey": "SL-168",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P101",
@@ -2765,7 +2861,8 @@ window.TB_DATA = {
                         "Rasulov Ulugbek"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-6"
+                  "jiraEpicKey": "SL-6",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P102",
@@ -2791,7 +2888,8 @@ window.TB_DATA = {
                         "Toxirov Sarvar"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-15"
+                  "jiraEpicKey": "SL-15",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P105",
@@ -2821,7 +2919,8 @@ window.TB_DATA = {
                         "Valixonov Baxtiyor"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-100"
+                  "jiraEpicKey": "SL-100",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P106",
@@ -2851,7 +2950,8 @@ window.TB_DATA = {
                         "Valixonov Baxtiyor"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-103"
+                  "jiraEpicKey": "SL-103",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P107",
@@ -2880,7 +2980,8 @@ window.TB_DATA = {
                         "Rasulov Ulugbek"
                   ],
                   "pmId": "E08",
-                  "jiraEpicKey": "SL-144"
+                  "jiraEpicKey": "SL-144",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P108",
@@ -2909,7 +3010,8 @@ window.TB_DATA = {
                         "Valixonov Baxtiyor"
                   ],
                   "pmId": "E08",
-                  "jiraEpicKey": "SL-151"
+                  "jiraEpicKey": "SL-151",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P112",
@@ -2933,7 +3035,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux"
                   ],
                   "pmId": "E10",
-                  "jiraEpicKey": "FC-31"
+                  "jiraEpicKey": "FC-31",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P113",
@@ -2957,7 +3060,8 @@ window.TB_DATA = {
                         "Axmadov Sherzod"
                   ],
                   "pmId": "E43",
-                  "jiraEpicKey": "MW-2"
+                  "jiraEpicKey": "MW-2",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P114",
@@ -2982,7 +3086,8 @@ window.TB_DATA = {
                         "Xabibjonov Jaloliddin"
                   ],
                   "pmId": "E43",
-                  "jiraEpicKey": "MW-3"
+                  "jiraEpicKey": "MW-3",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P115",
@@ -3006,7 +3111,8 @@ window.TB_DATA = {
                         "Axmadov Sherzod"
                   ],
                   "pmId": "E43",
-                  "jiraEpicKey": "MW-5"
+                  "jiraEpicKey": "MW-5",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P116",
@@ -3030,7 +3136,8 @@ window.TB_DATA = {
                         "Inatullayev Jaxongir"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-174"
+                  "jiraEpicKey": "SL-174",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P117",
@@ -3052,7 +3159,8 @@ window.TB_DATA = {
                   "info": "",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-204"
+                  "jiraEpicKey": "SL-204",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P118",
@@ -3074,7 +3182,8 @@ window.TB_DATA = {
                   "info": "",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-208"
+                  "jiraEpicKey": "SL-208",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P119",
@@ -3098,7 +3207,8 @@ window.TB_DATA = {
                         "Mirzabayev Damir"
                   ],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-218"
+                  "jiraEpicKey": "SL-218",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P120",
@@ -3120,7 +3230,8 @@ window.TB_DATA = {
                   "info": "",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-242"
+                  "jiraEpicKey": "SL-242",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P121",
@@ -3142,7 +3253,8 @@ window.TB_DATA = {
                   "info": "",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-244"
+                  "jiraEpicKey": "SL-244",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P122",
@@ -3164,7 +3276,8 @@ window.TB_DATA = {
                   "info": "",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-245"
+                  "jiraEpicKey": "SL-245",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P123",
@@ -3186,7 +3299,8 @@ window.TB_DATA = {
                   "info": "",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-246"
+                  "jiraEpicKey": "SL-246",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P124",
@@ -3208,7 +3322,8 @@ window.TB_DATA = {
                   "info": "",
                   "team": [],
                   "pmId": "E15",
-                  "jiraEpicKey": "SL-249"
+                  "jiraEpicKey": "SL-249",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P125",
@@ -3221,7 +3336,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux"
                   ],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P126",
@@ -3232,7 +3348,8 @@ window.TB_DATA = {
                   "jiraEpicKey": "FC-4",
                   "team": [],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P127",
@@ -3243,7 +3360,8 @@ window.TB_DATA = {
                   "jiraEpicKey": "FC-5",
                   "team": [],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P128",
@@ -3256,7 +3374,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux"
                   ],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P129",
@@ -3269,7 +3388,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux"
                   ],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P130",
@@ -3280,7 +3400,8 @@ window.TB_DATA = {
                   "jiraEpicKey": "FC-11",
                   "team": [],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P131",
@@ -3293,7 +3414,8 @@ window.TB_DATA = {
                         "Xolikulov Farrux"
                   ],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P132",
@@ -3304,7 +3426,8 @@ window.TB_DATA = {
                   "jiraEpicKey": "FC-23",
                   "team": [],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P133",
@@ -3315,7 +3438,8 @@ window.TB_DATA = {
                   "jiraEpicKey": "FC-8",
                   "team": [],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P134",
@@ -3326,7 +3450,8 @@ window.TB_DATA = {
                   "jiraEpicKey": "FC-15",
                   "team": [],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P135",
@@ -3337,7 +3462,8 @@ window.TB_DATA = {
                   "jiraEpicKey": "FC-16",
                   "team": [],
                   "pm": "Asadbek",
-                  "pmId": "E10"
+                  "pmId": "E10",
+                  "origin": "Jira Story"
             },
             {
                   "id": "P136",
@@ -3362,7 +3488,8 @@ window.TB_DATA = {
                   "sum": "",
                   "paidFact": "",
                   "demoReady": "",
-                  "info": "Продукт: Trastpay"
+                  "info": "Продукт: Trastpay",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P137",
@@ -3387,7 +3514,8 @@ window.TB_DATA = {
                   "sum": "",
                   "paidFact": "",
                   "demoReady": "",
-                  "info": "Продукт: Trastpay"
+                  "info": "Продукт: Trastpay",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P138",
@@ -3409,7 +3537,8 @@ window.TB_DATA = {
                   "info": "Продукт: DBO",
                   "team": [],
                   "pmId": "",
-                  "jiraEpicKey": "KT-25"
+                  "jiraEpicKey": "KT-25",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P139",
@@ -3431,7 +3560,8 @@ window.TB_DATA = {
                   "info": "Продукт: DBO",
                   "team": [],
                   "pmId": "",
-                  "jiraEpicKey": "KT-26"
+                  "jiraEpicKey": "KT-26",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P140",
@@ -3453,7 +3583,8 @@ window.TB_DATA = {
                   "info": "Продукт: DBO",
                   "team": [],
                   "pmId": "",
-                  "jiraEpicKey": "KT-27"
+                  "jiraEpicKey": "KT-27",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P141",
@@ -3475,7 +3606,8 @@ window.TB_DATA = {
                   "info": "Продукт: DBO",
                   "team": [],
                   "pmId": "",
-                  "jiraEpicKey": "KT-28"
+                  "jiraEpicKey": "KT-28",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P142",
@@ -3497,7 +3629,8 @@ window.TB_DATA = {
                   "info": "Продукт: DBO",
                   "team": [],
                   "pmId": "",
-                  "jiraEpicKey": "KT-31"
+                  "jiraEpicKey": "KT-31",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P143",
@@ -3519,7 +3652,8 @@ window.TB_DATA = {
                   "info": "Продукт: DBO",
                   "team": [],
                   "pmId": "",
-                  "jiraEpicKey": "KT-32"
+                  "jiraEpicKey": "KT-32",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P144",
@@ -3541,7 +3675,8 @@ window.TB_DATA = {
                   "info": "Продукт: DBO",
                   "team": [],
                   "pmId": "",
-                  "jiraEpicKey": "KT-33"
+                  "jiraEpicKey": "KT-33",
+                  "origin": "Jira Epic"
             },
             {
                   "id": "P145",
@@ -3563,7 +3698,8 @@ window.TB_DATA = {
                   "info": "Продукт: DBO",
                   "team": [],
                   "pmId": "",
-                  "jiraEpicKey": "KT-34"
+                  "jiraEpicKey": "KT-34",
+                  "origin": "Jira Epic"
             }
       ],
       "employees": [
