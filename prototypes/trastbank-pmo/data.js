@@ -3211,6 +3211,135 @@ window.TB_DATA = {
                   "jiraEpicKey": "SL-249"
             },
             {
+                  "id": "P125",
+                  "name": "FoodCity — FIO maydoni qo'shish",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-3",
+                  "team": [
+                        "Xolikulov Farrux"
+                  ],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
+                  "id": "P126",
+                  "name": "FoodCity — Oylik va kunlik rastalar tarifi",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-4",
+                  "team": [],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
+                  "id": "P127",
+                  "name": "FoodCity — Excel: ortiqcha columnlarni o'chirish",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-5",
+                  "team": [],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
+                  "id": "P128",
+                  "name": "FoodCity — Cancel: pul qaytarish",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-9",
+                  "team": [
+                        "Xolikulov Farrux"
+                  ],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
+                  "id": "P129",
+                  "name": "FoodCity — Takroriy to'lovni bloklash (Check API)",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-10",
+                  "team": [
+                        "Xolikulov Farrux"
+                  ],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
+                  "id": "P130",
+                  "name": "FoodCity — Detail page ga fayl biriktirish",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-11",
+                  "team": [],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
+                  "id": "P131",
+                  "name": "FoodCity — Rasta narxlarini jadvalda ko'rsatish",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-12",
+                  "team": [
+                        "Xolikulov Farrux"
+                  ],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
+                  "id": "P132",
+                  "name": "FoodCity — Har bir obyekt uchun QR generatsiya",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-23",
+                  "team": [],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
+                  "id": "P133",
+                  "name": "FoodCity — To'lovlarga RabbitMQ qo'shish",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-8",
+                  "team": [],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
+                  "id": "P134",
+                  "name": "FoodCity — Anor integratsiyasi",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-15",
+                  "team": [],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
+                  "id": "P135",
+                  "name": "FoodCity — Error handling",
+                  "product": "Food City",
+                  "norm": "planned",
+                  "originalStatus": "Backlog",
+                  "jiraEpicKey": "FC-16",
+                  "team": [],
+                  "pm": "Asadbek",
+                  "pmId": "E10"
+            },
+            {
                   "id": "P136",
                   "name": "Интеграция с сервисом Xolis",
                   "product": "Trastpay",
@@ -3259,6 +3388,182 @@ window.TB_DATA = {
                   "paidFact": "",
                   "demoReady": "",
                   "info": "Продукт: Trastpay"
+            },
+            {
+                  "id": "P138",
+                  "name": "Push - Notifications Application",
+                  "product": "DBO",
+                  "goal": "Реализация push-уведомлений для заявок в ДБО",
+                  "basis": "Расширение функциональности уведомлений в системе ДБО",
+                  "department": "Отдел Цифровых Трансформаций и Инноваций",
+                  "customer": "Трастбанк",
+                  "supplier": "",
+                  "startDate": "",
+                  "endDate": "",
+                  "sum": "ГПХ",
+                  "paidFact": "",
+                  "norm": "planned",
+                  "originalStatus": "new",
+                  "pm": "",
+                  "demoReady": false,
+                  "info": "Продукт: DBO",
+                  "team": [],
+                  "pmId": "",
+                  "jiraEpicKey": "KT-25"
+            },
+            {
+                  "id": "P139",
+                  "name": "Push - Notifications Conversion",
+                  "product": "DBO",
+                  "goal": "Реализация push-уведомлений для конверсионных операций в ДБО",
+                  "basis": "Расширение функциональности уведомлений для операций конверсии",
+                  "department": "Отдел Цифровых Трансформаций и Инноваций",
+                  "customer": "Трастбанк",
+                  "supplier": "",
+                  "startDate": "",
+                  "endDate": "",
+                  "sum": "ГПХ",
+                  "paidFact": "",
+                  "norm": "planned",
+                  "originalStatus": "new",
+                  "pm": "",
+                  "demoReady": false,
+                  "info": "Продукт: DBO",
+                  "team": [],
+                  "pmId": "",
+                  "jiraEpicKey": "KT-26"
+            },
+            {
+                  "id": "P140",
+                  "name": "Push - Notifications Payment",
+                  "product": "DBO",
+                  "goal": "Реализация push-уведомлений для платежей в ДБО",
+                  "basis": "Расширение функциональности уведомлений для платежных операций",
+                  "department": "Отдел Цифровых Трансформаций и Инноваций",
+                  "customer": "Трастбанк",
+                  "supplier": "",
+                  "startDate": "",
+                  "endDate": "",
+                  "sum": "ГПХ",
+                  "paidFact": "",
+                  "norm": "progress",
+                  "originalStatus": "indeterminate",
+                  "pm": "",
+                  "demoReady": false,
+                  "info": "Продукт: DBO",
+                  "team": [],
+                  "pmId": "",
+                  "jiraEpicKey": "KT-27"
+            },
+            {
+                  "id": "P141",
+                  "name": "Webhook Notifications",
+                  "product": "DBO",
+                  "goal": "Внедрение webhook-уведомлений для бизнес-менеджеров в ДБО",
+                  "basis": "Расширение механизма уведомлений через webhook-интеграции",
+                  "department": "Отдел Цифровых Трансформаций и Инноваций",
+                  "customer": "Трастбанк",
+                  "supplier": "",
+                  "startDate": "",
+                  "endDate": "",
+                  "sum": "ГПХ",
+                  "paidFact": "",
+                  "norm": "planned",
+                  "originalStatus": "new",
+                  "pm": "",
+                  "demoReady": false,
+                  "info": "Продукт: DBO",
+                  "team": [],
+                  "pmId": "",
+                  "jiraEpicKey": "KT-28"
+            },
+            {
+                  "id": "P142",
+                  "name": "Interbank Salary Payments",
+                  "product": "DBO",
+                  "goal": "Реализация выплаты зарплаты на счета в других банках через ДБО",
+                  "basis": "Расширение возможностей межбанковских платежей для корпоративных клиентов",
+                  "department": "Отдел Цифровых Трансформаций и Инноваций",
+                  "customer": "Трастбанк",
+                  "supplier": "",
+                  "startDate": "",
+                  "endDate": "",
+                  "sum": "ГПХ",
+                  "paidFact": "",
+                  "norm": "planned",
+                  "originalStatus": "new",
+                  "pm": "",
+                  "demoReady": false,
+                  "info": "Продукт: DBO",
+                  "team": [],
+                  "pmId": "",
+                  "jiraEpicKey": "KT-31"
+            },
+            {
+                  "id": "P143",
+                  "name": "New Design Prototype",
+                  "product": "DBO",
+                  "goal": "Разработка нового дизайн-прототипа для системы ДБО",
+                  "basis": "Модернизация интерфейса ДБО в соответствии с современными дизайн-стандартами",
+                  "department": "Отдел Цифровых Трансформаций и Инноваций",
+                  "customer": "Трастбанк",
+                  "supplier": "",
+                  "startDate": "",
+                  "endDate": "",
+                  "sum": "ГПХ",
+                  "paidFact": "",
+                  "norm": "planned",
+                  "originalStatus": "new",
+                  "pm": "",
+                  "demoReady": false,
+                  "info": "Продукт: DBO",
+                  "team": [],
+                  "pmId": "",
+                  "jiraEpicKey": "KT-32"
+            },
+            {
+                  "id": "P144",
+                  "name": "Payment with Pin Code",
+                  "product": "DBO",
+                  "goal": "Реализация подтверждения платежей PIN-кодом в ДБО",
+                  "basis": "Повышение безопасности платежных операций через дополнительную аутентификацию",
+                  "department": "Отдел Цифровых Трансформаций и Инноваций",
+                  "customer": "Трастбанк",
+                  "supplier": "",
+                  "startDate": "",
+                  "endDate": "",
+                  "sum": "ГПХ",
+                  "paidFact": "",
+                  "norm": "planned",
+                  "originalStatus": "new",
+                  "pm": "",
+                  "demoReady": false,
+                  "info": "Продукт: DBO",
+                  "team": [],
+                  "pmId": "",
+                  "jiraEpicKey": "KT-33"
+            },
+            {
+                  "id": "P145",
+                  "name": "Sync Deleted Payments with iABS",
+                  "product": "DBO",
+                  "goal": "Синхронизация удалённых платежей между ДБО и iABS",
+                  "basis": "Обеспечение консистентности данных при удалении платежей",
+                  "department": "Отдел Цифровых Трансформаций и Инноваций",
+                  "customer": "Трастбанк",
+                  "supplier": "",
+                  "startDate": "",
+                  "endDate": "",
+                  "sum": "ГПХ",
+                  "paidFact": "",
+                  "norm": "planned",
+                  "originalStatus": "new",
+                  "pm": "",
+                  "demoReady": false,
+                  "info": "Продукт: DBO",
+                  "team": [],
+                  "pmId": "",
+                  "jiraEpicKey": "KT-34"
             }
       ],
       "employees": [
@@ -3296,8 +3601,8 @@ window.TB_DATA = {
                   "prCount": 11,
                   "statusCounts": {
                         "completed": 12,
-                        "progress": 1,
-                        "planned": 2,
+                        "progress": 2,
+                        "planned": 6,
                         "paused": 5
                   },
                   "projectIds": [
@@ -3321,9 +3626,13 @@ window.TB_DATA = {
                         "P094",
                         "P095",
                         "P096",
-                        "P112"
+                        "P112",
+                        "P125",
+                        "P128",
+                        "P129",
+                        "P131"
                   ],
-                  "totalMatched": 21,
+                  "totalMatched": 25,
                   "loadLevel": "critical"
             },
             {
@@ -3339,7 +3648,7 @@ window.TB_DATA = {
                   "prCount": 8,
                   "statusCounts": {
                         "completed": 12,
-                        "progress": 5,
+                        "progress": 6,
                         "planned": 4,
                         "paused": 2
                   },
@@ -3458,7 +3767,7 @@ window.TB_DATA = {
                   "prCount": 12,
                   "statusCounts": {
                         "completed": 10,
-                        "progress": 4,
+                        "progress": 5,
                         "planned": 2,
                         "paused": 5
                   },
@@ -3539,7 +3848,7 @@ window.TB_DATA = {
                   "prCount": 5,
                   "statusCounts": {
                         "completed": 9,
-                        "progress": 4,
+                        "progress": 5,
                         "planned": 1,
                         "paused": 2
                   },
@@ -3754,7 +4063,7 @@ window.TB_DATA = {
                   "prCount": 12,
                   "statusCounts": {
                         "completed": 20,
-                        "progress": 5,
+                        "progress": 6,
                         "planned": 8,
                         "paused": 2
                   },
@@ -3872,7 +4181,7 @@ window.TB_DATA = {
                   "prCount": 7,
                   "statusCounts": {
                         "completed": 6,
-                        "progress": 0,
+                        "progress": 1,
                         "planned": 4,
                         "paused": 2
                   },
@@ -4030,7 +4339,7 @@ window.TB_DATA = {
                   "prCount": 32,
                   "statusCounts": {
                         "completed": 16,
-                        "progress": 2,
+                        "progress": 5,
                         "planned": 7,
                         "paused": 6
                   },
@@ -4402,7 +4711,7 @@ window.TB_DATA = {
                   "prCount": 14,
                   "statusCounts": {
                         "completed": 7,
-                        "progress": 1,
+                        "progress": 3,
                         "planned": 4,
                         "paused": 2
                   },
@@ -4440,7 +4749,7 @@ window.TB_DATA = {
                   "prCount": 13,
                   "statusCounts": {
                         "completed": 6,
-                        "progress": 0,
+                        "progress": 2,
                         "planned": 4,
                         "paused": 2
                   },
@@ -4476,7 +4785,7 @@ window.TB_DATA = {
                   "prCount": 17,
                   "statusCounts": {
                         "completed": 6,
-                        "progress": 1,
+                        "progress": 3,
                         "planned": 4,
                         "paused": 5
                   },
@@ -4516,7 +4825,7 @@ window.TB_DATA = {
                   "prCount": 11,
                   "statusCounts": {
                         "completed": 6,
-                        "progress": 1,
+                        "progress": 3,
                         "planned": 4,
                         "paused": 2
                   },
@@ -4574,7 +4883,7 @@ window.TB_DATA = {
                   "prCount": 3,
                   "statusCounts": {
                         "completed": 0,
-                        "progress": 1,
+                        "progress": 2,
                         "planned": 3,
                         "paused": 0
                   },
@@ -4622,7 +4931,7 @@ window.TB_DATA = {
                   "prCount": 16,
                   "statusCounts": {
                         "completed": 8,
-                        "progress": 0,
+                        "progress": 2,
                         "planned": 7,
                         "paused": 2
                   },
