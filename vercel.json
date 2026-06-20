@@ -3,6 +3,8 @@
   "trailingSlash": false,
   "redirects": [
     { "source": "/protos", "destination": "/#prototypes", "permanent": false },
-    { "source": "/about", "destination": "/#top", "permanent": false }
+    { "source": "/about", "destination": "/#top", "permanent": false },
+    { "source": "/prototypes/noor/bazaar-ecosystem/:path*", "destination": "/prototypes/noor/mvp/:path*", "permanent": true },
+    { "source": "/prototypes/noor/bazaar-ecosystem", "destination": "/prototypes/noor/mvp", "permanent": true }
   ]
 }
