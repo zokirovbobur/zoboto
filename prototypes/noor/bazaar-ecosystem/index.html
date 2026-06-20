@@ -18,6 +18,8 @@
     --line:#e4dfd2;
     --red:#b3261e;
     --amber:#a36b00;
+    --purple:#5c3d99;
+    --purple-soft:#ede8f7;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.4}
@@ -51,6 +53,7 @@
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
   .card.green{background:linear-gradient(135deg,var(--green) 0%,var(--green-2) 100%);color:#fff;border:none}
   .card.gold{background:var(--gold-soft);border-color:var(--gold)}
+  .card.purple{background:var(--purple-soft);border-color:rgba(92,61,153,.3)}
   .card h3{margin:0 0 6px;font-size:13px;letter-spacing:.2px}
   .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 0}
   .row .label{color:var(--muted);font-size:12px}
@@ -62,6 +65,7 @@
   .pill.red{background:#fde7e5;color:var(--red)}
   .pill.amber{background:#fdf0d6;color:var(--amber)}
   .pill.gray{background:#eee;color:#555}
+  .pill.purple{background:var(--purple-soft);color:var(--purple)}
 
   .sccp{background:#0e1a16;color:var(--gold);border-radius:10px;padding:8px 10px;font-size:11px;margin:8px 0;border-left:3px solid var(--gold)}
   .sccp b{color:#fff;display:block;margin-bottom:2px;font-size:11px}
@@ -77,6 +81,7 @@
   .btn.gold:hover:not(:disabled){background:#d8b25c}
   .btn.outline{background:#fff;color:var(--green);border:1px solid var(--green)}
   .btn.danger{background:#fff;color:var(--red);border:1px solid var(--red)}
+  .btn.amber{background:#fff;color:var(--amber);border:1px solid var(--amber)}
   .btn.sm{padding:7px;font-size:11px;margin-top:4px}
 
   .status-list{list-style:none;padding:0;margin:6px 0 0}
@@ -94,6 +99,8 @@
 
   .progress{height:10px;background:#e4dfd2;border-radius:6px;overflow:hidden;margin:6px 0}
   .progress div{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));transition:width .5s}
+  .progress-pulse div{animation:pulse-bar 1.2s ease-in-out infinite}
+  @keyframes pulse-bar{0%,100%{opacity:.6}50%{opacity:1}}
 
   .qr{width:140px;height:140px;margin:10px auto;background:
     repeating-conic-gradient(#000 0 25%, #fff 0 50%) 50% / 14px 14px;
@@ -102,7 +109,8 @@
   .side{display:flex;flex-direction:column;gap:14px}
   .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
   .panel h2{margin:0 0 10px;font-size:14px;color:var(--green);letter-spacing:.3px;text-transform:uppercase}
-  .timeline{list-style:none;padding:0;margin:0;max-height:380px;overflow-y:auto}
+
+  .timeline{list-style:none;padding:0;margin:0;max-height:300px;overflow-y:auto}
   .timeline li{font-size:11.5px;padding:5px 0 5px 18px;position:relative;color:var(--muted);border-left:2px solid var(--line);margin-left:5px;padding-left:14px}
   .timeline li.done{color:var(--green);font-weight:600;border-left-color:var(--green)}
   .timeline li.active{color:var(--gold);font-weight:700;border-left-color:var(--gold)}
@@ -115,9 +123,23 @@
   .own-row.active{background:var(--green);color:#fff;font-weight:600}
   .own-row .who{flex:1}
 
-  .log{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:#0e1a16;color:#9ec6b6;border-radius:10px;padding:10px;max-height:200px;overflow-y:auto}
+  .log{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:#0e1a16;color:#9ec6b6;border-radius:10px;padding:10px;max-height:180px;overflow-y:auto}
   .log div{padding:2px 0;border-bottom:1px dashed rgba(255,255,255,.07)}
   .log .t{color:var(--gold);margin-right:6px}
+
+  /* Shariah panel */
+  .sccp-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12px}
+  .sccp-item:last-child{border-bottom:none}
+  .sccp-dot{width:18px;height:18px;border-radius:50%;background:var(--line);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px}
+  .sccp-dot.pass{background:var(--green);color:#fff}
+  .sccp-dot.warn{background:var(--red);color:#fff}
+  .sccp-label{flex:1}
+  .sccp-label b{display:block;color:var(--ink);font-size:11px;font-weight:600}
+  .sccp-label span{color:var(--muted);font-size:11px}
+  .sccp-item.pass .sccp-label b{color:var(--green)}
+
+  .overdue-banner{background:#fde7e5;border:1px solid var(--red);border-radius:12px;padding:12px;margin-bottom:10px}
+  .overdue-banner h3{margin:0 0 4px;font-size:13px;color:var(--red)}
 
   .empty{color:var(--muted);font-size:12px;text-align:center;padding:16px;font-style:italic}
 
@@ -170,6 +192,10 @@
       <div class="ownership" id="ownership"></div>
     </div>
     <div class="panel">
+      <h2>🕌 Shariah Compliance</h2>
+      <div id="shariah-panel"></div>
+    </div>
+    <div class="panel">
       <h2>📜 Event Log</h2>
       <div class="log" id="log"></div>
     </div>
@@ -190,12 +216,18 @@ const ORDER = {
   term:7,
   delivery:150000,
   pricePerKg:6000,
-  stockTons:12
+  stockTons:12,
+  limit:50000000
 };
 
 const DEFAULT_STATE = {
   orderCreated:false,
   orderStatus:null,
+  /* #1 Limit assessment */
+  limitChecking:false,
+  fundsReserved:false,
+  limitInsufficient:false,
+  /* order flow */
   ownership:'supplier',
   supplierConfirmed:false,
   supplierPaid:false,
@@ -205,7 +237,11 @@ const DEFAULT_STATE = {
   qabdConfirmed:false,
   inDelivery:false,
   arrivedAtBuyer:false,
+  /* #3 QR scan → terms → accept */
+  qrScanned:false,
+  contractGenerated:false,
   murabahaAccepted:false,
+  /* repayment */
   fullyRepaid:false,
   cancelled:false,
   dispute:null,
@@ -215,61 +251,103 @@ const DEFAULT_STATE = {
   driverBalance:0,
   traderBalance:0,
   checklist:{qty:false, quality:false, loaded:false},
+  /* #9 Overdue */
+  overdueActive:false,
+  charityPenalty:0,
   log:[],
   tab:'m'
 };
 
 let state = load() || JSON.parse(JSON.stringify(DEFAULT_STATE));
+let _limitTimer = null;
+let _bankTimer = null;
 
 function save(){ localStorage.setItem('noor_state', JSON.stringify(state)); }
 function load(){ try{ return JSON.parse(localStorage.getItem('noor_state')); }catch(e){ return null; } }
 function logEvent(msg){
   const t = new Date().toLocaleTimeString('ru-RU');
   state.log.unshift({t,msg});
-  if(state.log.length>40) state.log.pop();
+  if(state.log.length>50) state.log.pop();
 }
 
 const TIMELINE = [
-  ['prescoring','Prescoring completed'],
-  ['limit','Limit shown to trader'],
-  ['order','Order created'],
-  ['supplier','Supplier confirmed stock'],
-  ['purchase','Bank purchased goods from supplier'],
-  ['own_bank','Ownership transferred to Noor Bank'],
-  ['driver','Driver assigned'],
-  ['qabd','Physical qabd/kabz confirmed'],
-  ['delivered','Goods delivered to trader'],
-  ['murabaha','Murabaha contract accepted'],
-  ['schedule','Repayment schedule activated'],
-  ['repaying','Repayment in progress'],
-  ['repaid','Murabaha fully repaid']
+  ['prescoring',   'Prescoring completed'],
+  ['limit',        'Limit shown to trader'],
+  ['order',        'Order created'],
+  ['limit_check',  'Financing limit assessed (Noor Core)'],
+  ['funds_reserved','Funds reserved (Noor Core)'],
+  ['supplier',     'Supplier confirmed stock'],
+  ['purchase',     'Bank purchased goods from supplier'],
+  ['own_bank',     'Ownership → Noor Bank (Qabd legal)'],
+  ['driver',       'Driver assigned & accepted'],
+  ['qabd',         'Physical qabd/kabz confirmed'],
+  ['delivered',    'Goods delivered to buyer'],
+  ['qr_scanned',   'Buyer confirmed receipt (QR scan)'],
+  ['terms_shown',  'Murabaha terms shown & signed'],
+  ['contract_gen', 'Murabaha contract generated (Noor Core)'],
+  ['murabaha',     'Murabaha contract active'],
+  ['schedule',     'Repayment schedule activated'],
+  ['repaying',     'Repayment in progress'],
+  ['repaid',       'Murabaha fully repaid']
 ];
 
 function timelineStatus(key){
   const s = state;
   const map = {
-    prescoring: true,
-    limit: true,
-    order: s.orderCreated,
-    supplier: s.supplierConfirmed,
-    purchase: s.supplierPaid,
-    own_bank: s.ownership==='bank' || s.ownership==='client' || s.ownership==='closed',
-    driver: s.driverAccepted,
-    qabd: s.qabdConfirmed,
-    delivered: s.arrivedAtBuyer,
-    murabaha: s.murabahaAccepted,
-    schedule: s.murabahaAccepted,
-    repaying: s.repaid>0 && !s.fullyRepaid,
-    repaid: s.fullyRepaid
+    prescoring:    true,
+    limit:         true,
+    order:         s.orderCreated,
+    limit_check:   s.fundsReserved || s.limitInsufficient,
+    funds_reserved:s.fundsReserved,
+    supplier:      s.supplierConfirmed,
+    purchase:      s.supplierPaid,
+    own_bank:      s.ownership==='bank'||s.ownership==='client'||s.ownership==='closed',
+    driver:        s.driverAccepted,
+    qabd:          s.qabdConfirmed,
+    delivered:     s.arrivedAtBuyer,
+    qr_scanned:    s.qrScanned,
+    terms_shown:   s.contractGenerated,
+    contract_gen:  s.contractGenerated,
+    murabaha:      s.murabahaAccepted,
+    schedule:      s.murabahaAccepted,
+    repaying:      s.repaid>0 && !s.fullyRepaid,
+    repaid:        s.fullyRepaid
   };
   return map[key];
 }
 
+/* ── Actions ── */
+
+// #1 — Limit gateway
 function createOrder(){
   state.orderCreated = true;
-  state.orderStatus = 'supplier_pending';
+  state.limitChecking = true;
+  state.orderStatus = 'limit_checking';
   logEvent('🛒 Заказ N-1001 создан в Marketplace');
-  logEvent('📤 Отправлен оптовику Food City Agro Optom');
+  logEvent('🔄 Noor Core: проверка лимита финансирования...');
+  render();
+  _limitTimer = setTimeout(limitCheckPass, 1800);
+}
+
+function limitCheckPass(){
+  _limitTimer = null;
+  if(!state.limitChecking) return;
+  state.limitChecking = false;
+  state.fundsReserved = true;
+  state.orderStatus = 'supplier_pending';
+  logEvent('✅ Лимит достаточен: 6 000 000 < 50 000 000 сум');
+  logEvent('🔒 Noor Core: средства зарезервированы');
+  logEvent('📤 Заказ направлен оптовику Food City Agro Optom');
+  render();
+}
+
+function limitCheckFail(){
+  if(_limitTimer){ clearTimeout(_limitTimer); _limitTimer = null; }
+  state.limitChecking = false;
+  state.limitInsufficient = true;
+  state.cancelled = true;
+  state.orderStatus = 'cancelled';
+  logEvent('❌ Noor Core: лимит недостаточен. Заказ отменён.');
   render();
 }
 
@@ -278,7 +356,7 @@ function supplierConfirm(){
   state.orderStatus = 'bank_purchase_pending';
   logEvent('✅ Оптовик подтвердил наличие 1 тонны');
   render();
-  setTimeout(bankPurchase, 1200);
+  _bankTimer = setTimeout(bankPurchase, 1200);
 }
 
 function supplierNoStock(){
@@ -290,6 +368,7 @@ function supplierNoStock(){
 }
 
 function bankPurchase(){
+  _bankTimer = null;
   if(!state.supplierConfirmed || state.cancelled) return;
   state.supplierPaid = true;
   state.supplierBalance += ORDER.cost;
@@ -297,7 +376,7 @@ function bankPurchase(){
   state.orderStatus = 'ownership_bank';
   state.driverAssigned = true;
   logEvent('🏦 Банк Noor оплатил оптовику 6 000 000 сум');
-  logEvent('🔁 Собственность: оптовик → Noor Bank');
+  logEvent('🔁 Собственность: Оптовик → Noor Bank (Qabd legal)');
   logEvent('🚚 Доставка назначена водителю Акмал');
   render();
 }
@@ -329,27 +408,42 @@ function driverQualityFail(){
   state.dispute = 'driver_quality';
   state.cancelled = true;
   state.orderStatus = 'dispute';
-  logEvent('⚠ Водитель: товар не соответствует. Спор открыт. Мурабаха не активирована.');
+  logEvent('⚠ Водитель: товар не соответствует. Спор открыт.');
   render();
 }
 function driverArrived(){
   state.arrivedAtBuyer = true;
-  state.orderStatus = 'murabaha_pending_acceptance';
+  state.orderStatus = 'receipt_pending';
   logEvent('📍 Водитель прибыл к покупателю на Чорсу');
-  logEvent('🪧 Покупателю показан QR для подтверждения Мурабахи');
+  logEvent('📱 Покупатель должен отсканировать QR для подтверждения приёмки');
   render();
 }
+
+// #3 — Step 1: Buyer scans QR (physical receipt)
+function buyerScanQR(){
+  state.qrScanned = true;
+  state.orderStatus = 'terms_pending';
+  logEvent('📱 Покупатель отсканировал QR — физическая приёмка подтверждена');
+  logEvent('📜 Marketplace: показаны условия договора Мурабаха');
+  render();
+}
+
+// #3/#4 — Step 2: Buyer accepts terms → Noor Core generates contract
 function acceptMurabaha(){
   state.murabahaAccepted = true;
+  state.contractGenerated = true;
   state.ownership = 'client';
   state.orderStatus = 'murabaha_active';
   state.debt = ORDER.total;
   state.driverBalance += ORDER.delivery;
-  logEvent('📝 Иджаб/Кабул: клиент подтвердил приёмку и Мурабаху');
+  logEvent('✍ Иджаб/Кабул: клиент принял условия Мурабахи');
+  logEvent('📑 Noor Core: Договор Мурабаха сгенерирован и вступил в силу');
+  logEvent('🕌 Shariah Audit: SCCP-1, 2, 3, 4 — пройдено');
   logEvent('🔁 Собственность: Noor Bank → Клиент');
-  logEvent('💳 Активирован график погашения: 6 180 000 сум, 7 дней');
+  logEvent('💳 График погашения активирован: 6 180 000 сум, 7 дней');
   render();
 }
+
 function customerDispute(){
   state.dispute = 'customer';
   state.cancelled = true;
@@ -357,6 +451,7 @@ function customerDispute(){
   logEvent('⚠ Клиент: проблема с товаром. Мурабаха НЕ активирована. Риск на банке.');
   render();
 }
+
 function qrSale(amount){
   if(!state.murabahaAccepted || state.fullyRepaid) return;
   const toMurabaha = Math.min(amount*0.2, state.debt);
@@ -365,7 +460,7 @@ function qrSale(amount){
   state.debt -= toMurabaha;
   state.traderBalance += toTrader;
   state.orderStatus = 'repayment_in_progress';
-  logEvent(`💸 QR-продажа ${amount.toLocaleString('ru-RU')} сум: ${toMurabaha.toLocaleString('ru-RU')} → погашение, ${toTrader.toLocaleString('ru-RU')} → торговец`);
+  logEvent(`💸 QR-продажа ${amount.toLocaleString('ru-RU')} сум: ${toMurabaha.toLocaleString('ru-RU')} → погашение Мурабахи, ${toTrader.toLocaleString('ru-RU')} → торговец`);
   if(state.debt<=0.5){
     state.debt = 0;
     state.fullyRepaid = true;
@@ -376,8 +471,27 @@ function qrSale(amount){
   render();
 }
 
+// #9 — Overdue / Charity penalty
+function triggerOverdue(){
+  state.overdueActive = true;
+  state.charityPenalty = Math.round(state.debt * 0.005);
+  logEvent('⚠ Просрочка платежа! Рассчитывается благотворительный штраф (садака)');
+  logEvent('🕌 Shariah: штраф = садака в благотворительный фонд — это не риба');
+  render();
+}
+
+function payCharityPenalty(){
+  logEvent(`💚 Штраф-садака ${state.charityPenalty.toLocaleString('ru-RU')} сум → благотворительный фонд`);
+  state.overdueActive = false;
+  state.charityPenalty = 0;
+  logEvent('✅ Штраф оплачен. Погашение продолжается.');
+  render();
+}
+
 function resetDemo(){
   if(!confirm('Сбросить демо?')) return;
+  if(_limitTimer){ clearTimeout(_limitTimer); _limitTimer = null; }
+  if(_bankTimer){ clearTimeout(_bankTimer); _bankTimer = null; }
   localStorage.removeItem('noor_state');
   state = JSON.parse(JSON.stringify(DEFAULT_STATE));
   logEvent('🔄 Демо сброшено');
@@ -387,19 +501,22 @@ function resetDemo(){
 async function autoPlay(){
   resetSilent();
   const wait = ms => new Promise(r=>setTimeout(r,ms));
-  createOrder(); await wait(1200);
-  supplierConfirm(); await wait(2500);
-  driverAccept(); await wait(1200);
-  driverAtSupplier(); await wait(900);
-  state.checklist={qty:true,quality:true,loaded:true}; render(); await wait(900);
-  driverConfirmQabd(); await wait(1500);
-  driverArrived(); await wait(1500);
+  createOrder(); await wait(2500);          // limit check auto-triggers inside
+  supplierConfirm(); await wait(2500);      // bank purchase auto-triggers inside
+  driverAccept(); await wait(1000);
+  driverAtSupplier(); await wait(800);
+  state.checklist={qty:true,quality:true,loaded:true}; render(); await wait(800);
+  driverConfirmQabd(); await wait(1200);
+  driverArrived(); await wait(1200);
+  buyerScanQR(); await wait(1000);
   acceptMurabaha(); await wait(1500);
-  qrSale(3000000); await wait(1200);
-  qrSale(3000000); await wait(1200);
+  qrSale(3000000); await wait(1000);
+  qrSale(3000000); await wait(1000);
   qrSale(1000000);
 }
 function resetSilent(){
+  if(_limitTimer){ clearTimeout(_limitTimer); _limitTimer = null; }
+  if(_bankTimer){ clearTimeout(_bankTimer); _bankTimer = null; }
   localStorage.removeItem('noor_state');
   state = JSON.parse(JSON.stringify(DEFAULT_STATE));
   render();
@@ -414,41 +531,49 @@ function switchTab(t){
 }
 
 function statusListHTML(){
+  const s = state;
   const steps = [
-    ['Заявка создана', state.orderCreated],
-    ['Ожидаем подтверждение оптовика', state.orderStatus==='supplier_pending', state.supplierConfirmed],
-    ['Товар подтверждён', state.supplierConfirmed],
-    ['Банк выкупает товар', state.supplierConfirmed && !state.supplierPaid, state.supplierPaid],
-    ['Товар — собственность банка', state.supplierPaid],
-    ['Назначена доставка', state.driverAssigned],
-    ['Водитель принял товар / qabd', state.qabdConfirmed],
-    ['Товар в пути', state.inDelivery],
-    ['Ожидает акцепт Мурабахи', state.arrivedAtBuyer && !state.murabahaAccepted, state.murabahaAccepted],
-    ['Мурабаха активна', state.murabahaAccepted],
-    ['Погашение', state.repaid>0, state.fullyRepaid],
-    ['Полностью погашено', state.fullyRepaid]
+    ['Заявка создана',                    s.orderCreated],
+    ['Noor Core: проверка лимита',        s.limitChecking, s.fundsReserved || s.limitInsufficient],
+    ['Лимит одобрен · средства резервированы', s.fundsReserved],
+    ['Ожидаем подтверждение оптовика',    s.fundsReserved && s.orderStatus==='supplier_pending', s.supplierConfirmed],
+    ['Товар подтверждён оптовиком',       s.supplierConfirmed],
+    ['Банк выкупает товар у оптовика',    s.supplierConfirmed && !s.supplierPaid, s.supplierPaid],
+    ['Товар — собственность Noor Bank',   s.supplierPaid],
+    ['Назначена доставка',                s.driverAssigned],
+    ['Водитель принял qabd/kabz',         s.qabdConfirmed],
+    ['Товар в пути',                      s.inDelivery],
+    ['Ожидаем QR-сканирование покупателя',s.arrivedAtBuyer && !s.qrScanned, s.qrScanned],
+    ['Ожидаем акцепт Мурабахи',           s.qrScanned && !s.murabahaAccepted, s.murabahaAccepted],
+    ['Мурабаха активна',                  s.murabahaAccepted],
+    ['Погашение',                         s.repaid>0, s.fullyRepaid],
+    ['Полностью погашено ✓',              s.fullyRepaid]
   ];
   let html = '<ul class="status-list">';
   steps.forEach(([txt,active,done])=>{
     let cls = '';
     if(done) cls='done';
     else if(active) cls='active';
-    if(state.cancelled) cls = done?'done':(active?'cancelled':'');
+    if(s.cancelled) cls = done?'done':(active?'cancelled':'');
     html += `<li class="${cls}">${txt}</li>`;
   });
-  if(state.cancelled){
-    const t = state.dispute==='supplier_no_stock'?'Отменён: нет товара'
-           : state.dispute==='driver_quality'?'Dispute: товар не соответствует'
-           : 'Customer dispute';
+  if(s.cancelled){
+    const t = s.limitInsufficient ? 'Отменён: недостаточный лимит'
+            : s.dispute==='supplier_no_stock' ? 'Отменён: нет товара у оптовика'
+            : s.dispute==='driver_quality' ? 'Dispute: товар не соответствует'
+            : 'Customer dispute';
     html += `<li class="cancelled">${t}</li>`;
   }
   html += '</ul>';
   return html;
 }
 
+/* ── Renders ── */
+
 function renderMarketplace(){
   const s = state;
   let html = `<div class="app-title"><span class="dot"></span>Noor Marketplace</div>`;
+
   html += `<div class="card green">
     <div style="font-size:12px;opacity:.85">Здравствуйте,</div>
     <div style="font-size:18px;font-weight:700;margin-bottom:8px">${ORDER.buyer.name} 👋</div>
@@ -457,7 +582,7 @@ function renderMarketplace(){
 
   html += `<div class="card gold">
     <div class="row"><span class="label">Доступный лимит Noor</span><span class="pill gold">Pre-approved</span></div>
-    <div class="big" style="color:#7a5a13">50 000 000 сум</div>
+    <div class="big" style="color:#7a5a13">${ORDER.limit.toLocaleString('ru-RU')} сум</div>
     <div class="muted">Основано на оборотах Paynet / Xolis</div>
   </div>`;
 
@@ -479,35 +604,82 @@ function renderMarketplace(){
       <div class="row"><span class="label">Срок</span><span class="val">${ORDER.term} дней</span></div>
       <div class="row"><span class="label">Наценка</span><span class="val">3% · 180 000 сум</span></div>
       <div class="row"><span class="label">Доставка</span><span class="val">${ORDER.delivery.toLocaleString('ru-RU')} сум</span></div>
-      <div class="row" style="border-top:1px dashed var(--line);margin-top:6px;padding-top:6px"><span class="label">Итого к возврату</span><span class="val" style="color:var(--green);font-size:16px">6 180 000 сум</span></div>
+      <div class="row" style="border-top:1px dashed var(--line);margin-top:6px;padding-top:6px">
+        <span class="label">Итого к возврату</span>
+        <span class="val" style="color:var(--green);font-size:16px">6 180 000 сум</span>
+      </div>
       <div class="sccp"><b>SCCP-1 / SCCP-2</b>Noor не выдаёт деньги в долг. Банк сначала покупает товар у оптовика, вступает во владение, и только потом продаёт вам по Мурабахе.</div>
       <button class="btn gold" onclick="createOrder()">Создать заказ по Мурабахе</button>
     </div>`;
+
   } else {
     html += `<div class="card"><h3>Заказ N-1001 · ${ORDER.product}</h3>
       <div class="muted">${ORDER.qty} · 6 180 000 сум · ${ORDER.term} дней</div>
       ${statusListHTML()}
     </div>`;
 
-    if(s.arrivedAtBuyer && !s.murabahaAccepted && !s.cancelled){
-      html += `<div class="card gold">
-        <h3>📜 Иджаб / Кабул</h3>
-        <div class="sccp"><b>SCCP-6</b>Мурабаха активируется только после приёмки товара клиентом.</div>
-        <div style="font-size:12px;line-height:1.5">
-          Принять товар от <b>Банка Noor</b> по договору <b>Мурабаха</b> на ${ORDER.term} дней?<br>
-          Закупочная цена банка: <b>6 000 000 сум</b><br>
-          Наценка: <b>180 000 сум</b><br>
-          Итого к возврату: <b>6 180 000 сум</b><br>
-          Срок оплаты: <b>${ORDER.term} дней</b>
+    /* #1 — Limit check in progress */
+    if(s.limitChecking){
+      html += `<div class="card">
+        <h3>🔄 Noor Core: оценка лимита...</h3>
+        <div class="muted" style="margin-bottom:8px">Проверяем достаточность лимита финансирования для этого заказа</div>
+        <div class="progress progress-pulse"><div style="width:60%"></div></div>
+        <div class="row" style="margin-top:8px">
+          <span class="label">Запрошено</span><span class="val">6 000 000 сум</span>
         </div>
-        <button class="btn" onclick="acceptMurabaha()">Подтверждаю приёмку и покупку</button>
+        <div class="row">
+          <span class="label">Доступный лимит</span><span class="val" style="color:var(--green)">50 000 000 сум</span>
+        </div>
+        <button class="btn danger sm" onclick="limitCheckFail()">⚠ Симуляция: недостаточный лимит</button>
+      </div>`;
+    }
+
+    /* Waiting for QR scan after driver arrived */
+    if(s.arrivedAtBuyer && !s.qrScanned && !s.cancelled){
+      html += `<div class="card gold">
+        <h3>📱 Шаг 1 из 2 — Подтвердите приёмку товара</h3>
+        <div style="font-size:12px;line-height:1.6;margin-bottom:10px">
+          Водитель прибыл. Отсканируйте QR-код на экране водителя, чтобы подтвердить физическую приёмку товара.<br>
+          <span style="color:var(--amber);font-weight:600">До сканирования QR Мурабаха не активируется.</span>
+        </div>
+        <div class="sccp"><b>SCCP-3</b>Покупатель сначала подтверждает физическую приёмку, затем получает условия договора. Последовательность обязательна по Шариату.</div>
+        <button class="btn" onclick="buyerScanQR()">📱 QR отсканирован — товар получен</button>
+      </div>`;
+    }
+
+    /* #3 — Show Murabaha Terms after QR scan */
+    if(s.qrScanned && !s.murabahaAccepted && !s.cancelled){
+      html += `<div class="card gold">
+        <h3>📜 Шаг 2 из 2 — Условия договора Мурабаха</h3>
+        <div class="sccp" style="margin-bottom:10px"><b>SCCP-4 · Иджаб / Кабул</b>Мурабаха активируется только после вашего явного согласия с условиями договора.</div>
+        <div style="font-size:12px;line-height:1.7;background:#fff;border-radius:10px;padding:10px;border:1px solid var(--gold)">
+          <div style="font-weight:700;margin-bottom:6px;color:var(--ink)">Договор Мурабаха № ${ORDER.id}</div>
+          <div class="row"><span class="label">Продавец</span><span class="val">Noor Islamic Bank</span></div>
+          <div class="row"><span class="label">Покупатель</span><span class="val">${ORDER.buyer.name}</span></div>
+          <div class="row"><span class="label">Товар</span><span class="val">${ORDER.product}</span></div>
+          <div class="row"><span class="label">Закупочная цена банка</span><span class="val">6 000 000 сум</span></div>
+          <div class="row"><span class="label">Наценка (Ribh)</span><span class="val">180 000 сум (3%)</span></div>
+          <div class="row" style="border-top:1px dashed var(--line);padding-top:6px;margin-top:4px">
+            <span class="label">Итого к возврату</span>
+            <span class="val" style="color:var(--green);font-size:15px;font-weight:700">6 180 000 сум</span>
+          </div>
+          <div class="row"><span class="label">Срок погашения</span><span class="val">${ORDER.term} дней</span></div>
+          <div class="row"><span class="label">Тип погашения</span><span class="val">QR-продажи (20% авто)</span></div>
+          <div style="margin-top:8px;font-size:11px;color:var(--muted)">
+            ✓ Цена фиксирована и не увеличится<br>
+            ✓ Штраф за просрочку = садака (благотворительность), не риба<br>
+            ✓ Товар был в собственности Банка до передачи вам
+          </div>
+        </div>
+        <button class="btn" onclick="acceptMurabaha()" style="margin-top:10px">
+          ✍ Подтверждаю — принимаю условия Мурабахи
+        </button>
         <button class="btn danger sm" onclick="customerDispute()">Есть проблема с товаром</button>
       </div>`;
-    } else if(!s.murabahaAccepted && !s.cancelled){
-      html += `<div class="card" style="opacity:.7">
-        <button class="btn" disabled>Подтвердить Мурабаху</button>
-        <div class="muted" style="text-align:center;margin-top:6px">Мурабаха будет доступна после qabd/kabz</div>
-      </div>`;
+    }
+
+    if(!s.murabahaAccepted && !s.arrivedAtBuyer && !s.qrScanned && !s.cancelled && s.fundsReserved){
+      /* placeholder while waiting for delivery */
     }
 
     if(s.murabahaAccepted){
@@ -515,28 +687,44 @@ function renderMarketplace(){
       html += `<div class="card green">
         <h3>Активный договор Мурабаха</h3>
         <div class="row"><span style="opacity:.8">Сумма</span><span><b>${ORDER.total.toLocaleString('ru-RU')} сум</b></span></div>
-        <div class="row"><span style="opacity:.8">Остаток</span><span><b>${Math.round(s.debt).toLocaleString('ru-RU')} сум</b></span></div>
+        <div class="row"><span style="opacity:.8">Остаток долга</span><span><b>${Math.round(s.debt).toLocaleString('ru-RU')} сум</b></span></div>
         <div class="row"><span style="opacity:.8">Срок</span><span><b>${ORDER.term} дней</b></span></div>
         <div class="row"><span style="opacity:.8">Статус</span><span>${s.fullyRepaid?'<span class="pill gold">Закрыт ✓</span>':'<span class="pill gold">Активен</span>'}</span></div>
         <div class="progress"><div style="width:${pct}%"></div></div>
         <div style="font-size:11px;opacity:.85">Погашено ${pct}% · Баланс торговца: ${s.traderBalance.toLocaleString('ru-RU')} сум</div>
       </div>`;
-      if(!s.fullyRepaid){
+
+      /* #9 — Overdue banner */
+      if(s.overdueActive){
+        html += `<div class="overdue-banner">
+          <h3>⚠ Просрочка платежа</h3>
+          <div class="muted" style="margin-bottom:8px;font-size:12px">Начислен благотворительный штраф (садака) — ${s.charityPenalty.toLocaleString('ru-RU')} сум<br>
+          <span style="font-size:11px">Это не риба — штраф направляется в благотворительный фонд</span></div>
+          <button class="btn amber sm" onclick="payCharityPenalty()">💚 Оплатить садака ${s.charityPenalty.toLocaleString('ru-RU')} сум</button>
+        </div>`;
+      }
+
+      if(!s.fullyRepaid && !s.overdueActive){
         html += `<div class="card">
           <h3>💸 Симуляция QR-продаж</h3>
           <div class="muted">20% от продажи автоматически идёт на погашение Мурабахи</div>
           <button class="btn sm outline" onclick="qrSale(500000)">QR-продажа 500 000</button>
           <button class="btn sm outline" onclick="qrSale(1000000)">QR-продажа 1 000 000</button>
           <button class="btn sm outline" onclick="qrSale(3000000)">QR-продажа 3 000 000</button>
+          <button class="btn amber sm" onclick="triggerOverdue()">⚠ Симуляция просрочки</button>
         </div>`;
       }
     }
 
     if(s.cancelled){
       html += `<div class="card" style="background:#fde7e5;border-color:var(--red)">
-        <h3 style="color:var(--red)">Заказ отменён</h3>
-        <div class="muted">${s.dispute==='supplier_no_stock'?'Оптовик не подтвердил наличие':'Спор по качеству. Мурабаха НЕ активирована, риск на банке.'}</div>
-        <div class="sccp"><b>Shariah note</b>Клиент не несёт обязательств, так как договор Мурабаха не был заключён.</div>
+        <h3 style="color:var(--red)">Заказ отменён / Dispute</h3>
+        <div class="muted">
+          ${s.limitInsufficient ? 'Noor Core: недостаточный лимит финансирования.'
+          : s.dispute==='supplier_no_stock' ? 'Оптовик не подтвердил наличие товара.'
+          : 'Спор по качеству. Мурабаха НЕ активирована, риск на банке.'}
+        </div>
+        <div class="sccp"><b>Shariah note</b>Клиент не несёт обязательств — договор Мурабаха не был заключён.</div>
       </div>`;
     }
   }
@@ -569,12 +757,18 @@ function renderB2B(){
   </div>`;
 
   html += `<div class="card"><h3>📥 Новые заказы</h3>`;
-  if(!s.orderCreated){
-    html += `<div class="empty">Нет новых заказов</div>`;
+
+  /* Order only visible in B2B after funds reserved */
+  if(!s.orderCreated || !s.fundsReserved){
+    if(s.limitChecking){
+      html += `<div class="empty" style="font-style:normal;color:var(--amber)">⏳ Ожидание: Noor Core проверяет лимит покупателя...</div>`;
+    } else {
+      html += `<div class="empty">Нет новых заказов</div>`;
+    }
   } else {
     let statusPill = '<span class="pill amber">Ожидает подтверждения</span>';
     if(s.supplierConfirmed && !s.supplierPaid) statusPill = '<span class="pill amber">Ожидаем оплату от Noor Bank</span>';
-    if(s.supplierPaid && !s.qabdConfirmed) statusPill = '<span class="pill">Оплачено банком · готов к передаче</span>';
+    if(s.supplierPaid && !s.qabdConfirmed) statusPill = '<span class="pill">Оплачено · готов к передаче водителю</span>';
     if(s.qabdConfirmed) statusPill = '<span class="pill gold">Передано водителю (Wakil банка)</span>';
     if(s.cancelled) statusPill = '<span class="pill red">Отменён</span>';
 
@@ -583,7 +777,7 @@ function renderB2B(){
       <div class="muted" style="margin:4px 0">Покупатель: ${ORDER.buyer.name}, ${ORDER.buyer.market}</div>
       <div class="row"><span class="label">Товар</span><span class="val">${ORDER.product}</span></div>
       <div class="row"><span class="label">Количество</span><span class="val">${ORDER.qty}</span></div>
-      <div class="row"><span class="label">Сумма</span><span class="val">${ORDER.cost.toLocaleString('ru-RU')} сум</span></div>`;
+      <div class="row"><span class="label">Сумма (от банка)</span><span class="val">${ORDER.cost.toLocaleString('ru-RU')} сум</span></div>`;
 
     if(!s.supplierConfirmed && !s.cancelled){
       html += `<button class="btn" onclick="supplierConfirm()">Подтвердить наличие</button>
@@ -594,7 +788,7 @@ function renderB2B(){
       html += `<div class="sccp"><b>Ожидание</b>Банк Noor выкупает товар. Статус обновится автоматически.</div>`;
     }
     if(s.supplierPaid){
-      html += `<div class="sccp"><b>SCCP — переход собственности</b>На этом этапе товар <b>продан банку Noor</b>. Клиент ещё НЕ является покупателем по Мурабахе.</div>`;
+      html += `<div class="sccp"><b>SCCP-1 — переход собственности</b>Товар продан банку Noor. Клиент ещё НЕ является покупателем по Мурабахе.</div>`;
     }
     if(s.qabdConfirmed){
       html += `<div class="card gold" style="margin-top:8px">
@@ -628,7 +822,7 @@ function renderDelivery(){
   } else if(s.cancelled && s.dispute!=='customer'){
     html += `<div class="card" style="background:#fde7e5">
       <h3 style="color:var(--red)">Рейс отменён</h3>
-      <div class="muted">Спор открыт. Ожидайте инструкций.</div>
+      <div class="muted">Спор открыт. Ожидайте инструкций от Noor.</div>
     </div>`;
   } else {
     html += `<div class="card"><h3>🚚 Задание ${ORDER.id}</h3>
@@ -641,27 +835,29 @@ function renderDelivery(){
     if(!s.driverAccepted){
       html += `<button class="btn gold" onclick="driverAccept()">Принять доставку</button>`;
     } else if(!s.driverAtSupplier){
-      html += `<div class="sccp"><b>В пути</b>Еду к оптовику Food City B-14</div>
+      html += `<div class="sccp"><b>В пути к оптовику</b>Еду к Food City B-14</div>
         <button class="btn" onclick="driverAtSupplier()">Я у оптовика</button>`;
     } else if(!s.qabdConfirmed){
-      html += `<div class="sccp"><b>SCCP-4</b>Вы действуете как <b>Wakil / агент банка Noor</b>. Проверьте товар перед приёмкой.</div>
+      html += `<div class="sccp"><b>SCCP-2</b>Вы действуете как <b>Wakil / агент банка Noor</b>. Проверьте товар перед приёмкой.</div>
         <h3 style="margin-top:8px">Чеклист приёмки</h3>
         <label class="checkbox"><input type="checkbox" ${s.checklist.qty?'checked':''} onchange="toggleCheck('qty')"> Количество соответствует</label>
         <label class="checkbox"><input type="checkbox" ${s.checklist.quality?'checked':''} onchange="toggleCheck('quality')"> Качество визуально соответствует</label>
         <label class="checkbox"><input type="checkbox" ${s.checklist.loaded?'checked':''} onchange="toggleCheck('loaded')"> Товар загружен</label>
-        <button class="btn" ${(s.checklist.qty&&s.checklist.quality&&s.checklist.loaded)?'':'disabled'} onclick="driverConfirmQabd()">Товар принял, качество соответствует</button>
+        <button class="btn" ${(s.checklist.qty&&s.checklist.quality&&s.checklist.loaded)?'':'disabled'} onclick="driverConfirmQabd()">Товар принял — качество соответствует</button>
         <button class="btn danger sm" onclick="driverQualityFail()">Товар не соответствует</button>`;
     } else if(!s.arrivedAtBuyer){
       html += `<div class="card gold" style="margin-top:8px">
-        <h3>🕌 SCCP-3 · Qabd/kabz зафиксирован</h3>
-        <div style="font-size:12px">Водитель действует как Wakil/агент банка. С этого момента <b>банк фактически владеет товаром</b> и несёт риск до передачи клиенту.</div>
+        <h3>🕌 SCCP-2 · Qabd/kabz зафиксирован</h3>
+        <div style="font-size:12px">С этого момента <b>банк фактически владеет товаром</b> и несёт риск до передачи клиенту. Вы — Wakil банка.</div>
       </div>
-      <div class="sccp"><b>SCCP-5</b>До акцепта клиента риск товара несёт банк.</div>
       <div style="text-align:center;font-weight:600;color:var(--green);margin:8px 0">📦 Товар в пути</div>
       <button class="btn" onclick="driverArrived()">Прибыл к покупателю</button>`;
     } else if(!s.murabahaAccepted && !s.cancelled){
-      html += `<div class="qr"></div>
-      <div class="muted" style="text-align:center;font-size:12px">Попросите покупателя сканировать QR в Noor Marketplace для приёмки товара и подтверждения Мурабахи.</div>`;
+      html += `<div class="sccp"><b>Ожидаем покупателя</b>Попросите покупателя отсканировать QR в Noor Marketplace для подтверждения приёмки и подписания Мурабахи.</div>
+      <div class="qr"></div>
+      <div class="muted" style="text-align:center;font-size:12px">
+        ${s.qrScanned ? '✅ QR отсканирован · Ожидаем подписания договора...' : 'QR-код для подтверждения приёмки товара'}
+      </div>`;
     } else if(s.murabahaAccepted){
       html += `<div class="card green" style="margin-top:8px">
         <h3>✅ Доставка завершена</h3>
@@ -671,9 +867,10 @@ function renderDelivery(){
         <ul class="status-list" style="margin-top:6px">
           <li class="done">Принял задание</li>
           <li class="done">Прибыл к оптовику</li>
-          <li class="done">Qabd зафиксирован</li>
+          <li class="done">Qabd зафиксирован (Wakil)</li>
           <li class="done">Прибыл к покупателю</li>
-          <li class="done">Клиент акцептовал Мурабаху</li>
+          <li class="done">Покупатель отсканировал QR</li>
+          <li class="done">Мурабаха подписана клиентом</li>
         </ul>
       </details>`;
     }
@@ -684,30 +881,75 @@ function renderDelivery(){
 }
 
 function renderSide(){
-  let html = '';
-  const activeKey = (()=>{
-    for(let i=TIMELINE.length-1;i>=0;i--) if(timelineStatus(TIMELINE[i][0])) return TIMELINE[Math.min(i+1,TIMELINE.length-1)][0];
-    return TIMELINE[0][0];
-  })();
-  TIMELINE.forEach(([k,t])=>{
-    let cls = timelineStatus(k) ? 'done' : (k===activeKey?'active':'');
-    html += `<li class="${cls}">${t}</li>`;
-  });
-  if(state.cancelled) html += `<li class="active" style="color:var(--red);border-left-color:var(--red)">Order cancelled / Dispute</li>`;
-  document.getElementById('timeline').innerHTML = html;
+  const s = state;
 
-  const own = state.ownership;
+  /* Timeline */
+  let timelineHtml = '';
+  const activeIdx = (()=>{
+    for(let i=TIMELINE.length-1;i>=0;i--) if(timelineStatus(TIMELINE[i][0])) return Math.min(i+1,TIMELINE.length-1);
+    return 0;
+  })();
+  TIMELINE.forEach(([k,t],i)=>{
+    let cls = timelineStatus(k) ? 'done' : (i===activeIdx?'active':'');
+    timelineHtml += `<li class="${cls}">${t}</li>`;
+  });
+  if(s.cancelled) timelineHtml += `<li style="color:var(--red);font-size:11.5px;padding:5px 0 5px 14px;border-left:2px solid var(--red);margin-left:5px">Order cancelled / Dispute</li>`;
+  document.getElementById('timeline').innerHTML = timelineHtml;
+
+  /* Ownership */
+  const own = s.ownership;
   const rows = [
     ['supplier','🏭 Оптовик Food City', 'До оплаты банком'],
-    ['bank','🏦 Noor Bank', 'После оплаты + qabd, риск на банке'],
-    ['client','🛒 Клиент (Абдулло)', 'После акцепта Мурабахи, задолженность активна'],
+    ['bank','🏦 Noor Bank', 'После оплаты + qabd — риск на банке'],
+    ['client','🛒 Клиент (Абдулло)', 'После подписания Мурабахи — долг активен'],
     ['closed','✅ Договор закрыт', 'После полного погашения']
   ];
   document.getElementById('ownership').innerHTML = rows.map(([k,who,d])=>
     `<div class="own-row ${own===k?'active':''}"><div class="who"><b>${who}</b><div style="font-size:11px;opacity:.85">${d}</div></div></div>`
   ).join('');
 
-  document.getElementById('log').innerHTML = state.log.map(l=>`<div><span class="t">${l.t}</span>${l.msg}</div>`).join('') || '<div style="opacity:.5">Нет событий. Нажмите «Создать заказ» в Marketplace.</div>';
+  /* #5 — Shariah Compliance panel */
+  const sccpPoints = [
+    {
+      label:'SCCP-1 · Bank purchases before selling',
+      desc:'Noor Bank купил товар у оптовика. Нет прямого займа клиенту.',
+      pass: s.supplierPaid
+    },
+    {
+      label:'SCCP-2 · Driver acts as Bank\'s Wakil',
+      desc:'Водитель = агент банка. Банк владеет товаром при перевозке (Qabd).',
+      pass: s.qabdConfirmed
+    },
+    {
+      label:'SCCP-3 · Terms disclosed before contract',
+      desc:'Условия Мурабахи показаны покупателю до подписания договора.',
+      pass: s.qrScanned
+    },
+    {
+      label:'SCCP-4 · Explicit buyer acceptance',
+      desc:'Иджаб/Кабул: клиент явно принял условия. Долг начинается с этого момента.',
+      pass: s.murabahaAccepted
+    },
+    {
+      label:'SCCP-5 · Late payment = Charity, not Riba',
+      desc:'Штраф за просрочку направляется в благотворительный фонд (садака).',
+      pass: s.overdueActive || s.fullyRepaid
+    }
+  ];
+  document.getElementById('shariah-panel').innerHTML = sccpPoints.map(p=>`
+    <div class="sccp-item ${p.pass?'pass':''}">
+      <div class="sccp-dot ${p.pass?'pass':''}">
+        ${p.pass?'✓':'·'}
+      </div>
+      <div class="sccp-label">
+        <b>${p.label}</b>
+        <span>${p.desc}</span>
+      </div>
+    </div>`).join('');
+
+  /* Event Log */
+  document.getElementById('log').innerHTML = s.log.map(l=>`<div><span class="t">${l.t}</span>${l.msg}</div>`).join('')
+    || '<div style="opacity:.5">Нет событий. Нажмите «Создать заказ» в Marketplace.</div>';
 }
 
 function render(){
