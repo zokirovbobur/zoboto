@@ -269,15 +269,6 @@ const PROTOTYPES = [
     description: "Shariah-compliant freight factoring platform — carrier portal with 7-step Wakalah funding wizard, AI-powered broker risk scoring, admin underwriting queue, Shariah compliance log, and collections dashboard. Built for US trucking market with USD mock data."
   },
   {
-    title: "Trustbank Platform",
-    product: "Trastbank",
-    type: "Internal",
-    status: "Demo",
-    platforms: ["desktop"],
-    url: "prototypes/trustbank-platform/index.html",
-    description: "Full bank website prototype — Home with hero & calculator, 4-type loan calculator with real annuity math & amortization chart, 5-step credit application wizard, personal cabinet, compliance/appeal portal, and CRM lead manager. Dark/light mode, UZ/RU/EN."
-  },
-  {
     title: "Safa",
     product: "Concept",
     type: "Internal",
