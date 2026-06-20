@@ -315,9 +315,12 @@ img{max-width:100%;display:block;}
 .badge--public{color:#1f7a52;border-color:#aedcc6;}
 .badge--private{color:var(--muted);}
 .badge--soon{color:#7c5cbf;border-color:#c4b0e8;background:rgba(124,92,191,.08);}
-.badge--platform{padding:3px 6px;display:inline-flex;align-items:center;justify-content:center;}
+.badge--platform{padding:3px 6px;display:inline-flex;align-items:center;justify-content:center;position:relative;}
 .badge--platform-desktop{color:#1e6faa;border-color:#a8d4f0;}
 .badge--platform-mobile{color:#1a7a5e;border-color:#9ecec0;}
+.badge--platform::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1f2e;color:#fff;font-size:11px;font-weight:500;white-space:nowrap;padding:5px 9px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .15s ease;box-shadow:0 4px 12px rgba(0,0,0,.2);}
+.badge--platform::before{content:"";position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#1a1f2e;pointer-events:none;opacity:0;transition:opacity .15s ease;}
+.badge--platform:hover::after,.badge--platform:hover::before{opacity:1;}
 [data-theme="dark"] .badge--demo{color:#e6c073;border-color:#5a4a26;}
 [data-theme="dark"] .badge--public{color:#6cd6a0;border-color:#2a5340;}
 [data-theme="dark"] .badge--soon{color:#b89ee8;border-color:#4a3470;background:rgba(124,92,191,.15);}

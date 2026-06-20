@@ -277,6 +277,15 @@ const PROTOTYPES = [
     url: "prototypes/trustbank-platform/index.html",
     description: "Full bank website prototype — Home with hero & calculator, 4-type loan calculator with real annuity math & amortization chart, 5-step credit application wizard, personal cabinet, compliance/appeal portal, and CRM lead manager. Dark/light mode, UZ/RU/EN."
   },
+  {
+    title: "Safa",
+    product: "Concept",
+    type: "Internal",
+    status: "Demo",
+    platforms: ["desktop", "mobile"],
+    url: "prototypes/safa/index.html",
+    description: "Daily Islamic Activities app — namoz vaqtlari, Qibla yo'nalishi, zikr, sadaqa, zakot va boshqa kundalik islomiy amallar uchun yagona platforma."
+  },
 ];
 
 /* =========================== I18N ================================== */
@@ -611,7 +620,7 @@ const I18N = {
       const statusLabel = isSoon ? tr.proto_btn_soon : p.status;
       const statusBadge = p.platforms
         ? p.platforms.map(function(pl) {
-            return '<span class="badge badge--platform badge--platform-' + pl + '" title="' + (pl === "desktop" ? "Desktop" : "Mobile") + '">' + (pl === "desktop" ? deskSVG : mobSVG) + '</span>';
+            return '<span class="badge badge--platform badge--platform-' + pl + '" data-tooltip="' + (pl === "desktop" ? "Desktop ready" : "Mobile ready") + '">' + (pl === "desktop" ? deskSVG : mobSVG) + '</span>';
           }).join("")
         : '<span class="badge ' + stClass + '">' + statusLabel + '</span>';
       const action = isSoon

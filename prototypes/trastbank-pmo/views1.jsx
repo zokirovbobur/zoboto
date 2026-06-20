@@ -64,29 +64,70 @@ function Dashboard() {
     { label: t("kpi_incidents"), value: a.incidents, accent: "#C0392B", go: () => nav("risks", {}) },
   ];
 
+  const stoppers = (window.STOPPERS || []).filter(s => s.open);
+  const SEV_C = { P0: "#C0392B", P1: "#E0792F", P2: "#B45309" };
+
   return (
     <div className="fade-in">
       <PageHead title={t("nav_dashboard")} sub={t("appSub")} />
 
-      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
-        {kpis.slice(0, 5).map((k, i) => <KPI key={i} {...k} onClick={k.go} accent={k.accent} />)}
-      </div>
+      {stoppers.length > 0 && (
+        <div className="ticker-banner" style={{
+          display: "flex", alignItems: "stretch", marginBottom: 16,
+          background: "#FEF2F2", border: "1px solid #FCA5A5",
+          borderRadius: 10, overflow: "hidden", height: 38,
+        }}>
+          <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
+            <div className="ticker-track">
+              {[...stoppers, ...stoppers].map((s, i) => (
+                <span key={i} className="ticker-item" onClick={() => nav("risks")} style={{ cursor: "pointer" }}>
+                  <span style={{
+                    fontSize: 10, fontWeight: 800, color: SEV_C[s.sev],
+                    background: SEV_C[s.sev] + "22", borderRadius: 4,
+                    padding: "1px 5px", marginRight: 6, letterSpacing: ".2px",
+                  }}>{s.sev}</span>
+                  <span className="ticker-text" style={{ color: "#7F1D1D", fontWeight: 600, fontSize: 13 }}>
+                    {lang === "ru" ? s.title_ru : s.title_uz}
+                  </span>
+                  <span className="ticker-dot" style={{ margin: "0 20px", color: "#FCA5A5", fontSize: 16 }}>·</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
         {kpis.slice(5).map((k, i) => <KPI key={i} {...k} onClick={k.go} accent={k.accent} />)}
       </div>
 
       <div className="grid" style={{ gridTemplateColumns: "1.1fr 1.4fr", marginTop: 18 }}>
         <div className="card">
-          <div className="card-h"><h3>{t("ch_status")}</h3><span className="hint">{t("clickHint")}</span></div>
+          <div className="card-h">
+            <h3>{t("ch_status")}</h3>
+            <span style={{ fontSize: 13, color: "var(--muted)", fontWeight: 500 }}>
+              {t("total_label")} — <span style={{ fontWeight: 700, fontSize: 18, color: "var(--ink)" }}>{a.total}</span>
+            </span>
+          </div>
           <div className="card-pad">
-            <Chart_ type="doughnut" height={230}
+            <Chart_ type="bar" height={200}
               onClickIndex={(i) => nav("portfolio", { status: STATUS_ORDER[i] })}
               data={{
-                labels: STATUS_ORDER.map(s => t(STATUS[s].short)),
-                datasets: [{ data: STATUS_ORDER.map(s => a.by[s]),
-                  backgroundColor: STATUS_ORDER.map(s => STATUS[s].color), borderWidth: 3, borderColor: "#fff", hoverOffset: 6 }],
+                labels: STATUS_ORDER.map(s => t(STATUS[s].short) + "   —   " + a.by[s]),
+                datasets: [{
+                  data: STATUS_ORDER.map(s => a.by[s]),
+                  backgroundColor: STATUS_ORDER.map(s => STATUS[s].color),
+                  borderRadius: 5, maxBarThickness: 28,
+                }],
               }}
-              options={{ cutout: "62%", plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 14, font: { size: 12, family: "IBM Plex Sans" } } } } }} />
+              options={{
+                indexAxis: "y",
+                plugins: { legend: { display: false } },
+                scales: {
+                  x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } },
+                  y: { grid: { display: false }, ticks: { font: { size: 12 } } },
+                },
+              }} />
           </div>
         </div>
 
@@ -114,14 +155,17 @@ function Dashboard() {
         <div className="card">
           <div className="card-h"><h3>{t("ch_stack")}</h3><span className="hint">{t("clickHint")}</span></div>
           <div className="card-pad">
-            <Chart_ type="bar" height={250}
+            <Chart_ type="pie" height={250}
               onClickIndex={(i) => nav("workload", { stack: stackData[i][0] })}
               data={{
                 labels: stackData.map(d => d[0]),
-                datasets: [{ data: stackData.map(d => d[1]), backgroundColor: "#2563EB", borderRadius: 5, maxBarThickness: 30 }],
+                datasets: [{
+                  data: stackData.map(d => d[1]),
+                  backgroundColor: ["#2563EB","#138A5E","#6D5CD6","#C2410C","#0E7490","#D97706","#9333EA","#0E9C8E","#B45309","#64748B","#1D4ED8","#065F46","#4C1D95","#7F1D1D","#0C4A6E"],
+                  borderWidth: 0, hoverOffset: 4,
+                }],
               }}
-              options={{ plugins: { legend: { display: false } },
-                scales: { y: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, x: { grid: { display: false }, ticks: { font: { size: 10.5 }, maxRotation: 50, minRotation: 35 } } } }} />
+              options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 10, font: { size: 11 } } } } }} />
           </div>
         </div>
 
@@ -166,22 +210,31 @@ function Portfolio() {
   const [status, setStatus] = uS1(route.status || "all");
   const [product, setProduct] = uS1(route.product || "all");
   const [pm, setPm] = uS1("all");
+  const [origin, setOrigin] = uS1("all");
   const [demoOnly, setDemoOnly] = uS1(!!route.demo);
   const [sort, setSort] = uS1({ k: "name", dir: 1 });
 
-  const pms = uM1(() => [...new Set(ALL_P.map(p => p.pm).filter(Boolean))].sort(), []);
+  const pms = uM1(() => {
+    const m = {};
+    ALL_P.forEach(p => {
+      const key = projectPmKey(p);
+      if (key) m[key] = projectPmName(p);
+    });
+    return Object.entries(m).sort((a, b) => a[1].localeCompare(b[1]));
+  }, []);
   const prods = DATA.products;
 
   const rows = uM1(() => {
     let r = ALL_P.filter(p => {
       if (status !== "all" && p.norm !== status) return false;
       if (product !== "all" && p.product !== product) return false;
-      if (pm !== "all" && p.pm !== pm) return false;
+      if (pm !== "all" && projectPmKey(p) !== pm) return false;
+      if (origin !== "all" && (p.origin || "Google Sheet") !== origin) return false;
       if (demoOnly && !p.demoReady) return false;
       if (search) {
         const q = search.toLowerCase();
         if (!(p.name.toLowerCase().includes(q) || p.product.toLowerCase().includes(q) ||
-              (p.pm || "").toLowerCase().includes(q) || (p.customer || "").toLowerCase().includes(q))) return false;
+              projectPmName(p).toLowerCase().includes(q) || (p.customer || "").toLowerCase().includes(q))) return false;
       }
       return true;
     });
@@ -190,19 +243,33 @@ function Portfolio() {
       let a, b;
       if (k === "deadline") { a = parseDate(x.endDate) || 0; b = parseDate(y.endDate) || 0; }
       else if (k === "status") { a = STATUS_ORDER.indexOf(x.norm); b = STATUS_ORDER.indexOf(y.norm); }
+      else if (k === "pm") { a = projectPmName(x).toLowerCase(); b = projectPmName(y).toLowerCase(); }
       else { a = (x[k] || "").toString().toLowerCase(); b = (y[k] || "").toString().toLowerCase(); }
       return (a < b ? -1 : a > b ? 1 : 0) * sort.dir;
     });
     return r;
-  }, [status, product, pm, demoOnly, search, sort]);
+  }, [status, product, pm, origin, demoOnly, search, sort]);
 
   // chart data — derived from filtered rows
   const statusCounts  = uM1(() => STATUS_ORDER.map(s => rows.filter(p => p.norm === s).length), [rows]);
   const prodChart     = uM1(() => { const m = {}; rows.forEach(p => m[p.product] = (m[p.product]||0)+1); return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6); }, [rows]);
-  const pmChart       = uM1(() => { const m = {}; rows.forEach(p => { if(p.pm) m[p.pm]=(m[p.pm]||0)+1; }); return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6); }, [rows]);
+  const pmChart       = uM1(() => {
+    const m = {};
+    rows.forEach(p => {
+      const key = projectPmKey(p);
+      if (key) {
+        if (!m[key]) m[key] = { name: projectPmName(p), count: 0 };
+        m[key].count++;
+      }
+    });
+    return Object.entries(m).map(([key, v]) => [key, v.name, v.count]).sort((a,b)=>b[2]-a[2]).slice(0,6);
+  }, [rows]);
   const demoCounts    = uM1(() => [rows.filter(p=>p.demoReady).length, rows.filter(p=>!p.demoReady).length], [rows]);
 
-  const reset = () => { setStatus("all"); setProduct("all"); setPm("all"); setDemoOnly(false); };
+  const ORIGINS = ["Jira Epic", "Jira Story", "Google Sheet"];
+  const ORIGIN_COLOR = { "Jira Epic": "#2563EB", "Jira Story": "#7C3AED", "Google Sheet": "#0D7C56" };
+
+  const reset = () => { setStatus("all"); setProduct("all"); setPm("all"); setOrigin("all"); setDemoOnly(false); };
   const SortTh = ({ k, label, cls }) => (
     <th className={cls} onClick={() => setSort(s => ({ k, dir: s.k === k ? -s.dir : 1 }))}>
       {label}{sort.k === k && <span className="arr">{sort.dir > 0 ? "▲" : "▼"}</span>}
@@ -225,7 +292,11 @@ function Portfolio() {
         </select></div>
         <div className="sel"><select className="f-sel" value={pm} onChange={e => setPm(e.target.value)}>
           <option value="all">{t("col_pm")}: {t("all")}</option>
-          {pms.map(p => <option key={p} value={p}>{p}</option>)}
+          {pms.map(([key, name]) => <option key={key} value={key}>{name}</option>)}
+        </select></div>
+        <div className="sel"><select className="f-sel" value={origin} onChange={e => setOrigin(e.target.value)}>
+          <option value="all">Origin: {t("all")}</option>
+          {ORIGINS.map(o => <option key={o} value={o}>{o}</option>)}
         </select></div>
         <button className={"chip" + (demoOnly ? " on" : "")} onClick={() => setDemoOnly(v => !v)}>{t("kpi_demo")}</button>
         <button className="btn btn-ghost" onClick={reset}>↺ {t("resetFilters")}</button>
@@ -235,11 +306,12 @@ function Portfolio() {
         <div className="card">
           <div className="card-h"><h3>{t("col_status")}</h3></div>
           <div className="card-pad">
-            <Chart_ type="doughnut" height={160}
+            <Chart_ type="bar" height={160}
               onClickIndex={i => setStatus(status === STATUS_ORDER[i] ? "all" : STATUS_ORDER[i])}
-              data={{ labels: STATUS_ORDER.map(s => t(STATUS[s].short)),
-                datasets:[{ data: statusCounts, backgroundColor: STATUS_ORDER.map(s=>STATUS[s].color), borderWidth:2, borderColor:"#fff", hoverOffset:4 }] }}
-              options={{ cutout:"60%", plugins:{ legend:{ position:"bottom", labels:{ usePointStyle:true, pointStyle:"circle", padding:8, font:{ size:10.5 } } } } }} />
+              data={{ labels: STATUS_ORDER.map((s,i) => t(STATUS[s].short) + "   —   " + statusCounts[i]),
+                datasets:[{ data: statusCounts, backgroundColor: STATUS_ORDER.map(s=>STATUS[s].color), borderRadius:5, maxBarThickness:22 }] }}
+              options={{ indexAxis:"y", plugins:{ legend:{ display:false } },
+                scales:{ x:{ grid:{ color:"#EEF2F8" }, ticks:{ precision:0 } }, y:{ grid:{ display:false }, ticks:{ font:{ size:11 } } } } }} />
           </div>
         </div>
         <div className="card">
@@ -258,8 +330,8 @@ function Portfolio() {
           <div className="card-pad">
             <Chart_ type="bar" height={160}
               onClickIndex={i => setPm(pm === pmChart[i][0] ? "all" : pmChart[i][0])}
-              data={{ labels: pmChart.map(d=>d[0].split(" ")[0]),
-                datasets:[{ data: pmChart.map(d=>d[1]), backgroundColor: pmChart.map(d=> pm==="all"||pm===d[0] ? "#6D5CD6" : "#D4CEF5"), borderRadius:4, maxBarThickness:16 }] }}
+              data={{ labels: pmChart.map(d=>d[1]),
+                datasets:[{ data: pmChart.map(d=>d[2]), backgroundColor: pmChart.map(d=> pm==="all"||pm===d[0] ? "#6D5CD6" : "#D4CEF5"), borderRadius:4, maxBarThickness:16 }] }}
               options={{ indexAxis:"y", plugins:{ legend:{ display:false } },
                 scales:{ x:{ grid:{ color:"#EEF2F8" }, ticks:{ precision:0, font:{ size:10 } } }, y:{ grid:{ display:false }, ticks:{ font:{ size:10 } } } } }} />
           </div>
@@ -283,11 +355,11 @@ function Portfolio() {
               <SortTh k="name" label={t("col_project")} />
               <SortTh k="product" label={t("col_product")} />
               <SortTh k="status" label={t("col_status")} />
-              <th className="no-sort">{t("origStatus")}</th>
               <th className="no-sort">Progress</th>
               <SortTh k="pm" label={t("col_pm")} />
               <SortTh k="customer" label={t("col_customer")} />
               <SortTh k="deadline" label={t("col_deadline")} />
+              <SortTh k="origin" label="Origin" />
               <th className="no-sort">{t("col_demo")}</th>
             </tr></thead>
             <tbody>
@@ -295,16 +367,23 @@ function Portfolio() {
                 <tr key={p.id} onClick={() => nav("project", { id: p.id })}>
                   <td className="cell-proj">
                     {p.name}
+                    {p.purchased && <PurchasedBadge tooltip={t("purchased_tooltip")} />}
                     <JiraLink epicKey={p.jiraEpicKey} product={p.product} />
                     {isOverdue(p) && <small style={{ color: "#C0392B" }}>● {t("overdue")}</small>}
                   </td>
                   <td><span className="tag">{prodShort(p.product)}</span></td>
                   <td><StatusBadge norm={p.norm} /></td>
-                  <td className="t-muted" style={{ fontSize: 12 }}>{p.originalStatus}</td>
                   <td style={{ minWidth: 90 }}><Progress value={progressOf(p)} norm={p.norm} /></td>
-                  <td>{p.pm ? <span className="row"><Avatar name={p.pm} size={24} /> {p.pm}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
+                  <td>{projectPmName(p) ? <span className="row"><Avatar name={projectPmName(p)} size={24} /> {projectPmName(p)}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
                   <td className="t-muted">{p.customer || "—"}</td>
                   <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
+                  <td>
+                    {(() => {
+                      const org = p.origin || "Google Sheet";
+                      return <span style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6,
+                        background: ORIGIN_COLOR[org] + "18", color: ORIGIN_COLOR[org] }}>{org}</span>;
+                    })()}
+                  </td>
                   <td><span className="demo-dot"><span className="dot" style={{ background: p.demoReady ? "#1AA568" : "#D0D6E0" }} />{p.demoReady ? t("yes") : t("no")}</span></td>
                 </tr>
               ))}
@@ -337,7 +416,7 @@ function StatusBoard() {
             </div>
             {c.items.map(p => (
               <div className="kcard" key={p.id} style={{ "--kc": STATUS[c.norm].color }} onClick={() => nav("project", { id: p.id })}>
-                <div className="kcard-t">{p.name}<JiraLink epicKey={p.jiraEpicKey} product={p.product} /></div>
+                <div className="kcard-t">{p.name}{p.purchased && <PurchasedBadge tooltip={t("purchased_tooltip")} />}<JiraLink epicKey={p.jiraEpicKey} product={p.product} /></div>
                 <div className="kcard-meta">
                   <span className="tag">{prodShort(p.product)}</span>
                   {p.pm && <span className="row" style={{ gap: 5 }}><Avatar name={p.pm} size={18} /> {p.pm}</span>}

@@ -3,7 +3,7 @@ const { useState: uS4, useMemo: uM4 } = React;
 
 const BOARD_ORDER = ["Trastpay", "ДБО", "Food City", "Middleware", "ABS", "AI products"];
 const PMO_ONLY_ORDER = ["Цифровые сервисы", "ABS / HR", "Исламский банкинг",
-  "Приобретённые продукты", "Trast Business", "Прочее", "Trastbank"];
+  "Приобретённые продукты", "Trast Business", "Прочее"];
 
 function ProductCard({ product, projects }) {
   const t = useT(); const { nav } = useApp();
@@ -84,7 +84,6 @@ function ProductCard({ product, projects }) {
                 <tr>
                   <th style={{ fontSize: 10.5 }}>Loyiha</th>
                   <th style={{ fontSize: 10.5 }}>Status</th>
-                  <th style={{ fontSize: 10.5 }}>Haqiqiy status</th>
                   <th style={{ fontSize: 10.5 }}>PM</th>
                   <th style={{ fontSize: 10.5 }}>Jira</th>
                 </tr>
@@ -103,7 +102,6 @@ function ProductCard({ product, projects }) {
                       )}
                     </td>
                     <td><StatusBadge norm={p.norm} /></td>
-                    <td style={{ color: "var(--muted)", fontSize: 11.5 }}>{p.originalStatus || "—"}</td>
                     <td style={{ color: "var(--muted)" }}>{p.pm || "—"}</td>
                     <td>
                       {p.jiraEpicKey ? (
@@ -160,9 +158,9 @@ function Products() {
   return (
     <div className="fade-in">
       <PageHead
-        title="Mahsulotlar"
-        sub="Jira doskalariga ulangan mahsulotlar va ularning loyihalari"
-        crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: "Mahsulotlar" }]}
+        title={t("nav_products")}
+        sub={t("products_sub")}
+        crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("nav_products") }]}
         right={
           <button className={"chip" + (showPmoOnly ? " on" : "")} onClick={() => setShowPmoOnly(v => !v)}>
             PMO only ({allPmo.length})

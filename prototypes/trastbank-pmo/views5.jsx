@@ -1,5 +1,15 @@
 // ===== views5: Ohirgi o'zgarishlar (Recent Changes / Launches) =====
-const { useState: uS5 } = React;
+const { useState: uS5, useEffect: uE5 } = React;
+const useT5 = () => { const { lang } = useApp(); const d = window.TB_I18N[lang]; return k => d && d[k] != null ? d[k] : k; };
+function useDark5() {
+  const [dark, setDark] = uS5(() => document.documentElement.getAttribute("data-theme") === "dark");
+  uE5(() => {
+    const obs = new MutationObserver(() => setDark(document.documentElement.getAttribute("data-theme") === "dark"));
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => obs.disconnect();
+  }, []);
+  return dark;
+}
 
 const RECENT_LAUNCHES = [
   {
@@ -17,7 +27,6 @@ const RECENT_LAUNCHES = [
       { key: "SL-212", summary: "Привязка номера телефона к кошелку счет (22616)", done: true },
       { key: "SL-213", summary: "[back] BM > p2p/info", done: true },
       { key: "SL-214", summary: "[back] BM > p2p/pay", done: true },
-      { key: "SL-238", summary: "A2A > Text UX ga to'ri holatda mobilkaga berilishi kerak", done: false },
     ],
   },
   {
@@ -43,7 +52,12 @@ const RECENT_LAUNCHES = [
 
 function LaunchCard({ item, lang }) {
   const [open, setOpen] = uS5(false);
+  const t = useT5();
+  const dark = useDark5();
   const board = JIRA_BOARDS[item.product];
+  const greenBg   = dark ? "#138A5E28" : "#E4F3EB";
+  const pendingBg  = dark ? "#2A1E08"  : "#FFFBEB";
+  const pendingBor = dark ? "#4A3A10"  : "#FDE68A";
   const name = lang === "ru" ? item.name_ru : item.name_uz;
   const doneTasks = item.tasks.filter(t => t.done);
   const openTasks = item.tasks.filter(t => !t.done);
@@ -54,7 +68,7 @@ function LaunchCard({ item, lang }) {
         {/* Green launched badge column */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, paddingTop: 2, flexShrink: 0 }}>
           <div style={{
-            width: 36, height: 36, borderRadius: 10, background: "#E4F3EB",
+            width: 36, height: 36, borderRadius: 10, background: greenBg,
             display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
           }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#138A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -70,9 +84,9 @@ function LaunchCard({ item, lang }) {
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 6 }}>
             <span style={{
               fontSize: 11, fontWeight: 700, color: "#138A5E",
-              background: "#E4F3EB", borderRadius: 6, padding: "2px 8px",
+              background: greenBg, borderRadius: 6, padding: "2px 8px",
               textTransform: "uppercase", letterSpacing: ".4px"
-            }}>Ishga tushdi</span>
+            }}>{t("launched")}</span>
             <span style={{ fontSize: 11, color: "var(--muted-2)" }}>{item.date}</span>
             {board && (
               <span style={{
@@ -106,10 +120,10 @@ function LaunchCard({ item, lang }) {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d={open ? "M6 9l6 6 6-6" : "M6 15l6-6 6 6"}/>
             </svg>
-            {item.tasks.length} ta task
+            {item.tasks.length} {t("tasks_count")}
             {openTasks.length > 0 && (
               <span style={{ marginLeft: 2, color: "#D97706", fontWeight: 600 }}>
-                · {openTasks.length} ochiq
+                · {openTasks.length} {t("tasks_open")}
               </span>
             )}
           </button>
@@ -121,9 +135,9 @@ function LaunchCard({ item, lang }) {
                 <a key={task.key} href={JIRA_BASE + "/browse/" + task.key}
                    target="_blank" rel="noopener noreferrer"
                    style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px",
-                            background: task.done ? "var(--bg)" : "#FFFBEB",
+                            background: task.done ? "var(--bg)" : pendingBg,
                             borderRadius: 8, textDecoration: "none",
-                            border: "1px solid " + (task.done ? "var(--line-2)" : "#FDE68A") }}>
+                            border: "1px solid " + (task.done ? "var(--line-2)" : pendingBor) }}>
                   <span style={{ flexShrink: 0 }}>
                     {task.done ? (
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#138A5E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -157,13 +171,13 @@ function RecentChanges() {
     <div className="fade-in">
       <PageHead
         title={t("nav_changes")}
-        sub={lang === "ru" ? "Запущенные продукты и фичи с историей задач" : "Ishga tushirilgan mahsulotlar va xususiyatlar, task tarixi bilan"}
+        sub={t("changes_sub")}
         crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("nav_changes") }]}
       />
 
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
         <span style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)", textTransform: "uppercase", letterSpacing: ".4px" }}>
-          2026-yil iyun
+          {t("month_label")}
         </span>
         <div style={{ flex: 1, height: 1, background: "var(--line-2)" }} />
       </div>
@@ -177,4 +191,4 @@ function RecentChanges() {
   );
 }
 
-Object.assign(window, { RecentChanges });
+Object.assign(window, { RecentChanges, RECENT_LAUNCHES });
