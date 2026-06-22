@@ -2851,7 +2851,7 @@ window.TB_DATA = {
                   "endDate": "",
                   "sum": "",
                   "paidFact": "",
-                  "norm": "progress",
+                  "norm": "completed",
                   "originalStatus": "IN DEV",
                   "pm": "Damir Mirzabaev",
                   "demoReady": false,
