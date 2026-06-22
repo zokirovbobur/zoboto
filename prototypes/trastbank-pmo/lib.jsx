@@ -76,7 +76,8 @@ window.TB_DATA.employees.forEach(e => {
     if (e.statusCounts[norm] !== undefined) e.statusCounts[norm]++;
   });
   e.totalMatched = e.projectIds.length;
-  e.loadLevel = e.totalMatched >= 20 ? "critical" : e.totalMatched >= 12 ? "high" : e.totalMatched >= 6 ? "normal" : "low";
+  const _active = e.statusCounts.progress + e.statusCounts.planned;
+  e.loadLevel = _active >= 10 ? "critical" : _active >= 6 ? "high" : _active >= 2 ? "normal" : "low";
 });
 function projectPmKey(p) {
   return p.pmId && EMP[p.pmId] ? p.pmId : (p.pm || "");
