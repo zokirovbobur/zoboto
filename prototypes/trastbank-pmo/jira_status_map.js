@@ -22,11 +22,11 @@ window.JIRA_STATUS_MAP = {
     "in dev",
     "В разработке",
     "В работе",
-    "IN ANALYSIS",
     "In Progress",
   ],
 
   planned: [
+    "IN ANALYSIS",
     "К выполнению",
     "To Do",
     "Discovery",
