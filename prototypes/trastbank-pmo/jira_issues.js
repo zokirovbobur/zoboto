@@ -1,5 +1,24 @@
 // Jira issues pre-fetched per epic — generated 2026-06-17
 window.TB_JIRA_ISSUES = {
+  "FC-13": [
+    {"key": "FC-2",  "summary": "Add Категория (арава, хожат хона...)", "type": "История", "status": "Backlog", "done": false},
+    {"key": "FC-3",  "summary": "Добавить поле - ФИО", "type": "История", "status": "Backlog", "done": false},
+    {"key": "FC-4",  "summary": "Tarif - Ойлик ва кунлик расталар болиб чикиш", "type": "История", "status": "Backlog", "done": false},
+    {"key": "FC-5",  "summary": "Экзельда ортикча column ларни чопиш кере", "type": "Задание", "status": "Backlog", "done": false},
+    {"key": "FC-9",  "summary": "Cancel - Пул возврати", "type": "Задание", "status": "Backlog", "done": false},
+    {"key": "FC-10", "summary": "Check Api - Такрорий толов block", "type": "Задание", "status": "Backlog", "done": false},
+    {"key": "FC-11", "summary": "Detail page га файл прикрепления кошиш", "type": "Задание", "status": "Backlog", "done": false},
+    {"key": "FC-12", "summary": "Таблицада раста нархларини чкариб койиш", "type": "Задание", "status": "Backlog", "done": false},
+    {"key": "FC-23", "summary": "QR генерация хар бир объект учун", "type": "Задание", "status": "Backlog", "done": false},
+  ],
+  "FC-14": [
+    {"key": "FC-8",  "summary": "Толовларга Rabbit кошиш", "type": "Задание", "status": "Backlog", "done": false},
+    {"key": "FC-15", "summary": "Anorga интеграция", "type": "История", "status": "Backlog", "done": false},
+    {"key": "FC-16", "summary": "Error handle", "type": "История", "status": "Backlog", "done": false},
+  ],
+  "FC-32": [
+    {"key": "FC-33", "summary": "Видео Аналитика(AI)", "type": "Задание", "status": "Backlog", "done": false},
+  ],
   "FC-29": [
     {"key": "FC-1", "summary": "Соликга хисобод кетиши хар бир толов бойича", "type": "Задание", "status": "Готово", "done": true},
   ],
