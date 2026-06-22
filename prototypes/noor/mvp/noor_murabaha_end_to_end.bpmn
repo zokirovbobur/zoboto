@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn2:collaboration id="Collaboration_Noor">
+    <bpmn2:participant id="Participant_Noor" name="Noor Ecosystem Murabaha Process" processRef="Process_NoorMurabaha" />
+  </bpmn2:collaboration>
+  <bpmn2:process id="Process_NoorMurabaha" name="Noor Ecosystem Murabaha Process" isExecutable="true">
+    <bpmn2:laneSet id="LaneSet_1">
+      <bpmn2:lane id="Lane_Retailer" name="Retail Trader / Buyer">
+        <bpmn2:flowNodeRef>StartEvent_RetailerOpen_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_SelectProduct_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_AcceptReceipt_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>EndEvent_OrderCancelled_Process_NoorMurabaha</bpmn2:flowNodeRef>
+      </bpmn2:lane>
+      <bpmn2:lane id="Lane_Marketplace" name="Noor Marketplace App">
+        <bpmn2:flowNodeRef>Task_ShowLimit_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_CreateOrder_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_ShowTerms_Process_NoorMurabaha</bpmn2:flowNodeRef>
+      </bpmn2:lane>
+      <bpmn2:lane id="Lane_Wholesaler" name="Wholesaler / Food City">
+        <bpmn2:flowNodeRef>Task_CheckStock_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Gateway_StockAvailable_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_PackGoods_Process_NoorMurabaha</bpmn2:flowNodeRef>
+      </bpmn2:lane>
+      <bpmn2:lane id="Lane_Driver" name="Driver / Damas Labo">
+        <bpmn2:flowNodeRef>Task_PickupInspect_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Gateway_QualityCheck_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_ConfirmQabd_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_DeliverGoods_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>EndEvent_Dispute_Process_NoorMurabaha</bpmn2:flowNodeRef>
+      </bpmn2:lane>
+      <bpmn2:lane id="Lane_Paynet" name="Paynet / Xolis">
+        <bpmn2:flowNodeRef>Task_TransferFunds_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_SplitPayments_Process_NoorMurabaha</bpmn2:flowNodeRef>
+      </bpmn2:lane>
+      <bpmn2:lane id="Lane_Core" name="Noor Core / Islamic Neobank">
+        <bpmn2:flowNodeRef>Task_CalculateLimit_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Gateway_LimitSufficient_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_ReserveLimit_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_InitiatePayment_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_RecordBankTitle_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_GenerateContract_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_UpdateDebt_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Gateway_DebtCleared_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Task_HandleOverdue_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>EndEvent_MurabahaRepaid_Process_NoorMurabaha</bpmn2:flowNodeRef>
+      </bpmn2:lane>
+      <bpmn2:lane id="Lane_Sharma" name="Shariah Compliance / Audit">
+        <bpmn2:flowNodeRef>Task_AuditCompliance_Process_NoorMurabaha</bpmn2:flowNodeRef>
+      </bpmn2:lane>
+    </bpmn2:laneSet>
+    <bpmn2:sequenceFlow id="Flow_1_Process_NoorMurabaha" sourceRef="StartEvent_RetailerOpen_Process_NoorMurabaha" targetRef="Task_ShowLimit_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_2_Process_NoorMurabaha" sourceRef="Task_ShowLimit_Process_NoorMurabaha" targetRef="Task_SelectProduct_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_3_Process_NoorMurabaha" sourceRef="Task_SelectProduct_Process_NoorMurabaha" targetRef="Task_CreateOrder_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_4_Process_NoorMurabaha" sourceRef="Task_CreateOrder_Process_NoorMurabaha" targetRef="Task_CalculateLimit_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_5_Process_NoorMurabaha" sourceRef="Task_CalculateLimit_Process_NoorMurabaha" targetRef="Gateway_LimitSufficient_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_6_Process_NoorMurabaha" name="No" sourceRef="Gateway_LimitSufficient_Process_NoorMurabaha" targetRef="EndEvent_OrderCancelled_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_7_Process_NoorMurabaha" name="Yes" sourceRef="Gateway_LimitSufficient_Process_NoorMurabaha" targetRef="Task_ReserveLimit_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_8_Process_NoorMurabaha" sourceRef="Task_ReserveLimit_Process_NoorMurabaha" targetRef="Task_CheckStock_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_9_Process_NoorMurabaha" sourceRef="Task_CheckStock_Process_NoorMurabaha" targetRef="Gateway_StockAvailable_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_10_Process_NoorMurabaha" name="No" sourceRef="Gateway_StockAvailable_Process_NoorMurabaha" targetRef="EndEvent_OrderCancelled_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_11_Process_NoorMurabaha" name="Yes" sourceRef="Gateway_StockAvailable_Process_NoorMurabaha" targetRef="Task_PackGoods_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_12_Process_NoorMurabaha" sourceRef="Task_PackGoods_Process_NoorMurabaha" targetRef="Task_InitiatePayment_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_13_Process_NoorMurabaha" sourceRef="Task_InitiatePayment_Process_NoorMurabaha" targetRef="Task_TransferFunds_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_14_Process_NoorMurabaha" sourceRef="Task_TransferFunds_Process_NoorMurabaha" targetRef="Task_RecordBankTitle_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_15_Process_NoorMurabaha" sourceRef="Task_RecordBankTitle_Process_NoorMurabaha" targetRef="Task_PickupInspect_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_16_Process_NoorMurabaha" sourceRef="Task_PickupInspect_Process_NoorMurabaha" targetRef="Gateway_QualityCheck_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_17_Process_NoorMurabaha" name="Damaged" sourceRef="Gateway_QualityCheck_Process_NoorMurabaha" targetRef="EndEvent_Dispute_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_18_Process_NoorMurabaha" name="Good" sourceRef="Gateway_QualityCheck_Process_NoorMurabaha" targetRef="Task_ConfirmQabd_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_19_Process_NoorMurabaha" sourceRef="Task_ConfirmQabd_Process_NoorMurabaha" targetRef="Task_DeliverGoods_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_20_Process_NoorMurabaha" sourceRef="Task_DeliverGoods_Process_NoorMurabaha" targetRef="Task_AcceptReceipt_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_21_Process_NoorMurabaha" sourceRef="Task_AcceptReceipt_Process_NoorMurabaha" targetRef="Task_ShowTerms_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_22_Process_NoorMurabaha" sourceRef="Task_ShowTerms_Process_NoorMurabaha" targetRef="Task_GenerateContract_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_23_Process_NoorMurabaha" sourceRef="Task_GenerateContract_Process_NoorMurabaha" targetRef="Task_AuditCompliance_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_24_Process_NoorMurabaha" sourceRef="Task_AuditCompliance_Process_NoorMurabaha" targetRef="Task_SplitPayments_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_25_Process_NoorMurabaha" sourceRef="Task_SplitPayments_Process_NoorMurabaha" targetRef="Task_UpdateDebt_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_26_Process_NoorMurabaha" sourceRef="Task_UpdateDebt_Process_NoorMurabaha" targetRef="Gateway_DebtCleared_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_27_Process_NoorMurabaha" name="Yes" sourceRef="Gateway_DebtCleared_Process_NoorMurabaha" targetRef="EndEvent_MurabahaRepaid_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_28_Process_NoorMurabaha" name="No / Overdue" sourceRef="Gateway_DebtCleared_Process_NoorMurabaha" targetRef="Task_HandleOverdue_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_29_Process_NoorMurabaha" sourceRef="Task_HandleOverdue_Process_NoorMurabaha" targetRef="Task_SplitPayments_Process_NoorMurabaha" />
+    <bpmn2:startEvent id="StartEvent_RetailerOpen_Process_NoorMurabaha" name="Retailer Opens App">
+      <bpmn2:outgoing>Flow_1_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:task id="Task_ShowLimit_Process_NoorMurabaha" name="Display Financing Limit">
+      <bpmn2:incoming>Flow_1_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_2_Process_NoorMurabaha</bpmn2:outgoing>
+      <bpmn2:dataOutputAssociation id="DataAssociation_Limit_Process_NoorMurabaha">
+        <bpmn2:targetRef>DataObjectReference_Limit_Process_NoorMurabaha</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:task id="Task_SelectProduct_Process_NoorMurabaha" name="Select Goods &#38; Terms">
+      <bpmn2:incoming>Flow_2_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_3_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="Task_CreateOrder_Process_NoorMurabaha" name="Create Purchase Order">
+      <bpmn2:incoming>Flow_3_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_4_Process_NoorMurabaha</bpmn2:outgoing>
+      <bpmn2:dataOutputAssociation id="DataAssociation_Order_Process_NoorMurabaha">
+        <bpmn2:targetRef>DataObjectReference_Order_Process_NoorMurabaha</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:task id="Task_CalculateLimit_Process_NoorMurabaha" name="Assess Financing Limit">
+      <bpmn2:incoming>Flow_4_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_5_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="Gateway_LimitSufficient_Process_NoorMurabaha" name="Limit Sufficient?" default="Flow_6_Process_NoorMurabaha">
+      <bpmn2:incoming>Flow_5_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_6_Process_NoorMurabaha</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_7_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="Task_ReserveLimit_Process_NoorMurabaha" name="Reserve Funds">
+      <bpmn2:incoming>Flow_7_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_8_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="Task_CheckStock_Process_NoorMurabaha" name="Confirm Stock Availability">
+      <bpmn2:incoming>Flow_8_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_9_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="Gateway_StockAvailable_Process_NoorMurabaha" name="In Stock?" default="Flow_10_Process_NoorMurabaha">
+      <bpmn2:incoming>Flow_9_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_10_Process_NoorMurabaha</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_11_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="Task_PackGoods_Process_NoorMurabaha" name="Prepare Shipment">
+      <bpmn2:incoming>Flow_11_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_12_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="Task_InitiatePayment_Process_NoorMurabaha" name="Initiate Bank Purchase">
+      <bpmn2:incoming>Flow_12_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_13_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="Task_TransferFunds_Process_NoorMurabaha" name="Transfer Funds to Wholesaler">
+      <bpmn2:incoming>Flow_13_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_14_Process_NoorMurabaha</bpmn2:outgoing>
+      <bpmn2:dataOutputAssociation id="DataAssociation_Payment_Process_NoorMurabaha">
+        <bpmn2:targetRef>DataObjectReference_BankConf_Process_NoorMurabaha</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:task id="Task_RecordBankTitle_Process_NoorMurabaha" name="Record Bank Ownership (Qabd Legal)">
+      <bpmn2:incoming>Flow_14_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_15_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="Task_PickupInspect_Process_NoorMurabaha" name="Pickup &#38; Inspect Goods">
+      <bpmn2:incoming>Flow_15_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_16_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="Gateway_QualityCheck_Process_NoorMurabaha" name="Goods OK?" default="Flow_17_Process_NoorMurabaha">
+      <bpmn2:incoming>Flow_16_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_17_Process_NoorMurabaha</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_18_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="Task_ConfirmQabd_Process_NoorMurabaha" name="Confirm Physical Qabd (Wakil)">
+      <bpmn2:incoming>Flow_18_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_19_Process_NoorMurabaha</bpmn2:outgoing>
+      <bpmn2:dataOutputAssociation id="DataAssociation_QabdConfirm_Process_NoorMurabaha">
+        <bpmn2:targetRef>DataObjectReference_Qabd_Process_NoorMurabaha</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:task id="Task_DeliverGoods_Process_NoorMurabaha" name="Deliver to Retailer">
+      <bpmn2:incoming>Flow_19_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_20_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="Task_AcceptReceipt_Process_NoorMurabaha" name="Scan QR &#38; Accept">
+      <bpmn2:incoming>Flow_20_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_21_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="Task_ShowTerms_Process_NoorMurabaha" name="Show Murabaha Terms">
+      <bpmn2:incoming>Flow_21_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_22_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="Task_GenerateContract_Process_NoorMurabaha" name="Execute Murabaha Contract">
+      <bpmn2:incoming>Flow_22_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_23_Process_NoorMurabaha</bpmn2:outgoing>
+      <bpmn2:dataOutputAssociation id="DataAssociation_Contract_Process_NoorMurabaha">
+        <bpmn2:targetRef>DataObjectReference_Contract_Process_NoorMurabaha</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:task>
+    <bpmn2:task id="Task_AuditCompliance_Process_NoorMurabaha" name="Validate Compliance Points">
+      <bpmn2:incoming>Flow_23_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_24_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="Task_SplitPayments_Process_NoorMurabaha" name="Split Income (Repay vs Balance)">
+      <bpmn2:incoming>Flow_24_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:incoming>Flow_29_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_25_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="Task_UpdateDebt_Process_NoorMurabaha" name="Apply Payment to Debt">
+      <bpmn2:incoming>Flow_25_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_26_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:exclusiveGateway id="Gateway_DebtCleared_Process_NoorMurabaha" name="Debt Cleared?" default="Flow_28_Process_NoorMurabaha">
+      <bpmn2:incoming>Flow_26_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_27_Process_NoorMurabaha</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_28_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:task id="Task_HandleOverdue_Process_NoorMurabaha" name="Start Overdue Process (Charity Penalty)">
+      <bpmn2:incoming>Flow_28_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_29_Process_NoorMurabaha</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:endEvent id="EndEvent_MurabahaRepaid_Process_NoorMurabaha" name="Murabaha Fully Repaid">
+      <bpmn2:incoming>Flow_27_Process_NoorMurabaha</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:endEvent id="EndEvent_OrderCancelled_Process_NoorMurabaha" name="Order Cancelled">
+      <bpmn2:incoming>Flow_6_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:incoming>Flow_10_Process_NoorMurabaha</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:endEvent id="EndEvent_Dispute_Process_NoorMurabaha" name="Dispute / Damaged">
+      <bpmn2:incoming>Flow_17_Process_NoorMurabaha</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:dataObject id="DataObject_Limit_Process_NoorMurabaha" name="Financing Limit" />
+    <bpmn2:dataObjectReference id="DataObjectReference_Limit_Process_NoorMurabaha" name="Financing Limit" dataObjectRef="DataObject_Limit_Process_NoorMurabaha" />
+    <bpmn2:dataObject id="DataObject_Order_Process_NoorMurabaha" name="Purchase Order" />
+    <bpmn2:dataObjectReference id="DataObjectReference_Order_Process_NoorMurabaha" name="Purchase Order" dataObjectRef="DataObject_Order_Process_NoorMurabaha" />
+    <bpmn2:dataObject id="DataObject_BankConf_Process_NoorMurabaha" name="Bank Purchase Confirmation">
+      <bpmn2:documentation>Legal proof bank purchased goods from wholesaler</bpmn2:documentation>
+    </bpmn2:dataObject>
+    <bpmn2:dataObjectReference id="DataObjectReference_BankConf_Process_NoorMurabaha" name="Bank Purchase Confirmation" dataObjectRef="DataObject_BankConf_Process_NoorMurabaha" />
+    <bpmn2:dataObject id="DataObject_Qabd_Process_NoorMurabaha" name="Qabd Confirmation" />
+    <bpmn2:dataObjectReference id="DataObjectReference_Qabd_Process_NoorMurabaha" name="Qabd Confirmation" dataObjectRef="DataObject_Qabd_Process_NoorMurabaha" />
+    <bpmn2:dataObject id="DataObject_Contract_Process_NoorMurabaha" name="Murabaha Contract" />
+    <bpmn2:dataObjectReference id="DataObjectReference_Contract_Process_NoorMurabaha" name="Murabaha Contract" dataObjectRef="DataObject_Contract_Process_NoorMurabaha" />
+    <bpmn2:textAnnotation id="Annotation_SCCP_1_Process_NoorMurabaha">
+      <bpmn2:text>SCCP: Bank purchases goods before selling. No cash loan to client.</bpmn2:text>
+    </bpmn2:textAnnotation>
+    <bpmn2:association id="Association_Annotation_1_Process_NoorMurabaha" sourceRef="Annotation_SCCP_1_Process_NoorMurabaha" targetRef="Task_TransferFunds_Process_NoorMurabaha" />
+    <bpmn2:textAnnotation id="Annotation_SCCP_2_Process_NoorMurabaha">
+      <bpmn2:text>SCCP: Driver acts as Bank's Wakil. Bank takes possession &amp; risk (Qabd).</bpmn2:text>
+    </bpmn2:textAnnotation>
+    <bpmn2:association id="Association_Annotation_2_Process_NoorMurabaha" sourceRef="Annotation_SCCP_2_Process_NoorMurabaha" targetRef="Task_ConfirmQabd_Process_NoorMurabaha" />
+    <bpmn2:textAnnotation id="Annotation_SCCP_3_Process_NoorMurabaha">
+      <bpmn2:text>SCCP: Murabaha contract signed. Debt obligation starts now.</bpmn2:text>
+    </bpmn2:textAnnotation>
+    <bpmn2:association id="Association_Annotation_3_Process_NoorMurabaha" sourceRef="Annotation_SCCP_3_Process_NoorMurabaha" targetRef="Task_GenerateContract_Process_NoorMurabaha" />
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Collaboration_Noor">
+    <bpmndi:BPMNPlane id="BPMNPlane_Collaboration_Noor" bpmnElement="Collaboration_Noor">
+      <bpmndi:BPMNShape id="Participant_Noor_di" bpmnElement="Participant_Noor" isHorizontal="true" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
+        <dc:Bounds x="32" y="0" width="4450" height="2098" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Sharma_di" bpmnElement="Lane_Sharma" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
+        <dc:Bounds x="62" y="1914" width="4420" height="184" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Core_di" bpmnElement="Lane_Core" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
+        <dc:Bounds x="62" y="1450" width="4420" height="464" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Paynet_di" bpmnElement="Lane_Paynet" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
+        <dc:Bounds x="62" y="1266" width="4420" height="184" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Driver_di" bpmnElement="Lane_Driver" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
+        <dc:Bounds x="62" y="817" width="4420" height="449" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Wholesaler_di" bpmnElement="Lane_Wholesaler" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
+        <dc:Bounds x="62" y="493" width="4420" height="324" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Marketplace_di" bpmnElement="Lane_Marketplace" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
+        <dc:Bounds x="62" y="184" width="4420" height="309" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Retailer_di" bpmnElement="Lane_Retailer" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
+        <dc:Bounds x="62" y="0" width="4420" height="184" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_RetailerOpen_Process_NoorMurabaha_di" bpmnElement="StartEvent_RetailerOpen_Process_NoorMurabaha">
+        <dc:Bounds x="192" y="74" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ShowLimit_Process_NoorMurabaha_di" bpmnElement="Task_ShowLimit_Process_NoorMurabaha">
+        <dc:Bounds x="310" y="236" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SelectProduct_Process_NoorMurabaha_di" bpmnElement="Task_SelectProduct_Process_NoorMurabaha">
+        <dc:Bounds x="480" y="52" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CreateOrder_Process_NoorMurabaha_di" bpmnElement="Task_CreateOrder_Process_NoorMurabaha">
+        <dc:Bounds x="650" y="236" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CalculateLimit_Process_NoorMurabaha_di" bpmnElement="Task_CalculateLimit_Process_NoorMurabaha">
+        <dc:Bounds x="820" y="1642" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_LimitSufficient_Process_NoorMurabaha_di" bpmnElement="Gateway_LimitSufficient_Process_NoorMurabaha" isMarkerVisible="true">
+        <dc:Bounds x="1015" y="1657" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ReserveLimit_Process_NoorMurabaha_di" bpmnElement="Task_ReserveLimit_Process_NoorMurabaha">
+        <dc:Bounds x="1140" y="1782" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CheckStock_Process_NoorMurabaha_di" bpmnElement="Task_CheckStock_Process_NoorMurabaha">
+        <dc:Bounds x="1310" y="545" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_StockAvailable_Process_NoorMurabaha_di" bpmnElement="Gateway_StockAvailable_Process_NoorMurabaha" isMarkerVisible="true">
+        <dc:Bounds x="1505" y="560" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_PackGoods_Process_NoorMurabaha_di" bpmnElement="Task_PackGoods_Process_NoorMurabaha">
+        <dc:Bounds x="1630" y="685" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_InitiatePayment_Process_NoorMurabaha_di" bpmnElement="Task_InitiatePayment_Process_NoorMurabaha">
+        <dc:Bounds x="1800" y="1502" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_TransferFunds_Process_NoorMurabaha_di" bpmnElement="Task_TransferFunds_Process_NoorMurabaha" bioc:fill="#ef9a9a">
+        <dc:Bounds x="1970" y="1318" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RecordBankTitle_Process_NoorMurabaha_di" bpmnElement="Task_RecordBankTitle_Process_NoorMurabaha">
+        <dc:Bounds x="2140" y="1502" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_PickupInspect_Process_NoorMurabaha_di" bpmnElement="Task_PickupInspect_Process_NoorMurabaha">
+        <dc:Bounds x="2310" y="869" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_QualityCheck_Process_NoorMurabaha_di" bpmnElement="Gateway_QualityCheck_Process_NoorMurabaha" isMarkerVisible="true">
+        <dc:Bounds x="2505" y="884" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ConfirmQabd_Process_NoorMurabaha_di" bpmnElement="Task_ConfirmQabd_Process_NoorMurabaha" bioc:fill="#ef9a9a">
+        <dc:Bounds x="2630" y="1009" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_DeliverGoods_Process_NoorMurabaha_di" bpmnElement="Task_DeliverGoods_Process_NoorMurabaha">
+        <dc:Bounds x="2800" y="1009" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AcceptReceipt_Process_NoorMurabaha_di" bpmnElement="Task_AcceptReceipt_Process_NoorMurabaha">
+        <dc:Bounds x="2970" y="52" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ShowTerms_Process_NoorMurabaha_di" bpmnElement="Task_ShowTerms_Process_NoorMurabaha">
+        <dc:Bounds x="3140" y="236" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_GenerateContract_Process_NoorMurabaha_di" bpmnElement="Task_GenerateContract_Process_NoorMurabaha" bioc:fill="#ef9a9a">
+        <dc:Bounds x="3310" y="1502" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AuditCompliance_Process_NoorMurabaha_di" bpmnElement="Task_AuditCompliance_Process_NoorMurabaha">
+        <dc:Bounds x="3480" y="1966" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SplitPayments_Process_NoorMurabaha_di" bpmnElement="Task_SplitPayments_Process_NoorMurabaha">
+        <dc:Bounds x="3800" y="1318" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_UpdateDebt_Process_NoorMurabaha_di" bpmnElement="Task_UpdateDebt_Process_NoorMurabaha">
+        <dc:Bounds x="3970" y="1502" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_DebtCleared_Process_NoorMurabaha_di" bpmnElement="Gateway_DebtCleared_Process_NoorMurabaha" isMarkerVisible="true">
+        <dc:Bounds x="4165" y="1517" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_HandleOverdue_Process_NoorMurabaha_di" bpmnElement="Task_HandleOverdue_Process_NoorMurabaha">
+        <dc:Bounds x="4290" y="1642" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_MurabahaRepaid_Process_NoorMurabaha_di" bpmnElement="EndEvent_MurabahaRepaid_Process_NoorMurabaha">
+        <dc:Bounds x="4332" y="1524" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_OrderCancelled_Process_NoorMurabaha_di" bpmnElement="EndEvent_OrderCancelled_Process_NoorMurabaha">
+        <dc:Bounds x="3682" y="74" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_Dispute_Process_NoorMurabaha_di" bpmnElement="EndEvent_Dispute_Process_NoorMurabaha">
+        <dc:Bounds x="2672" y="891" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_Limit_Process_NoorMurabaha_di" bpmnElement="DataObjectReference_Limit_Process_NoorMurabaha">
+        <dc:Bounds x="520" y="391" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="478" y="447" width="121" height="28" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_Order_Process_NoorMurabaha_di" bpmnElement="DataObjectReference_Order_Process_NoorMurabaha">
+        <dc:Bounds x="860" y="251" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="821" y="307" width="114" height="28" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_BankConf_Process_NoorMurabaha_di" bpmnElement="DataObjectReference_BankConf_Process_NoorMurabaha">
+        <dc:Bounds x="2180" y="1333" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2108" y="1389" width="180" height="28" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_Qabd_Process_NoorMurabaha_di" bpmnElement="DataObjectReference_Qabd_Process_NoorMurabaha">
+        <dc:Bounds x="2840" y="1164" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2791" y="1220" width="135" height="28" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_Contract_Process_NoorMurabaha_di" bpmnElement="DataObjectReference_Contract_Process_NoorMurabaha">
+        <dc:Bounds x="3520" y="1517" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3471" y="1573" width="135" height="28" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Annotation_SCCP_1_Process_NoorMurabaha_di" bpmnElement="Annotation_SCCP_1_Process_NoorMurabaha">
+        <dc:Bounds x="2140" y="1263" width="160" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Annotation_SCCP_2_Process_NoorMurabaha_di" bpmnElement="Annotation_SCCP_2_Process_NoorMurabaha">
+        <dc:Bounds x="2800" y="954" width="160" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Annotation_SCCP_3_Process_NoorMurabaha_di" bpmnElement="Annotation_SCCP_3_Process_NoorMurabaha">
+        <dc:Bounds x="3480" y="1447" width="160" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_Process_NoorMurabaha_di" bpmnElement="Flow_1_Process_NoorMurabaha">
+        <di:waypoint x="210" y="110" />
+        <di:waypoint x="210" y="276" />
+        <di:waypoint x="310" y="276" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_Process_NoorMurabaha_di" bpmnElement="Flow_2_Process_NoorMurabaha">
+        <di:waypoint x="430" y="276" />
+        <di:waypoint x="540" y="276" />
+        <di:waypoint x="540" y="132" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_Process_NoorMurabaha_di" bpmnElement="Flow_3_Process_NoorMurabaha">
+        <di:waypoint x="540" y="132" />
+        <di:waypoint x="540" y="276" />
+        <di:waypoint x="650" y="276" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_Process_NoorMurabaha_di" bpmnElement="Flow_4_Process_NoorMurabaha">
+        <di:waypoint x="710" y="316" />
+        <di:waypoint x="710" y="1682" />
+        <di:waypoint x="820" y="1682" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_Process_NoorMurabaha_di" bpmnElement="Flow_5_Process_NoorMurabaha">
+        <di:waypoint x="940" y="1682" />
+        <di:waypoint x="1015" y="1682" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_Process_NoorMurabaha_di" bpmnElement="Flow_6_Process_NoorMurabaha">
+        <di:waypoint x="1065" y="1682" />
+        <di:waypoint x="3700" y="1682" />
+        <di:waypoint x="3700" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_Process_NoorMurabaha_di" bpmnElement="Flow_7_Process_NoorMurabaha">
+        <di:waypoint x="1040" y="1707" />
+        <di:waypoint x="1040" y="1822" />
+        <di:waypoint x="1140" y="1822" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_8_Process_NoorMurabaha_di" bpmnElement="Flow_8_Process_NoorMurabaha">
+        <di:waypoint x="1260" y="1822" />
+        <di:waypoint x="1370" y="1822" />
+        <di:waypoint x="1370" y="625" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_9_Process_NoorMurabaha_di" bpmnElement="Flow_9_Process_NoorMurabaha">
+        <di:waypoint x="1430" y="585" />
+        <di:waypoint x="1505" y="585" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_Process_NoorMurabaha_di" bpmnElement="Flow_10_Process_NoorMurabaha">
+        <di:waypoint x="1555" y="585" />
+        <di:waypoint x="3700" y="585" />
+        <di:waypoint x="3700" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11_Process_NoorMurabaha_di" bpmnElement="Flow_11_Process_NoorMurabaha">
+        <di:waypoint x="1530" y="610" />
+        <di:waypoint x="1530" y="725" />
+        <di:waypoint x="1630" y="725" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12_Process_NoorMurabaha_di" bpmnElement="Flow_12_Process_NoorMurabaha">
+        <di:waypoint x="1690" y="765" />
+        <di:waypoint x="1690" y="1542" />
+        <di:waypoint x="1800" y="1542" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13_Process_NoorMurabaha_di" bpmnElement="Flow_13_Process_NoorMurabaha">
+        <di:waypoint x="1920" y="1542" />
+        <di:waypoint x="2030" y="1542" />
+        <di:waypoint x="2030" y="1398" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14_Process_NoorMurabaha_di" bpmnElement="Flow_14_Process_NoorMurabaha">
+        <di:waypoint x="2030" y="1398" />
+        <di:waypoint x="2030" y="1542" />
+        <di:waypoint x="2140" y="1542" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15_Process_NoorMurabaha_di" bpmnElement="Flow_15_Process_NoorMurabaha">
+        <di:waypoint x="2260" y="1542" />
+        <di:waypoint x="2370" y="1542" />
+        <di:waypoint x="2370" y="949" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16_Process_NoorMurabaha_di" bpmnElement="Flow_16_Process_NoorMurabaha">
+        <di:waypoint x="2430" y="909" />
+        <di:waypoint x="2505" y="909" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17_Process_NoorMurabaha_di" bpmnElement="Flow_17_Process_NoorMurabaha">
+        <di:waypoint x="2555" y="909" />
+        <di:waypoint x="2672" y="909" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18_Process_NoorMurabaha_di" bpmnElement="Flow_18_Process_NoorMurabaha">
+        <di:waypoint x="2530" y="934" />
+        <di:waypoint x="2530" y="1049" />
+        <di:waypoint x="2630" y="1049" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19_Process_NoorMurabaha_di" bpmnElement="Flow_19_Process_NoorMurabaha">
+        <di:waypoint x="2750" y="1049" />
+        <di:waypoint x="2800" y="1049" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_20_Process_NoorMurabaha_di" bpmnElement="Flow_20_Process_NoorMurabaha">
+        <di:waypoint x="2920" y="1049" />
+        <di:waypoint x="3030" y="1049" />
+        <di:waypoint x="3030" y="132" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_21_Process_NoorMurabaha_di" bpmnElement="Flow_21_Process_NoorMurabaha">
+        <di:waypoint x="3030" y="132" />
+        <di:waypoint x="3030" y="276" />
+        <di:waypoint x="3140" y="276" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_22_Process_NoorMurabaha_di" bpmnElement="Flow_22_Process_NoorMurabaha">
+        <di:waypoint x="3200" y="316" />
+        <di:waypoint x="3200" y="1542" />
+        <di:waypoint x="3310" y="1542" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_23_Process_NoorMurabaha_di" bpmnElement="Flow_23_Process_NoorMurabaha">
+        <di:waypoint x="3370" y="1582" />
+        <di:waypoint x="3370" y="2006" />
+        <di:waypoint x="3480" y="2006" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_24_Process_NoorMurabaha_di" bpmnElement="Flow_24_Process_NoorMurabaha">
+        <di:waypoint x="3600" y="2006" />
+        <di:waypoint x="3860" y="2006" />
+        <di:waypoint x="3860" y="1398" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_25_Process_NoorMurabaha_di" bpmnElement="Flow_25_Process_NoorMurabaha">
+        <di:waypoint x="3860" y="1398" />
+        <di:waypoint x="3860" y="1542" />
+        <di:waypoint x="3970" y="1542" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_26_Process_NoorMurabaha_di" bpmnElement="Flow_26_Process_NoorMurabaha">
+        <di:waypoint x="4090" y="1542" />
+        <di:waypoint x="4165" y="1542" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_27_Process_NoorMurabaha_di" bpmnElement="Flow_27_Process_NoorMurabaha">
+        <di:waypoint x="4215" y="1542" />
+        <di:waypoint x="4332" y="1542" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_28_Process_NoorMurabaha_di" bpmnElement="Flow_28_Process_NoorMurabaha">
+        <di:waypoint x="4190" y="1567" />
+        <di:waypoint x="4190" y="1682" />
+        <di:waypoint x="4290" y="1682" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_29_Process_NoorMurabaha_di" bpmnElement="Flow_29_Process_NoorMurabaha">
+        <di:waypoint x="4290" y="1682" />
+        <di:waypoint x="3860" y="1682" />
+        <di:waypoint x="3860" y="1398" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_Annotation_1_Process_NoorMurabaha_di" bpmnElement="Association_Annotation_1_Process_NoorMurabaha">
+        <di:waypoint x="2030" y="1318" />
+        <di:waypoint x="2030" y="1283" />
+        <di:waypoint x="2140" y="1283" />
+        <di:waypoint x="2140" y="1293" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_Annotation_2_Process_NoorMurabaha_di" bpmnElement="Association_Annotation_2_Process_NoorMurabaha">
+        <di:waypoint x="2690" y="1009" />
+        <di:waypoint x="2690" y="974" />
+        <di:waypoint x="2800" y="974" />
+        <di:waypoint x="2800" y="984" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_Annotation_3_Process_NoorMurabaha_di" bpmnElement="Association_Annotation_3_Process_NoorMurabaha">
+        <di:waypoint x="3370" y="1502" />
+        <di:waypoint x="3370" y="1467" />
+        <di:waypoint x="3480" y="1467" />
+        <di:waypoint x="3480" y="1477" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataAssociation_Limit_Process_NoorMurabaha_di" bpmnElement="DataAssociation_Limit_Process_NoorMurabaha">
+        <di:waypoint x="370" y="316" />
+        <di:waypoint x="370" y="416" />
+        <di:waypoint x="520" y="416" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataAssociation_Order_Process_NoorMurabaha_di" bpmnElement="DataAssociation_Order_Process_NoorMurabaha">
+        <di:waypoint x="767" y="276" />
+        <di:waypoint x="860" y="276" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataAssociation_Payment_Process_NoorMurabaha_di" bpmnElement="DataAssociation_Payment_Process_NoorMurabaha">
+        <di:waypoint x="2087" y="1358" />
+        <di:waypoint x="2180" y="1358" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataAssociation_QabdConfirm_Process_NoorMurabaha_di" bpmnElement="DataAssociation_QabdConfirm_Process_NoorMurabaha">
+        <di:waypoint x="2690" y="1089" />
+        <di:waypoint x="2690" y="1189" />
+        <di:waypoint x="2840" y="1189" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataAssociation_Contract_Process_NoorMurabaha_di" bpmnElement="DataAssociation_Contract_Process_NoorMurabaha">
+        <di:waypoint x="3427" y="1542" />
+        <di:waypoint x="3520" y="1542" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

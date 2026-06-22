@@ -277,6 +277,15 @@ const PROTOTYPES = [
     url: "prototypes/safa/index.html",
     description: "Daily Islamic Activities app — namoz vaqtlari, Qibla yo'nalishi, zikr, sadaqa, zakot va boshqa kundalik islomiy amallar uchun yagona platforma."
   },
+  {
+    title: "Noor",
+    product: "Concept",
+    type: "Internal",
+    status: "Soon",
+    platforms: ["desktop", "mobile"],
+    url: "prototypes/noor/index.html",
+    description: "Noor Ecosystem — Islamic B2B marketplace with Murabaha financing, ownership transfer, qabd/kabz confirmation, and Shariah-compliant trade flow across buyer, supplier, and delivery."
+  },
 ];
 
 /* =========================== I18N ================================== */

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noor Bazaar Ecosystem — BPMN</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17/dist/assets/diagram-js.css" />
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17/dist/assets/bpmn-js.css" />
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@17/dist/assets/bpmn-font/css/bpmn-embedded.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #06110D;
+      --bg2:    #0A1A12;
+      --gold:   #C9A14A;
+      --green:  #0D4D3A;
+      --ink:    #EAF0EC;
+      --muted:  #6B9980;
+      --border: rgba(201,161,74,.2);
+      --bar-h:  48px;
+    }
+
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── toolbar ── */
+    .toolbar {
+      height: var(--bar-h);
+      min-height: var(--bar-h);
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      flex-shrink: 0;
+    }
+
+    .toolbar-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: .02em;
+      margin-right: auto;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(201,161,74,.06);
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .15s, border-color .15s;
+      user-select: none;
+    }
+    .btn:hover { background: rgba(201,161,74,.14); border-color: rgba(201,161,74,.4); }
+    .btn:active { background: rgba(201,161,74,.22); }
+    .btn-icon { font-size: 13px; }
+
+    .sep {
+      width: 1px;
+      height: 22px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .back-link {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 5px 8px;
+      border-radius: 6px;
+      transition: color .15s, background .15s;
+      white-space: nowrap;
+    }
+    .back-link:hover { color: var(--ink); background: rgba(255,255,255,.05); }
+
+    .status {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: .02em;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    /* ── canvas ── */
+    #canvas {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    /* bpmn-js renders inside #canvas */
+    #canvas .djs-container { width: 100%; height: 100%; }
+
+    /* loading overlay */
+    #overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: #f8f8f8;
+      z-index: 100;
+      pointer-events: none;
+    }
+    #overlay.hidden { display: none; }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #e0e0e0;
+      border-top-color: #0D4D3A;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .overlay-text {
+      font-size: 13px;
+      color: #666;
+    }
+
+    #error-msg {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      background: #f8f8f8;
+      z-index: 100;
+      font-size: 13px;
+      color: #c0392b;
+      text-align: center;
+      padding: 32px;
+    }
+    #error-msg.visible { display: flex; }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back-link" href="../">← Bazaar Ecosystem</a>
+    <div class="sep"></div>
+    <span class="toolbar-title">Noor Bazaar Ecosystem — BPMN</span>
+    <button class="btn" id="btn-fit" title="Fit diagram to viewport">
+      <span class="btn-icon">⊡</span> Fit
+    </button>
+    <button class="btn" id="btn-in" title="Zoom in">
+      <span class="btn-icon">+</span> Zoom in
+    </button>
+    <button class="btn" id="btn-out" title="Zoom out">
+      <span class="btn-icon">−</span> Zoom out
+    </button>
+    <div class="sep"></div>
+    <span class="status" id="status">Loading…</span>
+  </div>
+
+  <div id="canvas">
+    <div id="overlay">
+      <div class="spinner"></div>
+      <div class="overlay-text">Loading BPMN diagram…</div>
+    </div>
+    <div id="error-msg"></div>
+  </div>
+
+  <script src="https://unpkg.com/bpmn-js@17/dist/bpmn-navigated-viewer.development.js"></script>
+  <script>
+    const viewer = new BpmnJS({ container: '#canvas' });
+
+    const overlay  = document.getElementById('overlay');
+    const errorMsg = document.getElementById('error-msg');
+    const statusEl = document.getElementById('status');
+
+    function setStatus(text) { statusEl.textContent = text; }
+
+    fetch('./noor_murabaha_end_to_end.bpmn')
+      .then(r => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(xml => viewer.importXML(xml))
+      .then(() => {
+        overlay.classList.add('hidden');
+        const canvas = viewer.get('canvas');
+        canvas.zoom('fit-viewport');
+        setStatus('Loaded');
+      })
+      .catch(err => {
+        overlay.classList.add('hidden');
+        errorMsg.classList.add('visible');
+        errorMsg.innerHTML =
+          '<strong>Failed to load diagram</strong><br>' +
+          '<span style="color:#555;font-size:12px">' + err.message + '</span>';
+        setStatus('Error');
+        console.error(err);
+      });
+
+    document.getElementById('btn-fit').addEventListener('click', () => {
+      viewer.get('canvas').zoom('fit-viewport');
+    });
+
+    document.getElementById('btn-in').addEventListener('click', () => {
+      const canvas = viewer.get('canvas');
+      canvas.zoom(canvas.zoom() * 1.25);
+    });
+
+    document.getElementById('btn-out').addEventListener('click', () => {
+      const canvas = viewer.get('canvas');
+      canvas.zoom(canvas.zoom() * 0.8);
+    });
+  </script>
+</body>
+</html>
