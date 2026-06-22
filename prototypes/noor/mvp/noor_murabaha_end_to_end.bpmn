@@ -30,11 +30,10 @@
         <bpmn2:flowNodeRef>Task_RecordBankTitle_Process_NoorMurabaha</bpmn2:flowNodeRef>
         <bpmn2:flowNodeRef>Task_GenerateContract_Process_NoorMurabaha</bpmn2:flowNodeRef>
         <bpmn2:flowNodeRef>Task_UpdateDebt_Process_NoorMurabaha</bpmn2:flowNodeRef>
-        <bpmn2:flowNodeRef>Gateway_11w898d</bpmn2:flowNodeRef>
         <bpmn2:flowNodeRef>Gateway_DebtCleared_Process_NoorMurabaha</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Gateway_11w898d</bpmn2:flowNodeRef>
+        <bpmn2:flowNodeRef>Event_0bmwkzk</bpmn2:flowNodeRef>
         <bpmn2:flowNodeRef>EndEvent_MurabahaRepaid_Process_NoorMurabaha</bpmn2:flowNodeRef>
-        <bpmn2:flowNodeRef>Task_HandleOverdue_Process_NoorMurabaha</bpmn2:flowNodeRef>
-        <bpmn2:flowNodeRef>Activity_1kj9p1z</bpmn2:flowNodeRef>
       </bpmn2:lane>
       <bpmn2:lane id="Lane_Paynet" name="Paynet / Xolis">
         <bpmn2:flowNodeRef>Task_TransferFunds_Process_NoorMurabaha</bpmn2:flowNodeRef>
@@ -162,7 +161,7 @@
     </bpmn2:task>
     <bpmn2:task id="Task_SplitPayments_Process_NoorMurabaha" name="Split Income (Repay 20% vs Balance 80%)">
       <bpmn2:incoming>Flow_24_Process_NoorMurabaha</bpmn2:incoming>
-      <bpmn2:incoming>Flow_29_Process_NoorMurabaha</bpmn2:incoming>
+      <bpmn2:incoming>Flow_28_Process_NoorMurabaha</bpmn2:incoming>
       <bpmn2:outgoing>Flow_25_Process_NoorMurabaha</bpmn2:outgoing>
     </bpmn2:task>
     <bpmn2:endEvent id="EndEvent_Dispute_Process_NoorMurabaha" name="Dispute / Damaged">
@@ -200,26 +199,11 @@
       <bpmn2:incoming>Flow_188tuec</bpmn2:incoming>
       <bpmn2:outgoing>Flow_0lvnbj1</bpmn2:outgoing>
     </bpmn2:task>
-    <bpmn2:exclusiveGateway id="Gateway_11w898d" name="Abnormal drop in cashless revenue? (possible shift to cash)">
-      <bpmn2:incoming>Flow_0lvnbj1</bpmn2:incoming>
-      <bpmn2:outgoing>Flow_0j8sxa4</bpmn2:outgoing>
-    </bpmn2:exclusiveGateway>
     <bpmn2:exclusiveGateway id="Gateway_DebtCleared_Process_NoorMurabaha" name="Debt Cleared?" default="Flow_28_Process_NoorMurabaha">
       <bpmn2:incoming>Flow_0j8sxa4</bpmn2:incoming>
       <bpmn2:outgoing>Flow_27_Process_NoorMurabaha</bpmn2:outgoing>
       <bpmn2:outgoing>Flow_28_Process_NoorMurabaha</bpmn2:outgoing>
     </bpmn2:exclusiveGateway>
-    <bpmn2:endEvent id="EndEvent_MurabahaRepaid_Process_NoorMurabaha" name="Murabaha Fully Repaid">
-      <bpmn2:incoming>Flow_27_Process_NoorMurabaha</bpmn2:incoming>
-    </bpmn2:endEvent>
-    <bpmn2:task id="Task_HandleOverdue_Process_NoorMurabaha" name="Block access to new purchases — Default status">
-      <bpmn2:incoming>Flow_28_Process_NoorMurabaha</bpmn2:incoming>
-      <bpmn2:outgoing>Flow_0wj7x9w</bpmn2:outgoing>
-    </bpmn2:task>
-    <bpmn2:task id="Activity_1kj9p1z" name="Start Overdue Process (Charity Penalty)">
-      <bpmn2:incoming>Flow_0wj7x9w</bpmn2:incoming>
-      <bpmn2:outgoing>Flow_29_Process_NoorMurabaha</bpmn2:outgoing>
-    </bpmn2:task>
     <bpmn2:sequenceFlow id="Flow_1_Process_NoorMurabaha" sourceRef="StartEvent_RetailerOpen_Process_NoorMurabaha" targetRef="Task_ShowLimit_Process_NoorMurabaha" />
     <bpmn2:sequenceFlow id="Flow_2_Process_NoorMurabaha" sourceRef="Task_ShowLimit_Process_NoorMurabaha" targetRef="Task_SelectProduct_Process_NoorMurabaha" />
     <bpmn2:sequenceFlow id="Flow_3_Process_NoorMurabaha" sourceRef="Task_SelectProduct_Process_NoorMurabaha" targetRef="Task_CreateOrder_Process_NoorMurabaha" />
@@ -244,14 +228,24 @@
     <bpmn2:sequenceFlow id="Flow_22_Process_NoorMurabaha" sourceRef="Task_ShowTerms_Process_NoorMurabaha" targetRef="Task_GenerateContract_Process_NoorMurabaha" />
     <bpmn2:sequenceFlow id="Flow_23_Process_NoorMurabaha" sourceRef="Task_GenerateContract_Process_NoorMurabaha" targetRef="Task_AuditCompliance_Process_NoorMurabaha" />
     <bpmn2:sequenceFlow id="Flow_24_Process_NoorMurabaha" sourceRef="Task_AuditCompliance_Process_NoorMurabaha" targetRef="Task_SplitPayments_Process_NoorMurabaha" />
-    <bpmn2:sequenceFlow id="Flow_29_Process_NoorMurabaha" sourceRef="Activity_1kj9p1z" targetRef="Task_SplitPayments_Process_NoorMurabaha" />
     <bpmn2:sequenceFlow id="Flow_25_Process_NoorMurabaha" sourceRef="Task_SplitPayments_Process_NoorMurabaha" targetRef="Task_UpdateDebt_Process_NoorMurabaha" />
     <bpmn2:sequenceFlow id="Flow_188tuec" sourceRef="Task_UpdateDebt_Process_NoorMurabaha" targetRef="Activity_1t4vggv" />
     <bpmn2:sequenceFlow id="Flow_0lvnbj1" sourceRef="Activity_1t4vggv" targetRef="Gateway_11w898d" />
     <bpmn2:sequenceFlow id="Flow_0j8sxa4" name="No" sourceRef="Gateway_11w898d" targetRef="Gateway_DebtCleared_Process_NoorMurabaha" />
     <bpmn2:sequenceFlow id="Flow_27_Process_NoorMurabaha" name="Yes" sourceRef="Gateway_DebtCleared_Process_NoorMurabaha" targetRef="EndEvent_MurabahaRepaid_Process_NoorMurabaha" />
-    <bpmn2:sequenceFlow id="Flow_28_Process_NoorMurabaha" name="No / Overdue" sourceRef="Gateway_DebtCleared_Process_NoorMurabaha" targetRef="Task_HandleOverdue_Process_NoorMurabaha" />
-    <bpmn2:sequenceFlow id="Flow_0wj7x9w" sourceRef="Task_HandleOverdue_Process_NoorMurabaha" targetRef="Activity_1kj9p1z" />
+    <bpmn2:sequenceFlow id="Flow_28_Process_NoorMurabaha" name="No / Overdue" sourceRef="Gateway_DebtCleared_Process_NoorMurabaha" targetRef="Task_SplitPayments_Process_NoorMurabaha" />
+    <bpmn2:sequenceFlow id="Flow_1mk8r9d" name="Yes" sourceRef="Gateway_11w898d" targetRef="Event_0bmwkzk" />
+    <bpmn2:exclusiveGateway id="Gateway_11w898d" name="Abnormal drop in cashless revenue? (possible shift to cash)" default="Flow_0j8sxa4">
+      <bpmn2:incoming>Flow_0lvnbj1</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_0j8sxa4</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_1mk8r9d</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:endEvent id="Event_0bmwkzk" name="Block access to new purchases — Default status">
+      <bpmn2:incoming>Flow_1mk8r9d</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:endEvent id="EndEvent_MurabahaRepaid_Process_NoorMurabaha" name="Murabaha Fully Repaid">
+      <bpmn2:incoming>Flow_27_Process_NoorMurabaha</bpmn2:incoming>
+    </bpmn2:endEvent>
   </bpmn2:process>
   <bpmn2:process id="Process_Prescoring" name="ФАЗА 1: Прескоринг" isExecutable="true">
     <bpmn2:documentation>Автоматизированный ежедневный процесс прескоринга, который собирает данные, рассчитывает лимиты и резервирует ликвидность.</bpmn2:documentation>
@@ -301,31 +295,31 @@
   <bpmndi:BPMNDiagram id="BPMNDiagram_Collaboration_Noor">
     <bpmndi:BPMNPlane id="BPMNPlane_Collaboration_Noor" bpmnElement="Collaboration_Noor">
       <bpmndi:BPMNShape id="Participant_Noor_di" bpmnElement="Participant_Noor" isHorizontal="true" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
-        <dc:Bounds x="1492" y="80" width="4788" height="2218" />
+        <dc:Bounds x="1492" y="80" width="4378" height="2218" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_Sharma_di" bpmnElement="Lane_Sharma" isHorizontal="true" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
-        <dc:Bounds x="1522" y="1994" width="4758" height="184" />
+        <dc:Bounds x="1522" y="1994" width="4348" height="184" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_Core_di" bpmnElement="Lane_Core" isHorizontal="true" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
-        <dc:Bounds x="1522" y="1530" width="4758" height="464" />
+        <dc:Bounds x="1522" y="1530" width="4348" height="464" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_Paynet_di" bpmnElement="Lane_Paynet" isHorizontal="true" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
-        <dc:Bounds x="1522" y="1346" width="4758" height="184" />
+        <dc:Bounds x="1522" y="1346" width="4348" height="184" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_Driver_di" bpmnElement="Lane_Driver" isHorizontal="true" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
-        <dc:Bounds x="1522" y="897" width="4758" height="449" />
+        <dc:Bounds x="1522" y="897" width="4348" height="449" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_Wholesaler_di" bpmnElement="Lane_Wholesaler" isHorizontal="true" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
-        <dc:Bounds x="1522" y="573" width="4758" height="324" />
+        <dc:Bounds x="1522" y="573" width="4348" height="324" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_Marketplace_di" bpmnElement="Lane_Marketplace" isHorizontal="true" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
-        <dc:Bounds x="1522" y="264" width="4758" height="309" />
+        <dc:Bounds x="1522" y="264" width="4348" height="309" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_Retailer_di" bpmnElement="Lane_Retailer" isHorizontal="true" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
-        <dc:Bounds x="1522" y="80" width="4758" height="184" />
+        <dc:Bounds x="1522" y="80" width="4348" height="184" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_0fzsi6z_di" bpmnElement="Lane_0fzsi6z" isHorizontal="true">
-        <dc:Bounds x="1522" y="2178" width="4758" height="120" />
+        <dc:Bounds x="1522" y="2178" width="4348" height="120" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_RetailerOpen_Process_NoorMurabaha_di" bpmnElement="StartEvent_RetailerOpen_Process_NoorMurabaha">
@@ -456,40 +450,29 @@
         <dc:Bounds x="5270" y="2200" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_11w898d_di" bpmnElement="Gateway_11w898d" isMarkerVisible="true">
-        <dc:Bounds x="5475" y="1825" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="5439" y="1775" width="122" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_DebtCleared_Process_NoorMurabaha_di" bpmnElement="Gateway_DebtCleared_Process_NoorMurabaha" isMarkerVisible="true">
         <dc:Bounds x="5655" y="1825" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="5644" y="1885" width="71" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="EndEvent_MurabahaRepaid_Process_NoorMurabaha_di" bpmnElement="EndEvent_MurabahaRepaid_Process_NoorMurabaha">
-        <dc:Bounds x="5842" y="1832" width="36" height="36" />
+      <bpmndi:BPMNShape id="Gateway_11w898d_di" bpmnElement="Gateway_11w898d" isMarkerVisible="true">
+        <dc:Bounds x="5515" y="1825" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="5822" y="1868" width="76" height="27" />
+          <dc:Bounds x="5389" y="1830" width="110" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_HandleOverdue_Process_NoorMurabaha_di" bpmnElement="Task_HandleOverdue_Process_NoorMurabaha">
-        <dc:Bounds x="5620" y="1660" width="120" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape id="Event_0bmwkzk_di" bpmnElement="Event_0bmwkzk">
+        <dc:Bounds x="5522" y="1642" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5496" y="1590" width="89" height="40" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1kj9p1z_di" bpmnElement="Activity_1kj9p1z">
-        <dc:Bounds x="5810" y="1660" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Annotation_SCCP_1_Process_NoorMurabaha_di" bpmnElement="Annotation_SCCP_1_Process_NoorMurabaha">
-        <dc:Bounds x="3600" y="1343" width="160" height="60" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Annotation_SCCP_2_Process_NoorMurabaha_di" bpmnElement="Annotation_SCCP_2_Process_NoorMurabaha">
-        <dc:Bounds x="4260" y="1034" width="160" height="60" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Annotation_SCCP_3_Process_NoorMurabaha_di" bpmnElement="Annotation_SCCP_3_Process_NoorMurabaha">
-        <dc:Bounds x="4940" y="1527" width="160" height="60" />
+      <bpmndi:BPMNShape id="EndEvent_MurabahaRepaid_Process_NoorMurabaha_di" bpmnElement="EndEvent_MurabahaRepaid_Process_NoorMurabaha">
+        <dc:Bounds x="5792" y="1832" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5772" y="1868" width="76" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1_Process_NoorMurabaha_di" bpmnElement="Flow_1_Process_NoorMurabaha">
         <di:waypoint x="1670" y="190" />
@@ -629,62 +612,44 @@
         <di:waypoint x="5320" y="1478" />
         <di:waypoint x="5320" y="1810" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_29_Process_NoorMurabaha_di" bpmnElement="Flow_29_Process_NoorMurabaha">
-        <di:waypoint x="5860" y="1660" />
-        <di:waypoint x="5860" y="1438" />
-        <di:waypoint x="5380" y="1438" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_Annotation_1_Process_NoorMurabaha_di" bpmnElement="Association_Annotation_1_Process_NoorMurabaha">
-        <di:waypoint x="3490" y="1398" />
-        <di:waypoint x="3490" y="1363" />
-        <di:waypoint x="3600" y="1363" />
-        <di:waypoint x="3600" y="1373" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_Annotation_2_Process_NoorMurabaha_di" bpmnElement="Association_Annotation_2_Process_NoorMurabaha">
-        <di:waypoint x="4150" y="1089" />
-        <di:waypoint x="4150" y="1054" />
-        <di:waypoint x="4260" y="1054" />
-        <di:waypoint x="4260" y="1064" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_Annotation_3_Process_NoorMurabaha_di" bpmnElement="Association_Annotation_3_Process_NoorMurabaha">
-        <di:waypoint x="4830" y="1582" />
-        <di:waypoint x="4830" y="1547" />
-        <di:waypoint x="4940" y="1547" />
-        <di:waypoint x="4940" y="1557" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_188tuec_di" bpmnElement="Flow_188tuec">
         <di:waypoint x="5320" y="1890" />
         <di:waypoint x="5320" y="2200" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0lvnbj1_di" bpmnElement="Flow_0lvnbj1">
         <di:waypoint x="5370" y="2240" />
-        <di:waypoint x="5500" y="2240" />
-        <di:waypoint x="5500" y="1875" />
+        <di:waypoint x="5540" y="2240" />
+        <di:waypoint x="5540" y="1875" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0j8sxa4_di" bpmnElement="Flow_0j8sxa4">
-        <di:waypoint x="5525" y="1850" />
+        <di:waypoint x="5565" y="1850" />
         <di:waypoint x="5655" y="1850" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="5537" y="1858.5" width="15" height="14" />
+          <dc:Bounds x="5571" y="1858.5" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_27_Process_NoorMurabaha_di" bpmnElement="Flow_27_Process_NoorMurabaha">
         <di:waypoint x="5705" y="1850" />
-        <di:waypoint x="5842" y="1850" />
+        <di:waypoint x="5792" y="1850" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="5765" y="1825" width="18" height="14" />
+          <dc:Bounds x="5740" y="1825" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_28_Process_NoorMurabaha_di" bpmnElement="Flow_28_Process_NoorMurabaha">
         <di:waypoint x="5680" y="1825" />
-        <di:waypoint x="5680" y="1740" />
+        <di:waypoint x="5680" y="1370" />
+        <di:waypoint x="5320" y="1370" />
+        <di:waypoint x="5320" y="1398" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="5607" y="1781" width="66" height="14" />
+          <dc:Bounds x="5687" y="1403" width="66" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0wj7x9w_di" bpmnElement="Flow_0wj7x9w">
-        <di:waypoint x="5740" y="1700" />
-        <di:waypoint x="5810" y="1700" />
+      <bpmndi:BPMNEdge id="Flow_1mk8r9d_di" bpmnElement="Flow_1mk8r9d">
+        <di:waypoint x="5540" y="1825" />
+        <di:waypoint x="5540" y="1678" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5546" y="1749.5" width="18" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_Prescoring_di" bpmnElement="Participant_Prescoring" isHorizontal="true" bioc:fill="#f3f4f6" color:background-color="#f3f4f6">
         <dc:Bounds x="160" y="80" width="961" height="832" />
@@ -751,6 +716,39 @@
         <di:waypoint x="838" y="842" />
         <di:waypoint x="980" y="842" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_Annotation_1_Process_NoorMurabaha_di" bpmnElement="Association_Annotation_1_Process_NoorMurabaha">
+        <di:waypoint x="3490" y="1398" />
+        <di:waypoint x="3490" y="1363" />
+        <di:waypoint x="3600" y="1363" />
+        <di:waypoint x="3600" y="1373" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_Annotation_2_Process_NoorMurabaha_di" bpmnElement="Association_Annotation_2_Process_NoorMurabaha">
+        <di:waypoint x="4150" y="1089" />
+        <di:waypoint x="4150" y="1054" />
+        <di:waypoint x="4260" y="1054" />
+        <di:waypoint x="4260" y="1064" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_Annotation_3_Process_NoorMurabaha_di" bpmnElement="Association_Annotation_3_Process_NoorMurabaha">
+        <di:waypoint x="4830" y="1582" />
+        <di:waypoint x="4830" y="1547" />
+        <di:waypoint x="4940" y="1547" />
+        <di:waypoint x="4940" y="1557" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Annotation_SCCP_1_Process_NoorMurabaha_di" bpmnElement="Annotation_SCCP_1_Process_NoorMurabaha">
+        <dc:Bounds x="3600" y="1343" width="160" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Annotation_SCCP_2_Process_NoorMurabaha_di" bpmnElement="Annotation_SCCP_2_Process_NoorMurabaha">
+        <dc:Bounds x="4260" y="1034" width="160" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Annotation_SCCP_3_Process_NoorMurabaha_di" bpmnElement="Annotation_SCCP_3_Process_NoorMurabaha">
+        <dc:Bounds x="4940" y="1527" width="160" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1qfoj4a_di" bpmnElement="Flow_1qfoj4a">
+        <di:waypoint x="1016" y="842" />
+        <di:waypoint x="1290" y="842" />
+        <di:waypoint x="1290" y="172" />
+        <di:waypoint x="1652" y="172" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="DataAssociation_Limit_Process_NoorMurabaha_di" bpmnElement="DataAssociation_Limit_Process_NoorMurabaha">
         <di:waypoint x="1830" y="396" />
         <di:waypoint x="1830" y="496" />
@@ -772,12 +770,6 @@
       <bpmndi:BPMNEdge id="DataAssociation_Contract_Process_NoorMurabaha_di" bpmnElement="DataAssociation_Contract_Process_NoorMurabaha">
         <di:waypoint x="4887" y="1622" />
         <di:waypoint x="4980" y="1622" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1qfoj4a_di" bpmnElement="Flow_1qfoj4a">
-        <di:waypoint x="1016" y="842" />
-        <di:waypoint x="1290" y="842" />
-        <di:waypoint x="1290" y="172" />
-        <di:waypoint x="1652" y="172" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
