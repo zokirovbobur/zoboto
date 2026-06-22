@@ -266,8 +266,8 @@ function Portfolio() {
   }, [rows]);
   const demoCounts    = uM1(() => [rows.filter(p=>p.demoReady).length, rows.filter(p=>!p.demoReady).length], [rows]);
 
-  const ORIGINS = ["Jira Epic", "Jira Story", "Google Sheet"];
-  const ORIGIN_COLOR = { "Jira Epic": "#2563EB", "Jira Story": "#7C3AED", "Google Sheet": "#0D7C56" };
+  const ORIGINS = ["Jira Epic", "Google Sheet"];
+  const ORIGIN_COLOR = { "Jira Epic": "#2563EB", "Google Sheet": "#0D7C56" };
 
   const reset = () => { setStatus("all"); setProduct("all"); setPm("all"); setOrigin("all"); setDemoOnly(false); };
   const SortTh = ({ k, label, cls }) => (
