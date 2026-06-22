@@ -1,5 +1,5 @@
 // ===== views1: Dashboard, Portfolio, Status Board =====
-const { useState: uS1, useMemo: uM1 } = React;
+const { useState: uS1, useMemo: uM1, useEffect: uE1 } = React;
 
 const DATA = window.TB_DATA;
 const ALL_P = DATA.projects;
@@ -7,10 +7,9 @@ const ALL_P = DATA.projects;
 function agg() {
   const by = { completed: 0, progress: 0, planned: 0, paused: 0 };
   ALL_P.forEach(p => by[p.norm]++);
-  const demo = ALL_P.filter(p => p.demoReady).length;
   const noOwner = ALL_P.filter(p => !p.pm).length;
   const overdue = ALL_P.filter(p => isOverdue(p)).length;
-  return { by, demo, noOwner, overdue, total: ALL_P.length,
+  return { by, noOwner, overdue, total: ALL_P.length,
     employees: DATA.employees.length, incidents: DATA.incidents.length };
 }
 
@@ -57,7 +56,6 @@ function Dashboard() {
     { label: t("kpi_progress"), value: a.by.progress, accent: STATUS.progress.color, go: () => nav("portfolio", { status: "progress" }) },
     { label: t("kpi_planned"), value: a.by.planned, accent: STATUS.planned.color, go: () => nav("portfolio", { status: "planned" }) },
     { label: t("kpi_paused"), value: a.by.paused, accent: STATUS.paused.color, go: () => nav("portfolio", { status: "paused" }) },
-    { label: t("kpi_demo"), value: a.demo, accent: "#0E9C8E", go: () => nav("portfolio", { demo: true }) },
     { label: t("kpi_overdue"), value: a.overdue, accent: "#C0392B", go: () => nav("risks", {}) },
     { label: t("kpi_noowner"), value: a.noOwner, accent: "#B45309", go: () => nav("risks", {}) },
     { label: t("kpi_employees"), value: a.employees, accent: "#2563EB", go: () => nav("workload", {}) },
@@ -97,7 +95,7 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
+      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(4,1fr)" }}>
         {kpis.slice(5).map((k, i) => <KPI key={i} {...k} onClick={k.go} accent={k.accent} />)}
       </div>
 
@@ -204,15 +202,23 @@ function Dashboard() {
   );
 }
 
+// Persists Portfolio filter state across navigation
+const _pf = { status: "all", product: "all", pm: "all", origin: "all", sort: { k: "name", dir: 1 } };
+
 // ---------- PORTFOLIO ----------
 function Portfolio() {
   const t = useT(); const { nav, route, search, lang } = useApp();
-  const [status, setStatus] = uS1(route.status || "all");
-  const [product, setProduct] = uS1(route.product || "all");
-  const [pm, setPm] = uS1("all");
-  const [origin, setOrigin] = uS1("all");
-  const [demoOnly, setDemoOnly] = uS1(!!route.demo);
-  const [sort, setSort] = uS1({ k: "name", dir: 1 });
+  const [status, setStatus] = uS1(() => route.status || _pf.status);
+  const [product, setProduct] = uS1(() => route.product || _pf.product);
+  const [pm, setPm] = uS1(() => _pf.pm);
+  const [origin, setOrigin] = uS1(() => _pf.origin);
+  const [sort, setSort] = uS1(() => _pf.sort);
+
+  uE1(() => { _pf.status = status; }, [status]);
+  uE1(() => { _pf.product = product; }, [product]);
+  uE1(() => { _pf.pm = pm; }, [pm]);
+  uE1(() => { _pf.origin = origin; }, [origin]);
+  uE1(() => { _pf.sort = sort; }, [sort]);
 
   const pms = uM1(() => {
     const m = {};
@@ -230,7 +236,6 @@ function Portfolio() {
       if (product !== "all" && p.product !== product) return false;
       if (pm !== "all" && projectPmKey(p) !== pm) return false;
       if (origin !== "all" && (p.origin || "Google Sheet") !== origin) return false;
-      if (demoOnly && !p.demoReady) return false;
       if (search) {
         const q = search.toLowerCase();
         if (!(p.name.toLowerCase().includes(q) || p.product.toLowerCase().includes(q) ||
@@ -248,7 +253,7 @@ function Portfolio() {
       return (a < b ? -1 : a > b ? 1 : 0) * sort.dir;
     });
     return r;
-  }, [status, product, pm, origin, demoOnly, search, sort]);
+  }, [status, product, pm, origin, search, sort]);
 
   // chart data — derived from filtered rows
   const statusCounts  = uM1(() => STATUS_ORDER.map(s => rows.filter(p => p.norm === s).length), [rows]);
@@ -264,12 +269,10 @@ function Portfolio() {
     });
     return Object.entries(m).map(([key, v]) => [key, v.name, v.count]).sort((a,b)=>b[2]-a[2]).slice(0,6);
   }, [rows]);
-  const demoCounts    = uM1(() => [rows.filter(p=>p.demoReady).length, rows.filter(p=>!p.demoReady).length], [rows]);
-
   const ORIGINS = ["Jira Epic", "Google Sheet"];
   const ORIGIN_COLOR = { "Jira Epic": "#2563EB", "Google Sheet": "#0D7C56" };
 
-  const reset = () => { setStatus("all"); setProduct("all"); setPm("all"); setOrigin("all"); setDemoOnly(false); };
+  const reset = () => { setStatus("all"); setProduct("all"); setPm("all"); setOrigin("all"); };
   const SortTh = ({ k, label, cls }) => (
     <th className={cls} onClick={() => setSort(s => ({ k, dir: s.k === k ? -s.dir : 1 }))}>
       {label}{sort.k === k && <span className="arr">{sort.dir > 0 ? "▲" : "▼"}</span>}
@@ -298,7 +301,6 @@ function Portfolio() {
           <option value="all">Origin: {t("all")}</option>
           {ORIGINS.map(o => <option key={o} value={o}>{o}</option>)}
         </select></div>
-        <button className={"chip" + (demoOnly ? " on" : "")} onClick={() => setDemoOnly(v => !v)}>{t("kpi_demo")}</button>
         <button className="btn btn-ghost" onClick={reset}>↺ {t("resetFilters")}</button>
       </div>
 
@@ -336,16 +338,6 @@ function Portfolio() {
                 scales:{ x:{ grid:{ color:"#EEF2F8" }, ticks:{ precision:0, font:{ size:10 } } }, y:{ grid:{ display:false }, ticks:{ font:{ size:10 } } } } }} />
           </div>
         </div>
-        <div className="card">
-          <div className="card-h"><h3>{t("kpi_demo")}</h3></div>
-          <div className="card-pad">
-            <Chart_ type="doughnut" height={160}
-              onClickIndex={i => setDemoOnly(i === 0 ? !demoOnly : false)}
-              data={{ labels:[t("yes"), t("no")],
-                datasets:[{ data: demoCounts, backgroundColor:["#138A5E","#D0D6E0"], borderWidth:2, borderColor:"#fff", hoverOffset:4 }] }}
-              options={{ cutout:"60%", plugins:{ legend:{ position:"bottom", labels:{ usePointStyle:true, pointStyle:"circle", padding:8, font:{ size:10.5 } } } } }} />
-          </div>
-        </div>
       </div>
 
       <div className="card">
@@ -360,7 +352,6 @@ function Portfolio() {
               <SortTh k="customer" label={t("col_customer")} />
               <SortTh k="deadline" label={t("col_deadline")} />
               <SortTh k="origin" label="Origin" />
-              <th className="no-sort">{t("col_demo")}</th>
             </tr></thead>
             <tbody>
               {rows.map(p => (
@@ -384,10 +375,9 @@ function Portfolio() {
                         background: ORIGIN_COLOR[org] + "18", color: ORIGIN_COLOR[org] }}>{org}</span>;
                     })()}
                   </td>
-                  <td><span className="demo-dot"><span className="dot" style={{ background: p.demoReady ? "#1AA568" : "#D0D6E0" }} />{p.demoReady ? t("yes") : t("no")}</span></td>
                 </tr>
               ))}
-              {!rows.length && <tr><td colSpan="9" className="empty">{t("noData")}</td></tr>}
+              {!rows.length && <tr><td colSpan="8" className="empty">{t("noData")}</td></tr>}
             </tbody>
           </table>
         </div>
