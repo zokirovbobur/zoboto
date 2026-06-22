@@ -239,7 +239,8 @@ function Portfolio() {
       if (search) {
         const q = search.toLowerCase();
         if (!(p.name.toLowerCase().includes(q) || p.product.toLowerCase().includes(q) ||
-              projectPmName(p).toLowerCase().includes(q) || (p.customer || "").toLowerCase().includes(q))) return false;
+              projectPmName(p).toLowerCase().includes(q) || (p.customer || "").toLowerCase().includes(q) ||
+              (p.jiraEpicKey || "").toLowerCase().includes(q))) return false;
       }
       return true;
     });
@@ -391,7 +392,7 @@ function StatusBoard() {
   const t = useT(); const { nav, search } = useApp();
   const cols = STATUS_ORDER.map(norm => ({
     norm,
-    items: ALL_P.filter(p => p.norm === norm && (!search || p.name.toLowerCase().includes(search.toLowerCase()))),
+    items: ALL_P.filter(p => p.norm === norm && (!search || p.name.toLowerCase().includes(search.toLowerCase()) || (p.jiraEpicKey || "").toLowerCase().includes(search.toLowerCase()))),
   }));
   return (
     <div className="fade-in">
