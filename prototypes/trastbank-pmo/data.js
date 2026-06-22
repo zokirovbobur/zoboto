@@ -3469,58 +3469,6 @@ window.TB_DATA = {
                   "origin": "Jira Story"
             },
             {
-                  "id": "P136",
-                  "name": "Интеграция с сервисом Xolis",
-                  "product": "Trastpay",
-                  "norm": "progress",
-                  "originalStatus": "IN ANALYSIS",
-                  "jiraEpicKey": "SL-252",
-                  "startDate": "",
-                  "endDate": "",
-                  "prodDate": "",
-                  "pm": "Damir Mirzabaev",
-                  "pmId": "E15",
-                  "team": [
-                        "Mirzabayev Damir"
-                  ],
-                  "goal": "",
-                  "basis": "",
-                  "department": "",
-                  "customer": "",
-                  "supplier": "",
-                  "sum": "",
-                  "paidFact": "",
-                  "demoReady": "",
-                  "info": "Продукт: Trastpay",
-                  "origin": "Jira Epic"
-            },
-            {
-                  "id": "P137",
-                  "name": "Льготная ипотека «Мой дом» (Mening Uyim)",
-                  "product": "Trastpay",
-                  "norm": "progress",
-                  "originalStatus": "IN ANALYSIS",
-                  "jiraEpicKey": "SL-253",
-                  "startDate": "",
-                  "endDate": "",
-                  "prodDate": "",
-                  "pm": "Damir Mirzabaev",
-                  "pmId": "E15",
-                  "team": [
-                        "Mirzabayev Damir"
-                  ],
-                  "goal": "",
-                  "basis": "",
-                  "department": "",
-                  "customer": "",
-                  "supplier": "",
-                  "sum": "",
-                  "paidFact": "",
-                  "demoReady": "",
-                  "info": "Продукт: Trastpay",
-                  "origin": "Jira Epic"
-            },
-            {
                   "id": "P138",
                   "name": "Push - Notifications Application",
                   "product": "DBO",
