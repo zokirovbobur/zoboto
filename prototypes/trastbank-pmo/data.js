@@ -1609,7 +1609,9 @@ window.TB_DATA = {
                   "pm": "Asadbek",
                   "demoReady": true,
                   "info": "Продукт: ДБО",
-                  "team": [],
+                  "team": [
+                        "Pavel Pankin"
+                  ],
                   "pmId": "E10",
                   "jiraEpicKey": "KT-30",
                   "origin": "Jira Epic"
@@ -1793,7 +1795,7 @@ window.TB_DATA = {
                   "department": "Отдел Цифровых Трансформаций и Инноваций",
                   "customer": "Трастбанк",
                   "supplier": "",
-                  "startDate": "",
+                  "startDate": "05.05.2026",
                   "endDate": "",
                   "sum": "ГПХ",
                   "paidFact": "",
@@ -2661,7 +2663,7 @@ window.TB_DATA = {
                   "department": "Отдел Цифровых Трансформаций и Инноваций",
                   "customer": "Трастбанк",
                   "supplier": "",
-                  "startDate": "",
+                  "startDate": "05.05.2026",
                   "endDate": "",
                   "sum": "",
                   "paidFact": "",
@@ -2670,7 +2672,9 @@ window.TB_DATA = {
                   "pm": "",
                   "demoReady": false,
                   "info": "",
-                  "team": [],
+                  "team": [
+                        "Pavel Pankin"
+                  ],
                   "pmId": "",
                   "jiraEpicKey": "KT-34",
                   "origin": "Jira Epic"
