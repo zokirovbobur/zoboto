@@ -1,14 +1,9 @@
 // Jira issues pre-fetched per epic — generated 2026-06-23 (sync updated 2026-06-23)
 window.TB_JIRA_ISSUES = {
   "FC-13": [
-    {"key": "FC-2",  "summary": "Add Категория (арава, хожат хона...)", "type": "История", "status": "Backlog", "done": false},
     {"key": "FC-3",  "summary": "Добавить поле - ФИО", "type": "История", "status": "Backlog", "done": false},
-    {"key": "FC-4",  "summary": "Tarif - Ойлик ва кунлик расталар болиб чикиш", "type": "История", "status": "in dev", "done": false},
-    {"key": "FC-5",  "summary": "Экзельда ортикча column ларни чопиш кере", "type": "Задание", "status": "Backlog", "done": false},
     {"key": "FC-9",  "summary": "Cancel - Пул возврати", "type": "Задание", "status": "Backlog", "done": false},
-    {"key": "FC-10", "summary": "Check Api - Такрорий толов block", "type": "Задание", "status": "Ready for dev", "done": false},
     {"key": "FC-11", "summary": "Detail page га файл прикрепления кошиш", "type": "Задание", "status": "Backlog", "done": false},
-    {"key": "FC-12", "summary": "Таблицада раста нархларини чкариб койиш", "type": "Задание", "status": "Ready for dev", "done": false},
     {"key": "FC-23", "summary": "QR генерация хар бир объект учун", "type": "Задание", "status": "Backlog", "done": false},
   ],
   "FC-14": [
