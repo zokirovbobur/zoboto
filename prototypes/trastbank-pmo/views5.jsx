@@ -37,7 +37,7 @@ const RECENT_LAUNCHES = [
     name_ru: "Mastercard Moneysend — Переводы (MasterCard P2P)",
     epicKey: "SL-9",
     pmoId: "P001",
-    status: "launched",
+    status: "relaunching",
     tasks: [
       { key: "SL-26",  summary: "Проверка карты получателя", done: true },
       { key: "SL-27",  summary: "Совершения перевода", done: true },
@@ -55,9 +55,12 @@ function LaunchCard({ item, lang }) {
   const t = useT5();
   const dark = useDark5();
   const board = JIRA_BOARDS[item.product];
-  const greenBg   = dark ? "#138A5E28" : "#E4F3EB";
-  const pendingBg  = dark ? "#2A1E08"  : "#FFFBEB";
-  const pendingBor = dark ? "#4A3A10"  : "#FDE68A";
+  const greenBg      = dark ? "#138A5E28" : "#E4F3EB";
+  const pendingBg    = dark ? "#2A1E08"   : "#FFFBEB";
+  const pendingBor   = dark ? "#4A3A10"   : "#FDE68A";
+  const relaunchBg   = dark ? "#1E2A3A"   : "#EEF4FF";
+  const relaunchClr  = "#2563EB";
+  const isRelaunching = item.status === "relaunching";
   const name = lang === "ru" ? item.name_ru : item.name_uz;
   const doneTasks = item.tasks.filter(t => t.done);
   const openTasks = item.tasks.filter(t => !t.done);
@@ -65,16 +68,24 @@ function LaunchCard({ item, lang }) {
   return (
     <div className="card" style={{ overflow: "hidden" }}>
       <div style={{ padding: "16px 20px", display: "flex", alignItems: "flex-start", gap: 14 }}>
-        {/* Green launched badge column */}
+        {/* Status icon column */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, paddingTop: 2, flexShrink: 0 }}>
           <div style={{
-            width: 36, height: 36, borderRadius: 10, background: greenBg,
+            width: 36, height: 36, borderRadius: 10,
+            background: isRelaunching ? relaunchBg : greenBg,
             display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
           }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#138A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
+            {isRelaunching ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={relaunchClr} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#138A5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            )}
           </div>
           <div style={{ width: 1, flex: 1, background: "var(--line-2)", minHeight: 20 }} />
         </div>
@@ -83,10 +94,12 @@ function LaunchCard({ item, lang }) {
           {/* Header */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 6 }}>
             <span style={{
-              fontSize: 11, fontWeight: 700, color: "#138A5E",
-              background: greenBg, borderRadius: 6, padding: "2px 8px",
+              fontSize: 11, fontWeight: 700,
+              color: isRelaunching ? relaunchClr : "#138A5E",
+              background: isRelaunching ? relaunchBg : greenBg,
+              borderRadius: 6, padding: "2px 8px",
               textTransform: "uppercase", letterSpacing: ".4px"
-            }}>{t("launched")}</span>
+            }}>{t(isRelaunching ? "relaunching" : "launched")}</span>
             <span style={{ fontSize: 11, color: "var(--muted-2)" }}>{item.date}</span>
             {board && (
               <span style={{
