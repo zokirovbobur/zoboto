@@ -1,14 +1,14 @@
-// Jira issues pre-fetched per epic — generated 2026-06-23
+// Jira issues pre-fetched per epic — generated 2026-06-23 (sync updated 2026-06-23)
 window.TB_JIRA_ISSUES = {
   "FC-13": [
     {"key": "FC-2",  "summary": "Add Категория (арава, хожат хона...)", "type": "История", "status": "Backlog", "done": false},
     {"key": "FC-3",  "summary": "Добавить поле - ФИО", "type": "История", "status": "Backlog", "done": false},
-    {"key": "FC-4",  "summary": "Tarif - Ойлик ва кунлик расталар болиб чикиш", "type": "История", "status": "Backlog", "done": false},
+    {"key": "FC-4",  "summary": "Tarif - Ойлик ва кунлик расталар болиб чикиш", "type": "История", "status": "in dev", "done": false},
     {"key": "FC-5",  "summary": "Экзельда ортикча column ларни чопиш кере", "type": "Задание", "status": "Backlog", "done": false},
     {"key": "FC-9",  "summary": "Cancel - Пул возврати", "type": "Задание", "status": "Backlog", "done": false},
-    {"key": "FC-10", "summary": "Check Api - Такрорий толов block", "type": "Задание", "status": "Backlog", "done": false},
+    {"key": "FC-10", "summary": "Check Api - Такрорий толов block", "type": "Задание", "status": "Ready for dev", "done": false},
     {"key": "FC-11", "summary": "Detail page га файл прикрепления кошиш", "type": "Задание", "status": "Backlog", "done": false},
-    {"key": "FC-12", "summary": "Таблицада раста нархларини чкариб койиш", "type": "Задание", "status": "Backlog", "done": false},
+    {"key": "FC-12", "summary": "Таблицада раста нархларини чкариб койиш", "type": "Задание", "status": "Ready for dev", "done": false},
     {"key": "FC-23", "summary": "QR генерация хар бир объект учун", "type": "Задание", "status": "Backlog", "done": false},
   ],
   "FC-14": [
@@ -20,7 +20,7 @@ window.TB_JIRA_ISSUES = {
     {"key": "FC-1", "summary": "Соликга хисобод кетиши хар бир толов бойича", "type": "Задание", "status": "Готово", "done": true},
   ],
   "FC-30": [
-    {"key": "FC-6",  "summary": "Auto Fill - толов вактида", "type": "История", "status": "in dev", "done": false},
+    {"key": "FC-6",  "summary": "Auto Fill - толов вактида", "type": "История", "status": "Ready for dev", "done": false},
     {"key": "FC-17", "summary": "Company кушиш (динамик килиш бошка бозорла кошиш учун)", "type": "Задание", "status": "in dev", "done": false},
     {"key": "FC-18", "summary": "Tax-settings table кошилди", "type": "Задание", "status": "in dev", "done": false},
     {"key": "FC-19", "summary": "Role Base (permissions)", "type": "Задание", "status": "Ready for dev", "done": false},
@@ -39,8 +39,8 @@ window.TB_JIRA_ISSUES = {
   "KT-28": [],
   "KT-29": [
     {"key": "KT-35",  "summary": "Mobile: Android da User ID yuborilmayapti", "type": "Баг", "status": "Blocked", "done": false},
-    {"key": "KT-36",  "summary": "Back: API реализация для 2 метода malware", "type": "История", "status": "qa", "done": false},
-    {"key": "KT-37",  "summary": "Mobile: Malware API Integration", "type": "История", "status": "Documentation", "done": false},
+    {"key": "KT-36",  "summary": "Back: API реализация для 2 метода malware", "type": "История", "status": "Готово", "done": true},
+    {"key": "KT-37",  "summary": "Mobile: Malware API Integration", "type": "История", "status": "in dev", "done": false},
     {"key": "KT-135", "summary": "Front: Session_Id не отправляется", "type": "Баг", "status": "Готово", "done": true},
     {"key": "KT-136", "summary": "Mobile: Добавить тестовое приложение для проверки blacklist API", "type": "История", "status": "Готово", "done": true},
   ],
@@ -51,7 +51,7 @@ window.TB_JIRA_ISSUES = {
   "KT-32": [],
   "KT-33": [],
   "KT-34": [
-    {"key": "KT-10", "summary": "Back: В случае если проводка удалена нужно синхронизировать статус", "type": "История", "status": "Backlog", "done": false},
+    {"key": "KT-10", "summary": "Back: В случае если проводка удалена нужно синхронизировать статус", "type": "История", "status": "Documentation", "done": false},
   ],
   "MW-2": [],
   "MW-3": [
@@ -128,6 +128,11 @@ window.TB_JIRA_ISSUES = {
     {"key": "SL-176", "summary": "[back]  Проверка совпадения ПИНФЛ и номера телефона", "type": "История", "status": "К выполнению", "done": false},
     {"key": "SL-178", "summary": "[flutter]  Проверка совпадения ПИНФЛ и номера телефона", "type": "История", "status": "Готово", "done": true},
     {"key": "SL-186", "summary": "ЦБ so'ragan ma'lumotlarni bazadan olib berish", "type": "История", "status": "Готово", "done": true},
+    {"key": "SL-256", "summary": "Интеграция с сервисом Xolis", "type": "История", "status": "IN ANALYSIS", "done": false},
+    {"key": "SL-257", "summary": "Льготная ипотека «Мой дом» (Mening Uyim ТСЧЖ)", "type": "История", "status": "IN ANALYSIS", "done": false},
+    {"key": "SL-258", "summary": "Валютный Вклад \"Qulay sarmoya\"", "type": "История", "status": "К выполнению", "done": false},
+    {"key": "SL-259", "summary": "возврат платежа МУНИС", "type": "История", "status": "К выполнению", "done": false},
+    {"key": "SL-262", "summary": "dinamic QR не притягивает сумму", "type": "История", "status": "IN QA", "done": false},
   ],
   "SL-103": [
     {"key": "SL-102", "summary": "Add check-request to Create-customer", "type": "История", "status": "Готово", "done": true},
