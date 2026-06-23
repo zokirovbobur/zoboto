@@ -294,7 +294,8 @@ function JiraSection({ epicKey, product }) {
   const epicUrl = epicKey ? JIRA_BASE + "/browse/" + epicKey : (board ? board.url : null);
 
   // Use pre-fetched static data if available
-  const staticItems = epicKey && window.TB_JIRA_ISSUES ? (window.TB_JIRA_ISSUES[epicKey] || null) : null;
+  const rawItems = (epicKey && window.TB_JIRA_ISSUES) ? window.TB_JIRA_ISSUES[epicKey] : undefined;
+  const staticItems = Array.isArray(rawItems) ? rawItems : null;
   const doneCount = staticItems ? staticItems.filter(i => i.done).length : 0;
   const totalCount = staticItems ? staticItems.length : 0;
 

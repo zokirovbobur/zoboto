@@ -213,7 +213,7 @@ window.TB_JIRA_ISSUES = {
     {"key": "SL-158", "summary": "16 - Ro'yxatdan o'tmagan qurilmadan akkauntga kirish urinishida SMS-xabarnoma yuborish", "type": "История", "status": "Готово", "done": true},
     {"key": "SL-159", "summary": "18 - Foydalanuvchi sessiyasi uchun inactivity timeout (3 daqiqa) joriy etish", "type": "История", "status": "Готово", "done": true},
     {"key": "SL-161", "summary": "26 - Moliyaviy operatsiyalar oldidan foydalanuvchidan qo'shimcha tasdiq (anti-fraud warni…", "type": "История", "status": "Готово", "done": true},
-    {"key": "SL-162", "summary": "27 - Mobil ilovada "Firibgarlik haqida xabar berish" bo'limini joriy etish", "type": "История", "status": "Готово", "done": true},
+    {"key": "SL-162", "summary": "27 - Mobil ilovada 'Firibgarlik haqida xabar berish' bo'limini joriy etish", "type": "История", "status": "Готово", "done": true},
     {"key": "SL-163", "summary": "59 - Root/Jailbreak aniqlanganda mobil ilova funksionalligini cheklash", "type": "История", "status": "Готово", "done": true},
     {"key": "SL-165", "summary": "61 - Mobil ilova kodini reverse engineering va dekompilyatsiyadan himoyalash", "type": "История", "status": "Готово", "done": true},
     {"key": "SL-166", "summary": "62 - Mobil ilovaga antivirus va antifraud funksiyalariga ega xavfsizlik SDK integratsiyasi", "type": "История", "status": "Готово", "done": true},
