@@ -362,6 +362,21 @@ function Portfolio() {
                     {p.purchased && <PurchasedBadge tooltip={t("purchased_tooltip")} />}
                     <JiraLink epicKey={p.jiraEpicKey} product={p.product} />
                     {isOverdue(p) && <small style={{ color: "#C0392B" }}>● {t("overdue")}</small>}
+                    {(() => {
+                      if (!p.jiraEpicKey || !window.TB_JIRA_ISSUES) return null;
+                      const items = window.TB_JIRA_ISSUES[p.jiraEpicKey];
+                      if (!items || items.length === 0) return null;
+                      const done = items.filter(i => i.done).length;
+                      const total = items.length;
+                      return (
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 3, marginLeft: 5,
+                                       fontSize: 10, fontWeight: 600, color: done === total ? "#138A5E" : "#64748B",
+                                       background: done === total ? "#DCFCE7" : "var(--line-2)",
+                                       borderRadius: 4, padding: "1px 5px", verticalAlign: "middle" }}>
+                          ✓ {done}/{total}
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td><span className="tag">{prodShort(p.product)}</span></td>
                   <td><StatusBadge norm={p.norm} /></td>

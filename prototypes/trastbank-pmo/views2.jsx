@@ -66,6 +66,8 @@ function ProjectDetail() {
             {p.info && <div><div className="fact-l">{t("addInfo")}</div><div style={{ marginTop: 4, fontSize: 13.5 }} className="muted">{p.info}</div></div>}
           </div>}
 
+          <JiraSection epicKey={p.jiraEpicKey} product={p.product} />
+
           <div className="card">
             <div className="card-h"><h3>{t("timeline")}</h3></div>
             <div className="card-pad"><div className="tl">
@@ -106,8 +108,6 @@ function ProjectDetail() {
               {!p.team.length && <div className="empty">{t("notSpecified")}</div>}
             </div>
           </div>
-
-          <JiraSection epicKey={p.jiraEpicKey} product={p.product} />
 
           <div className="card">
             <div className="card-h"><h3>{t("riskCard")}</h3></div>

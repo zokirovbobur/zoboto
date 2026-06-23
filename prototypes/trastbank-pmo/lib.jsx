@@ -269,8 +269,24 @@ const JIRA_BOARDS = {
   "AI products": { key: "AI",  color: "#9333EA", icon: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z", url: JIRA_BASE + "/jira/software/projects/AI/summary" },
 };
 
-const JIRA_TYPE_COLOR = { Bug: "#E11D48", Story: "#0EA5E9", Task: "#6366F1", Subtask: "#94A3B8", Epic: "#7C3AED" };
-const JIRA_STATUS_COLOR = { "To Do": "#64748B", "In Progress": "#2563EB", "Done": "#138A5E", "In Review": "#D97706", "Blocked": "#E11D48" };
+const JIRA_TYPE_COLOR = {
+  // English
+  Bug: "#E11D48", Story: "#0EA5E9", Task: "#6366F1", Subtask: "#94A3B8", Epic: "#7C3AED",
+  // Russian
+  "Баг": "#E11D48", "История": "#0EA5E9", "Задание": "#6366F1", "Эпик": "#7C3AED",
+};
+const JIRA_STATUS_COLOR = {
+  // English
+  "To Do": "#64748B", "In Progress": "#2563EB", "Done": "#138A5E", "In Review": "#D97706", "Blocked": "#E11D48",
+  // Russian / mixed
+  "К выполнению": "#64748B", "Backlog": "#94A3B8",
+  "IN DEV": "#2563EB", "in dev": "#2563EB", "В разработке": "#2563EB", "В работе": "#2563EB",
+  "IN ANALYSIS": "#7C3AED", "IN QA": "#D97706", "Ready for dev": "#0EA5E9", "Ready for prod": "#059669",
+  "Documentation": "#6366F1",
+  "Готово": "#138A5E", "Closed": "#138A5E",
+  "Blocked": "#E11D48", "В ожидании": "#F59E0B", "Отменён": "#94A3B8", "Cancelled": "#94A3B8",
+  "qa": "#D97706",
+};
 
 function JiraSection({ epicKey, product }) {
   const t = useT();
@@ -278,7 +294,9 @@ function JiraSection({ epicKey, product }) {
   const epicUrl = epicKey ? JIRA_BASE + "/browse/" + epicKey : (board ? board.url : null);
 
   // Use pre-fetched static data if available
-  const staticItems = epicKey && window.TB_JIRA_ISSUES && window.TB_JIRA_ISSUES[epicKey];
+  const staticItems = epicKey && window.TB_JIRA_ISSUES ? (window.TB_JIRA_ISSUES[epicKey] || null) : null;
+  const doneCount = staticItems ? staticItems.filter(i => i.done).length : 0;
+  const totalCount = staticItems ? staticItems.length : 0;
 
   return (
     <div className="card">
@@ -296,31 +314,39 @@ function JiraSection({ epicKey, product }) {
             {epicKey} ↗
           </a>}
         </h3>
-        {staticItems && <span className="hint">{staticItems.length} {t("jira_issues_count")}</span>}
+        {staticItems !== null && (
+          <span className="hint">
+            {doneCount}/{totalCount} {t("jira_issues_count")}
+          </span>
+        )}
       </div>
 
-      <div className="card-pad">
+      <div className="card-pad" style={{ padding: totalCount > 0 ? "0 20px" : "18px 20px" }}>
         {!epicKey && <div className="muted" style={{ fontSize: 13 }}>{t("jira_no_epic")}</div>}
-        {epicKey && !staticItems && (
+        {epicKey && staticItems === null && (
           <div className="muted" style={{ fontSize: 13 }}>{t("jira_no_issues")}</div>
         )}
-        {staticItems && staticItems.length > 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        {staticItems !== null && totalCount === 0 && (
+          <div className="muted" style={{ fontSize: 13 }}>{t("jira_no_issues")}</div>
+        )}
+        {staticItems !== null && totalCount > 0 && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 0, maxHeight: 380, overflowY: "auto" }}>
             {staticItems.map(iss => {
               const tc = JIRA_TYPE_COLOR[iss.type] || "#64748B";
               const sc = JIRA_STATUS_COLOR[iss.status] || "#64748B";
               return (
                 <a key={iss.key} href={JIRA_BASE + "/browse/" + iss.key} target="_blank" rel="noopener noreferrer"
                    onClick={e => e.stopPropagation()}
-                   style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 0",
+                   style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 0",
                             borderBottom: "1px solid var(--line-2)", textDecoration: "none", color: "inherit" }}>
                   <span style={{ fontSize: 10, fontWeight: 700, color: tc, background: tc + "18",
-                                 borderRadius: 4, padding: "2px 5px", flexShrink: 0 }}>{iss.type}</span>
+                                 borderRadius: 4, padding: "2px 5px", flexShrink: 0, minWidth: 44, textAlign: "center" }}>{iss.type}</span>
                   <span style={{ flex: 1, fontSize: 12.5, color: iss.done ? "var(--muted)" : "var(--ink)",
                                  textDecoration: iss.done ? "line-through" : "none", lineHeight: 1.35 }}>{iss.summary}</span>
                   <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 3, flexShrink: 0 }}>
                     <span style={{ fontSize: 10, fontWeight: 600, color: "#2563EB" }}>{iss.key}</span>
-                    <span style={{ fontSize: 10, color: sc, background: sc + "18", borderRadius: 4, padding: "1px 5px", whiteSpace: "nowrap" }}>{iss.status}</span>
+                    <span style={{ fontSize: 10, fontWeight: 600, color: sc, background: sc + "18",
+                                   borderRadius: 4, padding: "1px 5px", whiteSpace: "nowrap" }}>{iss.status}</span>
                   </span>
                 </a>
               );
