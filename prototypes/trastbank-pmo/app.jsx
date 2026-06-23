@@ -23,6 +23,7 @@ function routeToHash(name, params) {
 
 const IconPaths = {
   dashboard: "M3 3h7v7H3zM14 3h7v4h-7zM14 10h7v11h-7zM3 13h7v8H3z",
+  devops: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
   portfolio: "M4 5h16M4 12h16M4 19h16",
   board: "M4 4h4v16H4zM10 4h4v16h-4zM16 4h4v16h-4z",
   roadmap: "M4 6h16M4 6v12M8 10h12M8 10v8M12 14h8",
@@ -33,7 +34,7 @@ const IconPaths = {
   changes: "M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z",
 };
 function Icon({ name, size = 18 }) {
-  const stroke = ["portfolio", "board", "roadmap", "workload", "risks", "reports", "products", "changes"].includes(name);
+  const stroke = ["portfolio", "board", "roadmap", "workload", "risks", "reports", "products", "changes", "devops"].includes(name);
   return (
     <svg className="ic" width={size} height={size} viewBox="0 0 24 24"
       fill={stroke ? "none" : "currentColor"} stroke={stroke ? "currentColor" : "none"}
@@ -58,13 +59,14 @@ const NAV = [
   { group: "nav_group_control", items: [
     { id: "risks", icon: "risks", label: "nav_risks", warn: true, count: () => (window.STOPPERS || []).filter(s => s.open).length },
     { id: "reports", icon: "reports", label: "nav_reports" },
+    { id: "devops", icon: "devops", label: "nav_devops" },
   ]},
 ];
 
 const PAGES = {
   dashboard: Dashboard, portfolio: Portfolio, board: StatusBoard, roadmap: Roadmap,
   workload: Workload, employee: EmployeeProfile, project: ProjectDetail, risks: Risks, reports: Reports,
-  products: Products, changes: RecentChanges,
+  products: Products, changes: RecentChanges, devops: DevopsReport,
 };
 window.PAGES_MAP = PAGES;
 // which sidebar item is highlighted for a given route
