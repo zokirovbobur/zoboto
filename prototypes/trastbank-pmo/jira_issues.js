@@ -1,4 +1,4 @@
-// Jira issues pre-fetched per epic — generated 2026-06-17
+// Jira issues pre-fetched per epic — generated 2026-06-23
 window.TB_JIRA_ISSUES = {
   "FC-13": [
     {"key": "FC-2",  "summary": "Add Категория (арава, хожат хона...)", "type": "История", "status": "Backlog", "done": false},

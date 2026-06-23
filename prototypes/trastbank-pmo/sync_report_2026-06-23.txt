@@ -1,0 +1,27 @@
+=== PMO ↔ JIRA DAILY SYNC HISOBOTI ===
+Sana: 23.06.2026
+
+FARQLAR TOPILDI:
+| PMO ID | Jira Epic | Loyiha | PMO Norm Eski | Jira Norm | Yangi |
+|--------|-----------|--------|--------------|-----------|-------|
+| P086   | KT-27     | Push-уведомления для платежей (ДБО) | paused | progress | progress |
+| P105   | SL-100    | CBU feature | progress | planned | planned |
+
+YANGILANMAGAN LOYIHALAR (farq yo'q):
+P051, P055, P058, P075, P106, P114, P146, P147, P149, P156
+
+CHILD TICKETS YO'Q EPICLAR (faqat epic-level ma'lumot ishlatiladi):
+SL-243, SL-253, SL-252, MW-2, MW-5, MW-7, KT-25, KT-26, KT-28, KT-31, KT-32, KT-33
+
+TAHLIL:
+- Tekshirilgan loyihalar: 24 ta (completed emas bo'lgan)
+- Statusni yangilash kerak: 2 ta (P086, P105)
+- Statusda o'zgarish yo'q: 10 ta
+- Child issues yo'q: 12 ta epics
+
+YANGILASHLAR:
+1. P086 (KT-27): paused → progress (child: KT-11 "in dev")
+2. P105 (SL-100): progress → planned (10 child issues, amiksiya: 8 completed, 2 planned)
+
+===================================
+Generated: 2026-06-23T05:50:00Z
