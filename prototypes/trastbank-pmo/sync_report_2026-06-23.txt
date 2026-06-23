@@ -1,0 +1,137 @@
+PMO Sync Report — 2026-06-23
+Generated: 2026-06-23
+Source: Jira (test-tb.atlassian.net)
+======================================
+
+## SUMMARY
+Projects audited: 24 non-completed projects with jiraEpicKey
+Norm changes in data.js: 1
+jira_issues.js: fully rewritten with fresh Jira data
+
+======================================
+## NORM CHANGES (data.js)
+
+[CHANGED] P086 — "Push-уведомления для платежей (ДБО)" (jiraEpicKey: KT-27)
+  norm:         "paused" → "planned"
+  originalStatus: "Blocked" → "Backlog"
+  Reason: Previously child ticket KT-11 was "Blocked" → paused.
+          Now KT-11 status is "Backlog" → planned.
+          No other children exist under KT-27.
+
+======================================
+## NO-CHANGE PROJECTS (norm confirmed from Jira)
+
+P051 (KT-29) — paused
+  KT-35: Blocked → paused (dominant)
+  KT-36: qa → planned
+  KT-37: Documentation → planned
+  KT-135: Готово → completed (updated from Blocked in old cache)
+  KT-136: Готово → completed
+
+P055 (KT-30) — paused
+  KT-6: Blocked → paused
+
+P058 (FC-32) — planned
+  FC-33: Backlog → planned
+
+P060 (SL-243) — planned
+  No child tickets found
+
+P061 (SL-253) — planned
+  No child tickets found
+
+P062 (SL-252) — planned
+  No child tickets found
+
+P075 (FC-30) — progress
+  FC-6: in dev → progress (dominant)
+  FC-17: in dev → progress
+  FC-18: in dev → progress
+  FC-19: Ready for dev → planned
+  NOTE: FC-2 was removed from FC-30 (re-parented to FC-13 in Jira)
+
+P105 (SL-100) — progress
+  SL-160: IN ANALYSIS → progress (dominant; re-parented from SL-151)
+  SL-164: IN ANALYSIS → progress (re-parented from SL-151)
+  SL-176: К выполнению → planned
+  Others: Готово → completed
+
+P106 (SL-103) — progress
+  SL-260: IN DEV → progress (dominant; new ticket)
+  SL-272: IN DEV → progress (new ticket)
+  SL-265, SL-266, SL-268: IN QA → planned
+  SL-182, SL-184, SL-190, SL-200, SL-206, SL-207, SL-209, SL-211, SL-225, SL-231, SL-232,
+  SL-233, SL-235, SL-236, SL-267: К выполнению → planned
+  Others: Готово → completed
+  New tickets since last sync: SL-234, SL-260, SL-261, SL-265, SL-266, SL-267, SL-268, SL-271, SL-272
+
+P113 (MW-2) — progress
+  No child tickets; epic own status "В работе" → progress (kept as-is)
+
+P114 (MW-3) — progress
+  MW-6: В работе → progress (dominant)
+  MW-4: Ready for prod → planned (status changed from "Тестирование")
+
+P115 (MW-5) — progress
+  No child tickets; epic own status "В работе" → progress (kept as-is)
+
+P146 (FC-13) — planned
+  FC-2, FC-3, FC-4, FC-5, FC-9, FC-10, FC-11, FC-12, FC-23: all Backlog → planned
+
+P147 (FC-14) — planned
+  FC-8, FC-15, FC-16: all Backlog → planned
+
+P148 (MW-7) — planned
+  No child tickets found
+
+P149 (SL-203) — planned
+  SL-138, SL-140, SL-168, SL-170, SL-171, SL-174, SL-204, SL-208, SL-218, SL-242, SL-244,
+  SL-245, SL-246, SL-247, SL-249, SL-250, SL-251, SL-254: all К выполнению → planned
+
+P150 (KT-25) — planned
+  No child tickets found
+
+P151 (KT-26) — planned
+  No child tickets found
+
+P152 (KT-28) — planned
+  No child tickets found
+
+P153 (KT-31) — planned
+  No child tickets found
+
+P154 (KT-32) — planned
+  No child tickets found
+
+P155 (KT-33) — planned
+  No child tickets found
+
+P156 (KT-34) — planned
+  KT-10: Backlog → planned
+
+======================================
+## JIRA_ISSUES.JS CACHE CHANGES
+
+Updated epics:
+  FC-30     : Removed FC-2 (re-parented to FC-13); remaining: FC-6, FC-17, FC-18, FC-19
+  KT-27     : KT-11 status "in dev" → "Backlog" (done: true→false)
+  KT-29     : KT-135 status "Blocked" → "Готово" (done: false→true)
+  MW-3      : MW-4 status "Тестирование" → "Ready for prod"
+  SL-6      : Removed SL-239 (re-parented or deleted in Jira since 2026-06-17)
+  SL-100    : Added SL-160 (IN ANALYSIS), SL-164 (IN ANALYSIS) — both re-parented from SL-151
+  SL-103    : 9 new tickets (SL-234, SL-260, SL-261, SL-265, SL-266, SL-267, SL-268, SL-271, SL-272)
+               Status changes: SL-183 (К выполнению→Готово), SL-211 (IN ANALYSIS→К выполнению),
+               SL-229 (IN QA→Готово), SL-232 (IN ANALYSIS→К выполнению),
+               SL-238 (IN DEV→Готово), SL-240 (IN DEV→Готово), SL-241 (IN DEV→Готово)
+  SL-144    : 8 new tickets (SL-148, SL-149, SL-150, SL-152, SL-153, SL-154, SL-155, SL-156)
+               SL-145 status "IN ANALYSIS" → "Готово"
+  SL-151    : Removed SL-160, SL-164 (re-parented to SL-100)
+               SL-158 status "READY TO QA" → "Готово"
+
+New epics added to cache (all with empty child arrays):
+  KT-25, KT-26, KT-28, KT-31, KT-32, KT-33 — Backlog, no children
+  MW-2, MW-5, MW-7                           — В работе, no children
+  SL-243, SL-252, SL-253                     — no children
+
+======================================
+## END OF REPORT
