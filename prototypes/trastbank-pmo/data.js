@@ -2442,13 +2442,14 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "Backlog",
-                  "pm": "",
+                  "pm": "To'xtashev Asadbek",
                   "demoReady": false,
                   "info": "",
                   "team": [
-                        "Xolikulov Farrux"
+                        "Xolikulov Farrux",
+                        "To'xtashev Asadbek"
                   ],
-                  "pmId": "",
+                  "pmId": "712020:2a0d60ed-5e61-4d4b-927d-447dd94e93f7",
                   "jiraEpicKey": "FC-13",
                   "origin": "Jira Epic"
             },
@@ -2467,11 +2468,13 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "Backlog",
-                  "pm": "",
+                  "pm": "To'xtashev Asadbek",
                   "demoReady": false,
                   "info": "",
-                  "team": [],
-                  "pmId": "",
+                  "team": [
+                        "To'xtashev Asadbek"
+                  ],
+                  "pmId": "712020:2a0d60ed-5e61-4d4b-927d-447dd94e93f7",
                   "jiraEpicKey": "FC-14",
                   "origin": "Jira Epic"
             },
@@ -2539,11 +2542,13 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "Backlog",
-                  "pm": "",
+                  "pm": "Aliakbarov Abdulaziz",
                   "demoReady": false,
                   "info": "",
-                  "team": [],
-                  "pmId": "",
+                  "team": [
+                        "Aliakbarov Abdulaziz"
+                  ],
+                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
                   "jiraEpicKey": "KT-25",
                   "origin": "Jira Epic"
             },
@@ -2562,11 +2567,13 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "Backlog",
-                  "pm": "",
+                  "pm": "Aliakbarov Abdulaziz",
                   "demoReady": false,
                   "info": "",
-                  "team": [],
-                  "pmId": "",
+                  "team": [
+                        "Aliakbarov Abdulaziz"
+                  ],
+                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
                   "jiraEpicKey": "KT-26",
                   "origin": "Jira Epic"
             },
@@ -2585,11 +2592,13 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "Backlog",
-                  "pm": "",
+                  "pm": "Aliakbarov Abdulaziz",
                   "demoReady": false,
                   "info": "",
-                  "team": [],
-                  "pmId": "",
+                  "team": [
+                        "Aliakbarov Abdulaziz"
+                  ],
+                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
                   "jiraEpicKey": "KT-28",
                   "origin": "Jira Epic"
             },
@@ -2608,11 +2617,13 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "Backlog",
-                  "pm": "",
+                  "pm": "Aliakbarov Abdulaziz",
                   "demoReady": false,
                   "info": "",
-                  "team": [],
-                  "pmId": "",
+                  "team": [
+                        "Aliakbarov Abdulaziz"
+                  ],
+                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
                   "jiraEpicKey": "KT-31",
                   "origin": "Jira Epic"
             },
@@ -2631,11 +2642,13 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "Backlog",
-                  "pm": "",
+                  "pm": "Aliakbarov Abdulaziz",
                   "demoReady": false,
                   "info": "",
-                  "team": [],
-                  "pmId": "",
+                  "team": [
+                        "Aliakbarov Abdulaziz"
+                  ],
+                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
                   "jiraEpicKey": "KT-32",
                   "origin": "Jira Epic"
             },
@@ -2654,11 +2667,13 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "Backlog",
-                  "pm": "",
+                  "pm": "Aliakbarov Abdulaziz",
                   "demoReady": false,
                   "info": "",
-                  "team": [],
-                  "pmId": "",
+                  "team": [
+                        "Aliakbarov Abdulaziz"
+                  ],
+                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
                   "jiraEpicKey": "KT-33",
                   "origin": "Jira Epic"
             },
@@ -2677,13 +2692,14 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "progress",
                   "originalStatus": "Documentation",
-                  "pm": "",
+                  "pm": "Aliakbarov Abdulaziz",
                   "demoReady": false,
                   "info": "",
                   "team": [
-                        "Pavel Pankin"
+                        "Pavel Pankin",
+                        "Aliakbarov Abdulaziz"
                   ],
-                  "pmId": "",
+                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
                   "jiraEpicKey": "KT-34",
                   "origin": "Jira Epic"
             },
