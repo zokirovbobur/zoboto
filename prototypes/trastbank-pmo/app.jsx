@@ -48,6 +48,7 @@ const NAV = [
   { group: "nav_group_overview", items: [
     { id: "dashboard", icon: "dashboard", label: "nav_dashboard" },
     { id: "portfolio", icon: "portfolio", label: "nav_portfolio", count: () => ALL_P.length },
+    { id: "devops", icon: "devops", label: "nav_devops" },
     { id: "board", icon: "board", label: "nav_board" },
     { id: "products", icon: "products", label: "nav_products" },
     { id: "changes", icon: "changes", label: "nav_changes" },
@@ -59,7 +60,6 @@ const NAV = [
   { group: "nav_group_control", items: [
     { id: "risks", icon: "risks", label: "nav_risks", warn: true, count: () => (window.STOPPERS || []).filter(s => s.open).length },
     { id: "reports", icon: "reports", label: "nav_reports" },
-    { id: "devops", icon: "devops", label: "nav_devops" },
   ]},
 ];
 
