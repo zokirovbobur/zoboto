@@ -1,6 +1,9 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/prototypes/safa/mvp/:path*", "destination": "/prototypes/safa/mvp/index.html" }
+  ],
   "redirects": [
     { "source": "/protos", "destination": "/#prototypes", "permanent": false },
     { "source": "/about", "destination": "/#top", "permanent": false },
