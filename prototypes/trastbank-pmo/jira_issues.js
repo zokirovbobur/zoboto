@@ -1,4 +1,4 @@
-// Jira issues pre-fetched per epic — generated 2026-06-23 (sync updated 2026-06-23)
+// Jira issues pre-fetched per epic — generated 2026-06-23 (sync updated 2026-06-24)
 window.TB_JIRA_ISSUES = {
   "FC-13": [
     {"key": "FC-3",  "summary": "Добавить поле - ФИО", "type": "История", "status": "Backlog", "done": false},
@@ -15,10 +15,10 @@ window.TB_JIRA_ISSUES = {
     {"key": "FC-1", "summary": "Соликга хисобод кетиши хар бир толов бойича", "type": "Задание", "status": "Готово", "done": true},
   ],
   "FC-30": [
+    {"key": "FC-4",  "summary": "Tarif - Ойлик ва кунлик расталар болиб чикиш", "type": "История", "status": "in dev", "done": false},
     {"key": "FC-6",  "summary": "Auto Fill - толов вактида", "type": "История", "status": "Ready for dev", "done": false},
-    {"key": "FC-17", "summary": "Company кушиш (динамик килиш бошка бозорла кошиш учун)", "type": "Задание", "status": "in dev", "done": false},
-    {"key": "FC-18", "summary": "Tax-settings table кошилди", "type": "Задание", "status": "in dev", "done": false},
-    {"key": "FC-19", "summary": "Role Base (permissions)", "type": "Задание", "status": "Ready for dev", "done": false},
+    {"key": "FC-10", "summary": "Check Api - Такрорий толов block", "type": "Задание", "status": "Ready for dev", "done": false},
+    {"key": "FC-12", "summary": "Таблицада раста нархларини чкариб койиш", "type": "Задание", "status": "Ready for dev", "done": false},
   ],
   "FC-31": [
     {"key": "FC-24", "summary": "Анализ DSQ учун", "type": "История", "status": "Готово", "done": true},
@@ -127,7 +127,7 @@ window.TB_JIRA_ISSUES = {
     {"key": "SL-257", "summary": "Льготная ипотека «Мой дом» (Mening Uyim ТСЧЖ)", "type": "История", "status": "IN ANALYSIS", "done": false},
     {"key": "SL-258", "summary": "Валютный Вклад \"Qulay sarmoya\"", "type": "История", "status": "К выполнению", "done": false},
     {"key": "SL-259", "summary": "возврат платежа МУНИС", "type": "История", "status": "К выполнению", "done": false},
-    {"key": "SL-262", "summary": "dinamic QR не притягивает сумму", "type": "История", "status": "IN QA", "done": false},
+    {"key": "SL-262", "summary": "dinamic QR не притягивает сумму", "type": "Баг", "status": "PENDING", "done": false},
   ],
   "SL-103": [
     {"key": "SL-102", "summary": "Add check-request to Create-customer", "type": "История", "status": "Готово", "done": true},
@@ -161,12 +161,12 @@ window.TB_JIRA_ISSUES = {
     {"key": "SL-248", "summary": "SMS shablon qo'shish", "type": "Задание", "status": "Готово", "done": true},
     {"key": "SL-260", "summary": "notificationda broadcast-notification paytida microservice qotbqovotti", "type": "Баг", "status": "IN DEV", "done": false},
     {"key": "SL-261", "summary": "Chekda 'komissiya miqdori' xato ko'rsatvotti [budget tolov]", "type": "Баг", "status": "Готово", "done": true},
-    {"key": "SL-265", "summary": "A2A > bind qilishda filtr olib tashlash kerak", "type": "Задание", "status": "IN QA", "done": false},
+    {"key": "SL-265", "summary": "A2A > bind qilishda filtr olib tashlash kerak", "type": "Задание", "status": "IN DEV", "done": false},
     {"key": "SL-266", "summary": "A2A > bind check ishlamayapti", "type": "Баг", "status": "IN QA", "done": false},
     {"key": "SL-267", "summary": "trastpaydan iABS ga, transaction metodiga cheksiz zapros tashalvotti har kuni. Loop ni to'xtatish kerak", "type": "Задание", "status": "К выполнению", "done": false},
     {"key": "SL-268", "summary": "A2A > poluchatel kartasida select button'ni FIX qilib qo'yish kerak", "type": "История", "status": "IN QA", "done": false},
     {"key": "SL-271", "summary": "При сканере QR-кода не переходит на следующий page", "type": "Баг", "status": "Готово", "done": true},
-    {"key": "SL-272", "summary": "Иловага виртуал картасини кушомиетти", "type": "Задание", "status": "IN DEV", "done": false},
+    {"key": "SL-272", "summary": "Иловага виртуал картасини кушомиетти", "type": "Задание", "status": "Готово", "done": true},
   ],
   "SL-104": [
     {"key": "SL-101", "summary": "Release Group-IB", "type": "История", "status": "Готово", "done": true},
