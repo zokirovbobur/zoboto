@@ -233,7 +233,7 @@ const PROTOTYPES = [
     description: "Unified BNPL checkout broker prototype — multi-partner offer comparison, scoring simulation, contract generation, e-signature, and Face ID flow. Online & offline retail modes."
   },
   {
-    title: "PMO desk",
+    title: "PMO board",
     product: "Trastbank",
     type: "Internal",
     status: "Demo",
