@@ -1,0 +1,51 @@
+=== PMO ↔ JIRA DAILY SYNC HISOBOTI ===
+Sana: 2026-06-26
+
+FARQLAR TOPILDI:
+| PMO ID | Loyiha nomi                                    | Maydon          | PMO qiymati    | Jira qiymati   |
+|--------|------------------------------------------------|-----------------|----------------|----------------|
+| P055   | Биометрическая верификация ЦБ (Liveness)       | norm            | paused         | progress       |
+| P055   | Биометрическая верификация ЦБ (Liveness)       | originalStatus  | Blocked        | in dev         |
+| P060   | Интеграция сервиса Skrow                       | norm            | planned        | progress       |
+| P061   | Льготная ипотека «Мой дом» (Mening Uyim)       | norm            | planned        | progress       |
+| P062   | Интеграция с сервисом Xolis                    | norm            | planned        | progress       |
+| P051   | Антифрод-система Group IB (ДБО)               | team            | 3 members      | +3 Jira names  |
+| P075   | Добавление новых арендных объектов FoodCity    | team            | 1 member       | +1 Jira name   |
+| P086   | Push-уведомления для платежей (ДБО)            | team            | 1 member       | +1 Jira name   |
+| P105   | CBU feature                                    | team            | 9 members      | +7 Jira names  |
+| P106   | Maintenance                                    | team            | 8 members      | +10 Jira names |
+| P114   | Ex INT / X-GO — Разделение платежей            | team            | 2 members      | +2 Jira names  |
+| P146   | [Backlog] Food City Stage 2                    | team            | 2 members      | +1 Jira name   |
+| P149   | [Backlog] Trastpay                             | team            | 2 members      | +2 Jira names  |
+
+YANGILANMAGAN LOYIHALAR (farq yo'q):
+P113, P115, P148, P150, P151, P152, P153, P154, P155
+
+CHILD TICKET YO'Q EPICLAR (faqat epic-level ma'lumot ishlatiladi):
+KT-25, KT-26, KT-28, KT-31, KT-32, KT-33, MW-2, MW-5, MW-7, SL-243, SL-252, SL-253
+
+NORM O'ZGARISHLARI:
+  P055 (KT-30): paused → progress [epic child ticket: KT-6 statusi "in dev" ga o'zgardi]
+  P060 (SL-243): planned → progress [epic o'z statusi IN ANALYSIS]
+  P061 (SL-253): planned → progress [epic o'z statusi IN ANALYSIS]
+  P062 (SL-252): planned → progress [epic o'z statusi IN ANALYSIS]
+
+JAMOAGA QO'SHILGAN A'ZOLAR:
+  P051: Dilmurod Axmadov, Ismoil Gayratov, Ulugbek Umarov (Jira format)
+  P075: Farrux Xolikulov (Jira format)
+  P086: Almazbek (Jira format)
+  P105: Abdulazim muhammadrafiqov, Abdulaziz Babajanov, Baxtiyor Valixonov,
+         Jahongir Inatullaev, Mohirjon Alimov, Sarvar Tohirov, Ulugbek Rasulov
+  P106: Abdulaziz Babajanov, Akramhujaev Muhammadrasul, Ali Yadgarov (yangi!),
+         Baxtiyor Valixonov, Damir Mirzabaev, Mohirjon Alimov, Sarvar Tohirov,
+         Ulugbek Rasulov, Ulugbek Umarov, Yakubjonov Azizjon (yangi!)
+  P114: Jaloliddin Xabibjonov, Шерзод Ахмадов (Jira format)
+  P146: Farrux Xolikulov (Jira format)
+  P149: Damir Mirzabaev, Jahongir Inatullaev (Jira format)
+
+===================================
+Tekshirildi: 24 loyiha (non-completed, jiraEpicKey bor)
+Yangilangan:  13 loyiha
+Farqsiz:       9 loyiha
+Xatoliklar:    0
+===================================
