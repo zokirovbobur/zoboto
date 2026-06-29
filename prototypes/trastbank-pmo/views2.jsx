@@ -18,8 +18,17 @@ function ProjectDetail() {
   if (!p) return <div className="empty">{t("noData")}</div>;
   const h = healthOf(p); const hm = HEALTH[h];
   const relInc = DATA.incidents.filter(i => (p.product || "").toLowerCase().includes((i.product || "").toLowerCase()) && i.product);
-  const teamEmp = p.team.map(name => {
-    const key = name.replace(/\([^)]*\)/g, "").trim().split(" ").slice(0, 2).join(" ").toLowerCase().replace(/['`’ʻ]/g, "");
+  // Also include assignees from Jira tickets within this epic
+  const ticketAssigneeNames = React.useMemo ? React.useMemo(() => {
+    if (!p.jiraEpicKey || !window.TB_JIRA_ISSUES) return [];
+    const tickets = window.TB_JIRA_ISSUES[p.jiraEpicKey] || [];
+    const names = new Set();
+    tickets.forEach(tk => { if (tk.assignee) names.add(tk.assignee); });
+    return [...names];
+  }, [p.jiraEpicKey]) : [];
+  const allTeamNames = [...new Set([...p.team, ...ticketAssigneeNames])];
+  const teamEmp = allTeamNames.map(name => {
+    const key = name.replace(/\([^)]*\)/g, "").trim().split(" ").slice(0, 2).join(" ").toLowerCase().replace(/[‘`’ʻ]/g, "");
     return { name, emp: DATA.employees.find(e => e.matchKey === key) };
   });
 
@@ -95,7 +104,7 @@ function ProjectDetail() {
           </div>
 
           <div className="card">
-            <div className="card-h"><h3>{t("teamCard")}</h3><span className="hint">{p.team.length} {t("members")}</span></div>
+            <div className="card-h"><h3>{t("teamCard")}</h3><span className="hint">{allTeamNames.length} {t("members")}</span></div>
             <div className="card-pad" style={{ maxHeight: 320, overflow: "auto" }}>
               {teamEmp.map((m, i) => (
                 <div className="member-row" key={i} style={{ cursor: m.emp ? "pointer" : "default" }}
@@ -105,7 +114,7 @@ function ProjectDetail() {
                   {m.emp && <span className="member-role">{m.emp.stack}</span>}
                 </div>
               ))}
-              {!p.team.length && <div className="empty">{t("notSpecified")}</div>}
+              {!allTeamNames.length && <div className="empty">{t("notSpecified")}</div>}
             </div>
           </div>
 

@@ -37,7 +37,10 @@ for filepath in SL_FILES:
         done = n['fields']['status']['statusCategory']['key'] == 'done'
         s = n['fields']['summary']
         if len(s) > 90: s = s[:89] + '…'
-        by_epic[pk].append({"key": n['key'], "summary": s, "type": n['fields']['issuetype']['name'], "status": n['fields']['status']['name'], "done": done})
+        assignee = None
+        if n['fields'].get('assignee'):
+            assignee = n['fields']['assignee'].get('displayName') or n['fields']['assignee'].get('name')
+        by_epic[pk].append({"key": n['key'], "summary": s, "type": n['fields']['issuetype']['name'], "status": n['fields']['status']['name'], "done": done, "assignee": assignee})
 
 for node in INLINE:
     p = node['parent']

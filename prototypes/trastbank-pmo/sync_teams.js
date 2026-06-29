@@ -89,14 +89,29 @@ const CHILDREN_RAW = {
   'SL-9':  ['Farrux Xolikulov', 'Ulugbek Umarov', 'Mukhammadrasul'],
 };
 
+// Load jira_issues.js assignees if available
+let JIRA_ISSUES = {};
+try {
+  const jiSrc = fs.readFileSync('prototypes/trastbank-pmo/jira_issues.js', 'utf8');
+  eval(jiSrc.replace('window.TB_JIRA_ISSUES', 'JIRA_ISSUES'));
+} catch(e) {}
+
 function buildTeam(epicKey) {
   const team = new Set();
   const ea = EPIC_ASSIGNEE[epicKey];
   if (ea) team.add(ea);
+  // Manual children assignees
   const children = (CHILDREN_RAW[epicKey] || []);
   children.forEach(jiraName => {
     const empName = JIRA_TO_EMP[jiraName];
     if (empName) team.add(empName);
+  });
+  // Auto-add assignees from jira_issues.js tickets
+  const tickets = JIRA_ISSUES[epicKey] || [];
+  tickets.forEach(tk => {
+    if (!tk.assignee) return;
+    const empName = JIRA_TO_EMP[tk.assignee] || tk.assignee;
+    team.add(empName);
   });
   return [...team].sort();
 }
