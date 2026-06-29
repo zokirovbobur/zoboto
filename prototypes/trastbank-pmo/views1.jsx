@@ -234,9 +234,10 @@ function Portfolio() {
 
   const rows = uM1(() => {
     let r = ALL_P.filter(p => {
-      if (status !== "all" && p.norm !== status) return false;
+      const bt = ((DATA.boardTypes || {})[p.product]) || "Mahsulot";
+      // Operations boards are filtered by ticket-level norm after expansion, not project-level
+      if (status !== "all" && bt !== "Operations" && p.norm !== status) return false;
       if (boardType !== "all") {
-        const bt = ((DATA.boardTypes || {})[p.product]) || "Mahsulot";
         if (boardType === "Operations" && bt !== "Operations") return false;
         if (boardType === "Mahsulot" && bt !== "Mahsulot") return false;
       }
@@ -254,8 +255,7 @@ function Portfolio() {
     // Expand Operations boards into individual tickets
     const expanded = [];
     r.forEach(p => {
-      const bt = ((DATA.boardTypes || {})[p.product]) || "Mahsulot";
-      if (bt === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES) {
+      if (((DATA.boardTypes || {})[p.product]) === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES) {
         const tickets = window.TB_JIRA_ISSUES[p.jiraEpicKey] || [];
         tickets.forEach(ticket => {
           expanded.push({
