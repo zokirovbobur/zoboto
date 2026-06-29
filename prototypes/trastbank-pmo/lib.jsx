@@ -337,27 +337,54 @@ function JiraSection({ epicKey, product }) {
           <div className="muted" style={{ fontSize: 13 }}>{t("jira_no_issues")}</div>
         )}
         {staticItems !== null && totalCount > 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 0, maxHeight: 380, overflowY: "auto" }}>
-            {staticItems.map(iss => {
-              const tc = JIRA_TYPE_COLOR[iss.type] || "#64748B";
-              const sc = JIRA_STATUS_COLOR[iss.status] || "#64748B";
-              return (
-                <a key={iss.key} href={JIRA_BASE + "/browse/" + iss.key} target="_blank" rel="noopener noreferrer"
-                   onClick={e => e.stopPropagation()}
-                   style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 0",
-                            borderBottom: "1px solid var(--line-2)", textDecoration: "none", color: "inherit" }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, color: tc, background: tc + "18",
-                                 borderRadius: 4, padding: "2px 5px", flexShrink: 0, minWidth: 44, textAlign: "center" }}>{iss.type}</span>
-                  <span style={{ flex: 1, fontSize: 12.5, color: iss.done ? "var(--muted)" : "var(--ink)",
-                                 textDecoration: iss.done ? "line-through" : "none", lineHeight: 1.35 }}>{iss.summary}</span>
-                  <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 3, flexShrink: 0 }}>
-                    <span style={{ fontSize: 10, fontWeight: 600, color: "#2563EB" }}>{iss.key}</span>
-                    <span style={{ fontSize: 10, fontWeight: 600, color: sc, background: sc + "18",
-                                   borderRadius: 4, padding: "1px 5px", whiteSpace: "nowrap" }}>{iss.status}</span>
-                  </span>
-                </a>
-              );
-            })}
+          <div style={{ maxHeight: 380, overflowY: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5 }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid var(--line-2)" }}>
+                  <th style={{ padding: "6px 8px 6px 0", textAlign: "left", fontWeight: 600, color: "var(--muted)", fontSize: 11, width: 52 }}>Tur</th>
+                  <th style={{ padding: "6px 8px", textAlign: "left", fontWeight: 600, color: "var(--muted)", fontSize: 11 }}>Vazifa</th>
+                  <th style={{ padding: "6px 8px", textAlign: "left", fontWeight: 600, color: "var(--muted)", fontSize: 11, whiteSpace: "nowrap" }}>Ijrochi</th>
+                  <th style={{ padding: "6px 0 6px 8px", textAlign: "right", fontWeight: 600, color: "var(--muted)", fontSize: 11, whiteSpace: "nowrap" }}>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {staticItems.map(iss => {
+                  const tc = JIRA_TYPE_COLOR[iss.type] || "#64748B";
+                  const sc = JIRA_STATUS_COLOR[iss.status] || "#64748B";
+                  const assigneeShort = iss.assignee ? iss.assignee.split(" ").slice(0, 2).join(" ") : null;
+                  return (
+                    <tr key={iss.key} style={{ borderBottom: "1px solid var(--line-2)", cursor: "pointer" }}
+                        onClick={e => { e.stopPropagation(); window.open(JIRA_BASE + "/browse/" + iss.key, "_blank"); }}>
+                      <td style={{ padding: "7px 8px 7px 0", verticalAlign: "middle" }}>
+                        <span style={{ fontSize: 10, fontWeight: 700, color: tc, background: tc + "18",
+                                       borderRadius: 4, padding: "2px 5px", display: "inline-block", minWidth: 44, textAlign: "center" }}>{iss.type}</span>
+                      </td>
+                      <td style={{ padding: "7px 8px", verticalAlign: "middle" }}>
+                        <span style={{ color: iss.done ? "var(--muted)" : "var(--ink)",
+                                       textDecoration: iss.done ? "line-through" : "none", lineHeight: 1.35, display: "block" }}>{iss.summary}</span>
+                        <span style={{ fontSize: 10, fontWeight: 600, color: "#2563EB", marginTop: 1, display: "block" }}>{iss.key}</span>
+                      </td>
+                      <td style={{ padding: "7px 8px", verticalAlign: "middle", whiteSpace: "nowrap" }}>
+                        {assigneeShort
+                          ? <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                              <span style={{ width: 22, height: 22, borderRadius: "50%", background: "#2563EB22",
+                                             display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                             fontSize: 9, fontWeight: 700, color: "#2563EB", flexShrink: 0 }}>
+                                {assigneeShort.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2)}
+                              </span>
+                              <span style={{ color: "var(--ink)", fontSize: 12 }}>{assigneeShort}</span>
+                            </span>
+                          : <span style={{ color: "var(--muted-2)", fontSize: 11 }}>—</span>}
+                      </td>
+                      <td style={{ padding: "7px 0 7px 8px", verticalAlign: "middle", textAlign: "right" }}>
+                        <span style={{ fontSize: 10, fontWeight: 600, color: sc, background: sc + "18",
+                                       borderRadius: 4, padding: "2px 6px", whiteSpace: "nowrap", display: "inline-block" }}>{iss.status}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
