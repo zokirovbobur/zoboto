@@ -232,6 +232,18 @@ function Portfolio() {
   }, []);
   const prods = DATA.products;
 
+  const totalExpanded = uM1(() => {
+    let count = 0;
+    ALL_P.forEach(p => {
+      if (((DATA.boardTypes || {})[p.product]) === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES) {
+        count += (window.TB_JIRA_ISSUES[p.jiraEpicKey] || []).length;
+      } else {
+        count++;
+      }
+    });
+    return count;
+  }, []);
+
   const rows = uM1(() => {
     let r = ALL_P.filter(p => {
       const bt = ((DATA.boardTypes || {})[p.product]) || "Mahsulot";
@@ -317,7 +329,7 @@ function Portfolio() {
   return (
     <div className="fade-in">
       <PageHead title={t("nav_portfolio")} crumbs={[{ label: t("nav_dashboard"), to: "dashboard" }, { label: t("nav_portfolio") }]}
-        right={<span className="tag">{t("showing")} {rows.length} {t("of")} {ALL_P.length}</span>} />
+        right={<span className="tag">{t("showing")} {rows.length} {t("of")} {totalExpanded}</span>} />
 
       <div className="filterbar">
         <div className="sel"><select className="f-sel" value={status} onChange={e => setStatus(e.target.value)}>
