@@ -1736,6 +1736,7 @@ window.TB_DATA = {
                         "Xolmurodov Shoxriyor"
                   ],
                   "pmId": "E14",
+                  "qaIds": ["E30"],
                   "jiraEpicKey": "SL-253",
                   "origin": "Jira Epic"
             },
@@ -2235,6 +2236,7 @@ window.TB_DATA = {
                         "Valixonov Baxtiyor"
                   ],
                   "pmId": "E15",
+                  "qaIds": ["E30"],
                   "jiraEpicKey": "SL-100",
                   "origin": "Jira Epic"
             },
@@ -2269,6 +2271,7 @@ window.TB_DATA = {
                         "Yokubjonov Azizjon"
                   ],
                   "pmId": "E15",
+                  "qaIds": ["E38", "E30"],
                   "jiraEpicKey": "SL-103",
                   "origin": "Jira Epic"
             },
@@ -2300,6 +2303,7 @@ window.TB_DATA = {
                         "Yokubjonov Azizjon"
                   ],
                   "pmId": "E08",
+                  "qaIds": ["E38"],
                   "jiraEpicKey": "SL-144",
                   "origin": "Jira Epic"
             },
@@ -4425,14 +4429,16 @@ window.TB_DATA = {
                   "prCount": 19,
                   "statusCounts": {
                         "completed": 0,
-                        "progress": 1,
+                        "progress": 3,
                         "planned": 0,
                         "paused": 0
                   },
                   "projectIds": [
+                        "P061",
+                        "P105",
                         "P106"
                   ],
-                  "totalMatched": 1,
+                  "totalMatched": 3,
                   "loadLevel": "low"
             },
             {
@@ -4714,13 +4720,16 @@ window.TB_DATA = {
                   "grade": "Junior",
                   "prCount": 4,
                   "statusCounts": {
-                        "completed": 0,
-                        "progress": 0,
+                        "completed": 1,
+                        "progress": 1,
                         "planned": 0,
                         "paused": 0
                   },
-                  "projectIds": [],
-                  "totalMatched": 0,
+                  "projectIds": [
+                        "P106",
+                        "P107"
+                  ],
+                  "totalMatched": 2,
                   "loadLevel": "low"
             },
             {

@@ -67,9 +67,21 @@ function ProjectDetail() {
                     : (p.pm || t("notSpecified"))
                 } />
                 <Fact l={t("col_executor")} v={p.executor || "—"} sm />
+                <Fact l={t("col_qa")} v={
+                  p.qaIds && p.qaIds.length > 0
+                    ? p.qaIds.map((qid, i) => (
+                        <span key={qid}>
+                          {i > 0 && " / "}
+                          {EMP[qid]
+                            ? <span className="link-text" style={{ cursor: "pointer", color: "var(--accent)", fontWeight: 600 }}
+                                onClick={() => nav("employee", { id: qid })}>{EMP[qid].shortName}</span>
+                            : qid}
+                        </span>
+                      ))
+                    : "—"
+                } sm />
                 <Fact l={t("col_dept")} v={p.department || "—"} sm />
                 <Fact l={t("col_customer")} v={p.customer || t("notSpecified")} />
-                <Fact l={t("col_supplier")} v={p.supplier || t("none")} />
                 <Fact l={t("col_start")} v={fmtDate(p.startDate, lang)} />
                 <Fact l={t("col_deadline")} v={fmtDate(p.endDate, lang)} />
                 <Fact l={t("col_sum")} v={fmtSum(p.sum) || t("notSpecified")} />
