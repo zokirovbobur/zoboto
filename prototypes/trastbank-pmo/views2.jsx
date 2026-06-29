@@ -263,6 +263,7 @@ function Workload() {
       <div className="card"><div className="tbl-wrap">
         <table className="tbl">
           <thead><tr>
+            <th className="no-sort" style={{ width: 36, textAlign: "center" }}>№</th>
             <SortTh k="fullName" label={t("col_pm").split(" ")[0]} />
             <SortTh k="product" label={t("emp_product")} />
             <SortTh k="stack" label={t("col_stack")} />
@@ -273,8 +274,9 @@ function Workload() {
             <SortTh k="loadLevel" label={t("col_load")} />
           </tr></thead>
           <tbody>
-            {rows.map(e => (
+            {rows.map((e, idx) => (
               <tr key={e.id} onClick={() => nav("employee", { id: e.id })}>
+                <td style={{ textAlign: "center", color: "var(--muted)", fontSize: 12, width: 36 }}>{idx + 1}</td>
                 <td className="cell-proj"><span className="row"><Avatar name={e.shortName} size={28} />{e.fullName}</span></td>
                 <td className="t-muted">{e.product}</td>
                 <td><span className="tag">{e.stack}</span></td>
@@ -299,13 +301,30 @@ function EmployeeProfile() {
   const e = EMP[route.id];
   if (!e) return <div className="empty">{t("noData")}</div>;
 
-  const allProjs = e.projectIds.map(id => PROJ[id]).filter(Boolean);
+  const allProjs = e.projectIds.flatMap(id => {
+    const p = PROJ[id];
+    if (!p) return [];
+    const bt = ((window.TB_DATA.boardTypes || {})[p.product]) || "Mahsulot";
+    if (bt === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES) {
+      const tickets = window.TB_JIRA_ISSUES[p.jiraEpicKey] || [];
+      return tickets.map(tk => ({
+        id: tk.key,
+        name: tk.summary,
+        product: p.product,
+        norm: tk.done ? "completed" : "progress",
+        origin: tk.type === "История" ? "Jira Story" : "Jira Task",
+        jiraKey: tk.key,
+        _isTicket: true,
+      }));
+    }
+    return [p];
+  });
   const filteredProjs = statusFilter === "all" ? allProjs : allProjs.filter(p => p.norm === statusFilter);
   const ledProjs = ALL_P.filter(p => p.pmId === e.id);
   const LOAD = { low: "load_low", normal: "load_normal", high: "load_high", critical: "load_critical" };
   const toggleStatus = (norm) => setStatusFilter(f => f === norm ? "all" : norm);
 
-  const statusCounts = STATUS_ORDER.map(s => e.statusCounts[s]);
+  const statusCounts = STATUS_ORDER.map(s => allProjs.filter(p => p.norm === s).length);
 
   return (
     <div className="fade-in">
@@ -335,22 +354,22 @@ function EmployeeProfile() {
       </div>
 
       <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
-        <KPI label={t("st_completed_s")} value={e.statusCounts.completed} accent={STATUS.completed.color}
+        <KPI label={t("st_completed_s")} value={statusCounts[STATUS_ORDER.indexOf("completed")]} accent={STATUS.completed.color}
           onClick={() => toggleStatus("completed")} tone={statusFilter === "completed" ? "active" : null} />
-        <KPI label={t("st_progress_s")} value={e.statusCounts.progress} accent={STATUS.progress.color}
+        <KPI label={t("st_progress_s")} value={statusCounts[STATUS_ORDER.indexOf("progress")]} accent={STATUS.progress.color}
           onClick={() => toggleStatus("progress")} tone={statusFilter === "progress" ? "active" : null} />
-        <KPI label={t("st_planned_s")} value={e.statusCounts.planned} accent={STATUS.planned.color}
+        <KPI label={t("st_planned_s")} value={statusCounts[STATUS_ORDER.indexOf("planned")]} accent={STATUS.planned.color}
           onClick={() => toggleStatus("planned")} tone={statusFilter === "planned" ? "active" : null} />
-        <KPI label={t("st_paused_s")} value={e.statusCounts.paused} accent={STATUS.paused.color}
+        <KPI label={t("st_paused_s")} value={statusCounts[STATUS_ORDER.indexOf("paused")]} accent={STATUS.paused.color}
           onClick={() => toggleStatus("paused")} tone={statusFilter === "paused" ? "active" : null} />
-        <KPI label="Σ" value={e.totalMatched}
+        <KPI label="Σ" value={allProjs.length}
           onClick={() => setStatusFilter("all")} tone={statusFilter === "all" ? "active" : null} />
       </div>
 
       <div className="card" style={{ marginTop: 16 }}>
         <div className="card-h">
           <h3>{t("emp_projects")}</h3>
-          <span className="hint">{filteredProjs.length}{statusFilter !== "all" ? " / " + allProjs.length : ""} {t("projects")}</span>
+          <span className="hint">{filteredProjs.length}{statusFilter !== "all" ? " / " + allProjs.length : ""} {t("col_project")}</span>
           {statusFilter !== "all" && (
             <button className="btn btn-ghost" style={{ fontSize: 11, marginLeft: "auto" }} onClick={() => setStatusFilter("all")}>↺ {t("resetFilters")}</button>
           )}
@@ -363,9 +382,21 @@ function EmployeeProfile() {
               <th style={{ fontSize: 10.5 }}>{t("col_status")}</th>
             </tr></thead>
             <tbody>
-              {filteredProjs.map(p => (
-                <tr key={p.id} onClick={() => nav("project", { id: p.id })}>
-                  <td style={{ fontWeight: 600 }}>{p.name}</td>
+              {filteredProjs.map((p, idx) => (
+                <tr key={p.id + idx}
+                    onClick={() => p._isTicket
+                      ? window.open("https://test-tb.atlassian.net/browse/" + p.jiraKey, "_blank")
+                      : nav("project", { id: p.id })}
+                    style={{ cursor: "pointer" }}>
+                  <td style={{ fontWeight: 600 }}>
+                    {p.name}
+                    {p._isTicket && (
+                      <span style={{ marginLeft: 6, fontSize: 10, fontWeight: 600,
+                        color: p.origin === "Jira Story" ? "#7C3AED" : "#0E7490",
+                        background: p.origin === "Jira Story" ? "#7C3AED18" : "#0E749018",
+                        borderRadius: 4, padding: "1px 5px" }}>{p.jiraKey}</span>
+                    )}
+                  </td>
                   <td><span className="tag">{prodShort(p.product)}</span></td>
                   <td style={{ whiteSpace: "nowrap" }}><StatusBadge norm={p.norm} /></td>
                 </tr>

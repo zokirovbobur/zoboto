@@ -24,8 +24,13 @@ window.TB_DATA = {
             "Исламский банкинг",
             "Payment HUB",
             "Trastbank Business",
-            "Business and System Analysis"
+            "Business and System Analysis",
+            "Trastbank devops"
       ],
+      "boardTypes": {
+            "Trastbank devops": "Operations",
+            "Business and System Analysis": "Operations"
+      },
       "projects": [
             {
                   "id": "P001",
@@ -2399,6 +2404,7 @@ window.TB_DATA = {
                         "Axmadov Sherzod"
                   ],
                   "pmId": "E43",
+                  "executor": "Axmadov Sherzod",
                   "jiraEpicKey": "MW-2",
                   "origin": "Jira Epic"
             },
@@ -2427,6 +2433,7 @@ window.TB_DATA = {
                         "Шерзод Ахмадов",
                   ],
                   "pmId": "E43",
+                  "executor": "Axmadov Sherzod",
                   "jiraEpicKey": "MW-3",
                   "origin": "Jira Epic"
             },
@@ -2452,6 +2459,7 @@ window.TB_DATA = {
                         "Axmadov Sherzod"
                   ],
                   "pmId": "E43",
+                  "executor": "Axmadov Sherzod",
                   "jiraEpicKey": "MW-5",
                   "origin": "Jira Epic"
             },
@@ -2478,7 +2486,7 @@ window.TB_DATA = {
                         "To'xtashev Asadbek",
                         "Farrux Xolikulov",
                   ],
-                  "pmId": "712020:2a0d60ed-5e61-4d4b-927d-447dd94e93f7",
+                  "pmId": "E10",
                   "jiraEpicKey": "FC-13",
                   "origin": "Jira Epic"
             },
@@ -2503,7 +2511,7 @@ window.TB_DATA = {
                   "team": [
                         "To'xtashev Asadbek"
                   ],
-                  "pmId": "712020:2a0d60ed-5e61-4d4b-927d-447dd94e93f7",
+                  "pmId": "E10",
                   "jiraEpicKey": "FC-14",
                   "origin": "Jira Epic"
             },
@@ -2527,6 +2535,7 @@ window.TB_DATA = {
                   "info": "",
                   "team": ["Axmadov Sherzod"],
                   "pmId": "E43",
+                  "executor": "Axmadov Sherzod",
                   "jiraEpicKey": "MW-7",
                   "origin": "Jira Epic"
             },
@@ -2579,7 +2588,7 @@ window.TB_DATA = {
                   "team": [
                         "Aliakbarov Abdulaziz"
                   ],
-                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
+                  "pmId": "E19",
                   "jiraEpicKey": "KT-25",
                   "origin": "Jira Epic"
             },
@@ -2604,7 +2613,7 @@ window.TB_DATA = {
                   "team": [
                         "Aliakbarov Abdulaziz"
                   ],
-                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
+                  "pmId": "E19",
                   "jiraEpicKey": "KT-26",
                   "origin": "Jira Epic"
             },
@@ -2629,7 +2638,7 @@ window.TB_DATA = {
                   "team": [
                         "Aliakbarov Abdulaziz"
                   ],
-                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
+                  "pmId": "E19",
                   "jiraEpicKey": "KT-28",
                   "origin": "Jira Epic"
             },
@@ -2654,7 +2663,7 @@ window.TB_DATA = {
                   "team": [
                         "Aliakbarov Abdulaziz"
                   ],
-                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
+                  "pmId": "E19",
                   "jiraEpicKey": "KT-31",
                   "origin": "Jira Epic"
             },
@@ -2679,7 +2688,7 @@ window.TB_DATA = {
                   "team": [
                         "Aliakbarov Abdulaziz"
                   ],
-                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
+                  "pmId": "E19",
                   "jiraEpicKey": "KT-32",
                   "origin": "Jira Epic"
             },
@@ -2704,7 +2713,7 @@ window.TB_DATA = {
                   "team": [
                         "Aliakbarov Abdulaziz"
                   ],
-                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
+                  "pmId": "E19",
                   "jiraEpicKey": "KT-33",
                   "origin": "Jira Epic"
             },
@@ -2728,6 +2737,7 @@ window.TB_DATA = {
                   "info": "Mahsulot: Payment HUB. Uzcard/HUMO P2P, OFD, terminal integratsiyalari",
                   "team": [],
                   "pmId": "E43",
+                  "executor": "Axmadov Sherzod",
                   "jiraEpicKey": "PH-1",
                   "origin": "Jira Epic"
             },
@@ -2746,11 +2756,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "completed",
                   "originalStatus": "Готово",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Asosiy domen sxemasi tayyor",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-3",
                   "origin": "Jira Epic"
             },
@@ -2769,11 +2780,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "progress",
                   "originalStatus": "ready for dev",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Core infratuzilma",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-12",
                   "origin": "Jira Epic"
             },
@@ -2792,11 +2804,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "backlog",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Auth + registration",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-14",
                   "origin": "Jira Epic"
             },
@@ -2815,11 +2828,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "backlog",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. RBAC va profil boshqaruvi",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-15",
                   "origin": "Jira Epic"
             },
@@ -2838,11 +2852,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "progress",
                   "originalStatus": "in dev",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. References moduli",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-16",
                   "origin": "Jira Epic"
             },
@@ -2861,11 +2876,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "progress",
                   "originalStatus": "in dev",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. ABS Gateway integratsiyasi",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-17",
                   "origin": "Jira Epic"
             },
@@ -2884,11 +2900,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "backlog",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Bank moduli: hisoblar, to'lovlar, shablonlar",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-18",
                   "origin": "Jira Epic"
             },
@@ -2907,11 +2924,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "backlog",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Hujjat aylanmasi",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-19",
                   "origin": "Jira Epic"
             },
@@ -2930,11 +2948,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "backlog",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. SMS/Push/WS bildirishnomalar",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-20",
                   "origin": "Jira Epic"
             },
@@ -2953,11 +2972,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "backlog",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Kontragentlar moduli",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-21",
                   "origin": "Jira Epic"
             },
@@ -2976,11 +2996,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "backlog",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Tashqi integratsiyalar",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-22",
                   "origin": "Jira Epic"
             },
@@ -2999,11 +3020,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "backlog",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. QA/UAT/Pilot",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-23",
                   "origin": "Jira Epic"
             },
@@ -3022,11 +3044,12 @@ window.TB_DATA = {
                   "paidFact": "",
                   "norm": "planned",
                   "originalStatus": "backlog",
-                  "pm": "Saidiy Jahongir",
+                  "pm": "Berdiyev Xasan",
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Prod hardening",
-                  "team": ["Saidiy Jahongir"],
-                  "pmId": "E35",
+                  "executor": "Saidiy Jahongir",
+                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "pmId": "E33",
                   "jiraEpicKey": "TB-79",
                   "origin": "Jira Epic"
             },
@@ -3052,7 +3075,7 @@ window.TB_DATA = {
                         "Pavel Pankin",
                         "Aliakbarov Abdulaziz"
                   ],
-                  "pmId": "712020:819acd37-bc4d-46c6-b7b8-87e35bc307ea",
+                  "pmId": "E19",
                   "jiraEpicKey": "KT-34",
                   "origin": "Jira Epic"
             },
@@ -3296,6 +3319,54 @@ window.TB_DATA = {
                   "jiraEpicKey": "MDI-10",
                   "origin": "Jira Epic"
             },
+            {
+                  "id": "P181",
+                  "name": "Business and System Analysis",
+                  "product": "Business and System Analysis",
+                  "goal": "Tizim va biznes tahlili",
+                  "basis": "",
+                  "department": "Отдел Цифровых Трансформаций и Инноваций",
+                  "customer": "Трастбанк",
+                  "supplier": "",
+                  "startDate": "",
+                  "endDate": "",
+                  "sum": "",
+                  "paidFact": "",
+                  "norm": "progress",
+                  "originalStatus": "В работе",
+                  "pm": "Pulatov Nozimjon",
+                  "demoReady": false,
+                  "info": "",
+                  "executor": "Pulatov Nozimjon",
+                  "team": ["Pulatov Nozimjon"],
+                  "pmId": "E20",
+                  "jiraEpicKey": "BSA-BOARD",
+                  "origin": "Jira Epic"
+            },
+            {
+                  "id": "P182",
+                  "name": "Trastbank devops",
+                  "product": "Trastbank devops",
+                  "goal": "DevOps va infratuzilma",
+                  "basis": "",
+                  "department": "Отдел Цифровых Трансформаций и Инноваций",
+                  "customer": "Трастбанк",
+                  "supplier": "",
+                  "startDate": "",
+                  "endDate": "",
+                  "sum": "",
+                  "paidFact": "",
+                  "norm": "progress",
+                  "originalStatus": "В работе",
+                  "pm": "Abduxoshimov Ixtiyor",
+                  "demoReady": false,
+                  "info": "",
+                  "executor": "Abduxoshimov Ixtiyor",
+                  "team": ["Abduxoshimov Ixtiyor", "Sunnatov Yaxyo"],
+                  "pmId": "E41",
+                  "jiraEpicKey": "TD-BOARD",
+                  "origin": "Jira Epic"
+            },
       ],
       "employees": [
             {
@@ -3348,9 +3419,7 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P049",
-                        "P053",
                         "P058",
-                        "P068",
                         "P075",
                         "P090",
                         "P093",
@@ -3358,10 +3427,7 @@ window.TB_DATA = {
                         "P095",
                         "P096",
                         "P112",
-                        "P125",
-                        "P128",
-                        "P129",
-                        "P131"
+                        "P146"
                   ],
                   "totalMatched": 25,
                   "loadLevel": "critical"
@@ -3396,11 +3462,8 @@ window.TB_DATA = {
                         "P031",
                         "P038",
                         "P050",
-                        "P053",
-                        "P059",
+                        "P051",
                         "P062",
-                        "P068",
-                        "P079",
                         "P090",
                         "P093",
                         "P101",
@@ -3438,7 +3501,6 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P056",
-                        "P068",
                         "P090",
                         "P093"
                   ],
@@ -3473,9 +3535,6 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P038",
-                        "P059",
-                        "P068",
-                        "P079",
                         "P090",
                         "P093",
                         "P102",
@@ -3513,10 +3572,8 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P050",
-                        "P053",
                         "P058",
                         "P062",
-                        "P068",
                         "P090",
                         "P093",
                         "P094",
@@ -3555,8 +3612,6 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P038",
-                        "P068",
-                        "P079",
                         "P090",
                         "P093",
                         "P102",
@@ -3592,8 +3647,6 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P050",
-                        "P053",
-                        "P068",
                         "P090",
                         "P091",
                         "P093",
@@ -3628,7 +3681,6 @@ window.TB_DATA = {
                         "P022",
                         "P027",
                         "P031",
-                        "P068",
                         "P090",
                         "P093",
                         "P098"
@@ -3660,6 +3712,7 @@ window.TB_DATA = {
                         "P013",
                         "P014",
                         "P015",
+                        "P016",
                         "P017",
                         "P018",
                         "P019",
@@ -3670,11 +3723,18 @@ window.TB_DATA = {
                         "P029",
                         "P030",
                         "P043",
+                        "P054",
+                        "P055",
                         "P058",
+                        "P075",
+                        "P086",
                         "P090",
                         "P094",
                         "P095",
-                        "P096"
+                        "P096",
+                        "P112",
+                        "P146",
+                        "P147"
                   ],
                   "totalMatched": 21,
                   "loadLevel": "critical"
@@ -3722,7 +3782,50 @@ window.TB_DATA = {
                         "planned": 0,
                         "paused": 0
                   },
-                  "projectIds": [],
+                  "projectIds": [
+                        "P004",
+                        "P009",
+                        "P010",
+                        "P011",
+                        "P012",
+                        "P013",
+                        "P014",
+                        "P015",
+                        "P017",
+                        "P018",
+                        "P019",
+                        "P020",
+                        "P021",
+                        "P022",
+                        "P023",
+                        "P024",
+                        "P025",
+                        "P026",
+                        "P027",
+                        "P028",
+                        "P029",
+                        "P030",
+                        "P031",
+                        "P032",
+                        "P033",
+                        "P034",
+                        "P035",
+                        "P036",
+                        "P037",
+                        "P038",
+                        "P043",
+                        "P058",
+                        "P061",
+                        "P062",
+                        "P090",
+                        "P093",
+                        "P094",
+                        "P095",
+                        "P096",
+                        "P097",
+                        "P098",
+                        "P099"
+                  ],
                   "totalMatched": 0,
                   "loadLevel": "low"
             },
@@ -3743,7 +3846,53 @@ window.TB_DATA = {
                         "planned": 0,
                         "paused": 0
                   },
-                  "projectIds": [],
+                  "projectIds": [
+                        "P004",
+                        "P009",
+                        "P010",
+                        "P011",
+                        "P012",
+                        "P013",
+                        "P014",
+                        "P015",
+                        "P017",
+                        "P018",
+                        "P019",
+                        "P020",
+                        "P021",
+                        "P022",
+                        "P023",
+                        "P024",
+                        "P025",
+                        "P026",
+                        "P027",
+                        "P028",
+                        "P029",
+                        "P030",
+                        "P031",
+                        "P037",
+                        "P038",
+                        "P043",
+                        "P058",
+                        "P061",
+                        "P062",
+                        "P090",
+                        "P093",
+                        "P094",
+                        "P095",
+                        "P096",
+                        "P097",
+                        "P171",
+                        "P172",
+                        "P173",
+                        "P174",
+                        "P175",
+                        "P176",
+                        "P177",
+                        "P178",
+                        "P179",
+                        "P180"
+                  ],
                   "totalMatched": 0,
                   "loadLevel": "low"
             },
@@ -3765,18 +3914,18 @@ window.TB_DATA = {
                         "paused": 2
                   },
                   "projectIds": [
+                        "P002",
                         "P009",
                         "P010",
                         "P022",
                         "P027",
                         "P031",
-                        "P059",
                         "P061",
-                        "P068",
+                        "P062",
                         "P090",
                         "P093",
                         "P105",
-                        "P116"
+                        "P149"
                   ],
                   "totalMatched": 12,
                   "loadLevel": "high"
@@ -3808,6 +3957,8 @@ window.TB_DATA = {
                         "P008",
                         "P009",
                         "P010",
+                        "P011",
+                        "P012",
                         "P021",
                         "P022",
                         "P026",
@@ -3816,25 +3967,19 @@ window.TB_DATA = {
                         "P038",
                         "P049",
                         "P050",
-                        "P053",
                         "P056",
-                        "P059",
                         "P060",
-                        "P063",
-                        "P068",
-                        "P079",
                         "P090",
                         "P091",
                         "P092",
                         "P093",
+                        "P099",
                         "P101",
                         "P102",
                         "P105",
                         "P106",
                         "P107",
-                        "P119",
-                        "P136",
-                        "P137"
+                        "P149"
                   ],
                   "totalMatched": 36,
                   "loadLevel": "critical"
@@ -3862,7 +4007,6 @@ window.TB_DATA = {
                         "P022",
                         "P027",
                         "P031",
-                        "P068",
                         "P090",
                         "P093"
                   ],
@@ -3892,9 +4036,9 @@ window.TB_DATA = {
                         "P022",
                         "P027",
                         "P031",
-                        "P068",
                         "P090",
-                        "P093"
+                        "P093",
+                        "P106"
                   ],
                   "totalMatched": 8,
                   "loadLevel": "normal"
@@ -3923,11 +4067,7 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P038",
-                        "P053",
-                        "P059",
                         "P061",
-                        "P068",
-                        "P079",
                         "P090",
                         "P093"
                   ],
@@ -3971,7 +4111,15 @@ window.TB_DATA = {
                         "P043",
                         "P049",
                         "P090",
-                        "P105"
+                        "P105",
+                        "P106",
+                        "P150",
+                        "P151",
+                        "P152",
+                        "P153",
+                        "P154",
+                        "P155",
+                        "P156"
                   ],
                   "totalMatched": 20,
                   "loadLevel": "critical"
@@ -3994,8 +4142,19 @@ window.TB_DATA = {
                         "paused": 0
                   },
                   "projectIds": [
+                        "P004",
+                        "P009",
+                        "P010",
+                        "P022",
+                        "P027",
+                        "P031",
+                        "P038",
+                        "P061",
+                        "P090",
+                        "P093",
                         "P107",
-                        "P108"
+                        "P108",
+                        "P181"
                   ],
                   "totalMatched": 2,
                   "loadLevel": "low"
@@ -4017,7 +4176,10 @@ window.TB_DATA = {
                         "planned": 0,
                         "paused": 0
                   },
-                  "projectIds": [],
+                  "projectIds": [
+                        "P010",
+                        "P090"
+                  ],
                   "totalMatched": 0,
                   "loadLevel": "low"
             },
@@ -4046,7 +4208,6 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P058",
-                        "P068",
                         "P090",
                         "P093",
                         "P094",
@@ -4091,24 +4252,16 @@ window.TB_DATA = {
                         "P031",
                         "P037",
                         "P038",
-                        "P052",
-                        "P053",
-                        "P057",
                         "P058",
-                        "P059",
                         "P061",
-                        "P068",
-                        "P077",
-                        "P079",
-                        "P083",
-                        "P084",
                         "P090",
                         "P093",
                         "P094",
                         "P095",
                         "P096",
                         "P097",
-                        "P108"
+                        "P108",
+                        "P182"
                   ],
                   "totalMatched": 34,
                   "loadLevel": "critical"
@@ -4180,7 +4333,9 @@ window.TB_DATA = {
                         "P028",
                         "P029",
                         "P030",
-                        "P043"
+                        "P043",
+                        "P055",
+                        "P156"
                   ],
                   "totalMatched": 11,
                   "loadLevel": "normal"
@@ -4210,7 +4365,8 @@ window.TB_DATA = {
                         "P023",
                         "P029",
                         "P030",
-                        "P043"
+                        "P043",
+                        "P051"
                   ],
                   "totalMatched": 8,
                   "loadLevel": "normal"
@@ -4266,7 +4422,6 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P058",
-                        "P068",
                         "P093",
                         "P096",
                         "P107"
@@ -4296,8 +4451,9 @@ window.TB_DATA = {
                         "P022",
                         "P027",
                         "P031",
-                        "P068",
-                        "P093"
+                        "P093",
+                        "P105",
+                        "P106"
                   ],
                   "totalMatched": 6,
                   "loadLevel": "normal"
@@ -4319,7 +4475,21 @@ window.TB_DATA = {
                         "planned": 0,
                         "paused": 0
                   },
-                  "projectIds": [],
+                  "projectIds": [
+                        "P004",
+                        "P009",
+                        "P012",
+                        "P015",
+                        "P020",
+                        "P022",
+                        "P023",
+                        "P027",
+                        "P030",
+                        "P031",
+                        "P038",
+                        "P061",
+                        "P093"
+                  ],
                   "totalMatched": 0,
                   "loadLevel": "low"
             },
@@ -4381,7 +4551,6 @@ window.TB_DATA = {
                         "P022",
                         "P027",
                         "P031",
-                        "P068",
                         "P093"
                   ],
                   "totalMatched": 6,
@@ -4421,10 +4590,24 @@ window.TB_DATA = {
                         "P030",
                         "P037",
                         "P043",
+                        "P051",
                         "P058",
                         "P094",
                         "P095",
-                        "P096"
+                        "P096",
+                        "P158",
+                        "P159",
+                        "P160",
+                        "P161",
+                        "P162",
+                        "P163",
+                        "P164",
+                        "P165",
+                        "P166",
+                        "P167",
+                        "P168",
+                        "P169",
+                        "P170"
                   ],
                   "totalMatched": 20,
                   "loadLevel": "critical"
@@ -4455,12 +4638,6 @@ window.TB_DATA = {
                         "P031",
                         "P037",
                         "P051",
-                        "P052",
-                        "P057",
-                        "P068",
-                        "P077",
-                        "P083",
-                        "P084",
                         "P093",
                         "P097"
                   ],
@@ -4491,14 +4668,23 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P037",
-                        "P052",
-                        "P057",
-                        "P068",
-                        "P077",
-                        "P083",
-                        "P084",
                         "P093",
-                        "P097"
+                        "P097",
+                        "P105",
+                        "P149",
+                        "P158",
+                        "P159",
+                        "P160",
+                        "P161",
+                        "P162",
+                        "P163",
+                        "P164",
+                        "P165",
+                        "P166",
+                        "P167",
+                        "P168",
+                        "P169",
+                        "P170"
                   ],
                   "totalMatched": 14,
                   "loadLevel": "high"
@@ -4527,13 +4713,7 @@ window.TB_DATA = {
                         "P025",
                         "P027",
                         "P031",
-                        "P052",
-                        "P057",
                         "P058",
-                        "P068",
-                        "P077",
-                        "P083",
-                        "P084",
                         "P093",
                         "P094",
                         "P095",
@@ -4567,12 +4747,6 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P037",
-                        "P052",
-                        "P057",
-                        "P068",
-                        "P077",
-                        "P083",
-                        "P084",
                         "P093",
                         "P097",
                         "P108"
@@ -4597,7 +4771,9 @@ window.TB_DATA = {
                         "planned": 0,
                         "paused": 0
                   },
-                  "projectIds": [],
+                  "projectIds": [
+                        "P020"
+                  ],
                   "totalMatched": 0,
                   "loadLevel": "low"
             },
@@ -4619,10 +4795,6 @@ window.TB_DATA = {
                         "paused": 0
                   },
                   "projectIds": [
-                        "P052",
-                        "P077",
-                        "P083",
-                        "P084",
                         "P114"
                   ],
                   "totalMatched": 5,
@@ -4675,17 +4847,10 @@ window.TB_DATA = {
                         "P027",
                         "P031",
                         "P038",
-                        "P052",
-                        "P057",
-                        "P059",
                         "P061",
-                        "P068",
-                        "P077",
-                        "P079",
-                        "P083",
-                        "P084",
                         "P093",
-                        "P097"
+                        "P097",
+                        "P182"
                   ],
                   "totalMatched": 19,
                   "loadLevel": "high"
@@ -4710,7 +4875,19 @@ window.TB_DATA = {
                   "projectIds": [
                         "P113",
                         "P114",
-                        "P115"
+                        "P115",
+                        "P148",
+                        "P157",
+                        "P171",
+                        "P172",
+                        "P173",
+                        "P174",
+                        "P175",
+                        "P176",
+                        "P177",
+                        "P178",
+                        "P179",
+                        "P180"
                   ],
                   "totalMatched": 3,
                   "loadLevel": "low"

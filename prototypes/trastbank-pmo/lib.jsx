@@ -267,6 +267,12 @@ const JIRA_BOARDS = {
   "Middleware":  { key: "MW",  color: "#7C3AED", icon: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5", url: JIRA_BASE + "/jira/software/projects/MW/summary" },
   "ABS":         { key: "ABS", color: "#0E7490", icon: "M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01", url: JIRA_BASE + "/jira/software/projects/ABS/summary" },
   "AI products": { key: "AI",  color: "#9333EA", icon: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z", url: JIRA_BASE + "/jira/software/projects/AI/summary" },
+  "Middleware EXT": { key: "MW", color: "#7C3AED", icon: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5", url: JIRA_BASE + "/jira/software/projects/MW/summary" },
+  "Middleware INT": { key: "MDI", color: "#6D28D9", icon: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5", url: JIRA_BASE + "/jira/software/projects/MDI/summary" },
+  "Payment HUB":    { key: "PH", color: "#0284C7", icon: "M3 10h18M7 15h.01M11 15h2M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z", url: JIRA_BASE + "/jira/software/projects/PH/summary" },
+  "Trastbank Business": { key: "TB", color: "#047857", icon: "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2zM9 22V12h6v10", url: JIRA_BASE + "/jira/software/projects/TB/summary" },
+  "Business and System Analysis": { key: "BSA", color: "#0891B2", icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2", url: JIRA_BASE + "/jira/software/projects/BSA/summary" },
+  "Trastbank devops": { key: "TD", color: "#DC2626", icon: "M5 12h14M5 12l4-4M5 12l4 4M19 5l-4 4M19 5l-4-4M19 19l-4-4M19 19l-4 4", url: JIRA_BASE + "/jira/software/projects/TD/summary" },
 };
 
 const JIRA_TYPE_COLOR = {
