@@ -49,12 +49,12 @@ function ProjectDetail() {
                         onClick={() => nav("employee", { id: p.pmId })}>{EMP[p.pmId].fullName}</span>
                     : (p.pm || t("notSpecified"))
                 } />
+                <Fact l={t("col_executor")} v={p.executor || "—"} sm />
                 <Fact l={t("col_dept")} v={p.department || "—"} sm />
                 <Fact l={t("col_customer")} v={p.customer || t("notSpecified")} />
                 <Fact l={t("col_supplier")} v={p.supplier || t("none")} />
                 <Fact l={t("col_start")} v={fmtDate(p.startDate, lang)} />
                 <Fact l={t("col_deadline")} v={fmtDate(p.endDate, lang)} />
-                <Fact l={t("col_demo")} v={p.demoReady ? t("yes") : t("no")} />
                 <Fact l={t("col_sum")} v={fmtSum(p.sum) || t("notSpecified")} />
               </div>
             </div>
