@@ -242,6 +242,15 @@ const PROTOTYPES = [
     description: "Executive project reporting board — PMO registry, Kanban status board, employee workload, roadmap, risks & incidents. Fully multilingual (UZ/RU/EN)."
   },
   {
+    title: "Collection CRM",
+    product: "Trastbank",
+    type: "Internal",
+    status: "Demo",
+    platforms: ["desktop"],
+    url: "prototypes/trastbank-pmo/collection_crm",
+    description: "Debt collection CRM prototype вЂ” borrower registry, collector workload, call scripts, payment tracking, legal escalation workflow and analytics dashboard."
+  },
+  {
     title: "Finport",
     product: "Finport",
     type: "External",
