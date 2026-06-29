@@ -1572,11 +1572,7 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [
                         "Axmadov Dilmurod",
-                        "Dilmurod Axmadov",
                         "G'ayratov Ismoil",
-                        "Gayratov Ismoil",
-                        "Ismoil Gayratov",
-                        "Ulugbek Umarov",
                         "Umarov Ulug'bek"
                   ],
                   "pmId": "E33",
@@ -1626,7 +1622,6 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [
                         "Pankin Pavel",
-                        "Pavel Pankin",
                         "Umarov Ulug'bek"
                   ],
                   "pmId": "E10",
@@ -1682,12 +1677,10 @@ window.TB_DATA = {
                         "Jo'raboyev Axmadillo",
                         "Komilov Doniyorbek",
                         "Mirzaolimov Azizbek",
-                        "Saidov Jamshid (CTO)",
                         "Sunnatov Yaxyo",
                         "To'xtashev Asadbek",
                         "Valixonov Baxtiyor",
-                        "Xolikulov Farrux",
-                        "Zokirov Bobur (CPO)"
+                        "Xolikulov Farrux"
                   ],
                   "pmId": "E22",
                   "jiraEpicKey": "FC-32",
@@ -1739,12 +1732,8 @@ window.TB_DATA = {
                   "team": [
                         "Abduxoshimov Ixtiyor",
                         "Inatullayev Jaxongir",
-                        "Pulatov Nozimjon (BA)",
-                        "Saidov Jamshid (CTO)",
                         "Sunnatov Yaxyo",
-                        "Xolmurodov Shoxriyor",
-                        "Yodgorov Alibek (QA)",
-                        "Zokirov Bobur (CPO)"
+                        "Xolmurodov Shoxriyor"
                   ],
                   "pmId": "E14",
                   "jiraEpicKey": "SL-253",
@@ -1770,9 +1759,7 @@ window.TB_DATA = {
                   "info": "Продукт: Trastpay 2.0",
                   "team": [
                         "Rasulov Ulugbek",
-                        "Saidov Jamshid (CTO)",
-                        "Valixonov Baxtiyor",
-                        "Zokirov Bobur (CPO)"
+                        "Valixonov Baxtiyor"
                   ],
                   "pmId": "E14",
                   "jiraEpicKey": "SL-252",
@@ -1797,8 +1784,7 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Продукт: ДБО",
                   "team": [
-                        "Xolikulov Farrux",
-                        "Farrux Xolikulov"
+                        "Xolikulov Farrux"
                   ],
                   "pmId": "E10",
                   "jiraEpicKey": "FC-30",
@@ -1823,8 +1809,7 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Продукт: ДБО",
                   "team": [
-                        "Davranbekov Almazbek",
-                        "Almazbek"
+                        "Davranbekov Almazbek"
                   ],
                   "pmId": "E10",
                   "jiraEpicKey": "KT-27",
@@ -2239,22 +2224,14 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "team": [
-                        "Abdulazim muhammadrafiqov",
-                        "Abdulaziz Babajanov",
                         "Aliakbarov Abdulaziz",
                         "Alimov Mohirjon",
                         "Babajanov Abdulaziz",
-                        "Baxtiyor Valixonov",
                         "Inatullayev Jaxongir",
-                        "Jahongir Inatullaev",
                         "Mirzabayev Damir",
                         "Mirzaolimov Azizbek",
-                        "Mohirjon Alimov",
-                        "Muhammadrafiqov Abdulazim",
                         "Rasulov Ulugbek",
-                        "Sarvar Tohirov",
                         "Toxirov Sarvar",
-                        "Ulugbek Rasulov",
                         "Valixonov Baxtiyor"
                   ],
                   "pmId": "E15",
@@ -2280,24 +2257,14 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "team": [
-                        "Abdulaziz Babajanov",
-                        "Akramhujaev Muhammadrasul",
                         "Akramxo'jayev Muhammadrasul",
-                        "Ali Yadgarov",
                         "Alimov Mohirjon",
                         "Babajanov Abdulaziz",
-                        "Baxtiyor Valixonov",
-                        "Damir Mirzabaev",
                         "Mirzabayev Damir",
-                        "Mohirjon Alimov",
                         "Rasulov Ulugbek",
-                        "Sarvar Tohirov",
                         "Toxirov Sarvar",
-                        "Ulugbek Rasulov",
-                        "Ulugbek Umarov",
                         "Umarov Ulug'bek",
                         "Valixonov Baxtiyor",
-                        "Yakubjonov Azizjon",
                         "Yodgorov Alibek",
                         "Yokubjonov Azizjon"
                   ],
@@ -2438,9 +2405,7 @@ window.TB_DATA = {
                   "info": "",
                   "team": [
                         "Axmadov Sherzod",
-                        "Xabibjonov Jaloliddin",
-                        "Jaloliddin Xabibjonov",
-                        "Шерзод Ахмадов"
+                        "Xabibjonov Jaloliddin"
                   ],
                   "pmId": "E43",
                   "executor": "Axmadov Sherzod",
@@ -2492,9 +2457,8 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "team": [
-                        "Xolikulov Farrux",
                         "To'xtashev Asadbek",
-                        "Farrux Xolikulov"
+                        "Xolikulov Farrux"
                   ],
                   "pmId": "E10",
                   "jiraEpicKey": "FC-13",
@@ -2571,9 +2535,7 @@ window.TB_DATA = {
                   "info": "",
                   "team": [
                         "Inatullayev Jaxongir",
-                        "Mirzabayev Damir",
-                        "Damir Mirzabaev",
-                        "Jahongir Inatullaev"
+                        "Mirzabayev Damir"
                   ],
                   "pmId": "E15",
                   "jiraEpicKey": "SL-203",
@@ -3135,8 +3097,7 @@ window.TB_DATA = {
                   "info": "",
                   "team": [
                         "Aliakbarov Abdulaziz",
-                        "Pankin Pavel",
-                        "Pavel Pankin"
+                        "Pankin Pavel"
                   ],
                   "pmId": "E19",
                   "jiraEpicKey": "KT-34",
@@ -3163,8 +3124,7 @@ window.TB_DATA = {
                   "executor": "Saidov Jamshid (CTO)",
                   "team": [
                         "Axmadov Sherzod",
-                        "Saidov Jamshid",
-                        "Saidov Jamshid (CTO)"
+                        "Saidov Jamshid"
                   ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-1",
@@ -3191,8 +3151,7 @@ window.TB_DATA = {
                   "executor": "Saidov Jamshid (CTO)",
                   "team": [
                         "Axmadov Sherzod",
-                        "Saidov Jamshid",
-                        "Saidov Jamshid (CTO)"
+                        "Saidov Jamshid"
                   ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-2",
@@ -3219,8 +3178,7 @@ window.TB_DATA = {
                   "executor": "Saidov Jamshid (CTO)",
                   "team": [
                         "Axmadov Sherzod",
-                        "Saidov Jamshid",
-                        "Saidov Jamshid (CTO)"
+                        "Saidov Jamshid"
                   ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-3",
@@ -3247,8 +3205,7 @@ window.TB_DATA = {
                   "executor": "Saidov Jamshid (CTO)",
                   "team": [
                         "Axmadov Sherzod",
-                        "Saidov Jamshid",
-                        "Saidov Jamshid (CTO)"
+                        "Saidov Jamshid"
                   ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-4",
@@ -3275,8 +3232,7 @@ window.TB_DATA = {
                   "executor": "Saidov Jamshid (CTO)",
                   "team": [
                         "Axmadov Sherzod",
-                        "Saidov Jamshid",
-                        "Saidov Jamshid (CTO)"
+                        "Saidov Jamshid"
                   ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-5",
@@ -3303,8 +3259,7 @@ window.TB_DATA = {
                   "executor": "Saidov Jamshid (CTO)",
                   "team": [
                         "Axmadov Sherzod",
-                        "Saidov Jamshid",
-                        "Saidov Jamshid (CTO)"
+                        "Saidov Jamshid"
                   ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-6",
@@ -3331,8 +3286,7 @@ window.TB_DATA = {
                   "executor": "Saidov Jamshid (CTO)",
                   "team": [
                         "Axmadov Sherzod",
-                        "Saidov Jamshid",
-                        "Saidov Jamshid (CTO)"
+                        "Saidov Jamshid"
                   ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-7",
@@ -3358,8 +3312,7 @@ window.TB_DATA = {
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
                   "team": [
-                        "Axmadov Sherzod",
-                        "Saidov Jamshid (CTO)"
+                        "Axmadov Sherzod"
                   ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-8",
@@ -3385,8 +3338,7 @@ window.TB_DATA = {
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
                   "team": [
-                        "Axmadov Sherzod",
-                        "Saidov Jamshid (CTO)"
+                        "Axmadov Sherzod"
                   ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-9",
@@ -3412,8 +3364,7 @@ window.TB_DATA = {
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
                   "team": [
-                        "Axmadov Sherzod",
-                        "Saidov Jamshid (CTO)"
+                        "Axmadov Sherzod"
                   ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-10",

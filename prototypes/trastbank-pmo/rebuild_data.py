@@ -57,13 +57,18 @@ data = json.loads(raw)
 print(f"Loaded {len(data['projects'])} projects, {len(data['employees'])} employees")
 
 def build_team(epic_key, existing_team):
-    team = set(existing_team or [])
+    team = set()
+    # Normalize existing team members through JIRA_TO_EMP to avoid duplicates
+    for name in (existing_team or []):
+        canonical = JIRA_TO_EMP.get(name, name)
+        known = any(e['shortName'] == canonical for e in data['employees'])
+        if known:
+            team.add(canonical)
     tickets = jira_issues.get(epic_key, [])
     for tk in tickets:
         assignee = tk.get('assignee')
         if not assignee: continue
         emp_name = JIRA_TO_EMP.get(assignee, assignee)
-        # Only add if it's a known employee (avoid unknown Jira names)
         known = any(e['shortName'] == emp_name for e in data['employees'])
         if known:
             team.add(emp_name)
