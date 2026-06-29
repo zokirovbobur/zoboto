@@ -273,6 +273,8 @@ function Portfolio() {
       }
     });
     r = expanded;
+    // Re-apply status filter after ticket expansion (Operations tickets have their own norm)
+    if (status !== "all") r = r.filter(p => p.norm === status);
     const k = sort.k;
     r = [...r].sort((x, y) => {
       let a, b;
