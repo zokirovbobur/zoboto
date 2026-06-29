@@ -18,19 +18,27 @@ function ProjectDetail() {
   if (!p) return <div className="empty">{t("noData")}</div>;
   const h = healthOf(p); const hm = HEALTH[h];
   const relInc = DATA.incidents.filter(i => (p.product || "").toLowerCase().includes((i.product || "").toLowerCase()) && i.product);
-  // Also include assignees from Jira tickets within this epic
-  const ticketAssigneeNames = React.useMemo ? React.useMemo(() => {
-    if (!p.jiraEpicKey || !window.TB_JIRA_ISSUES) return [];
-    const tickets = window.TB_JIRA_ISSUES[p.jiraEpicKey] || [];
-    const names = new Set();
-    tickets.forEach(tk => { if (tk.assignee) names.add(tk.assignee); });
-    return [...names];
-  }, [p.jiraEpicKey]) : [];
-  const allTeamNames = [...new Set([...p.team, ...ticketAssigneeNames])];
-  const teamEmp = allTeamNames.map(name => {
-    const key = name.replace(/\([^)]*\)/g, "").trim().split(" ").slice(0, 2).join(" ").toLowerCase().replace(/[‘`’ʻ]/g, "");
-    return { name, emp: DATA.employees.find(e => e.matchKey === key) };
-  });
+  const toMatchKey = name => name.replace(/\([^)]*\)/g, "").trim().split(" ").slice(0, 2).join(" ").toLowerCase().replace(/[‘`’ʻ]/g, "");
+  // Merge team + Jira ticket assignees, dedup by employee matchKey (prevents same person with different name formats)
+  const teamEmp = React.useMemo ? React.useMemo(() => {
+    const seen = new Set();
+    const result = [];
+    const add = (name) => {
+      const key = toMatchKey(name);
+      const emp = DATA.employees.find(e => e.matchKey === key);
+      const dedupeKey = emp ? emp.id : key;
+      if (seen.has(dedupeKey)) return;
+      seen.add(dedupeKey);
+      result.push({ name: emp ? emp.shortName : name, emp });
+    };
+    (p.team || []).forEach(add);
+    if (p.jiraEpicKey && window.TB_JIRA_ISSUES) {
+      const tickets = window.TB_JIRA_ISSUES[p.jiraEpicKey] || [];
+      tickets.forEach(tk => { if (tk.assignee) add(tk.assignee); });
+    }
+    return result;
+  }, [p.id]) : (p.team || []).map(name => ({ name, emp: DATA.employees.find(e => e.matchKey === toMatchKey(name)) }));
+  const allTeamNames = teamEmp.map(m => m.name);
 
   const steps = [
     { l: t("col_start"), v: p.startDate, on: !!p.startDate, c: "#2563EB" },

@@ -189,6 +189,7 @@ window.TB_DATA = {
                   "info": "Продукт: Trastpay 2.0",
                   "team": [
                         "Mirzabayev Damir",
+                        "Mirzaolimov Azizbek",
                         "Rasulov Ulugbek",
                         "Xolikulov Farrux"
                   ],
@@ -1515,6 +1516,7 @@ window.TB_DATA = {
                   "info": "Продукт: Trastpay 2.0",
                   "team": [
                         "Aliakbarov Abdulaziz",
+                        "Babajanov Abdulaziz",
                         "Mirzabayev Damir",
                         "Xolikulov Farrux"
                   ],
@@ -1570,11 +1572,12 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [
                         "Axmadov Dilmurod",
-                        "Gayratov Ismoil",
-                        "Umarov Ulug'bek",
                         "Dilmurod Axmadov",
+                        "G'ayratov Ismoil",
+                        "Gayratov Ismoil",
                         "Ismoil Gayratov",
                         "Ulugbek Umarov",
+                        "Umarov Ulug'bek"
                   ],
                   "pmId": "E33",
                   "jiraEpicKey": "KT-29",
@@ -1622,7 +1625,9 @@ window.TB_DATA = {
                   "demoReady": true,
                   "info": "Продукт: ДБО",
                   "team": [
-                        "Pavel Pankin"
+                        "Pankin Pavel",
+                        "Pavel Pankin",
+                        "Umarov Ulug'bek"
                   ],
                   "pmId": "E10",
                   "jiraEpicKey": "KT-30",
@@ -1793,7 +1798,7 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [
                         "Xolikulov Farrux",
-                        "Farrux Xolikulov",
+                        "Farrux Xolikulov"
                   ],
                   "pmId": "E10",
                   "jiraEpicKey": "FC-30",
@@ -1819,7 +1824,7 @@ window.TB_DATA = {
                   "info": "Продукт: ДБО",
                   "team": [
                         "Davranbekov Almazbek",
-                        "Almazbek",
+                        "Almazbek"
                   ],
                   "pmId": "E10",
                   "jiraEpicKey": "KT-27",
@@ -2234,22 +2239,23 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "team": [
+                        "Abdulazim muhammadrafiqov",
+                        "Abdulaziz Babajanov",
                         "Aliakbarov Abdulaziz",
                         "Alimov Mohirjon",
                         "Babajanov Abdulaziz",
+                        "Baxtiyor Valixonov",
                         "Inatullayev Jaxongir",
+                        "Jahongir Inatullaev",
                         "Mirzabayev Damir",
+                        "Mirzaolimov Azizbek",
+                        "Mohirjon Alimov",
                         "Muhammadrafiqov Abdulazim",
                         "Rasulov Ulugbek",
-                        "Toxirov Sarvar",
-                        "Valixonov Baxtiyor",
-                        "Abdulazim muhammadrafiqov",
-                        "Abdulaziz Babajanov",
-                        "Baxtiyor Valixonov",
-                        "Jahongir Inatullaev",
-                        "Mohirjon Alimov",
                         "Sarvar Tohirov",
+                        "Toxirov Sarvar",
                         "Ulugbek Rasulov",
+                        "Valixonov Baxtiyor"
                   ],
                   "pmId": "E15",
                   "jiraEpicKey": "SL-100",
@@ -2274,24 +2280,26 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "team": [
-                        "Akramxo'jayev Muhammadrasul",
-                        "Alimov Mohirjon",
-                        "Babajanov Abdulaziz",
-                        "Mirzabayev Damir",
-                        "Rasulov Ulugbek",
-                        "Toxirov Sarvar",
-                        "Umarov Ulug'bek",
-                        "Valixonov Baxtiyor",
                         "Abdulaziz Babajanov",
                         "Akramhujaev Muhammadrasul",
+                        "Akramxo'jayev Muhammadrasul",
                         "Ali Yadgarov",
+                        "Alimov Mohirjon",
+                        "Babajanov Abdulaziz",
                         "Baxtiyor Valixonov",
                         "Damir Mirzabaev",
+                        "Mirzabayev Damir",
                         "Mohirjon Alimov",
+                        "Rasulov Ulugbek",
                         "Sarvar Tohirov",
+                        "Toxirov Sarvar",
                         "Ulugbek Rasulov",
                         "Ulugbek Umarov",
+                        "Umarov Ulug'bek",
+                        "Valixonov Baxtiyor",
                         "Yakubjonov Azizjon",
+                        "Yodgorov Alibek",
+                        "Yokubjonov Azizjon"
                   ],
                   "pmId": "E15",
                   "jiraEpicKey": "SL-103",
@@ -2321,7 +2329,8 @@ window.TB_DATA = {
                         "Mirzabayev Damir",
                         "Mirzaolimov Azizbek",
                         "Pulatov Nozimjon",
-                        "Rasulov Ulugbek"
+                        "Rasulov Ulugbek",
+                        "Yokubjonov Azizjon"
                   ],
                   "pmId": "E08",
                   "jiraEpicKey": "SL-144",
@@ -2376,6 +2385,7 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "team": [
+                        "Jo'raboyev Axmadillo",
                         "Xolikulov Farrux"
                   ],
                   "pmId": "E10",
@@ -2430,7 +2440,7 @@ window.TB_DATA = {
                         "Axmadov Sherzod",
                         "Xabibjonov Jaloliddin",
                         "Jaloliddin Xabibjonov",
-                        "Шерзод Ахмадов",
+                        "Шерзод Ахмадов"
                   ],
                   "pmId": "E43",
                   "executor": "Axmadov Sherzod",
@@ -2484,7 +2494,7 @@ window.TB_DATA = {
                   "team": [
                         "Xolikulov Farrux",
                         "To'xtashev Asadbek",
-                        "Farrux Xolikulov",
+                        "Farrux Xolikulov"
                   ],
                   "pmId": "E10",
                   "jiraEpicKey": "FC-13",
@@ -2533,7 +2543,9 @@ window.TB_DATA = {
                   "pm": "Шерзод Ахмадов",
                   "demoReady": false,
                   "info": "",
-                  "team": ["Axmadov Sherzod"],
+                  "team": [
+                        "Axmadov Sherzod"
+                  ],
                   "pmId": "E43",
                   "executor": "Axmadov Sherzod",
                   "jiraEpicKey": "MW-7",
@@ -2561,7 +2573,7 @@ window.TB_DATA = {
                         "Inatullayev Jaxongir",
                         "Mirzabayev Damir",
                         "Damir Mirzabaev",
-                        "Jahongir Inatullaev",
+                        "Jahongir Inatullaev"
                   ],
                   "pmId": "E15",
                   "jiraEpicKey": "SL-203",
@@ -2735,7 +2747,10 @@ window.TB_DATA = {
                   "pm": "Шерзод Ахмадов",
                   "demoReady": false,
                   "info": "Mahsulot: Payment HUB. Uzcard/HUMO P2P, OFD, terminal integratsiyalari",
-                  "team": [],
+                  "team": [
+                        "Jabbarov Diyorbek",
+                        "Xabibjonov Jaloliddin"
+                  ],
                   "pmId": "E43",
                   "executor": "Axmadov Sherzod",
                   "jiraEpicKey": "PH-1",
@@ -2760,7 +2775,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Asosiy domen sxemasi tayyor",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Berdiyev Xasan",
+                        "Saidiy Jahongir",
+                        "Sattarov Ravshan"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-3",
                   "origin": "Jira Epic"
@@ -2784,7 +2803,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Core infratuzilma",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Berdiyev Xasan",
+                        "Saidiy Jahongir",
+                        "Sattarov Ravshan"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-12",
                   "origin": "Jira Epic"
@@ -2808,7 +2831,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Auth + registration",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Berdiyev Xasan",
+                        "Saidiy Jahongir",
+                        "Sattarov Ravshan"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-14",
                   "origin": "Jira Epic"
@@ -2832,7 +2859,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. RBAC va profil boshqaruvi",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Berdiyev Xasan",
+                        "Saidiy Jahongir",
+                        "Sattarov Ravshan"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-15",
                   "origin": "Jira Epic"
@@ -2856,7 +2887,10 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. References moduli",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Saidiy Jahongir",
+                        "Berdiyev Xasan"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-16",
                   "origin": "Jira Epic"
@@ -2880,7 +2914,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. ABS Gateway integratsiyasi",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Axmadov Dilmurod",
+                        "Berdiyev Xasan",
+                        "Saidiy Jahongir"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-17",
                   "origin": "Jira Epic"
@@ -2904,7 +2942,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Bank moduli: hisoblar, to'lovlar, shablonlar",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Axmadov Dilmurod",
+                        "Berdiyev Xasan",
+                        "Saidiy Jahongir"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-18",
                   "origin": "Jira Epic"
@@ -2928,7 +2970,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Hujjat aylanmasi",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Axmadov Dilmurod",
+                        "Berdiyev Xasan",
+                        "Saidiy Jahongir"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-19",
                   "origin": "Jira Epic"
@@ -2952,7 +2998,10 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. SMS/Push/WS bildirishnomalar",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Saidiy Jahongir",
+                        "Berdiyev Xasan"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-20",
                   "origin": "Jira Epic"
@@ -2976,7 +3025,10 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Kontragentlar moduli",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Saidiy Jahongir",
+                        "Berdiyev Xasan"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-21",
                   "origin": "Jira Epic"
@@ -3000,7 +3052,10 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Tashqi integratsiyalar",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Saidiy Jahongir",
+                        "Berdiyev Xasan"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-22",
                   "origin": "Jira Epic"
@@ -3024,7 +3079,10 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. QA/UAT/Pilot",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Saidiy Jahongir",
+                        "Berdiyev Xasan"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-23",
                   "origin": "Jira Epic"
@@ -3048,7 +3106,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "Mahsulot: Trastbank Business. Prod hardening",
                   "executor": "Saidiy Jahongir",
-                  "team": ["Saidiy Jahongir", "Berdiyev Xasan"],
+                  "team": [
+                        "Berdiyev Xasan",
+                        "Saidiy Jahongir",
+                        "Sattarov Ravshan"
+                  ],
                   "pmId": "E33",
                   "jiraEpicKey": "TB-79",
                   "origin": "Jira Epic"
@@ -3072,8 +3134,9 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "team": [
-                        "Pavel Pankin",
-                        "Aliakbarov Abdulaziz"
+                        "Aliakbarov Abdulaziz",
+                        "Pankin Pavel",
+                        "Pavel Pankin"
                   ],
                   "pmId": "E19",
                   "jiraEpicKey": "KT-34",
@@ -3098,7 +3161,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
-                  "team": ["Axmadov Sherzod", "Saidov Jamshid (CTO)"],
+                  "team": [
+                        "Axmadov Sherzod",
+                        "Saidov Jamshid",
+                        "Saidov Jamshid (CTO)"
+                  ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-1",
                   "origin": "Jira Epic"
@@ -3122,7 +3189,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
-                  "team": ["Axmadov Sherzod", "Saidov Jamshid (CTO)"],
+                  "team": [
+                        "Axmadov Sherzod",
+                        "Saidov Jamshid",
+                        "Saidov Jamshid (CTO)"
+                  ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-2",
                   "origin": "Jira Epic"
@@ -3146,7 +3217,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
-                  "team": ["Axmadov Sherzod", "Saidov Jamshid (CTO)"],
+                  "team": [
+                        "Axmadov Sherzod",
+                        "Saidov Jamshid",
+                        "Saidov Jamshid (CTO)"
+                  ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-3",
                   "origin": "Jira Epic"
@@ -3170,7 +3245,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
-                  "team": ["Axmadov Sherzod", "Saidov Jamshid (CTO)"],
+                  "team": [
+                        "Axmadov Sherzod",
+                        "Saidov Jamshid",
+                        "Saidov Jamshid (CTO)"
+                  ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-4",
                   "origin": "Jira Epic"
@@ -3194,7 +3273,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
-                  "team": ["Axmadov Sherzod", "Saidov Jamshid (CTO)"],
+                  "team": [
+                        "Axmadov Sherzod",
+                        "Saidov Jamshid",
+                        "Saidov Jamshid (CTO)"
+                  ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-5",
                   "origin": "Jira Epic"
@@ -3218,7 +3301,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
-                  "team": ["Axmadov Sherzod", "Saidov Jamshid (CTO)"],
+                  "team": [
+                        "Axmadov Sherzod",
+                        "Saidov Jamshid",
+                        "Saidov Jamshid (CTO)"
+                  ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-6",
                   "origin": "Jira Epic"
@@ -3242,7 +3329,11 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
-                  "team": ["Axmadov Sherzod", "Saidov Jamshid (CTO)"],
+                  "team": [
+                        "Axmadov Sherzod",
+                        "Saidov Jamshid",
+                        "Saidov Jamshid (CTO)"
+                  ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-7",
                   "origin": "Jira Epic"
@@ -3266,7 +3357,10 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
-                  "team": ["Axmadov Sherzod", "Saidov Jamshid (CTO)"],
+                  "team": [
+                        "Axmadov Sherzod",
+                        "Saidov Jamshid (CTO)"
+                  ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-8",
                   "origin": "Jira Epic"
@@ -3290,7 +3384,10 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
-                  "team": ["Axmadov Sherzod", "Saidov Jamshid (CTO)"],
+                  "team": [
+                        "Axmadov Sherzod",
+                        "Saidov Jamshid (CTO)"
+                  ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-9",
                   "origin": "Jira Epic"
@@ -3314,7 +3411,10 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Saidov Jamshid (CTO)",
-                  "team": ["Axmadov Sherzod", "Saidov Jamshid (CTO)"],
+                  "team": [
+                        "Axmadov Sherzod",
+                        "Saidov Jamshid (CTO)"
+                  ],
                   "pmId": "E43",
                   "jiraEpicKey": "MDI-10",
                   "origin": "Jira Epic"
@@ -3338,7 +3438,9 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Pulatov Nozimjon",
-                  "team": ["Pulatov Nozimjon"],
+                  "team": [
+                        "Pulatov Nozimjon"
+                  ],
                   "pmId": "E20",
                   "jiraEpicKey": "BSA-BOARD",
                   "origin": "Jira Epic"
@@ -3362,11 +3464,14 @@ window.TB_DATA = {
                   "demoReady": false,
                   "info": "",
                   "executor": "Abduxoshimov Ixtiyor",
-                  "team": ["Abduxoshimov Ixtiyor", "Sunnatov Yaxyo"],
+                  "team": [
+                        "Abduxoshimov Ixtiyor",
+                        "Sunnatov Yaxyo"
+                  ],
                   "pmId": "E41",
                   "jiraEpicKey": "TD-BOARD",
                   "origin": "Jira Epic"
-            },
+            }
       ],
       "employees": [
             {
@@ -3403,8 +3508,8 @@ window.TB_DATA = {
                   "prCount": 11,
                   "statusCounts": {
                         "completed": 12,
-                        "progress": 2,
-                        "planned": 6,
+                        "progress": 1,
+                        "planned": 2,
                         "paused": 5
                   },
                   "projectIds": [
@@ -3429,7 +3534,7 @@ window.TB_DATA = {
                         "P112",
                         "P146"
                   ],
-                  "totalMatched": 25,
+                  "totalMatched": 20,
                   "loadLevel": "critical"
             },
             {
@@ -3444,9 +3549,9 @@ window.TB_DATA = {
                   "grade": "Senior",
                   "prCount": 8,
                   "statusCounts": {
-                        "completed": 12,
-                        "progress": 6,
-                        "planned": 4,
+                        "completed": 15,
+                        "progress": 3,
+                        "planned": 0,
                         "paused": 2
                   },
                   "projectIds": [
@@ -3462,7 +3567,6 @@ window.TB_DATA = {
                         "P031",
                         "P038",
                         "P050",
-                        "P051",
                         "P062",
                         "P090",
                         "P093",
@@ -3472,7 +3576,7 @@ window.TB_DATA = {
                         "P107",
                         "P108"
                   ],
-                  "totalMatched": 24,
+                  "totalMatched": 20,
                   "loadLevel": "critical"
             },
             {
@@ -3489,7 +3593,7 @@ window.TB_DATA = {
                   "statusCounts": {
                         "completed": 8,
                         "progress": 0,
-                        "planned": 1,
+                        "planned": 0,
                         "paused": 2
                   },
                   "projectIds": [
@@ -3504,7 +3608,7 @@ window.TB_DATA = {
                         "P090",
                         "P093"
                   ],
-                  "totalMatched": 11,
+                  "totalMatched": 10,
                   "loadLevel": "normal"
             },
             {
@@ -3521,7 +3625,7 @@ window.TB_DATA = {
                   "statusCounts": {
                         "completed": 11,
                         "progress": 2,
-                        "planned": 3,
+                        "planned": 0,
                         "paused": 2
                   },
                   "projectIds": [
@@ -3541,7 +3645,7 @@ window.TB_DATA = {
                         "P105",
                         "P106"
                   ],
-                  "totalMatched": 18,
+                  "totalMatched": 15,
                   "loadLevel": "high"
             },
             {
@@ -3556,9 +3660,9 @@ window.TB_DATA = {
                   "grade": "Team Lead",
                   "prCount": 12,
                   "statusCounts": {
-                        "completed": 10,
-                        "progress": 5,
-                        "planned": 2,
+                        "completed": 11,
+                        "progress": 3,
+                        "planned": 1,
                         "paused": 5
                   },
                   "projectIds": [
@@ -3583,7 +3687,7 @@ window.TB_DATA = {
                         "P106",
                         "P108"
                   ],
-                  "totalMatched": 22,
+                  "totalMatched": 20,
                   "loadLevel": "critical"
             },
             {
@@ -3600,7 +3704,7 @@ window.TB_DATA = {
                   "statusCounts": {
                         "completed": 9,
                         "progress": 2,
-                        "planned": 2,
+                        "planned": 0,
                         "paused": 2
                   },
                   "projectIds": [
@@ -3618,7 +3722,7 @@ window.TB_DATA = {
                         "P105",
                         "P106"
                   ],
-                  "totalMatched": 15,
+                  "totalMatched": 13,
                   "loadLevel": "high"
             },
             {
@@ -3633,9 +3737,9 @@ window.TB_DATA = {
                   "grade": "Middle",
                   "prCount": 5,
                   "statusCounts": {
-                        "completed": 9,
-                        "progress": 5,
-                        "planned": 1,
+                        "completed": 12,
+                        "progress": 1,
+                        "planned": 0,
                         "paused": 2
                   },
                   "projectIds": [
@@ -3655,7 +3759,7 @@ window.TB_DATA = {
                         "P107",
                         "P108"
                   ],
-                  "totalMatched": 17,
+                  "totalMatched": 15,
                   "loadLevel": "high"
             },
             {
@@ -3672,7 +3776,7 @@ window.TB_DATA = {
                   "statusCounts": {
                         "completed": 5,
                         "progress": 0,
-                        "planned": 1,
+                        "planned": 0,
                         "paused": 3
                   },
                   "projectIds": [
@@ -3685,7 +3789,7 @@ window.TB_DATA = {
                         "P093",
                         "P098"
                   ],
-                  "totalMatched": 9,
+                  "totalMatched": 8,
                   "loadLevel": "normal"
             },
             {
@@ -3701,8 +3805,8 @@ window.TB_DATA = {
                   "prCount": 27,
                   "statusCounts": {
                         "completed": 16,
-                        "progress": 1,
-                        "planned": 0,
+                        "progress": 0,
+                        "planned": 3,
                         "paused": 4
                   },
                   "projectIds": [
@@ -3712,7 +3816,6 @@ window.TB_DATA = {
                         "P013",
                         "P014",
                         "P015",
-                        "P016",
                         "P017",
                         "P018",
                         "P019",
@@ -3723,20 +3826,15 @@ window.TB_DATA = {
                         "P029",
                         "P030",
                         "P043",
-                        "P054",
-                        "P055",
                         "P058",
-                        "P075",
-                        "P086",
                         "P090",
                         "P094",
                         "P095",
                         "P096",
-                        "P112",
                         "P146",
                         "P147"
                   ],
-                  "totalMatched": 21,
+                  "totalMatched": 23,
                   "loadLevel": "critical"
             },
             {
@@ -3782,50 +3880,7 @@ window.TB_DATA = {
                         "planned": 0,
                         "paused": 0
                   },
-                  "projectIds": [
-                        "P004",
-                        "P009",
-                        "P010",
-                        "P011",
-                        "P012",
-                        "P013",
-                        "P014",
-                        "P015",
-                        "P017",
-                        "P018",
-                        "P019",
-                        "P020",
-                        "P021",
-                        "P022",
-                        "P023",
-                        "P024",
-                        "P025",
-                        "P026",
-                        "P027",
-                        "P028",
-                        "P029",
-                        "P030",
-                        "P031",
-                        "P032",
-                        "P033",
-                        "P034",
-                        "P035",
-                        "P036",
-                        "P037",
-                        "P038",
-                        "P043",
-                        "P058",
-                        "P061",
-                        "P062",
-                        "P090",
-                        "P093",
-                        "P094",
-                        "P095",
-                        "P096",
-                        "P097",
-                        "P098",
-                        "P099"
-                  ],
+                  "projectIds": [],
                   "totalMatched": 0,
                   "loadLevel": "low"
             },
@@ -3841,60 +3896,22 @@ window.TB_DATA = {
                   "grade": "CTO",
                   "prCount": 51,
                   "statusCounts": {
-                        "completed": 0,
+                        "completed": 7,
                         "progress": 0,
                         "planned": 0,
                         "paused": 0
                   },
                   "projectIds": [
-                        "P004",
-                        "P009",
-                        "P010",
-                        "P011",
-                        "P012",
-                        "P013",
-                        "P014",
-                        "P015",
-                        "P017",
-                        "P018",
-                        "P019",
-                        "P020",
-                        "P021",
-                        "P022",
-                        "P023",
-                        "P024",
-                        "P025",
-                        "P026",
-                        "P027",
-                        "P028",
-                        "P029",
-                        "P030",
-                        "P031",
-                        "P037",
-                        "P038",
-                        "P043",
-                        "P058",
-                        "P061",
-                        "P062",
-                        "P090",
-                        "P093",
-                        "P094",
-                        "P095",
-                        "P096",
-                        "P097",
                         "P171",
                         "P172",
                         "P173",
                         "P174",
                         "P175",
                         "P176",
-                        "P177",
-                        "P178",
-                        "P179",
-                        "P180"
+                        "P177"
                   ],
-                  "totalMatched": 0,
-                  "loadLevel": "low"
+                  "totalMatched": 7,
+                  "loadLevel": "normal"
             },
             {
                   "id": "E14",
@@ -3909,26 +3926,24 @@ window.TB_DATA = {
                   "prCount": 6,
                   "statusCounts": {
                         "completed": 5,
-                        "progress": 1,
-                        "planned": 4,
+                        "progress": 2,
+                        "planned": 1,
                         "paused": 2
                   },
                   "projectIds": [
-                        "P002",
                         "P009",
                         "P010",
                         "P022",
                         "P027",
                         "P031",
                         "P061",
-                        "P062",
                         "P090",
                         "P093",
                         "P105",
                         "P149"
                   ],
-                  "totalMatched": 12,
-                  "loadLevel": "high"
+                  "totalMatched": 10,
+                  "loadLevel": "normal"
             },
             {
                   "id": "E15",
@@ -3942,9 +3957,9 @@ window.TB_DATA = {
                   "grade": "Middle",
                   "prCount": 12,
                   "statusCounts": {
-                        "completed": 20,
-                        "progress": 6,
-                        "planned": 8,
+                        "completed": 23,
+                        "progress": 3,
+                        "planned": 1,
                         "paused": 2
                   },
                   "projectIds": [
@@ -3957,8 +3972,6 @@ window.TB_DATA = {
                         "P008",
                         "P009",
                         "P010",
-                        "P011",
-                        "P012",
                         "P021",
                         "P022",
                         "P026",
@@ -3973,7 +3986,6 @@ window.TB_DATA = {
                         "P091",
                         "P092",
                         "P093",
-                        "P099",
                         "P101",
                         "P102",
                         "P105",
@@ -3981,7 +3993,7 @@ window.TB_DATA = {
                         "P107",
                         "P149"
                   ],
-                  "totalMatched": 36,
+                  "totalMatched": 29,
                   "loadLevel": "critical"
             },
             {
@@ -3998,7 +4010,7 @@ window.TB_DATA = {
                   "statusCounts": {
                         "completed": 5,
                         "progress": 0,
-                        "planned": 1,
+                        "planned": 0,
                         "paused": 2
                   },
                   "projectIds": [
@@ -4010,7 +4022,7 @@ window.TB_DATA = {
                         "P090",
                         "P093"
                   ],
-                  "totalMatched": 8,
+                  "totalMatched": 7,
                   "loadLevel": "normal"
             },
             {
@@ -4025,9 +4037,9 @@ window.TB_DATA = {
                   "grade": "Junior",
                   "prCount": 2,
                   "statusCounts": {
-                        "completed": 5,
-                        "progress": 0,
-                        "planned": 1,
+                        "completed": 6,
+                        "progress": 1,
+                        "planned": 0,
                         "paused": 2
                   },
                   "projectIds": [
@@ -4038,9 +4050,10 @@ window.TB_DATA = {
                         "P031",
                         "P090",
                         "P093",
-                        "P106"
+                        "P106",
+                        "P107"
                   ],
-                  "totalMatched": 8,
+                  "totalMatched": 9,
                   "loadLevel": "normal"
             },
             {
@@ -4057,7 +4070,7 @@ window.TB_DATA = {
                   "statusCounts": {
                         "completed": 6,
                         "progress": 1,
-                        "planned": 4,
+                        "planned": 0,
                         "paused": 2
                   },
                   "projectIds": [
@@ -4071,8 +4084,8 @@ window.TB_DATA = {
                         "P090",
                         "P093"
                   ],
-                  "totalMatched": 13,
-                  "loadLevel": "high"
+                  "totalMatched": 9,
+                  "loadLevel": "normal"
             },
             {
                   "id": "E19",
@@ -4087,8 +4100,8 @@ window.TB_DATA = {
                   "prCount": 21,
                   "statusCounts": {
                         "completed": 18,
-                        "progress": 1,
-                        "planned": 0,
+                        "progress": 2,
+                        "planned": 6,
                         "paused": 1
                   },
                   "projectIds": [
@@ -4112,7 +4125,6 @@ window.TB_DATA = {
                         "P049",
                         "P090",
                         "P105",
-                        "P106",
                         "P150",
                         "P151",
                         "P152",
@@ -4121,7 +4133,7 @@ window.TB_DATA = {
                         "P155",
                         "P156"
                   ],
-                  "totalMatched": 20,
+                  "totalMatched": 27,
                   "loadLevel": "critical"
             },
             {
@@ -4136,27 +4148,17 @@ window.TB_DATA = {
                   "grade": "Middle",
                   "prCount": 14,
                   "statusCounts": {
-                        "completed": 0,
-                        "progress": 2,
+                        "completed": 2,
+                        "progress": 1,
                         "planned": 0,
                         "paused": 0
                   },
                   "projectIds": [
-                        "P004",
-                        "P009",
-                        "P010",
-                        "P022",
-                        "P027",
-                        "P031",
-                        "P038",
-                        "P061",
-                        "P090",
-                        "P093",
                         "P107",
                         "P108",
                         "P181"
                   ],
-                  "totalMatched": 2,
+                  "totalMatched": 3,
                   "loadLevel": "low"
             },
             {
@@ -4176,10 +4178,7 @@ window.TB_DATA = {
                         "planned": 0,
                         "paused": 0
                   },
-                  "projectIds": [
-                        "P010",
-                        "P090"
-                  ],
+                  "projectIds": [],
                   "totalMatched": 0,
                   "loadLevel": "low"
             },
@@ -4195,12 +4194,13 @@ window.TB_DATA = {
                   "grade": "Senior",
                   "prCount": 5,
                   "statusCounts": {
-                        "completed": 6,
-                        "progress": 2,
+                        "completed": 8,
+                        "progress": 1,
                         "planned": 1,
                         "paused": 5
                   },
                   "projectIds": [
+                        "P006",
                         "P009",
                         "P010",
                         "P019",
@@ -4213,9 +4213,10 @@ window.TB_DATA = {
                         "P094",
                         "P095",
                         "P096",
+                        "P105",
                         "P107"
                   ],
-                  "totalMatched": 14,
+                  "totalMatched": 15,
                   "loadLevel": "high"
             },
             {
@@ -4230,9 +4231,9 @@ window.TB_DATA = {
                   "grade": "Senior",
                   "prCount": 32,
                   "statusCounts": {
-                        "completed": 16,
-                        "progress": 5,
-                        "planned": 7,
+                        "completed": 17,
+                        "progress": 2,
+                        "planned": 1,
                         "paused": 6
                   },
                   "projectIds": [
@@ -4263,7 +4264,7 @@ window.TB_DATA = {
                         "P108",
                         "P182"
                   ],
-                  "totalMatched": 34,
+                  "totalMatched": 26,
                   "loadLevel": "critical"
             },
             {
@@ -4279,9 +4280,9 @@ window.TB_DATA = {
                   "prCount": 8,
                   "statusCounts": {
                         "completed": 15,
-                        "progress": 2,
+                        "progress": 1,
                         "planned": 0,
-                        "paused": 0
+                        "paused": 2
                   },
                   "projectIds": [
                         "P001",
@@ -4300,9 +4301,10 @@ window.TB_DATA = {
                         "P030",
                         "P043",
                         "P051",
+                        "P055",
                         "P106"
                   ],
-                  "totalMatched": 17,
+                  "totalMatched": 18,
                   "loadLevel": "high"
             },
             {
@@ -4318,9 +4320,9 @@ window.TB_DATA = {
                   "prCount": 4,
                   "statusCounts": {
                         "completed": 11,
-                        "progress": 0,
+                        "progress": 1,
                         "planned": 0,
-                        "paused": 0
+                        "paused": 1
                   },
                   "projectIds": [
                         "P012",
@@ -4337,8 +4339,8 @@ window.TB_DATA = {
                         "P055",
                         "P156"
                   ],
-                  "totalMatched": 11,
-                  "loadLevel": "normal"
+                  "totalMatched": 13,
+                  "loadLevel": "high"
             },
             {
                   "id": "E26",
@@ -4355,7 +4357,7 @@ window.TB_DATA = {
                         "completed": 8,
                         "progress": 0,
                         "planned": 0,
-                        "paused": 0
+                        "paused": 1
                   },
                   "projectIds": [
                         "P012",
@@ -4368,7 +4370,7 @@ window.TB_DATA = {
                         "P043",
                         "P051"
                   ],
-                  "totalMatched": 8,
+                  "totalMatched": 9,
                   "loadLevel": "normal"
             },
             {
@@ -4385,8 +4387,8 @@ window.TB_DATA = {
                   "statusCounts": {
                         "completed": 5,
                         "progress": 0,
-                        "planned": 0,
-                        "paused": 1
+                        "planned": 1,
+                        "paused": 0
                   },
                   "projectIds": [
                         "P012",
@@ -4411,8 +4413,8 @@ window.TB_DATA = {
                   "grade": "Junior",
                   "prCount": 3,
                   "statusCounts": {
-                        "completed": 4,
-                        "progress": 2,
+                        "completed": 5,
+                        "progress": 0,
                         "planned": 1,
                         "paused": 2
                   },
@@ -4426,7 +4428,7 @@ window.TB_DATA = {
                         "P096",
                         "P107"
                   ],
-                  "totalMatched": 9,
+                  "totalMatched": 8,
                   "loadLevel": "normal"
             },
             {
@@ -4441,9 +4443,9 @@ window.TB_DATA = {
                   "grade": "Junior",
                   "prCount": 2,
                   "statusCounts": {
-                        "completed": 4,
-                        "progress": 0,
-                        "planned": 1,
+                        "completed": 5,
+                        "progress": 2,
+                        "planned": 0,
                         "paused": 1
                   },
                   "projectIds": [
@@ -4451,11 +4453,12 @@ window.TB_DATA = {
                         "P022",
                         "P027",
                         "P031",
+                        "P049",
                         "P093",
                         "P105",
                         "P106"
                   ],
-                  "totalMatched": 6,
+                  "totalMatched": 8,
                   "loadLevel": "normal"
             },
             {
@@ -4471,26 +4474,14 @@ window.TB_DATA = {
                   "prCount": 19,
                   "statusCounts": {
                         "completed": 0,
-                        "progress": 0,
+                        "progress": 1,
                         "planned": 0,
                         "paused": 0
                   },
                   "projectIds": [
-                        "P004",
-                        "P009",
-                        "P012",
-                        "P015",
-                        "P020",
-                        "P022",
-                        "P023",
-                        "P027",
-                        "P030",
-                        "P031",
-                        "P038",
-                        "P061",
-                        "P093"
+                        "P106"
                   ],
-                  "totalMatched": 0,
+                  "totalMatched": 1,
                   "loadLevel": "low"
             },
             {
@@ -4543,7 +4534,7 @@ window.TB_DATA = {
                   "statusCounts": {
                         "completed": 4,
                         "progress": 0,
-                        "planned": 1,
+                        "planned": 0,
                         "paused": 1
                   },
                   "projectIds": [
@@ -4553,8 +4544,8 @@ window.TB_DATA = {
                         "P031",
                         "P093"
                   ],
-                  "totalMatched": 6,
-                  "loadLevel": "normal"
+                  "totalMatched": 5,
+                  "loadLevel": "low"
             },
             {
                   "id": "E33",
@@ -4568,9 +4559,9 @@ window.TB_DATA = {
                   "grade": "Head",
                   "prCount": 32,
                   "statusCounts": {
-                        "completed": 16,
-                        "progress": 1,
-                        "planned": 0,
+                        "completed": 17,
+                        "progress": 3,
+                        "planned": 10,
                         "paused": 3
                   },
                   "projectIds": [
@@ -4590,7 +4581,6 @@ window.TB_DATA = {
                         "P030",
                         "P037",
                         "P043",
-                        "P051",
                         "P058",
                         "P094",
                         "P095",
@@ -4609,7 +4599,7 @@ window.TB_DATA = {
                         "P169",
                         "P170"
                   ],
-                  "totalMatched": 20,
+                  "totalMatched": 33,
                   "loadLevel": "critical"
             },
             {
@@ -4625,9 +4615,9 @@ window.TB_DATA = {
                   "prCount": 14,
                   "statusCounts": {
                         "completed": 7,
-                        "progress": 3,
-                        "planned": 4,
-                        "paused": 2
+                        "progress": 1,
+                        "planned": 2,
+                        "paused": 3
                   },
                   "projectIds": [
                         "P009",
@@ -4639,9 +4629,12 @@ window.TB_DATA = {
                         "P037",
                         "P051",
                         "P093",
-                        "P097"
+                        "P097",
+                        "P163",
+                        "P164",
+                        "P165"
                   ],
-                  "totalMatched": 16,
+                  "totalMatched": 13,
                   "loadLevel": "high"
             },
             {
@@ -4656,9 +4649,9 @@ window.TB_DATA = {
                   "grade": "Team Lead",
                   "prCount": 13,
                   "statusCounts": {
-                        "completed": 6,
-                        "progress": 2,
-                        "planned": 4,
+                        "completed": 7,
+                        "progress": 3,
+                        "planned": 9,
                         "paused": 2
                   },
                   "projectIds": [
@@ -4670,8 +4663,6 @@ window.TB_DATA = {
                         "P037",
                         "P093",
                         "P097",
-                        "P105",
-                        "P149",
                         "P158",
                         "P159",
                         "P160",
@@ -4686,8 +4677,8 @@ window.TB_DATA = {
                         "P169",
                         "P170"
                   ],
-                  "totalMatched": 14,
-                  "loadLevel": "high"
+                  "totalMatched": 21,
+                  "loadLevel": "critical"
             },
             {
                   "id": "E36",
@@ -4701,9 +4692,9 @@ window.TB_DATA = {
                   "grade": "Senior",
                   "prCount": 17,
                   "statusCounts": {
-                        "completed": 6,
-                        "progress": 3,
-                        "planned": 4,
+                        "completed": 7,
+                        "progress": 0,
+                        "planned": 1,
                         "paused": 5
                   },
                   "projectIds": [
@@ -4718,9 +4709,10 @@ window.TB_DATA = {
                         "P094",
                         "P095",
                         "P096",
-                        "P097"
+                        "P097",
+                        "P112"
                   ],
-                  "totalMatched": 18,
+                  "totalMatched": 13,
                   "loadLevel": "high"
             },
             {
@@ -4735,9 +4727,9 @@ window.TB_DATA = {
                   "grade": "Senior",
                   "prCount": 11,
                   "statusCounts": {
-                        "completed": 6,
-                        "progress": 3,
-                        "planned": 4,
+                        "completed": 8,
+                        "progress": 1,
+                        "planned": 3,
                         "paused": 2
                   },
                   "projectIds": [
@@ -4749,9 +4741,14 @@ window.TB_DATA = {
                         "P037",
                         "P093",
                         "P097",
-                        "P108"
+                        "P108",
+                        "P158",
+                        "P159",
+                        "P160",
+                        "P161",
+                        "P170"
                   ],
-                  "totalMatched": 15,
+                  "totalMatched": 14,
                   "loadLevel": "high"
             },
             {
@@ -4771,9 +4768,7 @@ window.TB_DATA = {
                         "planned": 0,
                         "paused": 0
                   },
-                  "projectIds": [
-                        "P020"
-                  ],
+                  "projectIds": [],
                   "totalMatched": 0,
                   "loadLevel": "low"
             },
@@ -4791,13 +4786,14 @@ window.TB_DATA = {
                   "statusCounts": {
                         "completed": 0,
                         "progress": 2,
-                        "planned": 3,
+                        "planned": 0,
                         "paused": 0
                   },
                   "projectIds": [
-                        "P114"
+                        "P114",
+                        "P157"
                   ],
-                  "totalMatched": 5,
+                  "totalMatched": 2,
                   "loadLevel": "low"
             },
             {
@@ -4813,12 +4809,14 @@ window.TB_DATA = {
                   "prCount": 2,
                   "statusCounts": {
                         "completed": 0,
-                        "progress": 0,
+                        "progress": 1,
                         "planned": 0,
                         "paused": 0
                   },
-                  "projectIds": [],
-                  "totalMatched": 0,
+                  "projectIds": [
+                        "P157"
+                  ],
+                  "totalMatched": 1,
                   "loadLevel": "low"
             },
             {
@@ -4835,7 +4833,7 @@ window.TB_DATA = {
                   "statusCounts": {
                         "completed": 8,
                         "progress": 2,
-                        "planned": 7,
+                        "planned": 0,
                         "paused": 2
                   },
                   "projectIds": [
@@ -4852,7 +4850,7 @@ window.TB_DATA = {
                         "P097",
                         "P182"
                   ],
-                  "totalMatched": 19,
+                  "totalMatched": 12,
                   "loadLevel": "high"
             },
             {
@@ -4867,9 +4865,9 @@ window.TB_DATA = {
                   "grade": "Middle",
                   "prCount": 3,
                   "statusCounts": {
-                        "completed": 0,
-                        "progress": 3,
-                        "planned": 0,
+                        "completed": 8,
+                        "progress": 5,
+                        "planned": 1,
                         "paused": 0
                   },
                   "projectIds": [
@@ -4877,7 +4875,6 @@ window.TB_DATA = {
                         "P114",
                         "P115",
                         "P148",
-                        "P157",
                         "P171",
                         "P172",
                         "P173",
@@ -4889,8 +4886,8 @@ window.TB_DATA = {
                         "P179",
                         "P180"
                   ],
-                  "totalMatched": 3,
-                  "loadLevel": "low"
+                  "totalMatched": 14,
+                  "loadLevel": "high"
             }
       ],
       "incidents": [
