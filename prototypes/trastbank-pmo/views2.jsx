@@ -18,7 +18,7 @@ function ProjectDetail() {
   if (!p) return <div className="empty">{t("noData")}</div>;
   const h = healthOf(p); const hm = HEALTH[h];
   const relInc = DATA.incidents.filter(i => (p.product || "").toLowerCase().includes((i.product || "").toLowerCase()) && i.product);
-  const toMatchKey = name => name.replace(/\([^)]*\)/g, "").trim().split(" ").slice(0, 2).join(" ").toLowerCase().replace(/[‘`’ʻ]/g, "");
+  const toMatchKey = name => name.replace(/\([^)]*\)/g, "").trim().split(" ").slice(0, 2).join(" ").toLowerCase().replace(/[‘`’’’ʻ]/g, "");
   // Merge team + Jira ticket assignees, dedup by employee matchKey (prevents same person with different name formats)
   const teamEmp = React.useMemo ? React.useMemo(() => {
     const seen = new Set();
