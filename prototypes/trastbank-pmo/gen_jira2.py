@@ -1,5 +1,43 @@
 import json
 
+# Jira displayName → employee shortName (canonical)
+JIRA_TO_EMP = {
+  'Damir Mirzabaev':           'Mirzabayev Damir',
+  'Mukhammadrasul':            "Akramxo'jayev Muhammadrasul",
+  'Farrux Xolikulov':          'Xolikulov Farrux',
+  'Ulugbek Rasulov':           'Rasulov Ulugbek',
+  'Sarvar Tohirov':            'Toxirov Sarvar',
+  'Baxtiyor Valixonov':        'Valixonov Baxtiyor',
+  'Mohirjon':                  'Alimov Mohirjon',
+  'Pulatov Nozim':             'Pulatov Nozimjon',
+  'Yaxyo Sunnatov':            'Sunnatov Yaxyo',
+  'Ulugbek Umarov':            "Umarov Ulug'bek",
+  'Ravshan Sattarov':          'Sattarov Ravshan',
+  'Шерзод Ахмадов':            'Axmadov Sherzod',
+  'Jaloliddin Xabibjonov':     'Xabibjonov Jaloliddin',
+  'Dilmurod Axmadov':          'Axmadov Dilmurod',
+  'Ismoil Gayratov':           "G'ayratov Ismoil",
+  'Doniyorbek Komilov':        'Komilov Doniyorbek',
+  'Jahongir Inatullaev':       'Inatullayev Jaxongir',
+  'Almazbek':                  'Davranbekov Almazbek',
+  'Самадбек':                  'Yuldashev Samatbek',
+  'Abdulaziz':                 'Aliakbarov Abdulaziz',
+  'aziztrastpay':              'Mirzaolimov Azizbek',
+  'JAHONGIR SAIDIY':           'Saidiy Jahongir',
+  'Акрамхужаев Мухаммадрасул': "Akramxo'jayev Muhammadrasul",
+  'Akramhujaev Muhammadrasul': "Akramxo'jayev Muhammadrasul",
+  'Mohirjon Alimov':           'Alimov Mohirjon',
+  'Самадбек  Юлдашев':         'Yuldashev Samatbek',
+  'Abdulaziz Babajanov':       'Babajanov Abdulaziz',
+  'Abdulazim muhammadrafiqov': 'Mirzaolimov Azizbek',
+  'jamshid.trastpay':          'Saidov Jamshid',
+  'Diyorbek':                  'Jabbarov Diyorbek',
+  'Ali Yadgarov':              'Yodgorov Alibek',
+  "Ahmadillo Jo'raboyev":      "Jo'raboyev Axmadillo",
+  'Yakubjonov Azizjon':        'Yokubjonov Azizjon',
+  'Pavel Pankin':              'Pankin Pavel',
+}
+
 TOOL_FILES = [
     # SL page 1
     r'C:\Users\user\.claude\projects\C--Users-user-Projects-pmo-board\5f42c0de-0972-4240-b711-202ecf818c2b\tool-results\mcp-69e712ba-fbcb-4dff-a9f3-129666c2ce4e-searchJiraIssuesUsingJql-1782731008616.txt',
@@ -42,11 +80,15 @@ INLINE_NODES = [
 
 by_epic = {}
 
+def normalize_assignee(name):
+    if not name: return None
+    return JIRA_TO_EMP.get(name, name)
+
 def add_issue(key, parent_key, summary, itype, status, done, assignee):
     if parent_key not in by_epic:
         by_epic[parent_key] = {}
     s = summary if len(summary) <= 90 else summary[:89] + '…'
-    by_epic[parent_key][key] = {"key": key, "summary": s, "type": itype, "status": status, "done": done, "assignee": assignee}
+    by_epic[parent_key][key] = {"key": key, "summary": s, "type": itype, "status": status, "done": done, "assignee": normalize_assignee(assignee)}
 
 # Parse tool result files
 for filepath in TOOL_FILES:
