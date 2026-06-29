@@ -235,11 +235,9 @@ function Portfolio() {
   const totalExpanded = uM1(() => {
     let count = 0;
     ALL_P.forEach(p => {
-      if (((DATA.boardTypes || {})[p.product]) === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES) {
-        count += (window.TB_JIRA_ISSUES[p.jiraEpicKey] || []).length;
-      } else {
-        count++;
-      }
+      const _t = (((DATA.boardTypes || {})[p.product]) === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES)
+        ? (window.TB_JIRA_ISSUES[p.jiraEpicKey] || []) : [];
+      count += _t.length > 0 ? _t.length : 1;
     });
     return count;
   }, []);
@@ -267,9 +265,11 @@ function Portfolio() {
     // Expand Operations boards into individual tickets
     const expanded = [];
     r.forEach(p => {
-      if (((DATA.boardTypes || {})[p.product]) === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES) {
-        const tickets = window.TB_JIRA_ISSUES[p.jiraEpicKey] || [];
-        tickets.forEach(ticket => {
+      const _bt = ((DATA.boardTypes || {})[p.product]);
+      const _tickets = (_bt === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES)
+        ? (window.TB_JIRA_ISSUES[p.jiraEpicKey] || []) : [];
+      if (_tickets.length > 0) {
+        _tickets.forEach(ticket => {
           expanded.push({
             ...p,
             id: ticket.key,
