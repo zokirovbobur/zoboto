@@ -1,4 +1,4 @@
-// Jira issues pre-fetched per epic — generated 2026-06-23 (sync updated 2026-06-26)
+// Jira issues pre-fetched per epic — generated 2026-06-23 (sync updated 2026-06-29)
 window.TB_JIRA_ISSUES = {
   "FC-13": [
     {"key": "FC-3", "summary": "Добавить поле - ФИО", "type": "История", "status": "Backlog", "done": false},
@@ -43,7 +43,7 @@ window.TB_JIRA_ISSUES = {
     {"key": "KT-136", "summary": "Mobile: Добавить тестовое приложение для проверки blacklist API", "type": "История", "status": "Готово", "done": true},
   ],
   "KT-30": [
-    {"key": "KT-6", "summary": "FACEID ЦБ-ГЦИ", "type": "История", "status": "in dev", "done": false},
+    {"key": "KT-6", "summary": "FACEID ЦБ-ГЦИ", "type": "История", "status": "Blocked", "done": false},
   ],
   "KT-31": [
   ],
@@ -265,5 +265,101 @@ window.TB_JIRA_ISSUES = {
   "SL-252": [
   ],
   "SL-253": [
+  ],
+  "PH-1": [
+    {"key": "PH-2", "summary": "Uzcard ва HUMO P2P интеграцияси", "type": "История", "status": "Ready for Test", "done": false},
+    {"key": "PH-3", "summary": "OFD (Солиқ) тизими билан интеграция", "type": "История", "status": "Ready for Test", "done": false},
+    {"key": "PH-4", "summary": "HUMO терминаллари бўйича Reconciliation интеграцияси", "type": "История", "status": "В работе", "done": false},
+    {"key": "PH-5", "summary": "Uzcard Terminal API (Check/Add/Remove) интеграцияси", "type": "История", "status": "Ready for Test", "done": false},
+  ],
+  "TB-3": [
+    {"key": "TB-4", "summary": "Modul-RBAC + ko'p-kompaniya modeli", "type": "Задание", "status": "Готово", "done": true},
+    {"key": "TB-5", "summary": "Auth/notification/integration modellari", "type": "Задание", "status": "Готово", "done": true},
+    {"key": "TB-6", "summary": "To'lov domeni modeli", "type": "Задание", "status": "Готово", "done": true},
+    {"key": "TB-8", "summary": "Kontragent domeni modeli", "type": "Задание", "status": "Готово", "done": true},
+  ],
+  "TB-12": [
+    {"key": "TB-24", "summary": "Env konfiguratsiya + fail-fast validatsiya", "type": "Задание", "status": "ready for dev", "done": false},
+    {"key": "TB-25", "summary": "Strukturali JSON logging + PII masking", "type": "Задание", "status": "Documentation", "done": false},
+    {"key": "TB-26", "summary": "Global HTTP kontrakt (ValidationPipe + envelope)", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-27", "summary": "X-Correlation-ID middleware", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-28", "summary": "App bootstrap + Swagger + Health", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-29", "summary": "Queue infra + worker skeleti", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-30", "summary": "Observability wiring (OTel + Sentry)", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-14": [
+    {"key": "TB-31", "summary": "SMS-OTP oqimi", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-32", "summary": "Login + refresh + parol tiklash", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-33", "summary": "JWT sessiya + logout blacklist", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-34", "summary": "JwtAuthGuard + @CurrentUser ni api'da chiqarish", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-35", "summary": "To'liq registratsiya", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-15": [
+    {"key": "TB-36", "summary": "Kompaniya tanlash + ruxsatlar endpointlari", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-37", "summary": "Modul-darajali RBAC guard", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-38", "summary": "Imzo siyosati servisi", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-39", "summary": "Settings endpointlari", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-40", "summary": "Self-service profil", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-16": [
+    {"key": "TB-41", "summary": "References modulini yaratish (4 endpoint + lookup)", "type": "Задание", "status": "Готово", "done": true},
+    {"key": "TB-42", "summary": "Seed infratuzilmasi + bazaviy data", "type": "Задание", "status": "in dev", "done": false},
+    {"key": "TB-43", "summary": "To'liq MFO + to'lov maqsadi data importi", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-17": [
+    {"key": "TB-44", "summary": "Gateway auth + token boshqaruvi", "type": "Задание", "status": "in dev", "done": false},
+    {"key": "TB-45", "summary": "Hisob raqamlar va hisoblar servisi", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-46", "summary": "Tranzaksiya yaratish + poll + idempotentlik", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-47", "summary": "ABS ma'lumotnoma (dictionary)", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-48", "summary": "audit + circuit breaker", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-49", "summary": "ABS status - DocumentStatus mapping", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-18": [
+    {"key": "TB-50", "summary": "Hisoblar ro'yxati + ko'chirma + eksport", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-51", "summary": "Dashboard + imzolanmagan hujjatlar", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-52", "summary": "To'lov draftini yaratish (idempotent)", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-53", "summary": "To'lovni validatsiya qilish", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-54", "summary": "Imzolash va bankka yuborish", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-55", "summary": "To'lovlar ro'yxati (filtr)", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-56", "summary": "To'lov shablonlari CRUD", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-57", "summary": "Draftlar ro'yxati va saqlash", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-19": [
+    {"key": "TB-58", "summary": "Hujjatlar ro'yxati + tafsilot (status tarixi)", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-59", "summary": "Qayta yuborish + bekor qilish", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-60", "summary": "Kvitansiya: real PDF + MinIO", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-20": [
+    {"key": "TB-61", "summary": "Dispatch pipeline + kanal portlari", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-62", "summary": "RabbitMQ consumer (worker)", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-63", "summary": "Bildirishnomalar ro'yxati", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-64", "summary": "Bildirishnoma sozlamalari", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-65", "summary": "Producer publish: bank - RabbitMQ", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-66", "summary": "Centrifugo (WS) + FCM (push) real adapterlari", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-21": [
+    {"key": "TB-67", "summary": "Kontragent CRUD + soft delete", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-68", "summary": "INN qidiruv + primary autofill", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-69", "summary": "Ierarxik kontragent guruhlari", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-70", "summary": "GNK lookup + sync (port + stub)", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-71", "summary": "Real GNK adapteri", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-22": [
+    {"key": "TB-72", "summary": "Integratsiyalar holatini ko'rsatish", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-73", "summary": "Webhook key larini berish (xavfsiz)", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-74", "summary": "Kiruvchi webhook'ni tekshirish endpointi", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-75", "summary": "Integratsiya provisioning + real sync", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-23": [
+    {"key": "TB-76", "summary": "Har modul uchun e2e qamrov", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-77", "summary": "Rol-asosli UAT stsenariylari", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-78", "summary": "Pilot + monitoring", "type": "Задание", "status": "backlog", "done": false},
+  ],
+  "TB-79": [
+    {"key": "TB-80", "summary": "CI gate (Node 20) + pnpm audit", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-81", "summary": "secret-store + skan", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-82", "summary": "prom-client metrika (C-modullar)", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-83", "summary": "Audit log", "type": "Задание", "status": "backlog", "done": false},
+    {"key": "TB-84", "summary": "Monitoring (Sentry + Grafana)", "type": "Задание", "status": "backlog", "done": false},
   ],
 };
