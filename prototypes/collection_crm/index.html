@@ -107,6 +107,40 @@ body {
 .type-cell .lbl { font-size:11px; color:var(--muted); }
 .type-cell .v { font-size:15px; font-weight:700; color:var(--navy); }
 .type-cell .s { font-size:11px; color:var(--muted); }
+/* Proportional area chart */
+.prop-area-layout { display:flex; flex-direction:column; align-items:center; gap:8px; padding:2px 0; }
+.prop-area-info { text-align:center; }
+.prop-area-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.7px; }
+.prop-area-value { font-size:20px; font-weight:700; color:var(--navy); margin:2px 0; }
+.prop-area-sub { font-size:11px; color:var(--muted); }
+.prop-area-svg { width:100%; height:auto; display:block; border-radius:6px; overflow:visible; }
+.prop-rect { transition:opacity .12s; }
+.prop-rect:hover { opacity:.78; }
+.prop-label { font-size:9.5px; fill:#fff; font-weight:700; pointer-events:none; dominant-baseline:middle; text-anchor:middle; }
+.prop-pct  { font-size:8.5px; fill:rgba(255,255,255,.82); pointer-events:none; dominant-baseline:middle; text-anchor:middle; }
+.prop-legend {
+  width:100%;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:5px 8px;
+}
+.prop-legend-item {
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 8px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:#f8fafc;
+  color:var(--navy);
+  font-size:10.5px;
+  white-space:nowrap;
+}
+.prop-legend-item .sw { width:9px; height:9px; border-radius:2px; flex:0 0 auto; }
+.prop-legend-item .pct { font-weight:700; }
+/* First dashboard charts row: bucket narrower, type wider */
+#dashChartsTop { grid-template-columns: 1fr 1.7fr; }
 /* Funnel/stepper */
 .stepper { display:flex; flex-wrap:wrap; gap:6px; }
 .step { background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid var(--border); min-width:120px; flex:1; position:relative; }
@@ -214,11 +248,22 @@ table.data td.link { color:var(--court); font-weight:600; }
 .toast.success { border-left-color: #1E8449; }
 .toast.error { border-left-color: var(--red); }
 @keyframes slideIn { from{transform:translateX(20px);opacity:0;} to{transform:none;opacity:1;} }
-/* Recovery chart */
-.recovery-bars { display:flex; align-items:flex-end; height:140px; gap:6px; padding:8px 4px; border-bottom:1px solid var(--border); }
-.recovery-bars .b { flex:1; background:linear-gradient(180deg,var(--gold) 0%,#a67620 100%); border-radius:3px 3px 0 0; position:relative; min-height:6px;}
-.recovery-bars .b::after { content:attr(data-m); position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px; color:var(--muted); }
-.recovery-bars .b::before { content:attr(data-v); position:absolute; top:-16px; left:0; right:0; text-align:center; font-size:9.5px; color:var(--navy); font-weight:600; }
+/* Recovery chart (SVG) */
+.recovery-svg { width:100%; height:auto; display:block; overflow:visible; }
+/* Legal funnel SVG */
+.legal-funnel-svg { width:100%; height:auto; display:block; overflow:visible; }
+.lf-rect { transition:opacity .12s; cursor:default; }
+.lf-rect:hover { opacity:.82; }
+/* Dashboard KPI strip — compact variant */
+#dashKpis .kpi .val { font-size:18px; }
+#dashKpis .kpi .label { min-height:24px; font-size:10.5px; }
+/* AI calls chart */
+.ai-calls-row { display:flex; flex-direction:column; gap:8px; padding:4px 0; }
+.ai-calls-item { display:flex; align-items:center; gap:8px; font-size:12px; }
+.ai-calls-item .aci-label { width:130px; color:var(--text); flex-shrink:0; }
+.ai-calls-item .aci-bar-wrap { flex:1; background:#f0f2f5; border-radius:3px; height:10px; overflow:hidden; }
+.ai-calls-item .aci-bar { height:100%; border-radius:3px; }
+.ai-calls-item .aci-val { width:80px; text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; flex-shrink:0; }
 /* utility */
 .right { text-align:right; }
 .muted { color:var(--muted); }
@@ -297,11 +342,6 @@ table.data td.link { color:var(--court); font-weight:600; }
   <header class="topbar">
     <div class="breadcrumbs">Trastbank / <b id="crumb">Бош панел</b></div>
     <div class="search"><input id="globalSearch" placeholder="Излаш: мижоз, шартнома, телефон..."></div>
-    <div class="filt">
-      <input type="date" value="2026-06-01">
-      <input type="date" value="2026-06-30">
-      <select id="branchTop"><option>Барча филиаллар</option></select>
-    </div>
     <div class="spacer"></div>
     <div class="role-switch">
       <span style="font-size:10px;color:var(--muted);text-transform:uppercase;">Роль:</span>
@@ -323,90 +363,84 @@ table.data td.link { color:var(--court); font-weight:600; }
     <section class="section active" id="sec-dashboard">
       <div class="page-title">
         <h1>Бош панел — Муаммоли кредитлар портфели</h1>
-        <div class="actions">
+        <div class="actions" style="gap:6px;">
+          <input type="date" value="2026-06-01" style="padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:#fff;">
+          <input type="date" value="2026-06-30" style="padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:#fff;">
+          <select id="branchTop" style="padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:#fff;"><option>Барчаси</option></select>
           <button class="btn">Экспорт Excel</button>
           <button class="btn primary">Янгилаш</button>
         </div>
       </div>
-      <div class="filters">
-        <div class="f"><label>Бошланиш санаси</label><input type="date" value="2026-06-01"></div>
-        <div class="f"><label>Тугаш санаси</label><input type="date" value="2026-06-30"></div>
-        <div class="f"><label>Филиал</label><select id="fBranch"></select></div>
-        <div class="f"><label>Кредит тури</label><select id="fType"></select></div>
-        <div class="f"><label>Қарздорлик ҳолати</label><select id="fBucket"></select></div>
-        <div class="f"><label>Суд/МИБ/Аукцион</label><select><option>Барчаси</option><option>Суд</option><option>МИБ</option><option>Аукцион</option></select></div>
-        <div class="f"><label>Масъул</label><select><option>Барчаси</option><option>А.Каримов</option><option>М.Йўлдошева</option><option>Ж.Раҳимов</option></select></div>
-        <button class="btn primary">Қўллаш</button>
-        <button class="btn">Тозалаш</button>
-      </div>
 
-      <div class="kpi-grid" id="kpiGrid"></div>
+      <!-- 1. KPI strip -->
+      <div class="kpi-grid" id="dashKpis" style="grid-template-columns:repeat(5,1fr);margin-bottom:14px;"></div>
 
-      <div class="charts-grid">
+      <!-- 2. Portfolio structure -->
+      <div class="charts-grid" id="dashChartsTop">
         <div class="card">
-          <h3>Қарздорлик bucket тақсимоти <span class="hint">соннинг ва суммасининг улуши</span></h3>
+          <h3>Қарздорлик bucket тақсимоти <span class="hint">сон ва сумма улуши</span></h3>
           <div id="bucketBars"></div>
         </div>
         <div class="card">
           <h3>Кредит тури бўйича тақсимот</h3>
-          <div class="type-grid" id="typeGrid"></div>
+          <div id="typeGrid"></div>
         </div>
       </div>
 
+      <!-- 3. Legal pipeline full-width -->
       <div class="card" style="margin-bottom:14px;">
-        <h3>Филиаллар кесимида heatmap</h3>
+        <h3>Юридик ундирув конвейери <span class="hint">Палата → Суд → МИБ → Аукцион</span></h3>
+        <div id="legalPipeline"></div>
+      </div>
+
+      <!-- 4. Recovery trend + AI calls -->
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:14px;">
+        <div class="card">
+          <h3>Recovery тренд — охирги 12 ой <span class="hint">млрд сўм</span></h3>
+          <div id="recoveryBars"></div>
+        </div>
+        <div class="card">
+          <h3>AI қўнғироқлар <span class="hint">натижалар</span></h3>
+          <div id="aiCallsChart"></div>
+        </div>
+      </div>
+
+      <!-- 5. Branch heatmap -->
+      <div class="card" style="margin-bottom:14px;">
+        <h3>Филиаллар кесимида кўрсаткичлар</h3>
         <div style="overflow:auto;">
           <table class="heatmap" id="heatmap"></table>
         </div>
       </div>
 
-      <div class="charts-grid">
-        <div class="card">
-          <h3>Суд жараёнлари funnel</h3>
-          <div class="stepper" id="courtFunnel"></div>
-        </div>
-        <div class="card">
-          <h3>МИБ ижроси ҳолати</h3>
-          <div class="stepper" id="mibStatus"></div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-bottom:14px;">
-        <h3>Аукцион pipeline</h3>
-        <div class="pipeline" id="auctionPipeline"></div>
-      </div>
-
-      <div class="charts-grid">
-        <div class="card">
-          <h3>Recovery trend — охирги 12 ой <span class="hint">млрд сўм</span></h3>
-          <div class="recovery-bars" id="recoveryBars" style="margin-bottom:24px;"></div>
-        </div>
-        <div class="card">
-          <h3>AI қўнғироқлар самарадорлиги</h3>
-          <div class="ai-row" style="grid-template-columns:repeat(3,1fr);">
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Жами AI қўнғироқ</div><div class="v" style="color:var(--navy)">12 488</div></div>
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Жавоб берган</div><div class="v" style="color:var(--navy)">7 932 (63%)</div></div>
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Тўлов ваъда қилган</div><div class="v" style="color:var(--auction)">2 217</div></div>
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Рад этган</div><div class="v" style="color:var(--red)">1 044</div></div>
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Нотўғри рақам</div><div class="v" style="color:var(--orange)">812</div></div>
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Қайта қўнғироқ</div><div class="v" style="color:var(--court)">3 859</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Кредитлар реестри <span class="hint" id="tableHint">— Барча шартномалар</span></h3>
-        <div class="table-wrap" style="border:none;">
-          <table class="data" id="dashTable"></table>
-        </div>
+      <!-- hidden: keep ids for renderFunnels backward compat -->
+      <div style="display:none;">
+        <div id="courtFunnel"></div>
+        <div id="mibStatus"></div>
+        <div id="auctionPipeline"></div>
       </div>
     </section>
 
     <!-- ============== REGISTRY ============== -->
     <section class="section" id="sec-registry">
       <div class="page-title"><h1>Кредитлар реестри</h1><div class="actions"><button class="btn">Excel</button><button class="btn primary">Янги қидирув</button></div></div>
+      <div class="filters">
+        <div class="f"><label>Бошланиш санаси</label><input type="date" id="fStartDate" value="2026-06-01"></div>
+        <div class="f"><label>Тугаш санаси</label><input type="date" id="fEndDate" value="2026-06-30"></div>
+        <div class="f"><label>Филиал</label><select id="fBranch"></select></div>
+        <div class="f"><label>Кредит тури</label><select id="fType"></select></div>
+        <div class="f"><label>Қарздорлик ҳолати</label><select id="fBucket"></select></div>
+        <div class="f"><label>Суд/МИБ/Аукцион</label><select id="fStage"><option>Барчаси</option><option>Суд</option><option>МИБ</option><option>Аукцион</option></select></div>
+        <div class="f"><label>Масъул</label><select id="fOwner"></select></div>
+        <button class="btn primary" id="applyRegistryFilters" onclick="applyRegistryFilters({smooth:true})">Қўллаш</button>
+        <button class="btn" id="resetRegistryFilters" onclick="resetRegistryFilters()">Тозалаш</button>
+      </div>
+      <div class="kpi-grid" id="kpiGrid"></div>
       <div class="card">
-        <table class="data" id="regTable"></table>
+        <h3>Кредитлар реестри <span class="hint" id="tableHint">— Барча шартномалар</span></h3>
+        <div class="table-wrap" style="border:none;">
+          <table class="data" id="regTable"></table>
+        </div>
       </div>
     </section>
 
@@ -774,29 +808,267 @@ function fillSelect(id, opts, first="Барчаси"){
   el.innerHTML = `<option>${first}</option>` + opts.map(o=>`<option>${o}</option>`).join('');
 }
 
-function renderBucketBars(){
-  const data = (APP_DATA.bucketStats || []).map(d=>({ b: d.bucket, c: d.count, a: d.amount }));
-  const max = Math.max(...data.map(d=>d.c));
-  const colors = {"Жорий":"#9aa3af","30+":"#E5A50A","60+":"#E67E22","90+":"#C0392B","180+":"#7b1d12","365+":"#7E3FBF","Суд":"#2F6FDB","МИБ":"#123C69","Аукцион":"#1E8449"};
-  document.getElementById('bucketBars').innerHTML = data.map(d=>`
-    <div class="bar-row">
-      <div><span class="badge ${BUCKET_BADGE[d.b]}">${d.b}</span></div>
-      <div class="bar"><span style="width:${(d.c/max*100)||4}%; background:${colors[d.b]}"></span></div>
-      <div class="cnt">${d.c}</div>
-      <div class="amt">${(d.a/1e9).toFixed(2)} млрд</div>
+const PIE_COLORS = ["#9aa3af","#E5A50A","#E67E22","#C0392B","#7b1d12","#7E3FBF","#2F6FDB","#123C69","#1E8449","#C8922A","#243759","#48a999"];
+const registryState = { kpiIndex: null, search: "" };
+
+function polarToCartesian(cx, cy, r, angle){
+  const rad = (angle - 90) * Math.PI / 180;
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+
+function describeArc(cx, cy, r, startAngle, endAngle){
+  const start = polarToCartesian(cx, cy, r, endAngle);
+  const end = polarToCartesian(cx, cy, r, startAngle);
+  const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+  return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`;
+}
+
+function buildPropAreaMarkup(items, totalLabel, totalValue, formatter, valueKey = 'value', svgH = 120){
+  const total = items.reduce((sum, item) => sum + item[valueKey], 0) || 1;
+  const segs = items.map(item => {
+    const portion = item[valueKey] / total;
+    const percent = Math.round(portion * 100);
+    return { ...item, portion, percent, tooltip: formatter(item, percent) };
+  }).filter(s => s.portion > 0);
+
+  const W = 400, H = svgH, GAP = 2;
+
+  function treemap(nodes, x, y, w, h) {
+    if (nodes.length === 0) return [];
+    if (nodes.length === 1) return [{ ...nodes[0], x, y, w, h }];
+    const tot = nodes.reduce((s, n) => s + n.portion, 0);
+    let cum = 0, splitIdx = 0, bestDiff = Infinity;
+    for (let i = 0; i < nodes.length - 1; i++) {
+      cum += nodes[i].portion / tot;
+      const diff = Math.abs(cum - 0.5);
+      if (diff < bestDiff) { bestDiff = diff; splitIdx = i; }
+    }
+    splitIdx++;
+    const leftFrac = nodes.slice(0, splitIdx).reduce((s, n) => s + n.portion, 0) / tot;
+    if (w >= h) {
+      const lw = w * leftFrac - GAP / 2, rw = w * (1 - leftFrac) - GAP / 2;
+      return [
+        ...treemap(nodes.slice(0, splitIdx), x, y, lw, h),
+        ...treemap(nodes.slice(splitIdx), x + lw + GAP, y, rw, h)
+      ];
+    } else {
+      const lh = h * leftFrac - GAP / 2, rh = h * (1 - leftFrac) - GAP / 2;
+      return [
+        ...treemap(nodes.slice(0, splitIdx), x, y, w, lh),
+        ...treemap(nodes.slice(splitIdx), x, y + lh + GAP, w, rh)
+      ];
+    }
+  }
+
+  const rects = treemap([...segs].sort((a, b) => b.portion - a.portion), 0, 0, W, H);
+
+  const rectsHtml = rects.map(r => {
+    const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+    const showName = r.w > 44 && r.h > 22;
+    const showPct  = r.w > 28 && r.h > 14;
+    const nameY = showPct ? cy - 7 : cy;
+    const shortLabel = r.label.length > 12 ? r.label.slice(0, 11) + '…' : r.label;
+    return `<g>
+      <rect class="prop-rect" x="${r.x.toFixed(1)}" y="${r.y.toFixed(1)}" width="${Math.max(r.w,0).toFixed(1)}" height="${Math.max(r.h,0).toFixed(1)}" rx="3" fill="${r.color}">
+        <title>${r.label}: ${r.tooltip}</title>
+      </rect>
+      ${showName ? `<text class="prop-label" x="${cx.toFixed(1)}" y="${nameY.toFixed(1)}">${shortLabel}</text>` : ''}
+      ${showPct  ? `<text class="prop-pct"   x="${cx.toFixed(1)}" y="${(showName ? cy + 7 : cy).toFixed(1)}">${r.percent}%</text>` : ''}
+    </g>`;
+  }).join('');
+
+  const legendHtml = segs.map(seg => `
+    <div class="prop-legend-item" title="${seg.label}: ${seg.tooltip}">
+      <span class="sw" style="background:${seg.color}"></span>
+      <span>${seg.label}</span>
+      <span class="pct">${seg.percent}%</span>
     </div>`).join('');
+
+  return `
+    <div class="prop-area-layout">
+      <div class="prop-area-info">
+        <div class="prop-area-label">${totalLabel}</div>
+        <div class="prop-area-value">${totalValue}</div>
+        <div class="prop-area-sub">${segs.length} та сегмент</div>
+      </div>
+      <svg class="prop-area-svg" viewBox="0 0 ${W} ${H}" role="img">${rectsHtml}</svg>
+      <div class="prop-legend">${legendHtml}</div>
+    </div>`;
+}
+
+function buildPieChartMarkup(items, totalLabel, totalValue, formatter, valueKey = 'value'){
+  const total = items.reduce((sum, item) => sum + item[valueKey], 0) || 1;
+  const cx = 180;
+  const cy = 180;
+  const radius = 110;
+  const strokeWidth = 42;
+  let angle = -90;
+  const slices = items.map(item => {
+    const portion = item[valueKey] / total;
+    const sweep = portion * 360;
+    const startAngle = angle;
+    const endAngle = angle + sweep;
+    const midAngle = startAngle + sweep / 2;
+    const lineStart = polarToCartesian(cx, cy, radius + 4, midAngle);
+    const lineMid = polarToCartesian(cx, cy, radius + 18, midAngle);
+    const rightSide = Math.cos((midAngle - 90) * Math.PI / 180) >= 0;
+    const lineEndX = lineMid.x + (rightSide ? 14 : -14);
+    const labelX = lineEndX + (rightSide ? 12 : -12);
+    const labelY = lineMid.y;
+    const percent = Math.round(portion * 100);
+    angle = endAngle;
+    return {
+      ...item,
+      portion,
+      percent,
+      path: describeArc(cx, cy, radius, startAngle, endAngle),
+      linePath: `M ${lineStart.x} ${lineStart.y} L ${lineMid.x} ${lineMid.y} L ${lineEndX} ${lineMid.y}`,
+      labelX,
+      labelY,
+      labelAnchor: rightSide ? 'start' : 'end',
+      tooltip: formatter(item, percent)
+    };
+  });
+
+  return `
+    <div class="pie-layout">
+      <svg class="pie-svg" viewBox="0 0 360 360" role="img" aria-label="${totalLabel}">
+        ${slices.map(item => `
+          <path class="pie-slice" d="${item.path}" stroke="${item.color}" stroke-width="${strokeWidth}" fill="none" stroke-linecap="butt">
+            <title>${item.label}: ${item.tooltip}</title>
+          </path>
+        `).join('')}
+        <circle class="pie-hole" cx="${cx}" cy="${cy}" r="${radius - strokeWidth / 2}"></circle>
+        ${slices.map(item => item.percent > 0 ? `<path class="pie-label-line" d="${item.linePath}"></path>` : '').join('')}
+        ${slices.map(item => item.percent > 0 ? `<text class="pie-label" x="${item.labelX}" y="${item.labelY}" text-anchor="${item.labelAnchor}">${item.percent}%</text>` : '').join('')}
+        <text class="pie-center-label" x="${cx}" y="${cy - 18}">${totalLabel}</text>
+        <text class="pie-center-value" x="${cx}" y="${cy + 10}">${totalValue}</text>
+        <text class="pie-center-sub" x="${cx}" y="${cy + 34}">${items.length} та сегмент</text>
+      </svg>
+      <div class="pie-inline-legend">
+        ${slices.map(item => `
+          <div class="pie-inline-item" title="${item.label}: ${item.tooltip}">
+            <span class="sw" style="background:${item.color}"></span>
+            <span>${item.label}</span>
+            <span class="pct">${item.percent}%</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function parseDateVal(value){
+  if (!value) return null;
+  const date = new Date(`${value}T00:00:00`);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function getRegistryFilterFn(){
+  const branch = document.getElementById('fBranch')?.value || 'Барчаси';
+  const type = document.getElementById('fType')?.value || 'Барчаси';
+  const bucket = document.getElementById('fBucket')?.value || 'Барчаси';
+  const stage = document.getElementById('fStage')?.value || 'Барчаси';
+  const owner = document.getElementById('fOwner')?.value || 'Барчаси';
+  const start = parseDateVal(document.getElementById('fStartDate')?.value);
+  const end = parseDateVal(document.getElementById('fEndDate')?.value);
+  const search = registryState.search.trim().toLowerCase();
+
+  return c => {
+    if (branch !== 'Барчаси' && c.branch !== branch) return false;
+    if (type !== 'Барчаси' && c.type !== type) return false;
+    if (bucket !== 'Барчаси' && c.bucket !== bucket) return false;
+    if (owner !== 'Барчаси' && c.staff !== owner) return false;
+    if (stage === 'Суд' && c.court === '—') return false;
+    if (stage === 'МИБ' && c.mib === '—') return false;
+    if (stage === 'Аукцион' && c.auc === '—') return false;
+    if (start || end) {
+      const lastAct = parseDateVal(c.lastAct);
+      if (start && (!lastAct || lastAct < start)) return false;
+      if (end && (!lastAct || lastAct > end)) return false;
+    }
+    if (registryState.kpiIndex !== null) {
+      if (registryState.kpiIndex === 4 && c.bucket !== 'Суд') return false;
+      if (registryState.kpiIndex === 5 && c.bucket !== 'МИБ') return false;
+      if ([6,7,8].includes(registryState.kpiIndex) && c.bucket !== 'Аукцион') return false;
+      if (registryState.kpiIndex === 1 && !['30+','60+'].includes(c.bucket)) return false;
+      if (registryState.kpiIndex === 9 && c.bucket === 'Жорий') return false;
+    }
+    if (search && ![c.name, c.id, c.phone].some(v => String(v).toLowerCase().includes(search))) return false;
+    return true;
+  };
+}
+
+function updateRegistryHint(){
+  const parts = [];
+  const kpi = registryState.kpiIndex !== null ? KPIS[registryState.kpiIndex] : null;
+  if (kpi) parts.push(kpi.label);
+  if (registryState.search) parts.push(`Қидирув: "${registryState.search}"`);
+  if (!parts.length) parts.push('Барча шартномалар');
+  document.getElementById('tableHint').textContent = `— ${parts.join(' • ')}`;
+}
+
+function applyRegistryFilters(options = {}){
+  renderContractsTable('regTable', getRegistryFilterFn());
+  updateRegistryHint();
+  if (options.smooth) {
+    document.getElementById('regTable').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+function resetRegistryFilters(){
+  document.getElementById('fStartDate').value = '2026-06-01';
+  document.getElementById('fEndDate').value = '2026-06-30';
+  document.getElementById('fBranch').selectedIndex = 0;
+  document.getElementById('fType').selectedIndex = 0;
+  document.getElementById('fBucket').selectedIndex = 0;
+  document.getElementById('fStage').selectedIndex = 0;
+  document.getElementById('fOwner').selectedIndex = 0;
+  registryState.kpiIndex = null;
+  registryState.search = "";
+  const searchEl = document.getElementById('globalSearch');
+  if (searchEl) searchEl.value = "";
+  applyRegistryFilters({smooth:true});
+}
+
+function initRegistryFilters(){
+  fillSelect('fOwner', [...new Set(CONTRACTS.map(c => c.staff))]);
+}
+
+function renderBucketBars(){
+  const data = (APP_DATA.bucketStats || []).map((d, index)=>({
+    label: d.bucket,
+    value: d.count,
+    amount: d.amount,
+    color: PIE_COLORS[index % PIE_COLORS.length]
+  }));
+  const totalCount = data.reduce((sum, item) => sum + item.value, 0).toLocaleString('ru-RU');
+  document.getElementById('bucketBars').innerHTML = buildPropAreaMarkup(
+    data,
+    'Жами контракт',
+    totalCount,
+    item => `${item.value.toLocaleString('ru-RU')} та • ${(item.amount/1e9).toFixed(2)} млрд сўм`,
+    'value',
+    115
+  );
 }
 
 function renderTypeGrid(){
-  const tg = document.getElementById('typeGrid');
-  tg.innerHTML = (APP_DATA.typeStats || []).map((item,i)=>{
-    const colors = ["#1B2A4A","#C8922A","#2F6FDB","#1E8449","#C0392B","#7E3FBF","#E67E22"];
-    return `<div class="type-cell" style="border-left-color:${colors[i]}">
-      <div class="lbl">${item.type}</div>
-      <div class="v">${item.count} та</div>
-      <div class="s">${(item.amount/1e9).toFixed(2)} млрд сўм</div>
-    </div>`;
-  }).join('');
+  const data = (APP_DATA.typeStats || []).map((item, index)=>({
+    label: item.type,
+    value: item.amount,
+    count: item.count,
+    color: PIE_COLORS[index % PIE_COLORS.length]
+  }));
+  const totalAmount = `${(data.reduce((sum, item) => sum + item.value, 0) / 1e9).toFixed(2)} млрд`;
+  document.getElementById('typeGrid').innerHTML = buildPropAreaMarkup(
+    data,
+    'Жами сумма',
+    totalAmount,
+    item => `${item.count.toLocaleString('ru-RU')} та • ${(item.value/1e9).toFixed(2)} млрд сўм`,
+    'value',
+    130
+  );
 }
 
 function renderHeatmap(){
@@ -820,23 +1092,126 @@ function renderHeatmap(){
   document.getElementById('heatmap').innerHTML = html;
 }
 
+function renderDashKPIs(){
+  const picks = [0, 1, 2, 3, 5]; // indices from KPIS array
+  const el = document.getElementById('dashKpis');
+  if (!el) return;
+  el.innerHTML = picks.map(i => {
+    const k = KPIS[i];
+    if (!k) return '';
+    return `<div class="kpi ${k.cls||''}">
+      <div class="trend ${k.trClass}">${k.trend}</div>
+      <div class="label">${k.label}</div>
+      <div class="val">${k.val}</div>
+      <div class="sub">${k.sub}</div>
+    </div>`;
+  }).join('');
+}
+
 function renderFunnels(){
+  // Dashboard: SVG horizontal legal pipeline
   const cf = APP_DATA.courtFunnel || [];
-  document.getElementById('courtFunnel').innerHTML = cf.map((s,i)=>`<div class="step ${i===2?'active':'done'}"><div class="n">${s.n}</div><div class="t">${s.t}</div></div>`).join('');
-  const mb = APP_DATA.mibFunnel || [];
-  document.getElementById('mibStatus').innerHTML = mb.map((s,i)=>`<div class="step ${i===0?'active':''}"><div class="n">${s.n}</div><div class="t">${s.t}</div></div>`).join('');
+  const lp = document.getElementById('legalPipeline');
+  if (lp && cf.length) {
+    const STAGE_COLORS = ['#2F6FDB','#1f5ec2','#154fa8','#123C69','#1E8449'];
+    const W = 600, H = 90, LBLH = 36, GAP = 5, n = cf.length;
+    const sw = (W - GAP * (n - 1)) / n;
+    const maxN = Math.max(...cf.map(s => s.n));
+    const MIN_H = 30;
+    const barH = s => Math.max((s.n / maxN) * (H - 10), MIN_H);
+    const y0 = s => (H - barH(s)) / 2;
+
+    let paths = '';
+    cf.forEach((step, i) => {
+      const bh = barH(step), by = y0(step);
+      const x = i * (sw + GAP);
+      const col = STAGE_COLORS[i] || '#2F6FDB';
+      // connector trapezoid to next stage
+      if (i < n - 1) {
+        const nbh = barH(cf[i + 1]), nby = y0(cf[i + 1]);
+        const x1 = x + sw;
+        paths += `<polygon points="${x1},${by} ${x1+GAP},${nby} ${x1+GAP},${nby+nbh} ${x1},${by+bh}" fill="${col}" opacity=".35"/>`;
+      }
+      // rect
+      paths += `<rect class="lf-rect" x="${x.toFixed(1)}" y="${by.toFixed(1)}" width="${sw.toFixed(1)}" height="${bh.toFixed(1)}" rx="5" fill="${col}"><title>${step.t}: ${step.n.toLocaleString('ru-RU')}</title></rect>`;
+      // count label inside
+      const cx = x + sw / 2;
+      const showCount = bh > 24;
+      if (showCount) {
+        paths += `<text x="${cx.toFixed(1)}" y="${(H/2).toFixed(1)}" fill="#fff" font-size="13" font-weight="700" text-anchor="middle" dominant-baseline="middle">${step.n.toLocaleString('ru-RU')}</text>`;
+      }
+      // stage label below
+      const words = step.t.split(' ');
+      if (words.length > 2) {
+        const line1 = words.slice(0, Math.ceil(words.length/2)).join(' ');
+        const line2 = words.slice(Math.ceil(words.length/2)).join(' ');
+        paths += `<text x="${cx.toFixed(1)}" y="${(H + 14).toFixed(1)}" fill="#4b5563" font-size="9" text-anchor="middle">${line1}</text>`;
+        paths += `<text x="${cx.toFixed(1)}" y="${(H + 25).toFixed(1)}" fill="#4b5563" font-size="9" text-anchor="middle">${line2}</text>`;
+      } else {
+        paths += `<text x="${cx.toFixed(1)}" y="${(H + 18).toFixed(1)}" fill="#4b5563" font-size="9" text-anchor="middle">${step.t}</text>`;
+      }
+    });
+
+    lp.innerHTML = `<svg class="legal-funnel-svg" viewBox="0 0 ${W} ${H + LBLH}">${paths}</svg>`;
+  }
+
+  // Backward compat: hidden elements for other renderFunnels uses
   const ap = APP_DATA.auctionPipeline || [];
-  const pp = document.getElementById('auctionPipeline');
-  pp.innerHTML = ap.map((s,i)=>`<div class="p ${i===4?'active':''}"><div class="n">${s.n}</div>${s.t}</div>`).join('');
-  document.getElementById('aucPipe2').innerHTML = ap.map((s,i)=>`<div class="p ${i===4?'active':''}"><div class="n">${s.n}</div>${s.t}</div>`).join('');
+  const aucPipe2 = document.getElementById('aucPipe2');
+  if (aucPipe2) aucPipe2.innerHTML = ap.map((s,i)=>`<div class="p ${i===4?'active':''}"><div class="n">${s.n}</div>${s.t}</div>`).join('');
 }
 
 function renderRecovery(){
   const monthly = APP_DATA.recoveryMonthly || [];
-  const months = monthly.map(x=>x.m);
-  const vals = monthly.map(x=>x.v);
-  const max = Math.max(...vals);
-  document.getElementById('recoveryBars').innerHTML = months.map((m,i)=>`<div class="b" style="height:${vals[i]/max*100}%" data-m="${m}" data-v="${vals[i]}"></div>`).join('');
+  const vals = monthly.map(x => x.v);
+  const max = Math.max(...vals) || 1;
+  const W = 560, CH = 100, ML = 36, MR = 10, MT = 16, MB = 28;
+  const cw = W - ML - MR;
+  const bg = cw / vals.length;
+  const bw = bg * 0.55;
+
+  const gridVals = [0, Math.round(max * 0.5), max];
+  let gridSvg = gridVals.map(v => {
+    const y = MT + CH * (1 - v / max);
+    return `<line x1="${ML}" y1="${y}" x2="${W - MR}" y2="${y}" stroke="#e4e8ee" stroke-dasharray="${v ? '4 3' : 'none'}"/>
+      <text x="${ML - 5}" y="${y + 4}" fill="#9aa3af" font-size="9" text-anchor="end">${v}</text>`;
+  }).join('');
+
+  let barsSvg = vals.map((v, i) => {
+    const bh = (v / max) * CH;
+    const x = ML + i * bg + (bg - bw) / 2;
+    const y = MT + CH - bh;
+    const isCurrent = i === vals.length - 1;
+    return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="3" fill="${isCurrent ? 'var(--gold)' : 'var(--navy)'}" opacity="${isCurrent ? '1' : '0.72'}"/>
+      <text x="${(x + bw/2).toFixed(1)}" y="${(y - 4).toFixed(1)}" fill="${isCurrent ? 'var(--gold)' : '#1f2937'}" font-size="9" font-weight="700" text-anchor="middle">${v}</text>
+      <text x="${(x + bw/2).toFixed(1)}" y="${(MT + CH + 14).toFixed(1)}" fill="#9aa3af" font-size="9" text-anchor="middle">${monthly[i].m}</text>`;
+  }).join('');
+
+  document.getElementById('recoveryBars').innerHTML =
+    `<svg class="recovery-svg" viewBox="0 0 ${W} ${MT + CH + MB}">${gridSvg}${barsSvg}</svg>`;
+}
+
+function renderAICalls(){
+  const el = document.getElementById('aiCallsChart');
+  if (!el) return;
+  const total = 12488, answered = 7932, ptp = 2217, rejected = 1044, wrong = 812, callback = 3859;
+  const noAnswer = total - answered;
+  const rows = [
+    { label:'Жами қўнғироқ', val:total, pct:100, color:'var(--navy)', bold:true },
+    { label:'Жавоб берди', val:answered, pct:Math.round(answered/total*100), color:'var(--auction)' },
+    { label:'  ∟ Тўлов ваъдаси', val:ptp, pct:Math.round(ptp/answered*100), color:'#1E8449', sub:true },
+    { label:'  ∟ Қайта қўнғироқ', val:callback, pct:Math.round(callback/answered*100), color:'var(--court)', sub:true },
+    { label:'  ∟ Рад этди', val:rejected, pct:Math.round(rejected/answered*100), color:'var(--orange)', sub:true },
+    { label:'  ∟ Нотўғри рақам', val:wrong, pct:Math.round(wrong/answered*100), color:'var(--muted)', sub:true },
+    { label:'Жавоб бермади', val:noAnswer, pct:Math.round(noAnswer/total*100), color:'#c0392b' },
+  ];
+  el.innerHTML = `<div class="ai-calls-row">${rows.map(r=>`
+    <div class="ai-calls-item" style="${r.sub?'margin-left:12px;':''}">
+      <div class="aci-label" style="font-weight:${r.bold?'700':'400'};font-size:${r.sub?'11px':'12px'};color:${r.sub?'var(--muted)':''}">${r.label}</div>
+      <div class="aci-bar-wrap"><div class="aci-bar" style="width:${r.pct}%;background:${r.color}"></div></div>
+      <div class="aci-val">${r.val.toLocaleString('ru-RU')} <span style="color:var(--muted);font-size:10px">${r.pct}%</span></div>
+    </div>`).join('')}
+  </div>`;
 }
 
 function renderContractsTable(target, filter){
@@ -1142,15 +1517,9 @@ document.querySelectorAll('#menu a').forEach(a=>{
 /* ============ KPI FILTER ============ */
 function filterByKPI(i){
   const k = KPIS[i];
-  let filter = null; let hint = `— ${k.label}`;
-  if (i===4) filter = c=>c.bucket==="Суд";
-  else if (i===5) filter = c=>c.bucket==="МИБ";
-  else if (i===6||i===7||i===8) filter = c=>c.bucket==="Аукцион";
-  else if (i===1) filter = c=>["30+","60+"].includes(c.bucket);
-  else if (i===9) filter = c=>c.bucket!=="Жорий";
-  document.getElementById('tableHint').textContent = hint;
-  renderContractsTable('dashTable', filter);
-  document.getElementById('dashTable').scrollIntoView({behavior:'smooth', block:'start'});
+  registryState.kpiIndex = i;
+  navigate('registry');
+  applyRegistryFilters({smooth:true});
   toast(`Жадвал филтрланди: ${k.label}`,'success');
 }
 
@@ -1210,9 +1579,8 @@ document.getElementById('roleSelect').addEventListener('change', e=>{
 /* ============ SEARCH ============ */
 document.getElementById('globalSearch').addEventListener('input', e=>{
   const q = e.target.value.toLowerCase().trim();
-  if (!q){ renderContractsTable('dashTable'); document.getElementById('tableHint').textContent="— Барча шартномалар"; return; }
-  renderContractsTable('dashTable', c=>(c.name.toLowerCase().includes(q)||c.id.toLowerCase().includes(q)||c.phone.includes(q)));
-  document.getElementById('tableHint').textContent = `— Қидирув: "${q}"`;
+  registryState.search = q;
+  applyRegistryFilters();
 });
 
 /* ============ CALL CENTER TABLE ============ */
@@ -1450,17 +1818,19 @@ document.querySelectorAll('#sec-ai .subnav button').forEach(b=>{
 fillSelect('fBranch', BRANCHES);
 fillSelect('fType', TYPES);
 fillSelect('fBucket', BUCKETS);
+initRegistryFilters();
 fillSelect('branchTop', BRANCHES);
 fillSelect('wlBranch', BRANCHES);
 fillSelect('fAudBr', BRANCHES);
 renderKPIs();
+renderDashKPIs();
 renderBucketBars();
 renderTypeGrid();
-renderHeatmap();
 renderFunnels();
 renderRecovery();
-renderContractsTable('dashTable');
-renderContractsTable('regTable');
+renderAICalls();
+renderHeatmap();
+applyRegistryFilters();
 renderCallTable();
 renderAI('queue');
 renderCollateral();
