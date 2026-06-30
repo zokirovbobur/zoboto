@@ -205,52 +205,51 @@ function Dashboard() {
         )}
       </div>
 
-      {/* Row 3: Product breakdown + Stack + Timeline */}
+      {/* Row 3: Product breakdown + Stack (side by side) */}
       <div className="grid" style={{ gridTemplateColumns: "1.1fr 0.9fr", marginTop: 16 }}>
         <div className="card">
           <div className="card-h"><h3>{t("ch_product")}</h3><span className="hint">{t("clickHint")}</span></div>
           <div className="card-pad">
-            <Chart_ type="bar" height={240}
+            <Chart_ type="bar" height={220}
               onClickIndex={(i) => nav("portfolio", { product: prodData[i][0] })}
               data={{
                 labels: prodData.map(d => prodShort(d[0])),
                 datasets: STATUS_ORDER.map(s => ({
                   label: t(STATUS[s].short),
                   data: prodData.map(d => d[1][s]),
-                  backgroundColor: STATUS[s].color, borderRadius: 3, stack: "x", maxBarThickness: 20,
+                  backgroundColor: STATUS[s].color, borderRadius: 3, stack: "x", maxBarThickness: 18,
                 })),
               }}
               options={{ indexAxis: "y",
-                plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", padding: 12, font: { size: 11 } } } },
+                plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", padding: 10, font: { size: 11 } } } },
                 scales: { x: { stacked: true, grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 11 } } } } }} />
           </div>
         </div>
+        <div className="card">
+          <div className="card-h"><h3>{t("ch_stack")}</h3><span className="hint">{t("clickHint")}</span></div>
+          <div className="card-pad">
+            <Chart_ type="pie" height={220}
+              onClickIndex={(i) => nav("workload", { stack: stackData[i][0] })}
+              data={{
+                labels: stackData.map(d => d[0]),
+                datasets: [{ data: stackData.map(d => d[1]), backgroundColor: ["#2563EB","#138A5E","#6D5CD6","#C2410C","#0E7490","#D97706","#9333EA","#0E9C8E","#B45309","#64748B","#1D4ED8","#065F46","#4C1D95","#7F1D1D","#0C4A6E"], borderWidth: 0, hoverOffset: 4 }],
+              }}
+              options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 8, font: { size: 11 } } } } }} />
+          </div>
+        </div>
+      </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div className="card">
-            <div className="card-h"><h3>{t("ch_stack")}</h3><span className="hint">{t("clickHint")}</span></div>
-            <div className="card-pad">
-              <Chart_ type="pie" height={180}
-                onClickIndex={(i) => nav("workload", { stack: stackData[i][0] })}
-                data={{
-                  labels: stackData.map(d => d[0]),
-                  datasets: [{ data: stackData.map(d => d[1]), backgroundColor: ["#2563EB","#138A5E","#6D5CD6","#C2410C","#0E7490","#D97706","#9333EA","#0E9C8E","#B45309","#64748B","#1D4ED8","#065F46","#4C1D95","#7F1D1D","#0C4A6E"], borderWidth: 0, hoverOffset: 4 }],
-                }}
-                options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 8, font: { size: 11 } } } } }} />
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-h"><h3>{t("ch_timeline")}</h3><span className="hint">{t("st_completed_s")}</span></div>
-            <div className="card-pad">
-              <Chart_ type="bar" height={180}
-                data={{
-                  labels: tl.map(d => { const [y, mo] = d[0].split("-"); return MONTHS[lang][+mo - 1] + " " + y.slice(2); }),
-                  datasets: [{ data: tl.map(d => d[1]), backgroundColor: "#138A5E", borderRadius: 5, maxBarThickness: 32 }],
-                }}
-                options={{ plugins: { legend: { display: false } },
-                  scales: { y: { grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, x: { grid: { display: false } } } }} />
-            </div>
-          </div>
+      {/* Row 4: Timeline — full width */}
+      <div className="card" style={{ marginTop: 16 }}>
+        <div className="card-h"><h3>{t("ch_timeline")}</h3><span className="hint">{t("st_completed_s")}</span></div>
+        <div className="card-pad">
+          <Chart_ type="bar" height={160}
+            data={{
+              labels: tl.map(d => { const [y, mo] = d[0].split("-"); return MONTHS[lang][+mo - 1] + " " + y.slice(2); }),
+              datasets: [{ data: tl.map(d => d[1]), backgroundColor: "#138A5E", borderRadius: 5, maxBarThickness: 52 }],
+            }}
+            options={{ plugins: { legend: { display: false } },
+              scales: { y: { grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, x: { grid: { display: false } } } }} />
         </div>
       </div>
     </div>
