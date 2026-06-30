@@ -247,7 +247,7 @@ const PROTOTYPES = [
     type: "Internal",
     status: "Demo",
     platforms: ["desktop"],
-    url: "prototypes/trastbank-pmo/collection_crm",
+    url: "prototypes/collection_crm",
     description: "Debt collection CRM prototype вЂ” borrower registry, collector workload, call scripts, payment tracking, legal escalation workflow and analytics dashboard."
   },
   {
