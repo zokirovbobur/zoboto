@@ -24,6 +24,7 @@ function routeToHash(name, params) {
 const IconPaths = {
   dashboard: "M3 3h7v7H3zM14 3h7v4h-7zM14 10h7v11h-7zM3 13h7v8H3z",
   devops: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
+  operations: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 22V12h6v10",
   portfolio: "M4 5h16M4 12h16M4 19h16",
   board: "M4 4h4v16H4zM10 4h4v16h-4zM16 4h4v16h-4z",
   roadmap: "M4 6h16M4 6v12M8 10h12M8 10v8M12 14h8",
@@ -34,7 +35,7 @@ const IconPaths = {
   changes: "M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z",
 };
 function Icon({ name, size = 18 }) {
-  const stroke = ["portfolio", "board", "roadmap", "workload", "risks", "reports", "products", "changes", "devops"].includes(name);
+  const stroke = ["portfolio", "board", "roadmap", "workload", "risks", "reports", "products", "changes", "devops", "operations"].includes(name);
   return (
     <svg className="ic" width={size} height={size} viewBox="0 0 24 24"
       fill={stroke ? "none" : "currentColor"} stroke={stroke ? "currentColor" : "none"}
@@ -47,7 +48,8 @@ function Icon({ name, size = 18 }) {
 const NAV = [
   { group: "nav_group_overview", items: [
     { id: "dashboard", icon: "dashboard", label: "nav_dashboard" },
-    { id: "portfolio", icon: "portfolio", label: "nav_portfolio", count: () => ALL_P.length },
+    { id: "portfolio", icon: "portfolio", label: "nav_portfolio", count: () => ALL_P.filter(p => ((DATA.boardTypes || {})[p.product]) !== "Operations").length },
+    { id: "operations", icon: "operations", label: "nav_operations" },
     { id: "changes", icon: "changes", label: "nav_changes" },
     { id: "roadmap", icon: "roadmap", label: "nav_roadmap" },
   ]},
@@ -63,7 +65,7 @@ const NAV = [
 const PAGES = {
   dashboard: Dashboard, portfolio: Portfolio, board: StatusBoard, roadmap: Roadmap,
   workload: Workload, employee: EmployeeProfile, project: ProjectDetail, risks: Risks, reports: Reports,
-  products: Products, changes: RecentChanges, devops: DevopsReport,
+  products: Products, changes: RecentChanges, devops: DevopsReport, operations: OperationsReport,
 };
 window.PAGES_MAP = PAGES;
 // which sidebar item is highlighted for a given route

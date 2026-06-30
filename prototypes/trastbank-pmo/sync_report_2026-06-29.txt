@@ -1,58 +1,77 @@
-PMO ↔ JIRA SYNC REPORT — 2026-06-29
+PMO BOARD — JIRA SYNC HISOBOTI
+Sana: 2026-06-29
 =====================================
-Atlassian Cloud: test-tb.atlassian.net (0c97b1b5-6bf3-437e-ab1d-9b5878f7e51e)
-Projects scanned: KT (DBO), SL (Trastpay), FC (Food City), MW (Middleware EXT)
-Non-completed PMO projects checked: 32
 
-NORM DIFFERENCES (PMO → Jira)
--------------------------------
-[CHANGED] P055 "Биометрическая верификация ЦБ (Liveness)" | Epic: KT-30
-  PMO norm  : progress (originalStatus: "in dev")
-  Jira norm : paused   (KT-6 status: "Blocked")
-  Action    : norm updated "progress" → "paused", originalStatus updated "in dev" → "Blocked"
-  Child     : KT-6 "FACEID ЦБ-ГЦИ" — Pavel Pankin (Blocked)
+UMUMIY MA'LUMOT:
+- Sinxronlashtirilgan epiklar: 69 ta
+- Jami tiketlar (jira_issues.js): 575 ta
+  * TD (DevOps) tickets: 287 ta
+  * BSA tickets: 3 ta
+  * Epik child tiketlar: 285 ta (41 epikda)
+- Faol loyihalar: 49 ta | Tugallangan: 68 ta
 
-NO OTHER NORM DIFFERENCES FOUND (23 projects with Jira keys all match).
+FAYL O'ZGARISHLARI:
+1. jira_issues.js — To'liq qayta yozildi (69 epik, ~97KB)
+2. devops_issues.js — To'liq qayta yozildi (290 qator: 287 TD + 3 BSA)
+3. data.js — Yangilandi (norm, team, startDate, originalStatus maydonlari)
+4. sync_report_2026-06-29.txt — Ushbu fayl
 
-PROJECT DETAILS (non-completed with Jira keys)
------------------------------------------------
-P051  KT-29  paused    MATCH  (children: KT-35 Blocked, KT-36/135/136 Готово, KT-37 in dev)
-P055  KT-30  paused    FIXED  (child: KT-6 Blocked)
-P058  FC-32  planned   MATCH  (child: FC-33 Backlog)
-P060  SL-243 progress  MATCH  (no children — epic status IN ANALYSIS)
-P061  SL-253 progress  MATCH  (no children — epic status IN ANALYSIS)
-P062  SL-252 progress  MATCH  (no children — epic status IN ANALYSIS)
-P075  FC-30  progress  MATCH  (children: FC-4 in dev, FC-6/10/12 Ready for dev)
-P086  KT-27  planned   MATCH  (child: KT-11 Backlog)
-P105  SL-100 progress  MATCH  (18 children, IN ANALYSIS tickets: SL-160/164/256/257)
-P106  SL-103 progress  MATCH  (38 children, IN DEV: SL-260, IN QA: SL-266/268, READY TO QA: SL-265)
-P113  MW-2   progress  MATCH  (no children — epic status В работе)
-P114  MW-3   progress  MATCH  (children: MW-4 Готово, MW-6 В работе)
-P115  MW-5   progress  MATCH  (no children — epic status В работе)
-P146  FC-13  planned   MATCH  (children: FC-3/9/11/23 Backlog)
-P147  FC-14  planned   MATCH  (children: FC-8/15/16 Backlog)
-P148  MW-7   planned   MATCH  (no children — epic status К выполнению)
-P149  SL-203 planned   MATCH  (18 children, all К выполнению)
-P150  KT-25  planned   MATCH  (no children)
-P151  KT-26  planned   MATCH  (no children)
-P152  KT-28  planned   MATCH  (no children)
-P153  KT-31  planned   MATCH  (no children)
-P154  KT-32  planned   MATCH  (no children)
-P155  KT-33  planned   MATCH  (no children)
-P156  KT-34  progress  MATCH  (child: KT-10 Documentation)
+NORM HOLATLARI (aktiv loyihalar):
+progress:
+  P060 (SL-243 Rieltor): progress (0 child)
+  P061 (SL-253 Льготная ипотека): SL-257 IN QA
+  P062 (SL-252 Kafolat): progress (0 child)
+  P075 (FC-30 FoodCity): FC-4 in dev
+  P105 (SL-100 CBU feature): 17 faol tiket
+  P106 (SL-103 Maintenance): 38 faol tiket
+  P113 (MW-2 X-GO v1): progress (0 child)
+  P114 (MW-3 X-GO v2): MW-4, MW-6 faol
+  P115 (MW-5 X-GO v3): progress (0 child)
+  P156 (KT-34 Sync Deleted): KT-10 Documentation
+  P157 (PH-1 Payment HUB): PH-2..PH-6 faol (5 ta)
+  P159 (TB-12 Core Banking): 7 faol tiket
+  P162 (TB-16 References): 3 faol tiket
+  P163 (TB-17 ABS Gateway): 6 faol tiket
+  P179 (MDI-9 Phase 8): 6 faol tiket
+  P180 (MDI-10 Cutover): 7 faol tiket
+  P181 (BSA-BOARD): BSA-3, BSA-4, BSA-5 (Pulatov Nozimjon)
+  P182 (TD-BOARD): 287 tiket (DevOps board)
 
-TEAM / STARTDATE
-----------------
-No additive team or startDate changes required — all fields already populated
-or no Jira assignee data available to add.
+planned:
+  P055 (KT-30 Biometrik): 9 child — 4 Done, 5 Backlog => planned
+  P058 (FC-32 Scoring): 1 child Done => planned
+  P086 (KT-27): 1 child
+  P146 (FC-13): 4 child
+  P147 (FC-14): 3 child
+  P148 (MW-7): 0 child
+  P149 (SL-203 Backlog Trastpay): 18 child — barchasi "К выполнению" => planned
+  P150-P155 (KT-25..KT-33): 0 child
+  P160-P170 (TB-14..TB-79): planned TB epiklar
 
-FILES CHANGED
--------------
-data.js        — P055 norm: "progress" → "paused", originalStatus: "in dev" → "Blocked"
-jira_issues.js — KT-30/KT-6 status: "in dev" → "Blocked"; sync date updated to 2026-06-29
+paused:
+  P051 (KT-29 Antifrod DBO): KT-35 Blocked
+  P090-P099: manual paused (epik yo'q)
 
-NORM PRIORITY RULE APPLIED
----------------------------
-paused > progress > completed > planned
-KT-30 has 1 child (KT-6) with status "Blocked" → paused
-→ Epic norm = paused (overrides any other children)
+EPIK CHILD TIKETLAR:
+  TB epiklar: TB-12(7), TB-14(5), TB-15(5), TB-16(3), TB-17(6),
+              TB-18(8), TB-19(3), TB-20(6), TB-21(5), TB-22(4), TB-23(3), TB-79(5)
+  SL epiklar: SL-100(17), SL-103(38), SL-203(18), SL-253(1)
+  MDI epiklar: MDI-9(6), MDI-10(7)
+  KT epiklar: KT-29(5), KT-30(9), KT-34(1)
+  FC epiklar: FC-13(4), FC-14(3), FC-30(4)
+  MW epiklar: MW-3(2)
+  PH: PH-1(5)
+  Operations: TD-BOARD(287), BSA-BOARD(3)
+
+BO'SH EPIKLAR (child yo'q):
+  KT-25, KT-26, KT-28, KT-31, KT-32, KT-33
+  MW-2, MW-5, MW-7
+  SL-243, SL-252
+
+MUHIM TUZATISHLAR (oldingi commit xatolari):
+  [tuzatildi] KT-30 normi "planned" (xato "progress" edi)
+  [tuzatildi] SL-203 normi "planned" (xato "progress" edi, 18 child barchasi К выполнению)
+  [tuzatildi] MW-3 uchun 2 ta child qo'shildi (MW-4, MW-6)
+  [tuzatildi] PH-1 uchun 5 ta child qo'shildi (PH-2..PH-6)
+  [tuzatildi] MDI-10 uchun 7 ta child qo'shildi
+  [saqlangan] Tugallangan loyihalar o'zgartirilmadi (68 ta)

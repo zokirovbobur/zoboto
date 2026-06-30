@@ -203,20 +203,18 @@ function Dashboard() {
 }
 
 // Persists Portfolio filter state across navigation
-const _pf = { status: "all", boardType: "all", product: "all", pm: "all", origin: "all", sort: { k: "name", dir: 1 } };
+const _pf = { status: "all", product: "all", pm: "all", origin: "all", sort: { k: "name", dir: 1 } };
 
 // ---------- PORTFOLIO ----------
 function Portfolio() {
   const t = useT(); const { nav, route, search, lang } = useApp();
   const [status, setStatus] = uS1(() => route.status || _pf.status);
-  const [boardType, setBoardType] = uS1(() => _pf.boardType);
   const [product, setProduct] = uS1(() => route.product || _pf.product);
   const [pm, setPm] = uS1(() => _pf.pm);
   const [origin, setOrigin] = uS1(() => _pf.origin);
   const [sort, setSort] = uS1(() => _pf.sort);
 
   uE1(() => { _pf.status = status; }, [status]);
-  uE1(() => { _pf.boardType = boardType; }, [boardType]);
   uE1(() => { _pf.product = product; }, [product]);
   uE1(() => { _pf.pm = pm; }, [pm]);
   uE1(() => { _pf.origin = origin; }, [origin]);
@@ -233,24 +231,14 @@ function Portfolio() {
   const prods = DATA.products;
 
   const totalExpanded = uM1(() => {
-    let count = 0;
-    ALL_P.forEach(p => {
-      const _t = (((DATA.boardTypes || {})[p.product]) === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES)
-        ? (window.TB_JIRA_ISSUES[p.jiraEpicKey] || []) : [];
-      count += _t.length > 0 ? _t.length : 1;
-    });
-    return count;
+    return ALL_P.filter(p => ((DATA.boardTypes || {})[p.product]) !== "Operations").length;
   }, []);
 
   const rows = uM1(() => {
     let r = ALL_P.filter(p => {
       const bt = ((DATA.boardTypes || {})[p.product]) || "Mahsulot";
-      // Operations boards are filtered by ticket-level norm after expansion, not project-level
-      if (status !== "all" && bt !== "Operations" && p.norm !== status) return false;
-      if (boardType !== "all") {
-        if (boardType === "Operations" && bt !== "Operations") return false;
-        if (boardType === "Mahsulot" && bt !== "Mahsulot") return false;
-      }
+      if (bt === "Operations") return false;
+      if (status !== "all" && p.norm !== status) return false;
       if (product !== "all" && p.product !== product) return false;
       if (pm !== "all" && projectPmKey(p) !== pm) return false;
       if (origin !== "all" && (p.origin || "Google Sheet") !== origin) return false;
@@ -262,31 +250,6 @@ function Portfolio() {
       }
       return true;
     });
-    // Expand Operations boards into individual tickets
-    const expanded = [];
-    r.forEach(p => {
-      const _bt = ((DATA.boardTypes || {})[p.product]);
-      const _tickets = (_bt === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES)
-        ? (window.TB_JIRA_ISSUES[p.jiraEpicKey] || []) : [];
-      if (_tickets.length > 0) {
-        _tickets.forEach(ticket => {
-          expanded.push({
-            ...p,
-            id: ticket.key,
-            name: ticket.summary,
-            norm: ticket.done ? "completed" : "progress",
-            origin: ticket.type === "История" ? "Jira Story" : "Jira Task",
-            jiraEpicKey: ticket.key,
-            _isTicket: true,
-          });
-        });
-      } else {
-        expanded.push(p);
-      }
-    });
-    r = expanded;
-    // Re-apply status filter after ticket expansion (Operations tickets have their own norm)
-    if (status !== "all") r = r.filter(p => p.norm === status);
     const k = sort.k;
     r = [...r].sort((x, y) => {
       let a, b;
@@ -297,7 +260,7 @@ function Portfolio() {
       return (a < b ? -1 : a > b ? 1 : 0) * sort.dir;
     });
     return r;
-  }, [status, boardType, product, pm, origin, search, sort]);
+  }, [status, product, pm, origin, search, sort]);
 
   // chart data — derived from filtered rows
   const statusCounts  = uM1(() => STATUS_ORDER.map(s => rows.filter(p => p.norm === s).length), [rows]);
@@ -316,7 +279,7 @@ function Portfolio() {
   const ORIGINS = ["Jira Epic", "Jira Story", "Jira Task", "Google Sheet"];
   const ORIGIN_COLOR = { "Jira Epic": "#2563EB", "Jira Story": "#7C3AED", "Jira Task": "#0E7490", "Google Sheet": "#0D7C56" };
 
-  const reset = () => { setStatus("all"); setBoardType("all"); setProduct("all"); setPm("all"); setOrigin("all"); };
+  const reset = () => { setStatus("all"); setProduct("all"); setPm("all"); setOrigin("all"); };
   const SortTh = ({ k, label, cls }) => (
     <th className={cls} onClick={() => setSort(s => {
       if (s.k === k && s.dir === -1) return { k: "name", dir: 1 };
@@ -335,11 +298,6 @@ function Portfolio() {
         <div className="sel"><select className="f-sel" value={status} onChange={e => setStatus(e.target.value)}>
           <option value="all">{t("normStatus")}: {t("all")}</option>
           {STATUS_ORDER.map(s => <option key={s} value={s}>{t(STATUS[s].short)}</option>)}
-        </select></div>
-        <div className="sel"><select className="f-sel" value={boardType} onChange={e => setBoardType(e.target.value)}>
-          <option value="all">{t("col_board_type")}: {t("all")}</option>
-          <option value="Mahsulot">{t("board_type_product")}</option>
-          <option value="Operations">{t("board_type_ops")}</option>
         </select></div>
         <div className="sel"><select className="f-sel" value={product} onChange={e => setProduct(e.target.value)}>
           <option value="all">{t("col_product")}: {t("all")}</option>
@@ -399,7 +357,6 @@ function Portfolio() {
               <th className="no-sort" style={{ width: 36, textAlign: "center" }}>№</th>
               <SortTh k="name" label={t("col_project")} />
               <SortTh k="product" label={t("col_product")} />
-              <SortTh k="boardType" label={t("col_board_type")} />
               <SortTh k="status" label={t("col_status")} />
               <SortTh k="pm" label={t("col_pm")} />
               <SortTh k="customer" label={t("col_customer")} />
@@ -432,14 +389,6 @@ function Portfolio() {
                     })()}
                   </td>
                   <td><span className="tag">{prodShort(p.product)}</span></td>
-                  <td>{(() => {
-                    const bt = ((DATA.boardTypes || {})[p.product]) || "Mahsulot";
-                    const isOps = bt === "Operations";
-                    return <span style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6,
-                      background: isOps ? "#F59E0B18" : "#3B82F618", color: isOps ? "#B45309" : "#1D4ED8" }}>
-                      {isOps ? t("board_type_ops") : t("board_type_product")}
-                    </span>;
-                  })()}</td>
                   <td><StatusBadge norm={p.norm} /></td>
                   <td>{projectPmName(p) ? <span className="row"><Avatar name={projectPmName(p)} size={24} /> {projectPmName(p)}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
                   <td className="t-muted">{p.customer || "—"}</td>
@@ -453,7 +402,7 @@ function Portfolio() {
                   </td>
                 </tr>
               ))}
-              {!rows.length && <tr><td colSpan="9" className="empty">{t("noData")}</td></tr>}
+              {!rows.length && <tr><td colSpan="8" className="empty">{t("noData")}</td></tr>}
             </tbody>
           </table>
         </div>

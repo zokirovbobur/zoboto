@@ -1,0 +1,386 @@
+// ===== views7: Operations Report (BSA + DevOps boards) =====
+const { useState: uS7, useEffect: uE7, useMemo: uM7, useRef: uR7 } = React;
+const useT7 = () => { const { lang } = useApp(); const d = window.TB_I18N[lang]; return k => d && d[k] != null ? d[k] : k; };
+
+const OPS_STATUS = {
+  "DONE":                    { label_uz: "Bajarildi",       label_ru: "Выполнено",          color: "#138A5E", bg: "#E4F3EB" },
+  "Готово":                  { label_uz: "Bajarildi",       label_ru: "Готово",             color: "#138A5E", bg: "#E4F3EB" },
+  "IN PROGRESS":             { label_uz: "Jarayonda",       label_ru: "В работе",           color: "#2563EB", bg: "#E7EEFD" },
+  "in dev":                  { label_uz: "Jarayonda",       label_ru: "В разработке",       color: "#2563EB", bg: "#E7EEFD" },
+  "Проверка":                { label_uz: "Tekshiruvda",     label_ru: "На проверке",        color: "#0E9C8E", bg: "#E0F5F3" },
+  "Ready for dev":           { label_uz: "Dev uchun tayyor",label_ru: "Готов к разработке", color: "#0E9C8E", bg: "#E0F5F3" },
+  "Selected for Development":{ label_uz: "Navbatda",        label_ru: "В очереди",          color: "#6D5CD6", bg: "#ECEAFB" },
+  "Backlog":                 { label_uz: "Navbat",          label_ru: "Беклог",             color: "#6D5CD6", bg: "#ECEAFB" },
+  "backlog":                 { label_uz: "Navbat",          label_ru: "Беклог",             color: "#6D5CD6", bg: "#ECEAFB" },
+  "TO DO":                   { label_uz: "Kutilmoqda",      label_ru: "К выполнению",       color: "#C2410C", bg: "#FBEADD" },
+  "Blocked":                 { label_uz: "Bloklangan",      label_ru: "Заблокировано",      color: "#DC2626", bg: "#FEE2E2" },
+};
+
+const OPS_DONE = new Set(["DONE", "Готово"]);
+
+function opsStatusMeta(status, lang) {
+  const m = OPS_STATUS[status] || { label_uz: status, label_ru: status, color: "#8A93A6", bg: "#EEF2F8" };
+  return { ...m, label: lang === "ru" ? m.label_ru : m.label_uz };
+}
+
+function avatarInitials7(name) {
+  if (!name) return "?";
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name[0].toUpperCase();
+}
+
+const OPS_COLORS = ["#2563EB", "#138A5E", "#6D5CD6", "#C2410C", "#0E9C8E"];
+
+// Normalize both data sources to a common format
+function getOpsTickets() {
+  const td = (window.DEVOPS_ISSUES || []).map(([key, summary, status, , assignee, created]) => ({
+    key, summary, status: status || "TO DO", assignee: assignee || null, created: created || "", product: "Trastbank devops",
+  }));
+  const bsaRaw = ((window.TB_JIRA_ISSUES || {})["BSA-BOARD"] || []);
+  const bsa = bsaRaw.map(t => ({
+    key: t.key, summary: t.summary, status: t.status || "Backlog", assignee: t.assignee || null, created: "", product: "Business and System Analysis",
+  }));
+  return [...bsa, ...td];
+}
+
+function OpsEngineerCard({ name, stats, color, lang }) {
+  const pct = stats.total ? Math.round((stats.done / stats.total) * 100) : 0;
+  const initials = avatarInitials7(name);
+  const shortName = name.split(" ").slice(0, 2).join(" ");
+  return (
+    <div className="card card-pad" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div className="avatar" style={{ width: 38, height: 38, fontSize: 14, background: color }}>{initials}</div>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 13.5, color: "var(--ink)" }}>{shortName}</div>
+          <div style={{ fontSize: 11, color: "var(--muted-2)" }}>{stats.total} {lang === "ru" ? "тикетов" : "ta ticket"}</div>
+        </div>
+        <div style={{ marginLeft: "auto", fontWeight: 700, fontSize: 20, color }}>{pct}%</div>
+      </div>
+      <div className="progress">
+        <div className="progress-fill" style={{ width: pct + "%", background: color }} />
+      </div>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+        {stats.done > 0 && <span className="pill pill-green">{stats.done} {lang === "ru" ? "готово" : "tayyor"}</span>}
+        {stats.inprog > 0 && <span className="pill pill-blue">{stats.inprog} {lang === "ru" ? "в работе" : "jarayonda"}</span>}
+        {stats.review > 0 && <span className="pill" style={{ background: "#E0F5F3", color: "#0E9C8E" }}>{stats.review} {lang === "ru" ? "проверка" : "tekshiruv"}</span>}
+        {stats.todo > 0 && <span className="pill pill-amber">{stats.todo} {lang === "ru" ? "ожидает" : "kutilmoqda"}</span>}
+      </div>
+    </div>
+  );
+}
+
+function OperationsReport() {
+  const t = useT7();
+  const { lang } = useApp();
+  const [productFilter, setProductFilter] = uS7("all");
+  const [statusFilter, setStatusFilter] = uS7("all");
+  const [assigneeFilter, setAssigneeFilter] = uS7("all");
+  const [search, setSearch] = uS7("");
+
+  const allTickets = uM7(() => getOpsTickets(), []);
+
+  const products = uM7(() => [...new Set(allTickets.map(t => t.product))].sort(), [allTickets]);
+
+  const filtered = uM7(() => {
+    return allTickets.filter(({ key, summary, status, assignee, product }) => {
+      if (productFilter !== "all" && product !== productFilter) return false;
+      if (statusFilter !== "all" && status !== statusFilter) return false;
+      if (assigneeFilter !== "all" && assignee !== assigneeFilter) return false;
+      if (search) {
+        const q = search.toLowerCase();
+        if (!key.toLowerCase().includes(q) && !summary.toLowerCase().includes(q)) return false;
+      }
+      return true;
+    });
+  }, [allTickets, productFilter, statusFilter, assigneeFilter, search]);
+
+  const kpi = uM7(() => {
+    const src = productFilter === "all" ? allTickets : allTickets.filter(t => t.product === productFilter);
+    let done = 0, inprog = 0, review = 0, todo = 0;
+    src.forEach(({ status }) => {
+      if (OPS_DONE.has(status)) done++;
+      else if (status === "IN PROGRESS" || status === "in dev") inprog++;
+      else if (status === "Проверка" || status === "Ready for dev") review++;
+      else todo++;
+    });
+    return { total: src.length, done, inprog, review, todo, open: inprog + review + todo };
+  }, [allTickets, productFilter]);
+
+  const engineers = uM7(() => {
+    const src = productFilter === "all" ? allTickets : allTickets.filter(t => t.product === productFilter);
+    const map = {};
+    src.forEach(({ status, assignee }) => {
+      if (!assignee) return;
+      if (!map[assignee]) map[assignee] = { total: 0, done: 0, inprog: 0, review: 0, todo: 0 };
+      map[assignee].total++;
+      if (OPS_DONE.has(status)) map[assignee].done++;
+      else if (status === "IN PROGRESS" || status === "in dev") map[assignee].inprog++;
+      else if (status === "Проверка" || status === "Ready for dev") map[assignee].review++;
+      else map[assignee].todo++;
+    });
+    return Object.entries(map).sort((a, b) => b[1].total - a[1].total);
+  }, [allTickets, productFilter]);
+
+  const assignees = uM7(() => {
+    const src = productFilter === "all" ? allTickets : allTickets.filter(t => t.product === productFilter);
+    return [...new Set(src.map(t => t.assignee).filter(Boolean))].sort();
+  }, [allTickets, productFilter]);
+
+  // Unique statuses present in current product selection
+  const activeStatuses = uM7(() => {
+    const src = productFilter === "all" ? allTickets : allTickets.filter(t => t.product === productFilter);
+    return [...new Set(src.map(t => t.status))].filter(s => OPS_STATUS[s]);
+  }, [allTickets, productFilter]);
+
+  const completionPct = kpi.total ? Math.round((kpi.done / kpi.total) * 100) : 0;
+
+  const jiraBase = window.DEVOPS_JIRA_BASE || "https://test-tb.atlassian.net";
+
+  const resetFilters = () => { setStatusFilter("all"); setAssigneeFilter("all"); setSearch(""); };
+
+  return (
+    <div className="fade-in">
+      <PageHead
+        title={lang === "ru" ? "Operations" : "Operations"}
+        sub={lang === "ru"
+          ? `BSA + DevOps · ${allTickets.length} тикетов`
+          : `BSA + DevOps · ${allTickets.length} ta ticket`}
+        crumbs={[
+          { label: t("nav_dashboard"), to: "dashboard" },
+          { label: "Operations" }
+        ]}
+      />
+
+      {/* Product tabs */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
+        {["all", ...products].map(p => (
+          <button key={p} onClick={() => { setProductFilter(p); setAssigneeFilter("all"); setStatusFilter("all"); setSearch(""); }}
+            className={"btn" + (productFilter === p ? "" : " btn-ghost")}
+            style={{ fontSize: 12, padding: "6px 14px" }}>
+            {p === "all" ? (lang === "ru" ? "Все доски" : "Barcha doskalar") : p}
+          </button>
+        ))}
+      </div>
+
+      {/* KPI Row */}
+      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
+        {[
+          { val: kpi.total,  label: lang === "ru" ? "Всего тикетов"  : "Jami ticketlar", accent: "#2563EB" },
+          { val: kpi.done,   label: lang === "ru" ? "Выполнено"       : "Bajarildi",      accent: "#138A5E" },
+          { val: kpi.inprog, label: lang === "ru" ? "В работе"        : "Jarayonda",      accent: "#2563EB" },
+          { val: kpi.review, label: lang === "ru" ? "На проверке"     : "Tekshiruvda",    accent: "#0E9C8E" },
+          { val: kpi.open,   label: lang === "ru" ? "Открытых"        : "Ochiq ticketlar",accent: "#C2410C" },
+        ].map((k, i) => (
+          <div key={i} className="kpi" style={{ "--kpi-accent": k.accent }}>
+            <div className="kpi-val" style={{ color: k.accent }}>{k.val}</div>
+            <div className="kpi-label">{k.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Progress + Status breakdown */}
+      <div className="grid" style={{ gridTemplateColumns: "1fr 1.6fr", marginBottom: 16 }}>
+        <div className="card card-pad" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div style={{ fontWeight: 700, fontSize: 14, color: "var(--ink)", marginBottom: 4 }}>
+            {lang === "ru" ? "Прогресс выполнения" : "Bajarish ko'rsatkichi"}
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div className="health-ring" style={{ background: completionPct >= 80 ? "#138A5E" : completionPct >= 50 ? "#2563EB" : "#C2410C" }}>
+              {completionPct}%
+            </div>
+            <div style={{ flex: 1 }}>
+              <div className="progress" style={{ height: 10, marginBottom: 8 }}>
+                <div className="progress-fill" style={{ width: completionPct + "%", background: completionPct >= 80 ? "#138A5E" : "#2563EB" }} />
+              </div>
+              <div style={{ fontSize: 12, color: "var(--muted)" }}>
+                {kpi.done} / {kpi.total} {lang === "ru" ? "тикетов закрыто" : "ticket yopildi"}
+              </div>
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 4 }}>
+            {activeStatuses.map(st => {
+              const src = productFilter === "all" ? allTickets : allTickets.filter(t => t.product === productFilter);
+              const cnt = src.filter(t => t.status === st).length;
+              if (!cnt) return null;
+              const pct = Math.round((cnt / kpi.total) * 100);
+              const meta = OPS_STATUS[st];
+              const label = lang === "ru" ? meta.label_ru : meta.label_uz;
+              return (
+                <div key={st} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: meta.color, flexShrink: 0 }} />
+                  <span style={{ flex: 1, color: "var(--muted)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</span>
+                  <span style={{ fontWeight: 600, color: "var(--ink)" }}>{cnt}</span>
+                  <div style={{ width: 60 }}>
+                    <div className="progress" style={{ height: 4 }}>
+                      <div className="progress-fill" style={{ width: pct + "%", background: meta.color }} />
+                    </div>
+                  </div>
+                  <span style={{ color: "var(--muted-2)", width: 28, textAlign: "right" }}>{pct}%</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Product breakdown */}
+        <div className="card card-pad" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ fontWeight: 700, fontSize: 14, color: "var(--ink)", marginBottom: 4 }}>
+            {lang === "ru" ? "По дискам" : "Doskalar bo'yicha"}
+          </div>
+          {products.map((prod, i) => {
+            const cnt = allTickets.filter(t => t.product === prod).length;
+            const doneC = allTickets.filter(t => t.product === prod && OPS_DONE.has(t.status)).length;
+            const pct = cnt ? Math.round((doneC / cnt) * 100) : 0;
+            const color = OPS_COLORS[i % OPS_COLORS.length];
+            return (
+              <div key={prod} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
+                  <span style={{ fontWeight: 600, color: "var(--ink)" }}>{prod}</span>
+                  <span style={{ color: "var(--muted)" }}>{doneC}/{cnt} · {pct}%</span>
+                </div>
+                <div className="progress" style={{ height: 6 }}>
+                  <div className="progress-fill" style={{ width: pct + "%", background: color }} />
+                </div>
+              </div>
+            );
+          })}
+          {engineers.length > 0 && (
+            <>
+              <div style={{ fontWeight: 700, fontSize: 13, color: "var(--ink)", marginTop: 8 }}>
+                {lang === "ru" ? "Исполнители" : "Ijrochilar"}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {engineers.slice(0, 8).map(([name, stats], idx) => {
+                  const initials = avatarInitials7(name);
+                  const color = OPS_COLORS[idx % OPS_COLORS.length];
+                  return (
+                    <div key={name} title={name} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11,
+                      background: color + "18", borderRadius: 20, padding: "3px 10px 3px 4px" }}>
+                      <div className="avatar" style={{ width: 20, height: 20, fontSize: 9, background: color }}>{initials}</div>
+                      <span style={{ color, fontWeight: 600 }}>{name.split(" ")[0]}</span>
+                      <span style={{ color: "var(--muted-2)" }}>{stats.done}/{stats.total}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Engineer cards */}
+      {engineers.length > 0 && (
+        <>
+          <div style={{ fontWeight: 700, fontSize: 14, color: "var(--ink)", marginBottom: 10 }}>
+            {lang === "ru" ? "Исполнители" : "Ijrochilar"}
+          </div>
+          <div className="grid" style={{ gridTemplateColumns: "repeat(4,1fr)", marginBottom: 20 }}>
+            {engineers.slice(0, 8).map(([name, stats], idx) => (
+              <OpsEngineerCard key={name} name={name} stats={stats} color={OPS_COLORS[idx % OPS_COLORS.length]} lang={lang} />
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Ticket table */}
+      <div className="card">
+        <div className="card-h">
+          <h3>{lang === "ru" ? "Все тикеты" : "Barcha ticketlar"} <span className="hint">({filtered.length})</span></h3>
+          <a href={jiraBase + "/jira/software/projects"} target="_blank" rel="noopener noreferrer"
+             className="btn btn-ghost" style={{ fontSize: 12 }}>
+            Jira →
+          </a>
+        </div>
+
+        <div className="filterbar" style={{ padding: "12px 20px 0" }}>
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder={lang === "ru" ? "Поиск по ключу или названию…" : "Kalit yoki nom bo'yicha qidirish…"}
+            style={{ flex: 1, minWidth: 180, maxWidth: 320, border: "1px solid var(--line)", borderRadius: 9,
+                     padding: "7px 12px", fontSize: 12.5, background: "var(--select-bg)", color: "var(--ink)",
+                     outline: "none", fontFamily: "inherit" }}
+          />
+          <div className="sel">
+            <select className="f-sel" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+              <option value="all">{lang === "ru" ? "Все статусы" : "Barcha statuslar"}</option>
+              {activeStatuses.map(st => {
+                const meta = OPS_STATUS[st];
+                return <option key={st} value={st}>{lang === "ru" ? meta.label_ru : meta.label_uz}</option>;
+              })}
+            </select>
+          </div>
+          <div className="sel">
+            <select className="f-sel" value={assigneeFilter} onChange={e => setAssigneeFilter(e.target.value)}>
+              <option value="all">{lang === "ru" ? "Все исполнители" : "Barcha ijrochilar"}</option>
+              {assignees.map(a => <option key={a} value={a}>{a}</option>)}
+            </select>
+          </div>
+          {(statusFilter !== "all" || assigneeFilter !== "all" || search) && (
+            <button className="btn btn-ghost" style={{ fontSize: 12 }} onClick={resetFilters}>
+              {t("resetFilters")}
+            </button>
+          )}
+        </div>
+
+        <div className="tbl-wrap" style={{ marginTop: 8 }}>
+          <table className="tbl">
+            <thead>
+              <tr>
+                <th className="no-sort" style={{ width: 90 }}>Kalit</th>
+                <th className="no-sort">{lang === "ru" ? "Задача" : "Vazifa"}</th>
+                <th className="no-sort" style={{ width: 200 }}>{lang === "ru" ? "Доска" : "Doska"}</th>
+                <th className="no-sort" style={{ width: 150 }}>Status</th>
+                <th className="no-sort" style={{ width: 160 }}>{lang === "ru" ? "Исполнитель" : "Ijrochi"}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.length === 0 && (
+                <tr><td colSpan={5} className="empty">{t("noData")}</td></tr>
+              )}
+              {filtered.map(({ key, summary, status, assignee, product }, idx) => {
+                const meta = opsStatusMeta(status, lang);
+                const initials = avatarInitials7(assignee);
+                const engIdx = engineers.findIndex(([n]) => n === assignee);
+                const engColor = OPS_COLORS[engIdx % OPS_COLORS.length] || "#8A93A6";
+                return (
+                  <tr key={key + idx} onClick={() => window.open(jiraBase + "/browse/" + key, "_blank")} style={{ cursor: "pointer" }}>
+                    <td>
+                      <a href={jiraBase + "/browse/" + key} target="_blank" rel="noopener noreferrer"
+                         onClick={e => e.stopPropagation()}
+                         style={{ fontWeight: 600, fontSize: 12, color: "#2563EB", whiteSpace: "nowrap" }}>{key}</a>
+                    </td>
+                    <td className="cell-proj">
+                      <span style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                        {summary}
+                      </span>
+                    </td>
+                    <td>
+                      <span style={{ fontSize: 11, color: "var(--muted)", background: "var(--line-2)",
+                                     borderRadius: 4, padding: "2px 7px", fontWeight: 500 }}>{product}</span>
+                    </td>
+                    <td>
+                      <span className="pill" style={{ background: meta.bg, color: meta.color }}>{meta.label}</span>
+                    </td>
+                    <td>
+                      {assignee ? (
+                        <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                          <div className="avatar" style={{ width: 24, height: 24, fontSize: 10, background: engColor }}>{initials}</div>
+                          <span style={{ fontSize: 12, color: "var(--ink)" }}>{assignee.split(" ").slice(0, 2).join(" ")}</span>
+                        </div>
+                      ) : <span className="t-muted">—</span>}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { OperationsReport });
