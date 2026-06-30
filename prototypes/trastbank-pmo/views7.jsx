@@ -3,24 +3,53 @@ const { useState: uS7, useEffect: uE7, useMemo: uM7, useRef: uR7 } = React;
 const useT7 = () => { const { lang } = useApp(); const d = window.TB_I18N[lang]; return k => d && d[k] != null ? d[k] : k; };
 
 const OPS_STATUS = {
-  "DONE":                    { label_uz: "Bajarildi",       label_ru: "Выполнено",          color: "#138A5E", bg: "#E4F3EB" },
-  "Готово":                  { label_uz: "Bajarildi",       label_ru: "Готово",             color: "#138A5E", bg: "#E4F3EB" },
-  "IN PROGRESS":             { label_uz: "Jarayonda",       label_ru: "В работе",           color: "#2563EB", bg: "#E7EEFD" },
-  "in dev":                  { label_uz: "Jarayonda",       label_ru: "В разработке",       color: "#2563EB", bg: "#E7EEFD" },
-  "Проверка":                { label_uz: "Tekshiruvda",     label_ru: "На проверке",        color: "#0E9C8E", bg: "#E0F5F3" },
-  "Ready for dev":           { label_uz: "Dev uchun tayyor",label_ru: "Готов к разработке", color: "#0E9C8E", bg: "#E0F5F3" },
-  "Selected for Development":{ label_uz: "Navbatda",        label_ru: "В очереди",          color: "#6D5CD6", bg: "#ECEAFB" },
-  "Backlog":                 { label_uz: "Navbat",          label_ru: "Беклог",             color: "#6D5CD6", bg: "#ECEAFB" },
-  "backlog":                 { label_uz: "Navbat",          label_ru: "Беклог",             color: "#6D5CD6", bg: "#ECEAFB" },
-  "TO DO":                   { label_uz: "Kutilmoqda",      label_ru: "К выполнению",       color: "#C2410C", bg: "#FBEADD" },
-  "Blocked":                 { label_uz: "Bloklangan",      label_ru: "Заблокировано",      color: "#DC2626", bg: "#FEE2E2" },
+  "DONE":                    { label_uz: "Bajarildi",       label_ru: "Выполнено",          color: "#138A5E" },
+  "Готово":                  { label_uz: "Bajarildi",       label_ru: "Готово",             color: "#138A5E" },
+  "IN PROGRESS":             { label_uz: "Jarayonda",       label_ru: "В работе",           color: "#2563EB" },
+  "in dev":                  { label_uz: "Jarayonda",       label_ru: "В разработке",       color: "#2563EB" },
+  "Проверка":                { label_uz: "Tekshiruvda",     label_ru: "На проверке",        color: "#0E9C8E" },
+  "Ready for dev":           { label_uz: "Dev uchun tayyor",label_ru: "Готов к разработке", color: "#0E9C8E" },
+  "Selected for Development":{ label_uz: "Navbatda",        label_ru: "В очереди",          color: "#6D5CD6" },
+  "Backlog":                 { label_uz: "Navbat",          label_ru: "Беклог",             color: "#6D5CD6" },
+  "backlog":                 { label_uz: "Navbat",          label_ru: "Беклог",             color: "#6D5CD6" },
+  "TO DO":                   { label_uz: "Kutilmoqda",      label_ru: "К выполнению",       color: "#C2410C" },
+  "Blocked":                 { label_uz: "Bloklangan",      label_ru: "Заблокировано",      color: "#DC2626" },
 };
 
 const OPS_DONE = new Set(["DONE", "Готово"]);
 
 function opsStatusMeta(status, lang) {
-  const m = OPS_STATUS[status] || { label_uz: status, label_ru: status, color: "#8A93A6", bg: "#EEF2F8" };
-  return { ...m, label: lang === "ru" ? m.label_ru : m.label_uz };
+  const m = OPS_STATUS[status] || { label_uz: status, label_ru: status, color: "#8A93A6" };
+  return { ...m, bg: m.color + "22", label: lang === "ru" ? m.label_ru : m.label_uz };
+}
+
+// Build employee name → id lookup (tries direct + reversed surname/name order)
+function buildEmpMap() {
+  const map = {};
+  (DATA.employees || []).forEach(e => {
+    if (!e.matchKey) return;
+    map[e.matchKey] = e.id;
+    const parts = e.matchKey.split(/\s+/);
+    if (parts.length >= 2) {
+      // "lastname firstname" → also index as "firstname lastname"
+      map[parts.slice(1).join(" ") + " " + parts[0]] = e.id;
+    }
+  });
+  return map;
+}
+const OPS_EMP_MAP = buildEmpMap();
+
+function lookupEmpId(name) {
+  if (!name) return null;
+  const lower = name.trim().toLowerCase();
+  if (OPS_EMP_MAP[lower]) return OPS_EMP_MAP[lower];
+  const parts = lower.split(/\s+/);
+  if (parts.length >= 2) {
+    // try reversed
+    const rev = parts[parts.length - 1] + " " + parts.slice(0, -1).join(" ");
+    if (OPS_EMP_MAP[rev]) return OPS_EMP_MAP[rev];
+  }
+  return null;
 }
 
 function avatarInitials7(name) {
@@ -44,16 +73,18 @@ function getOpsTickets() {
   return [...bsa, ...td];
 }
 
-function OpsEngineerCard({ name, stats, color, lang }) {
+function OpsEngineerCard({ name, stats, color, lang, empId, nav }) {
   const pct = stats.total ? Math.round((stats.done / stats.total) * 100) : 0;
   const initials = avatarInitials7(name);
   const shortName = name.split(" ").slice(0, 2).join(" ");
   return (
-    <div className="card card-pad" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    <div className="card card-pad" style={{ display: "flex", flexDirection: "column", gap: 12,
+      cursor: empId ? "pointer" : "default" }}
+      onClick={() => empId && nav("employee", { id: empId })}>
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <div className="avatar" style={{ width: 38, height: 38, fontSize: 14, background: color }}>{initials}</div>
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13.5, color: "var(--ink)" }}>{shortName}</div>
+          <div style={{ fontWeight: 700, fontSize: 13.5, color: empId ? "#2563EB" : "var(--ink)" }}>{shortName}</div>
           <div style={{ fontSize: 11, color: "var(--muted-2)" }}>{stats.total} {lang === "ru" ? "тикетов" : "ta ticket"}</div>
         </div>
         <div style={{ marginLeft: "auto", fontWeight: 700, fontSize: 20, color }}>{pct}%</div>
@@ -64,7 +95,7 @@ function OpsEngineerCard({ name, stats, color, lang }) {
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
         {stats.done > 0 && <span className="pill pill-green">{stats.done} {lang === "ru" ? "готово" : "tayyor"}</span>}
         {stats.inprog > 0 && <span className="pill pill-blue">{stats.inprog} {lang === "ru" ? "в работе" : "jarayonda"}</span>}
-        {stats.review > 0 && <span className="pill" style={{ background: "#E0F5F3", color: "#0E9C8E" }}>{stats.review} {lang === "ru" ? "проверка" : "tekshiruv"}</span>}
+        {stats.review > 0 && <span className="pill" style={{ background: "#0E9C8E22", color: "#0E9C8E" }}>{stats.review} {lang === "ru" ? "проверка" : "tekshiruv"}</span>}
         {stats.todo > 0 && <span className="pill pill-amber">{stats.todo} {lang === "ru" ? "ожидает" : "kutilmoqda"}</span>}
       </div>
     </div>
@@ -73,7 +104,7 @@ function OpsEngineerCard({ name, stats, color, lang }) {
 
 function OperationsReport() {
   const t = useT7();
-  const { lang } = useApp();
+  const { lang, nav } = useApp();
   const [productFilter, setProductFilter] = uS7("all");
   const [statusFilter, setStatusFilter] = uS7("all");
   const [assigneeFilter, setAssigneeFilter] = uS7("all");
@@ -278,7 +309,7 @@ function OperationsReport() {
           </div>
           <div className="grid" style={{ gridTemplateColumns: "repeat(4,1fr)", marginBottom: 20 }}>
             {engineers.slice(0, 8).map(([name, stats], idx) => (
-              <OpsEngineerCard key={name} name={name} stats={stats} color={OPS_COLORS[idx % OPS_COLORS.length]} lang={lang} />
+              <OpsEngineerCard key={name} name={name} stats={stats} color={OPS_COLORS[idx % OPS_COLORS.length]} lang={lang} empId={lookupEmpId(name)} nav={nav} />
             ))}
           </div>
         </>
@@ -345,6 +376,7 @@ function OperationsReport() {
                 const initials = avatarInitials7(assignee);
                 const engIdx = engineers.findIndex(([n]) => n === assignee);
                 const engColor = OPS_COLORS[engIdx % OPS_COLORS.length] || "#8A93A6";
+                const empId = lookupEmpId(assignee);
                 return (
                   <tr key={key + idx} onClick={() => window.open(jiraBase + "/browse/" + key, "_blank")} style={{ cursor: "pointer" }}>
                     <td>
@@ -366,9 +398,13 @@ function OperationsReport() {
                     </td>
                     <td>
                       {assignee ? (
-                        <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 7,
+                          cursor: empId ? "pointer" : "default" }}
+                          onClick={empId ? e => { e.stopPropagation(); nav("employee", { id: empId }); } : undefined}>
                           <div className="avatar" style={{ width: 24, height: 24, fontSize: 10, background: engColor }}>{initials}</div>
-                          <span style={{ fontSize: 12, color: "var(--ink)" }}>{assignee.split(" ").slice(0, 2).join(" ")}</span>
+                          <span style={{ fontSize: 12, color: empId ? "#2563EB" : "var(--ink)" }}>
+                            {assignee.split(" ").slice(0, 2).join(" ")}
+                          </span>
                         </div>
                       ) : <span className="t-muted">—</span>}
                     </td>
@@ -383,4 +419,4 @@ function OperationsReport() {
   );
 }
 
-Object.assign(window, { OperationsReport });
+Object.assign(window, { OperationsReport, getOpsTickets });

@@ -49,6 +49,29 @@ function Dashboard() {
     });
     return Object.entries(m).sort().slice(-8);
   }, []);
+  // Operations data (status counts + workload by assignee)
+  const OPS_GROUPS = [
+    { key: "done",    label_uz: "Bajarildi",  label_ru: "Выполнено",    color: "#138A5E", test: s => s==="DONE"||s==="Готово" },
+    { key: "inprog",  label_uz: "Jarayonda",  label_ru: "В работе",     color: "#2563EB", test: s => s==="IN PROGRESS"||s==="in dev" },
+    { key: "review",  label_uz: "Tekshiruv",  label_ru: "На проверке",  color: "#0E9C8E", test: s => s==="Проверка"||s==="Ready for dev" },
+    { key: "queue",   label_uz: "Navbatda",   label_ru: "В очереди",    color: "#6D5CD6", test: s => s==="Selected for Development"||s==="Backlog"||s==="backlog" },
+    { key: "todo",    label_uz: "Kutilmoqda", label_ru: "К выполнению", color: "#C2410C", test: s => s==="TO DO" },
+    { key: "blocked", label_uz: "Bloklangan", label_ru: "Заблокировано",color: "#DC2626", test: s => s==="Blocked" },
+  ];
+  const opsData = uM1(() => {
+    const tickets = window.getOpsTickets ? window.getOpsTickets() : [];
+    const stCounts = OPS_GROUPS.map(g => ({ ...g, cnt: tickets.filter(tk => g.test(tk.status)).length })).filter(g => g.cnt > 0);
+    const empMap = {};
+    tickets.forEach(({ status, assignee }) => {
+      if (!assignee) return;
+      if (!empMap[assignee]) empMap[assignee] = { done: 0, inprog: 0, review: 0, queue: 0, todo: 0, blocked: 0, total: 0 };
+      empMap[assignee].total++;
+      const g = OPS_GROUPS.find(g => g.test(status));
+      if (g) empMap[assignee][g.key]++;
+    });
+    const load = Object.entries(empMap).sort((a, b) => b[1].total - a[1].total).slice(0, 12);
+    return { stCounts, load, hasData: tickets.length > 0 };
+  }, []);
 
   const kpis = [
     { label: t("kpi_total"), value: a.total, go: () => nav("portfolio", {}) },
@@ -99,7 +122,8 @@ function Dashboard() {
         {kpis.slice(5).map((k, i) => <KPI key={i} {...k} onClick={k.go} accent={k.accent} />)}
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: "1.1fr 1.4fr", marginTop: 18 }}>
+      {/* Row 1: Status charts — Portfolio + Operations */}
+      <div className="grid" style={{ gridTemplateColumns: "1fr 1fr", marginTop: 18 }}>
         <div className="card">
           <div className="card-h">
             <h3>{t("ch_status")}</h3>
@@ -108,94 +132,125 @@ function Dashboard() {
             </span>
           </div>
           <div className="card-pad">
-            <Chart_ type="bar" height={200}
+            <Chart_ type="bar" height={180}
               onClickIndex={(i) => nav("portfolio", { status: STATUS_ORDER[i] })}
               data={{
                 labels: STATUS_ORDER.map(s => t(STATUS[s].short) + "   —   " + a.by[s]),
-                datasets: [{
-                  data: STATUS_ORDER.map(s => a.by[s]),
-                  backgroundColor: STATUS_ORDER.map(s => STATUS[s].color),
-                  borderRadius: 5, maxBarThickness: 28,
-                }],
+                datasets: [{ data: STATUS_ORDER.map(s => a.by[s]), backgroundColor: STATUS_ORDER.map(s => STATUS[s].color), borderRadius: 5, maxBarThickness: 28 }],
               }}
-              options={{
-                indexAxis: "y",
-                plugins: { legend: { display: false } },
-                scales: {
-                  x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } },
-                  y: { grid: { display: false }, ticks: { font: { size: 12 } } },
-                },
-              }} />
+              options={{ indexAxis: "y", plugins: { legend: { display: false } },
+                scales: { x: { grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 12 } } } } }} />
           </div>
         </div>
 
+        {opsData.hasData && (
+          <div className="card">
+            <div className="card-h">
+              <h3>Operations — {lang === "ru" ? "Статусы" : "Statuslar"}</h3>
+              <button className="btn btn-ghost" style={{ fontSize: 12 }} onClick={() => nav("operations")}>→</button>
+            </div>
+            <div className="card-pad">
+              <Chart_ type="bar" height={180}
+                data={{
+                  labels: opsData.stCounts.map(g => lang === "ru" ? g.label_ru : g.label_uz),
+                  datasets: [{ data: opsData.stCounts.map(g => g.cnt), backgroundColor: opsData.stCounts.map(g => g.color), borderRadius: 5, maxBarThickness: 26 }],
+                }}
+                options={{ indexAxis: "y", plugins: { legend: { display: false } },
+                  scales: { x: { grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 11 } } } } }} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Row 2: Workload charts — Portfolio + Operations */}
+      <div className="grid" style={{ gridTemplateColumns: "1fr 1fr", marginTop: 16 }}>
+        <div className="card">
+          <div className="card-h"><h3>{t("ch_load")}</h3><span className="hint">{t("clickHint")}</span></div>
+          <div className="card-pad">
+            <Chart_ type="bar" height={300}
+              onClickIndex={(i) => nav("employee", { id: loadData[i].id })}
+              data={{
+                labels: loadData.map(e => e.shortName),
+                datasets: STATUS_ORDER.map(s => ({
+                  label: t(STATUS[s].short),
+                  data: loadData.map(e => e.statusCounts[s]),
+                  backgroundColor: STATUS[s].color, borderRadius: 3, stack: "x", maxBarThickness: 18,
+                })),
+              }}
+              options={{ indexAxis: "y", plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", padding: 12, font: { size: 11 } } } },
+                scales: { x: { stacked: true, grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 11 } } } } }} />
+          </div>
+        </div>
+
+        {opsData.hasData && (
+          <div className="card">
+            <div className="card-h">
+              <h3>Operations — {lang === "ru" ? "Нагрузка" : "Yuklama"}</h3>
+              <button className="btn btn-ghost" style={{ fontSize: 12 }} onClick={() => nav("operations")}>→</button>
+            </div>
+            <div className="card-pad">
+              <Chart_ type="bar" height={300}
+                data={{
+                  labels: opsData.load.map(([n]) => n.split(" ").slice(0, 2).join(" ")),
+                  datasets: OPS_GROUPS.filter(g => opsData.load.some(([, s]) => s[g.key] > 0)).map(g => ({
+                    label: lang === "ru" ? g.label_ru : g.label_uz,
+                    data: opsData.load.map(([, s]) => s[g.key] || 0),
+                    backgroundColor: g.color, borderRadius: 3, stack: "x", maxBarThickness: 18,
+                  })),
+                }}
+                options={{ indexAxis: "y", plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", padding: 12, font: { size: 11 } } } },
+                  scales: { x: { stacked: true, grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 11 } } } } }} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Row 3: Product breakdown + Stack + Timeline */}
+      <div className="grid" style={{ gridTemplateColumns: "1.1fr 0.9fr", marginTop: 16 }}>
         <div className="card">
           <div className="card-h"><h3>{t("ch_product")}</h3><span className="hint">{t("clickHint")}</span></div>
           <div className="card-pad">
-            <Chart_ type="bar" height={260}
+            <Chart_ type="bar" height={240}
               onClickIndex={(i) => nav("portfolio", { product: prodData[i][0] })}
               data={{
                 labels: prodData.map(d => prodShort(d[0])),
                 datasets: STATUS_ORDER.map(s => ({
                   label: t(STATUS[s].short),
                   data: prodData.map(d => d[1][s]),
-                  backgroundColor: STATUS[s].color, borderRadius: 3, stack: "x", maxBarThickness: 22,
+                  backgroundColor: STATUS[s].color, borderRadius: 3, stack: "x", maxBarThickness: 20,
                 })),
               }}
               options={{ indexAxis: "y",
-                plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", padding: 14, font: { size: 11.5 } } } },
-                scales: { x: { stacked: true, grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 11.5 } } } } }} />
-          </div>
-        </div>
-      </div>
-
-      <div className="grid" style={{ gridTemplateColumns: "1fr 1fr", marginTop: 16 }}>
-        <div className="card">
-          <div className="card-h"><h3>{t("ch_stack")}</h3><span className="hint">{t("clickHint")}</span></div>
-          <div className="card-pad">
-            <Chart_ type="pie" height={250}
-              onClickIndex={(i) => nav("workload", { stack: stackData[i][0] })}
-              data={{
-                labels: stackData.map(d => d[0]),
-                datasets: [{
-                  data: stackData.map(d => d[1]),
-                  backgroundColor: ["#2563EB","#138A5E","#6D5CD6","#C2410C","#0E7490","#D97706","#9333EA","#0E9C8E","#B45309","#64748B","#1D4ED8","#065F46","#4C1D95","#7F1D1D","#0C4A6E"],
-                  borderWidth: 0, hoverOffset: 4,
-                }],
-              }}
-              options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 10, font: { size: 11 } } } } }} />
+                plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", padding: 12, font: { size: 11 } } } },
+                scales: { x: { stacked: true, grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 11 } } } } }} />
           </div>
         </div>
 
-        <div className="card">
-          <div className="card-h"><h3>{t("ch_timeline")}</h3><span className="hint">{t("st_completed_s")}</span></div>
-          <div className="card-pad">
-            <Chart_ type="bar" height={250}
-              data={{
-                labels: tl.map(d => { const [y, mo] = d[0].split("-"); return MONTHS[lang][+mo - 1] + " " + y.slice(2); }),
-                datasets: [{ data: tl.map(d => d[1]), backgroundColor: "#138A5E", borderRadius: 5, maxBarThickness: 38 }],
-              }}
-              options={{ plugins: { legend: { display: false } },
-                scales: { y: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, x: { grid: { display: false } } } }} />
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div className="card">
+            <div className="card-h"><h3>{t("ch_stack")}</h3><span className="hint">{t("clickHint")}</span></div>
+            <div className="card-pad">
+              <Chart_ type="pie" height={180}
+                onClickIndex={(i) => nav("workload", { stack: stackData[i][0] })}
+                data={{
+                  labels: stackData.map(d => d[0]),
+                  datasets: [{ data: stackData.map(d => d[1]), backgroundColor: ["#2563EB","#138A5E","#6D5CD6","#C2410C","#0E7490","#D97706","#9333EA","#0E9C8E","#B45309","#64748B","#1D4ED8","#065F46","#4C1D95","#7F1D1D","#0C4A6E"], borderWidth: 0, hoverOffset: 4 }],
+                }}
+                options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 8, font: { size: 11 } } } } }} />
+            </div>
           </div>
-        </div>
-      </div>
-
-      <div className="card" style={{ marginTop: 16 }}>
-        <div className="card-h"><h3>{t("ch_load")}</h3><span className="hint">{t("clickHint")}</span></div>
-        <div className="card-pad">
-          <Chart_ type="bar" height={330}
-            onClickIndex={(i) => nav("employee", { id: loadData[i].id })}
-            data={{
-              labels: loadData.map(e => e.shortName),
-              datasets: STATUS_ORDER.map(s => ({
-                label: t(STATUS[s].short),
-                data: loadData.map(e => e.statusCounts[s]),
-                backgroundColor: STATUS[s].color, borderRadius: 3, stack: "x", maxBarThickness: 22,
-              })),
-            }}
-            options={{ indexAxis: "y", plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", padding: 14, font: { size: 11.5 } } } },
-              scales: { x: { stacked: true, grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { stacked: true, grid: { display: false }, ticks: { font: { size: 11.5 } } } } }} />
+          <div className="card">
+            <div className="card-h"><h3>{t("ch_timeline")}</h3><span className="hint">{t("st_completed_s")}</span></div>
+            <div className="card-pad">
+              <Chart_ type="bar" height={180}
+                data={{
+                  labels: tl.map(d => { const [y, mo] = d[0].split("-"); return MONTHS[lang][+mo - 1] + " " + y.slice(2); }),
+                  datasets: [{ data: tl.map(d => d[1]), backgroundColor: "#138A5E", borderRadius: 5, maxBarThickness: 32 }],
+                }}
+                options={{ plugins: { legend: { display: false } },
+                  scales: { y: { grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, x: { grid: { display: false } } } }} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
