@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-DUAcabCT.js";var t=e(),n=()=>(0,t.jsx)(`div`,{className:`p-6`,children:`Шартнома топилмади.`});export{n as notFoundComponent};
