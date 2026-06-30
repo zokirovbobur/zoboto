@@ -107,44 +107,40 @@ body {
 .type-cell .lbl { font-size:11px; color:var(--muted); }
 .type-cell .v { font-size:15px; font-weight:700; color:var(--navy); }
 .type-cell .s { font-size:11px; color:var(--muted); }
-.pie-layout { display:grid; justify-items:center; gap:14px; min-height:260px; }
-.pie-svg { width:100%; max-width:320px; height:auto; overflow:visible; }
-.pie-slice { cursor:pointer; transition:opacity .15s ease, transform .15s ease; transform-origin:50% 50%; }
-.pie-slice:hover { opacity:.9; }
-.pie-hole { fill:#fff; stroke:var(--border); stroke-width:1; }
-.pie-label-line { stroke:var(--muted-2); stroke-width:1.25; fill:none; }
-.pie-label { font-size:11px; font-weight:700; fill:var(--navy); text-anchor:middle; dominant-baseline:middle; pointer-events:none; }
-.pie-center-label { font-size:10px; fill:var(--muted); text-transform:uppercase; letter-spacing:.7px; text-anchor:middle; }
-.pie-center-value { font-size:22px; font-weight:700; fill:var(--navy); text-anchor:middle; }
-.pie-center-sub { font-size:11px; fill:var(--muted); text-anchor:middle; }
-.pie-inline-legend {
+/* Proportional area chart */
+.prop-area-layout { display:flex; flex-direction:column; align-items:center; gap:8px; padding:2px 0; }
+.prop-area-info { text-align:center; }
+.prop-area-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.7px; }
+.prop-area-value { font-size:20px; font-weight:700; color:var(--navy); margin:2px 0; }
+.prop-area-sub { font-size:11px; color:var(--muted); }
+.prop-area-svg { width:100%; height:auto; display:block; border-radius:6px; overflow:visible; }
+.prop-rect { transition:opacity .12s; }
+.prop-rect:hover { opacity:.78; }
+.prop-label { font-size:9.5px; fill:#fff; font-weight:700; pointer-events:none; dominant-baseline:middle; text-anchor:middle; }
+.prop-pct  { font-size:8.5px; fill:rgba(255,255,255,.82); pointer-events:none; dominant-baseline:middle; text-anchor:middle; }
+.prop-legend {
   width:100%;
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-  gap:8px 14px;
+  gap:5px 8px;
 }
-.pie-inline-item {
+.prop-legend-item {
   display:flex;
   align-items:center;
-  gap:8px;
-  padding:6px 10px;
+  gap:5px;
+  padding:4px 8px;
   border:1px solid var(--border);
   border-radius:999px;
   background:#f8fafc;
   color:var(--navy);
-  font-size:11px;
+  font-size:10.5px;
   white-space:nowrap;
 }
-.pie-inline-item .sw {
-  width:12px;
-  height:12px;
-  border-radius:50%;
-  flex:0 0 auto;
-}
-.pie-inline-item .pct {
-  font-weight:700;
-}
+.prop-legend-item .sw { width:9px; height:9px; border-radius:2px; flex:0 0 auto; }
+.prop-legend-item .pct { font-weight:700; }
+/* First dashboard charts row: bucket narrower, type wider */
+#dashChartsTop { grid-template-columns: 1fr 1.7fr; }
 /* Funnel/stepper */
 .stepper { display:flex; flex-wrap:wrap; gap:6px; }
 .step { background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid var(--border); min-width:120px; flex:1; position:relative; }
@@ -366,14 +362,14 @@ table.data td.link { color:var(--court); font-weight:600; }
           <button class="btn primary">Янгилаш</button>
         </div>
       </div>
-      <div class="charts-grid">
+      <div class="charts-grid" id="dashChartsTop">
         <div class="card">
           <h3>Қарздорлик bucket тақсимоти <span class="hint">соннинг ва суммасининг улуши</span></h3>
           <div id="bucketBars"></div>
         </div>
         <div class="card">
           <h3>Кредит тури бўйича тақсимот</h3>
-          <div class="type-grid" id="typeGrid"></div>
+          <div id="typeGrid"></div>
         </div>
       </div>
 
@@ -821,6 +817,79 @@ function describeArc(cx, cy, r, startAngle, endAngle){
   return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`;
 }
 
+function buildPropAreaMarkup(items, totalLabel, totalValue, formatter, valueKey = 'value', svgH = 120){
+  const total = items.reduce((sum, item) => sum + item[valueKey], 0) || 1;
+  const segs = items.map(item => {
+    const portion = item[valueKey] / total;
+    const percent = Math.round(portion * 100);
+    return { ...item, portion, percent, tooltip: formatter(item, percent) };
+  }).filter(s => s.portion > 0);
+
+  const W = 400, H = svgH, GAP = 2;
+
+  function treemap(nodes, x, y, w, h) {
+    if (nodes.length === 0) return [];
+    if (nodes.length === 1) return [{ ...nodes[0], x, y, w, h }];
+    const tot = nodes.reduce((s, n) => s + n.portion, 0);
+    let cum = 0, splitIdx = 0, bestDiff = Infinity;
+    for (let i = 0; i < nodes.length - 1; i++) {
+      cum += nodes[i].portion / tot;
+      const diff = Math.abs(cum - 0.5);
+      if (diff < bestDiff) { bestDiff = diff; splitIdx = i; }
+    }
+    splitIdx++;
+    const leftFrac = nodes.slice(0, splitIdx).reduce((s, n) => s + n.portion, 0) / tot;
+    if (w >= h) {
+      const lw = w * leftFrac - GAP / 2, rw = w * (1 - leftFrac) - GAP / 2;
+      return [
+        ...treemap(nodes.slice(0, splitIdx), x, y, lw, h),
+        ...treemap(nodes.slice(splitIdx), x + lw + GAP, y, rw, h)
+      ];
+    } else {
+      const lh = h * leftFrac - GAP / 2, rh = h * (1 - leftFrac) - GAP / 2;
+      return [
+        ...treemap(nodes.slice(0, splitIdx), x, y, w, lh),
+        ...treemap(nodes.slice(splitIdx), x, y + lh + GAP, w, rh)
+      ];
+    }
+  }
+
+  const rects = treemap([...segs].sort((a, b) => b.portion - a.portion), 0, 0, W, H);
+
+  const rectsHtml = rects.map(r => {
+    const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+    const showName = r.w > 44 && r.h > 22;
+    const showPct  = r.w > 28 && r.h > 14;
+    const nameY = showPct ? cy - 7 : cy;
+    const shortLabel = r.label.length > 12 ? r.label.slice(0, 11) + '…' : r.label;
+    return `<g>
+      <rect class="prop-rect" x="${r.x.toFixed(1)}" y="${r.y.toFixed(1)}" width="${Math.max(r.w,0).toFixed(1)}" height="${Math.max(r.h,0).toFixed(1)}" rx="3" fill="${r.color}">
+        <title>${r.label}: ${r.tooltip}</title>
+      </rect>
+      ${showName ? `<text class="prop-label" x="${cx.toFixed(1)}" y="${nameY.toFixed(1)}">${shortLabel}</text>` : ''}
+      ${showPct  ? `<text class="prop-pct"   x="${cx.toFixed(1)}" y="${(showName ? cy + 7 : cy).toFixed(1)}">${r.percent}%</text>` : ''}
+    </g>`;
+  }).join('');
+
+  const legendHtml = segs.map(seg => `
+    <div class="prop-legend-item" title="${seg.label}: ${seg.tooltip}">
+      <span class="sw" style="background:${seg.color}"></span>
+      <span>${seg.label}</span>
+      <span class="pct">${seg.percent}%</span>
+    </div>`).join('');
+
+  return `
+    <div class="prop-area-layout">
+      <div class="prop-area-info">
+        <div class="prop-area-label">${totalLabel}</div>
+        <div class="prop-area-value">${totalValue}</div>
+        <div class="prop-area-sub">${segs.length} та сегмент</div>
+      </div>
+      <svg class="prop-area-svg" viewBox="0 0 ${W} ${H}" role="img">${rectsHtml}</svg>
+      <div class="prop-legend">${legendHtml}</div>
+    </div>`;
+}
+
 function buildPieChartMarkup(items, totalLabel, totalValue, formatter, valueKey = 'value'){
   const total = items.reduce((sum, item) => sum + item[valueKey], 0) || 1;
   const cx = 180;
@@ -968,12 +1037,13 @@ function renderBucketBars(){
     color: PIE_COLORS[index % PIE_COLORS.length]
   }));
   const totalCount = data.reduce((sum, item) => sum + item.value, 0).toLocaleString('ru-RU');
-  document.getElementById('bucketBars').innerHTML = buildPieChartMarkup(
+  document.getElementById('bucketBars').innerHTML = buildPropAreaMarkup(
     data,
     'Жами контракт',
     totalCount,
     item => `${item.value.toLocaleString('ru-RU')} та • ${(item.amount/1e9).toFixed(2)} млрд сўм`,
-    'value'
+    'value',
+    115
   );
 }
 
@@ -985,12 +1055,13 @@ function renderTypeGrid(){
     color: PIE_COLORS[index % PIE_COLORS.length]
   }));
   const totalAmount = `${(data.reduce((sum, item) => sum + item.value, 0) / 1e9).toFixed(2)} млрд`;
-  document.getElementById('typeGrid').innerHTML = buildPieChartMarkup(
+  document.getElementById('typeGrid').innerHTML = buildPropAreaMarkup(
     data,
     'Жами сумма',
     totalAmount,
     item => `${item.count.toLocaleString('ru-RU')} та • ${(item.value/1e9).toFixed(2)} млрд сўм`,
-    'value'
+    'value',
+    130
   );
 }
 
