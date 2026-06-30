@@ -342,11 +342,6 @@ table.data td.link { color:var(--court); font-weight:600; }
   <header class="topbar">
     <div class="breadcrumbs">Trastbank / <b id="crumb">Бош панел</b></div>
     <div class="search"><input id="globalSearch" placeholder="Излаш: мижоз, шартнома, телефон..."></div>
-    <div class="filt">
-      <input type="date" value="2026-06-01">
-      <input type="date" value="2026-06-30">
-      <select id="branchTop"><option>Барча филиаллар</option></select>
-    </div>
     <div class="spacer"></div>
     <div class="role-switch">
       <span style="font-size:10px;color:var(--muted);text-transform:uppercase;">Роль:</span>
@@ -368,7 +363,10 @@ table.data td.link { color:var(--court); font-weight:600; }
     <section class="section active" id="sec-dashboard">
       <div class="page-title">
         <h1>Бош панел — Муаммоли кредитлар портфели</h1>
-        <div class="actions">
+        <div class="actions" style="gap:6px;">
+          <input type="date" value="2026-06-01" style="padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:#fff;">
+          <input type="date" value="2026-06-30" style="padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:#fff;">
+          <select id="branchTop" style="padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:#fff;"><option>Барчаси</option></select>
           <button class="btn">Экспорт Excel</button>
           <button class="btn primary">Янгилаш</button>
         </div>
