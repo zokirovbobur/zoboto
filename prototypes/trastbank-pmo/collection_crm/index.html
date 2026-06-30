@@ -726,7 +726,13 @@ table.data td.link { color:var(--court); font-weight:600; }
 
 <div class="toasts" id="toasts"></div>
 
-<script src="./data/app-data.js"></script>
+<script>
+  (function () {
+    var path = window.location.pathname.replace(/\/index\.html$/, "/");
+    if (!path.endsWith("/")) path += "/";
+    document.write('<script src="' + path + 'data/app-data.js"><\/script>');
+  })();
+</script>
 <script>
 /* ============ MOCK DATA ============ */
 const APP_DATA = window.__APP_DATA__ || {};
