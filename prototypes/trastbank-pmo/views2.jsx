@@ -224,7 +224,21 @@ function Workload() {
 
   // top 12 for charts
   const topActive = [...DATA.employees].sort((a, b) => (b.statusCounts.progress + b.statusCounts.planned) - (a.statusCounts.progress + a.statusCounts.planned)).slice(0, 12);
-  const topDone   = [...DATA.employees].sort((a, b) => b.statusCounts.completed - a.statusCounts.completed).slice(0, 12);
+
+  // Compute completed Mahsulot projects per PM dynamically (accurate vs stale statusCounts)
+  const topDone = uM2(() => {
+    const bt = DATA.boardTypes || {};
+    const pmCount = {};
+    ALL_P.filter(p => (bt[p.product] || "Mahsulot") !== "Operations" && p.norm === "completed").forEach(p => {
+      if (!p.pmId) return;
+      if (!pmCount[p.pmId]) pmCount[p.pmId] = { id: p.pmId, count: 0, shortName: "" };
+      pmCount[p.pmId].count++;
+    });
+    return Object.values(pmCount).map(item => {
+      const e = DATA.employees.find(e => e.id === item.id);
+      return e ? { ...item, shortName: e.shortName } : item;
+    }).filter(item => item.shortName).sort((a, b) => b.count - a.count).slice(0, 12);
+  }, []);
 
   const LOAD = { low: { k: "load_low", t: "neutral" }, normal: { k: "load_normal", t: "blue" }, high: { k: "load_high", t: "amber" }, critical: { k: "load_critical", t: "red" } };
 
@@ -265,17 +279,17 @@ function Workload() {
           ); })()}
         </div></div>
 
-        <div className="card"><div className="card-h"><h3>{t("col_active")} (TOP-12)</h3></div><div className="card-pad">
+        <div className="card"><div className="card-h"><h3>{t("col_active")}</h3></div><div className="card-pad">
           <Chart_ type="bar" height={320}
             onClickIndex={(i) => nav("employee", { id: topActive[i].id })}
             data={{ labels: topActive.map(e => e.shortName), datasets: [{ label: t("col_active"), data: topActive.map(e => e.statusCounts.progress + e.statusCounts.planned), backgroundColor: "#2563EB", borderRadius: 3, maxBarThickness: 14 }] }}
             options={{ indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } } }} />
         </div></div>
 
-        <div className="card"><div className="card-h"><h3>{t("col_done")} (TOP-12)</h3></div><div className="card-pad">
+        <div className="card"><div className="card-h"><h3>{t("col_done")}</h3></div><div className="card-pad">
           <Chart_ type="bar" height={320}
             onClickIndex={(i) => nav("employee", { id: topDone[i].id })}
-            data={{ labels: topDone.map(e => e.shortName), datasets: [{ label: t("col_done"), data: topDone.map(e => e.statusCounts.completed), backgroundColor: "#138A5E", borderRadius: 3, maxBarThickness: 14 }] }}
+            data={{ labels: topDone.map(e => e.shortName), datasets: [{ label: t("col_done"), data: topDone.map(e => e.count), backgroundColor: "#138A5E", borderRadius: 3, maxBarThickness: 14 }] }}
             options={{ indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } } }} />
         </div></div>
       </div>
