@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/prototypes/trastbank-pmo/collection_crm/:path*", "destination": "/prototypes/trastbank-pmo/collection_crm/index.html" },
+    { "source": "/prototypes/collection_crm/:path*", "destination": "/prototypes/collection_crm/index.html" },
     { "source": "/prototypes/safa/mvp/:path*", "destination": "/prototypes/safa/mvp/index.html" }
   ],
   "redirects": [
