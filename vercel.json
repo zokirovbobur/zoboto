@@ -2,10 +2,12 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/prototypes/collection_crm/:path*", "destination": "/prototypes/collection_crm/index.html" },
+    { "source": "/prototypes/trastbank-pmo/collection_crm/:path*", "destination": "/prototypes/trastbank-pmo/collection_crm/index.html" },
     { "source": "/prototypes/safa/mvp/:path*", "destination": "/prototypes/safa/mvp/index.html" }
   ],
   "redirects": [
+    { "source": "/prototypes/collection_crm", "destination": "/prototypes/trastbank-pmo/collection_crm", "permanent": false },
+    { "source": "/prototypes/collection_crm/:path*", "destination": "/prototypes/trastbank-pmo/collection_crm/:path*", "permanent": false },
     { "source": "/protos", "destination": "/#prototypes", "permanent": false },
     { "source": "/about", "destination": "/#top", "permanent": false },
     { "source": "/prototypes/noor/bazaar-ecosystem/:path*", "destination": "/prototypes/noor/mvp/:path*", "permanent": true },
