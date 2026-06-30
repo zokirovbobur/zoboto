@@ -1,13 +1,936 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trastbank Collection CRM</title>
-    <link rel="stylesheet" crossorigin href="/prototypes/trastbank-pmo/collection_crm/assets/styles-IUevfp6f.css" />
-    <script type="module" crossorigin src="/prototypes/trastbank-pmo/collection_crm/assets/static-index-jiQ31bFJ.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<html lang="uz">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Trastbank — Collection CRM</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1e2436;--surface3:#242a3d;
+  --border:#2a3148;--accent:#f5a623;--accent2:#3b82f6;--accent3:#10b981;
+  --danger:#ef4444;--warn:#f59e0b;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --radius:10px;--nav:220px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;font-size:14px;display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--nav);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.logo{padding:20px 16px 16px;border-bottom:1px solid var(--border)}
+.logo-title{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:2px}
+.logo-sub{font-size:10px;color:var(--text3);margin-top:2px;letter-spacing:1px}
+.nav-section{padding:12px 0}
+.nav-label{font-size:10px;color:var(--text3);padding:4px 16px 6px;letter-spacing:1.5px;font-weight:600}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;color:var(--text2);font-size:13px;transition:all .15s;border-left:3px solid transparent}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--surface2);color:var(--accent);border-left-color:var(--accent)}
+.nav-item .icon{width:18px;text-align:center;font-size:15px}
+.nav-badge{margin-left:auto;background:var(--danger);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:700}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:52px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.topbar-title{font-weight:700;font-size:15px;flex:1}
+.search-box{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;width:320px}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-size:13px;width:100%}
+.search-box input::placeholder{color:var(--text3)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{background:#e0951f}
+.btn-secondary{background:var(--surface3);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--surface2)}
+.btn-sm{padding:4px 10px;font-size:12px}
+.content{flex:1;overflow-y:auto;padding:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.card-title{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;letter-spacing:.5px}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:1fr 1fr 1fr 1fr}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.kpi-label{font-size:11px;color:var(--text3);margin-bottom:6px;letter-spacing:.5px}
+.kpi-value{font-size:24px;font-weight:800;color:var(--text)}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:4px}
+.kpi-trend{font-size:11px;font-weight:600;margin-top:4px}
+.kpi-trend.up{color:var(--danger)}
+.kpi-trend.down{color:var(--accent3)}
+.kpi.accent .kpi-value{color:var(--accent)}
+.kpi.blue .kpi-value{color:var(--accent2)}
+.kpi.green .kpi-value{color:var(--accent3)}
+.kpi.red .kpi-value{color:var(--danger)}
+.kpi.yellow .kpi-value{color:var(--warn)}
+.kpi.purple .kpi-value{color:#a78bfa}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{background:var(--surface2);color:var(--text3);font-size:11px;font-weight:700;padding:8px 12px;text-align:left;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+tr:hover td{background:var(--surface2)}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-red{background:#7f1d1d;color:#fca5a5}
+.badge-yellow{background:#78350f;color:#fcd34d}
+.badge-green{background:#064e3b;color:#6ee7b7}
+.badge-blue{background:#1e3a5f;color:#93c5fd}
+.badge-purple{background:#4c1d95;color:#c4b5fd}
+.badge-gray{background:var(--surface3);color:var(--text3)}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px;overflow-x:auto}
+.tab{padding:10px 16px;cursor:pointer;color:var(--text3);font-size:12px;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:20px}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:100%;max-width:1100px;display:flex;flex-direction:column}
+.modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.modal-body{flex:1;overflow-y:auto;padding:20px;max-height:75vh}
+.close-btn{margin-left:auto;background:var(--surface3);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:16px}
+.progress-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width .3s}
+.sec-title{font-size:14px;font-weight:700}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.info-row{display:flex;flex-direction:column;gap:2px;padding:10px 8px;border-bottom:1px solid var(--border)}
+.info-label{font-size:11px;color:var(--text3)}
+.info-value{font-size:13px;font-weight:600}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:12px;padding:6px 0}
+.tl-line{display:flex;flex-direction:column;align-items:center;width:20px}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px}
+.tl-connector{width:2px;flex:1;background:var(--border);margin-top:4px;min-height:20px}
+.tl-content{flex:1;padding-bottom:8px}
+.chat{display:flex;flex-direction:column;gap:8px}
+.chat-msg{max-width:80%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5}
+.chat-ai{background:var(--surface3);border:1px solid var(--border);align-self:flex-start;border-radius:4px 12px 12px 12px}
+.chat-user{background:#1e3a5f;border:1px solid var(--accent2);align-self:flex-end;border-radius:12px 4px 12px 12px}
+.chat-time{font-size:10px;color:var(--text3);margin-top:4px}
+.date-input{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--text);font-size:12px;outline:none}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState}=React;
+
+const fmt=n=>new Intl.NumberFormat("uz-UZ").format(n);
+const fmtM=n=>(n/1000000).toFixed(1)+" млн";
+
+const BORROWERS=[
+  {
+    id:"CR-2024-0891",name:"Абдуллаев Жамшид Рустамович",phone:"+998 90 123 45 67",
+    contract:"ДКЗ-2021-4521",amount:485000000,overdue:87500000,dpd:124,stage:"Суд",
+    branch:"Ташкент-Юнусобод",collector:"Назаров А.",score:28,
+    credits:[{no:"ДКЗ-2021-4521",type:"Ипотека",amount:485000000,balance:412000000,overdue:87500000,startDate:"15.03.2021",endDate:"15.03.2031",rate:"18%",status:"Муаммоли"}],
+    calls:[
+      {id:1,date:"28.06.2026",time:"10:15",dur:"4:32",type:"out",op:"Назаров А.",result:"Ваъда берди",note:"30-июлга 5 млн тўлашга ваъда берди"},
+      {id:2,date:"20.06.2026",time:"14:22",dur:"1:10",type:"in",op:"Авто",result:"Жавоб бермади",note:""},
+      {id:3,date:"12.06.2026",time:"09:45",dur:"6:18",type:"out",op:"Назаров А.",result:"Тўлов режасини муҳокама",note:"Реструктуризация талаб қилди"},
+      {id:4,date:"01.06.2026",time:"11:00",dur:"2:45",type:"ai",op:"AI Bot",result:"Эслатма юборди",note:"SMS+Call, ваъда олинди"},
+    ],
+    aiChats:[
+      {role:"ai",text:"Салом! Мен Trastbank коллекция ботиман. Сизнинг кредит бўйича 87,500,000 сўм муддати ўтган қарздорлик мавжуд. Тўловни амалга ошириш имконингиз борми?",time:"01.06 11:00"},
+      {role:"user",text:"Ҳозир иш жойида қийинчилик бор, кейинроқ тўлайман",time:"01.06 11:01"},
+      {role:"ai",text:"Тушундим. Кейинги 3 кун ичида қисман ҳам бўлса тўлов амалга ошира оласизми? Минимал сумма 5,000,000 сўм.",time:"01.06 11:01"},
+      {role:"user",text:"Яхши, 5 млн тўлаш мумкин",time:"01.06 11:02"},
+      {role:"ai",text:"Раҳмат! Ваъдангиз қайд этилди. Тўлов учун: Trastbank, р/с 20208000905100120001",time:"01.06 11:02"},
+    ],
+    aiRecommendations:[
+      {icon:"📞",text:"Ҳар ҳафта қўнғироқ белгиланг — DPD 124 кун критик",type:"red"},
+      {icon:"⚖",text:"Апелляция кўрилишида иштирок этиш — 15.07.2026",type:"yellow"},
+      {icon:"🏠",text:"Гаровни қайта баҳолашни буюртма қилинг",type:"blue"},
+    ],
+    collateral:[
+      {type:"Кўчмас мулк",object:"3-хонали квартира",address:"Ташкент, Юнусобод т., Амир Темур шоҳ.156, 4-қ",value:680000000,cadastre:"10-07-2021:001:0012345",status:"Гаровда",auctioned:false},
+    ],
+    court:[
+      {caseNo:"№2-4892/2025",stage:"Апелляция",status:"Кўриб чиқилмоқда",lastDecision:"Биринчи инстанция банк фойдасига қарор чиқарди",nextDate:"15.07.2026",lawyer:"Юсупов К.",
+       history:[
+         {date:"01.03.2025",text:"Ариза суд томонидан қабул қилинди"},
+         {date:"15.04.2025",text:"Биринчи суд мажлиси ўтказилди"},
+         {date:"10.06.2025",text:"Суд банк фойдасига қарор чиқарди"},
+         {date:"20.07.2025",text:"Мижоз апелляция берди"},
+         {date:"15.07.2026",text:"Апелляция кўрилади (кутилмоқда)"},
+       ]},
+    ],
+    mib:[{execNo:"ИД-2025-7841",status:"Фаол",executor:"Тошматов Б.Б.",collected:12000000,remaining:75500000,lastAction:"20.06.2026"}],
+    auctions:[],
+    payments:[
+      {date:"05.05.2026",amount:5000000,type:"Асосий қарз",channel:"Наличный"},
+      {date:"10.03.2026",amount:3500000,type:"Фоиз",channel:"Банк ўтказмаси"},
+      {date:"15.01.2026",amount:10000000,type:"Асосий қарз",channel:"Банк ўтказмаси"},
+    ],
+    notes:[
+      {date:"28.06.2026",author:"Назаров А.",text:"Мижоз 30-июлга 5 млн ваъда берди. Кузатув белгиланди."},
+      {date:"20.06.2026",author:"Назаров А.",text:"Уч бор чиқувчи қўнғироқ, жавоб берилмади. SMS юборилди."},
+    ],
+  },
+  {
+    id:"CR-2024-1043",name:"Юсупова Малика Тўлқиновна",phone:"+998 91 987 65 43",
+    contract:"КД-2022-8812",amount:280000000,overdue:42000000,dpd:67,stage:"МИБ",
+    branch:"Ташкент-Чилонзор",collector:"Ҳасанова Д.",score:42,
+    credits:[{no:"КД-2022-8812",type:"Истеъмол кредити",amount:280000000,balance:198000000,overdue:42000000,startDate:"10.07.2022",endDate:"10.07.2027",rate:"22%",status:"Муаммоли"}],
+    calls:[
+      {id:1,date:"29.06.2026",time:"09:30",dur:"3:12",type:"out",op:"Ҳасанова Д.",result:"Тўлов ваъдаси",note:"10 июлга 10 млн ваъда берди"},
+      {id:2,date:"22.06.2026",time:"16:45",dur:"0:45",type:"ai",op:"AI Bot",result:"Жавоб берди",note:"Кейинроқ деди"},
+    ],
+    aiChats:[
+      {role:"ai",text:"Хурматли Малика Тўлқиновна! Сизнинг 42,000,000 сўм миқдоридаги қарздорлик бўйича хабардор қиламиз.",time:"22.06 16:45"},
+      {role:"user",text:"Биламан, ойлигим тушса тўлайман",time:"22.06 16:46"},
+      {role:"ai",text:"Ойлигингиз қачон тушиши кутилмоқда? Аниқ санани белгилаб бера оласизми?",time:"22.06 16:46"},
+      {role:"user",text:"5-июлда",time:"22.06 16:47"},
+      {role:"ai",text:"Раҳмат! 5-июлга тўлов ваъдасини қайд этдим. Эслатма юборамиз.",time:"22.06 16:47"},
+    ],
+    aiRecommendations:[
+      {icon:"📞",text:"10-июлда ваъдани текшириш учун қўнғироқ",type:"yellow"},
+      {icon:"🏛",text:"МИБ ижрочиси билан мувофиқлаштириш",type:"blue"},
+    ],
+    collateral:[
+      {type:"Автотранспорт",object:"Chevrolet Cobalt 2021",address:"—",value:95000000,cadastre:"01АА123UZ",status:"Гаровда",auctioned:false},
+    ],
+    court:[],
+    mib:[{execNo:"ИД-2026-1122",status:"Фаол",executor:"Раҳимов А.С.",collected:5000000,remaining:37000000,lastAction:"25.06.2026"}],
+    auctions:[],
+    payments:[{date:"01.06.2026",amount:8000000,type:"Асосий қарз",channel:"Банк ўтказмаси"}],
+    notes:[{date:"29.06.2026",author:"Ҳасанова Д.",text:"МИБ ижрочиси билан мувофиқлаштирилди."}],
+  },
+  {
+    id:"CR-2024-1187",name:"Каримов Бобур Алишерович",phone:"+998 93 456 78 90",
+    contract:"ИК-2020-3301",amount:920000000,overdue:215000000,dpd:210,stage:"Аукцион",
+    branch:"Самарқанд",collector:"Мирзаев Б.",score:15,
+    credits:[{no:"ИК-2020-3301",type:"Ипотека",amount:920000000,balance:876000000,overdue:215000000,startDate:"01.09.2020",endDate:"01.09.2035",rate:"16%",status:"Муаммоли"}],
+    calls:[
+      {id:1,date:"25.06.2026",time:"11:00",dur:"0:30",type:"out",op:"Мирзаев Б.",result:"Жавоб бермади",note:""},
+      {id:2,date:"20.06.2026",time:"10:00",dur:"5:20",type:"out",op:"Мирзаев Б.",result:"Тўлашни рад этди",note:"Тўлашни рад этди"},
+    ],
+    aiChats:[],
+    aiRecommendations:[
+      {icon:"🔨",text:"Аукцион 10-июлга белгиланган — тайёрлик",type:"red"},
+      {icon:"⚖",text:"Ижро хужжатини МИБга юбориш",type:"yellow"},
+    ],
+    collateral:[
+      {type:"Кўчмас мулк",object:"5 сотихли ер участкаси + уй",address:"Самарқанд вилояти, Булунғур тумани",value:1200000000,cadastre:"09-03-2019:002:0056789",status:"Гаровда",auctioned:true},
+    ],
+    court:[
+      {caseNo:"№1-2341/2024",stage:"Ижро",status:"Ижро хужжати олинган",lastDecision:"Банк фойдасига 876 млн ундириш",nextDate:"—",lawyer:"Содиқов Р.",
+       history:[
+         {date:"05.06.2023",text:"Ариза берилди"},
+         {date:"20.08.2023",text:"Биринчи мажлис ўтказилди"},
+         {date:"15.01.2024",text:"Суд банк фойдасига қарор чиқарди"},
+         {date:"10.03.2024",text:"Ижро хужжати олинди"},
+       ]},
+    ],
+    mib:[{execNo:"ИД-2024-4456",status:"Фаол",executor:"Холиқов Д.Т.",collected:0,remaining:215000000,lastAction:"10.06.2026"}],
+    auctions:[
+      {date:"10.07.2026",winner:"—",salePrice:0,payDeadline:"20.07.2026",payStatus:"Кутилмоқда",payDate:"—",regStatus:"Расмийлаштирилмаган"},
+    ],
+    payments:[],
+    notes:[{date:"25.06.2026",author:"Мирзаев Б.",text:"Аукцион 10-июлга белгиланди. Ижрочи хабардор қилинди."}],
+  },
+  {
+    id:"CR-2024-0654",name:"Рашидова Нилуфар Камолиддиновна",phone:"+998 97 321 09 87",
+    contract:"КД-2023-5510",amount:145000000,overdue:18500000,dpd:45,stage:"Боғланиш",
+    branch:"Фарғона",collector:"Қодирова З.",score:58,
+    credits:[{no:"КД-2023-5510",type:"Истеъмол кредити",amount:145000000,balance:98000000,overdue:18500000,startDate:"05.01.2023",endDate:"05.01.2026",rate:"24%",status:"Кеч тўлов"}],
+    calls:[
+      {id:1,date:"30.06.2026",time:"08:00",dur:"2:10",type:"out",op:"Қодирова З.",result:"Ваъда берди",note:"Бугун 5 млн тўлашга рози"},
+    ],
+    aiChats:[
+      {role:"ai",text:"Нилуфар Камолиддиновна, ойлик тўловингиз кечикмоқда. Бугун тўлай олесизми?",time:"29.06 18:00"},
+      {role:"user",text:"Ха, эртага тўлайман",time:"29.06 18:05"},
+      {role:"ai",text:"Тушундим! Эртага — 30.06.2026 тўлов ваъдасини қайд этдим.",time:"29.06 18:05"},
+    ],
+    aiRecommendations:[
+      {icon:"💬",text:"SMS эслатма юбориш — ваъда куни",type:"blue"},
+      {icon:"📞",text:"Тўлов тушмаса 01.07 қўнғироқ",type:"yellow"},
+    ],
+    collateral:[],
+    court:[],
+    mib:[],
+    auctions:[],
+    payments:[
+      {date:"05.06.2026",amount:5000000,type:"Ойлик тўлов",channel:"Payme"},
+      {date:"05.05.2026",amount:5000000,type:"Ойлик тўлов",channel:"Payme"},
+    ],
+    notes:[],
+  },
+];
+
+function Badge({type,children}){
+  const m={red:"badge-red",yellow:"badge-yellow",green:"badge-green",blue:"badge-blue",purple:"badge-purple",gray:"badge-gray"};
+  return <span className={`badge ${m[type]||"badge-gray"}`}>{children}</span>;
+}
+function StageBadge({stage}){
+  const m={"Суд":["red","⚖"],"МИБ":["yellow","🏛"],"Аукцион":["purple","🔨"],"Боғланиш":["blue","📞"],"Янги":["gray","🆕"]};
+  const[t,ic]=m[stage]||["gray","•"];
+  return <Badge type={t}>{ic} {stage}</Badge>;
+}
+
+/* DASHBOARD */
+function Dashboard(){
+  const[from,setFrom]=useState("2026-06-01");
+  const[to,setTo]=useState("2026-06-30");
+  const kpis=[
+    {label:"Ой бошидаги муаммоли кредитлар",value:"1 832",sub:"487.5 млрд сўм",cls:"accent",trend:null},
+    {label:"Янги муаммоли тоифа (давр)",value:"47",sub:"12.3 млрд сўм",cls:"red",trend:{dir:"up",v:"+12% ўтган ойга нисбатан"}},
+    {label:"Ундирилган кредитлар (давр)",value:"23",sub:"",cls:"green",trend:{dir:"down",v:"-5% ўтган ойга нисбатан"}},
+    {label:"Ундирилган маблағлар (давр)",value:"8.4 млрд",sub:"сўм",cls:"green",trend:null},
+    {label:"Суд жараёнидаги кредитлар",value:"312",sub:"",cls:"blue",trend:null},
+    {label:"МИБ ижросидаги кредитлар",value:"198",sub:"",cls:"yellow",trend:null},
+    {label:"Аукционга чиқарилган / сотилган",value:"67 / 24",sub:"гаров мулки",cls:"purple",trend:null},
+    {label:"Тўлов кутилаётган аукционлар",value:"12",sub:"",cls:"red",trend:null},
+  ];
+  const clsMap={accent:"accent",red:"red",green:"green",blue:"blue",yellow:"yellow",purple:"purple"};
+  const stages=[
+    {s:"Боғланиш",n:487,sum:45200000000,c:"#3b82f6"},
+    {s:"Суд",n:312,sum:187000000000,c:"#ef4444"},
+    {s:"МИБ",n:198,sum:134000000000,c:"#f59e0b"},
+    {s:"Аукцион",n:67,sum:89000000000,c:"#8b5cf6"},
+    {s:"Янги",n:768,sum:32000000000,c:"#6b7280"},
+  ];
+  const tot=stages.reduce((a,s)=>a+s.n,0);
+  return(
+    <div>
+      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
+        <div style={{fontWeight:800,fontSize:15,flex:1}}>Асосий кўрсаткичлар (KPI)</div>
+        <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+          <span style={{fontSize:12,color:"var(--text3)"}}>Давр:</span>
+          <input className="date-input" type="date" value={from} onChange={e=>setFrom(e.target.value)}/>
+          <span style={{color:"var(--text3)"}}>—</span>
+          <input className="date-input" type="date" value={to} onChange={e=>setTo(e.target.value)}/>
+          <button className="btn btn-primary btn-sm">Қўллаш</button>
+        </div>
+      </div>
+      <div className="grid g4" style={{marginBottom:16}}>
+        {kpis.map((k,i)=>(
+          <div key={i} className={`kpi ${clsMap[k.cls]||""}`}>
+            <div className="kpi-label">{k.label}</div>
+            <div className="kpi-value">{k.value}</div>
+            {k.sub&&<div className="kpi-sub">{k.sub}</div>}
+            {k.trend&&<div className={`kpi-trend ${k.trend.dir}`}>{k.trend.v}</div>}
+          </div>
+        ))}
+      </div>
+      <div className="grid g2" style={{marginBottom:16}}>
+        <div className="card">
+          <div className="card-title">БОСҚИЧЛАР БЎЙИЧА ТАҚСИМОТ</div>
+          {stages.map(s=>(
+            <div key={s.s} style={{marginBottom:12}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:4,fontSize:12}}>
+                <span style={{fontWeight:600}}>{s.s}</span>
+                <span style={{color:"var(--text2)"}}>{s.n} та — {fmtM(s.sum)}</span>
+              </div>
+              <div className="progress-bar">
+                <div className="progress-fill" style={{width:`${(s.n/tot*100).toFixed(0)}%`,background:s.c}}/>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="card">
+          <div className="card-title">ОЙ ДИНАМИКАСИ (млрд сўм)</div>
+          {[
+            {m:"Январь",c:5.2,n:3.1},{m:"Февраль",c:6.8,n:4.2},{m:"Март",c:4.1,n:2.8},
+            {m:"Апрель",c:7.9,n:5.1},{m:"Май",c:9.2,n:3.9},{m:"Июнь",c:8.4,n:4.7},
+          ].map(r=>(
+            <div key={r.m} style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+              <span style={{width:64,fontSize:12,color:"var(--text3)",flexShrink:0}}>{r.m}</span>
+              <div style={{flex:1}}>
+                <div style={{display:"flex",gap:4,alignItems:"center",marginBottom:2}}>
+                  <div style={{height:10,background:"var(--accent3)",borderRadius:2,width:`${r.c*10}px`,minWidth:4}}/>
+                  <span style={{fontSize:10,color:"var(--accent3)"}}>{r.c}</span>
+                </div>
+                <div style={{display:"flex",gap:4,alignItems:"center"}}>
+                  <div style={{height:10,background:"var(--danger)",borderRadius:2,width:`${r.n*10}px`,minWidth:4}}/>
+                  <span style={{fontSize:10,color:"var(--danger)"}}>{r.n}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+          <div style={{display:"flex",gap:16,marginTop:8,fontSize:11,color:"var(--text3)"}}>
+            <span><span style={{color:"var(--accent3)"}}>█</span> Ундирилди</span>
+            <span><span style={{color:"var(--danger)"}}>█</span> Янги муаммоли</span>
+          </div>
+        </div>
+      </div>
+      <div className="card">
+        <div className="card-title">СЎНГГИ АУКЦИОН НАТИЖАЛАРИ</div>
+        <div className="table-wrap">
+          <table>
+            <thead><tr><th>Лот</th><th>Гаров объекти</th><th>Мижоз</th><th>Аукцион санаси</th><th>Сотув нархи</th><th>Тўлов</th><th>Расмийлаштириш</th></tr></thead>
+            <tbody>
+              {[
+                {l:"АУК-2026-041",o:"3х.кв. Чилонзор",c:"Тошпўлатов Р.",d:"15.06.2026",p:320000000,pay:"✓ Амалга оширилган",reg:"✓ Тугалланган"},
+                {l:"АУК-2026-042",o:"Ер участкаси, Яшнобод",c:"Мўминов А.",d:"20.06.2026",p:185000000,pay:"⏳ Кутилмоқда",reg:"⏳ Жараёнда"},
+                {l:"АУК-2026-043",o:"Cobalt 2020",c:"Норматов Б.",d:"25.06.2026",p:85000000,pay:"✓ Амалга оширилган",reg:"⏳ Жараёнда"},
+              ].map(r=>(
+                <tr key={r.l}>
+                  <td style={{color:"var(--accent2)",fontWeight:700,fontSize:12}}>{r.l}</td>
+                  <td>{r.o}</td><td>{r.c}</td><td>{r.d}</td>
+                  <td style={{fontWeight:700}}>{fmt(r.p)} сўм</td>
+                  <td><Badge type={r.pay.startsWith("✓")?"green":"yellow"}>{r.pay}</Badge></td>
+                  <td><Badge type={r.reg.startsWith("✓")?"green":"blue"}>{r.reg}</Badge></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* BORROWER LIST */
+function BorrowerList({onOpen}){
+  const[q,setQ]=useState("");
+  const[sf,setSf]=useState("Барчаси");
+  const stages=["Барчаси","Боғланиш","Суд","МИБ","Аукцион"];
+  const filtered=BORROWERS.filter(b=>{
+    const qs=q.toLowerCase();
+    const mq=!q||b.name.toLowerCase().includes(qs)||b.contract.toLowerCase().includes(qs)||b.phone.includes(q);
+    const ms=sf==="Барчаси"||b.stage===sf;
+    return mq&&ms;
+  });
+  return(
+    <div>
+      <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap"}}>
+        <div className="search-box" style={{flex:1,minWidth:200}}>
+          <span>🔍</span>
+          <input placeholder="Мижоз, шартнома ёки телефон бўйича..." value={q} onChange={e=>setQ(e.target.value)}/>
+        </div>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+          {stages.map(s=>(
+            <button key={s} className={`btn btn-sm ${sf===s?"btn-primary":"btn-secondary"}`} onClick={()=>setSf(s)}>{s}</button>
+          ))}
+        </div>
+        <button className="btn btn-secondary btn-sm">+ Янги мижоз</button>
+      </div>
+      <div className="card" style={{padding:0}}>
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Мижоз</th><th>Шартнома</th><th>Муддати ўтган</th><th>DPD</th><th>Босқич</th><th>Коллектор</th><th>Риск</th><th></th></tr>
+            </thead>
+            <tbody>
+              {filtered.map(b=>(
+                <tr key={b.id}>
+                  <td style={{color:"var(--accent2)",fontWeight:700,fontSize:12,whiteSpace:"nowrap"}}>{b.id}</td>
+                  <td>
+                    <div style={{fontWeight:600}}>{b.name}</div>
+                    <div style={{fontSize:11,color:"var(--text3)"}}>{b.phone}</div>
+                  </td>
+                  <td style={{fontSize:12,color:"var(--text3)"}}>{b.contract}</td>
+                  <td>
+                    <div style={{fontWeight:700,color:"var(--danger)"}}>{fmtM(b.overdue)}</div>
+                    <div style={{fontSize:11,color:"var(--text3)"}}>жами: {fmtM(b.amount)}</div>
+                  </td>
+                  <td>
+                    <span style={{fontWeight:800,fontSize:15,color:b.dpd>90?"var(--danger)":b.dpd>30?"var(--warn)":"var(--accent3)"}}>{b.dpd}</span>
+                  </td>
+                  <td><StageBadge stage={b.stage}/></td>
+                  <td style={{fontSize:12}}>{b.collector}</td>
+                  <td>
+                    <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+                      <div style={{width:36,height:36,borderRadius:"50%",background:`conic-gradient(${b.score>50?"var(--accent3)":b.score>25?"var(--warn)":"var(--danger)"} ${b.score*3.6}deg,var(--surface3) 0)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800}}>{b.score}</div>
+                    </div>
+                  </td>
+                  <td>
+                    <button className="btn btn-primary btn-sm" onClick={()=>onOpen(b)}>360° Карточка</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* 360 MODAL */
+function Card360({b,onClose}){
+  const[tab,setTab]=useState("credit");
+  const tabs=[
+    {id:"credit",label:"💳 Кредит"},
+    {id:"client",label:"👤 Мижоз"},
+    {id:"calls",label:`📞 Қўнғироқлар (${b.calls.length})`},
+    {id:"ai",label:"🤖 AI Панел"},
+    {id:"collateral",label:`🏠 Гаров (${b.collateral.length})`},
+    {id:"court",label:`⚖ Суд (${b.court.length})`},
+    {id:"mib",label:`🏛 МИБ (${b.mib.length})`},
+    {id:"auction",label:`🔨 Аукцион (${b.auctions.length})`},
+    {id:"payments",label:`💳 Тўловлар (${b.payments.length})`},
+    {id:"notes",label:`📝 Изоҳлар (${b.notes.length})`},
+  ];
+  return(
+    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal">
+        <div className="modal-header">
+          <div>
+            <div style={{fontWeight:800,fontSize:16}}>{b.name}</div>
+            <div style={{display:"flex",gap:8,marginTop:4,alignItems:"center",flexWrap:"wrap"}}>
+              <span style={{fontSize:12,color:"var(--text3)"}}>{b.id}</span>
+              <StageBadge stage={b.stage}/>
+              <span style={{fontSize:12,color:"var(--danger)",fontWeight:700}}>DPD: {b.dpd}</span>
+              <span style={{fontSize:12,color:"var(--text3)"}}>{b.phone}</span>
+              <span style={{fontSize:12,color:"var(--text3)"}}>{b.branch}</span>
+            </div>
+          </div>
+          <div style={{marginLeft:"auto",display:"flex",gap:8,alignItems:"center",flexShrink:0}}>
+            <button className="btn btn-primary btn-sm">📞 Қўнғироқ</button>
+            <button className="close-btn" onClick={onClose}>✕</button>
+          </div>
+        </div>
+        <div className="modal-body">
+          <div className="tabs">
+            {tabs.map(t=>(
+              <div key={t.id} className={`tab ${tab===t.id?"active":""}`} onClick={()=>setTab(t.id)}>{t.label}</div>
+            ))}
+          </div>
+          {tab==="credit"&&<TabCredit b={b}/>}
+          {tab==="client"&&<TabClient b={b}/>}
+          {tab==="calls"&&<TabCalls b={b}/>}
+          {tab==="ai"&&<TabAI b={b}/>}
+          {tab==="collateral"&&<TabCollateral b={b}/>}
+          {tab==="court"&&<TabCourt b={b}/>}
+          {tab==="mib"&&<TabMIB b={b}/>}
+          {tab==="auction"&&<TabAuction b={b}/>}
+          {tab==="payments"&&<TabPayments b={b}/>}
+          {tab==="notes"&&<TabNotes b={b}/>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InfoRow({label,value,color}){
+  return(
+    <div className="info-row">
+      <span className="info-label">{label}</span>
+      <span className="info-value" style={color?{color}:{}}>{value}</span>
+    </div>
+  );
+}
+
+function TabCredit({b}){
+  return <div>{b.credits.map((c,i)=>(
+    <div key={i} className="card" style={{marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:12,alignItems:"center"}}>
+        <div style={{fontWeight:800,fontSize:15}}>{c.no}</div>
+        <Badge type="red">{c.status}</Badge>
+      </div>
+      <div className="info-grid">
+        <InfoRow label="Кредит тури" value={c.type}/>
+        <InfoRow label="Жами сумма" value={fmt(c.amount)+" сўм"}/>
+        <InfoRow label="Қолдиқ баланс" value={fmt(c.balance)+" сўм"}/>
+        <InfoRow label="Муддати ўтган" value={fmt(c.overdue)+" сўм"} color="var(--danger)"/>
+        <InfoRow label="Бошланиш санаси" value={c.startDate}/>
+        <InfoRow label="Тугаш санаси" value={c.endDate}/>
+        <InfoRow label="Фоиз ставкаси" value={c.rate}/>
+        <InfoRow label="Шўъба" value={b.branch}/>
+      </div>
+      <div style={{marginTop:12}}>
+        <div style={{display:"flex",justifyContent:"space-between",marginBottom:4,fontSize:12}}>
+          <span style={{color:"var(--text3)"}}>Тўланган</span>
+          <span>{fmtM(c.amount-c.balance)} / {fmtM(c.amount)}</span>
+        </div>
+        <div className="progress-bar">
+          <div className="progress-fill" style={{width:`${Math.round((c.amount-c.balance)/c.amount*100)}%`,background:"var(--accent3)"}}/>
+        </div>
+      </div>
+    </div>
+  ))}</div>;
+}
+
+function TabClient({b}){
+  return(
+    <div className="card">
+      <div className="info-grid">
+        <InfoRow label="Тўлиқ исм" value={b.name}/>
+        <InfoRow label="Телефон" value={b.phone}/>
+        <InfoRow label="Шўъба" value={b.branch}/>
+        <InfoRow label="Коллектор" value={b.collector}/>
+        <InfoRow label="Риск балли" value={b.score+"/100"} color={b.score>50?"var(--accent3)":b.score>25?"var(--warn)":"var(--danger)"}/>
+        <InfoRow label="DPD (муддат ўтганлик)" value={b.dpd+" кун"} color="var(--danger)"/>
+        <InfoRow label="Кредит босқичи" value={b.stage}/>
+        <InfoRow label="Шартнома рақами" value={b.contract}/>
+      </div>
+    </div>
+  );
+}
+
+function TabCalls({b}){
+  return(
+    <div>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:12,alignItems:"center"}}>
+        <div style={{fontSize:13,color:"var(--text2)"}}>Жами <b>{b.calls.length}</b> та қўнғироқ</div>
+        <button className="btn btn-primary btn-sm">+ Янги қўнғироқ</button>
+      </div>
+      <div className="card" style={{padding:0}}>
+        <table>
+          <thead><tr><th>Сана / Вақт</th><th>Тури</th><th>Давомийлик</th><th>Оператор</th><th>Натижа</th><th>Изоҳ</th></tr></thead>
+          <tbody>
+            {b.calls.map(c=>(
+              <tr key={c.id}>
+                <td><div style={{fontWeight:600}}>{c.date}</div><div style={{fontSize:11,color:"var(--text3)"}}>{c.time}</div></td>
+                <td>
+                  {c.type==="ai"?<Badge type="purple">🤖 AI</Badge>:c.type==="out"?<Badge type="blue">↗ Чиқувчи</Badge>:<Badge type="green">↙ Кирувчи</Badge>}
+                </td>
+                <td style={{fontWeight:600}}>{c.dur}</td>
+                <td>{c.op}</td>
+                <td><Badge type={c.result.includes("Ваъда")?"green":c.result.includes("Жавоб берм")||c.result.includes("рад")?"red":"blue"}>{c.result}</Badge></td>
+                <td style={{fontSize:12,color:"var(--text3)"}}>{c.note||"—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function TabAI({b}){
+  const[inp,setInp]=useState("");
+  return(
+    <div className="grid g2" style={{gap:16,alignItems:"start"}}>
+      <div>
+        <div style={{fontWeight:700,marginBottom:10,fontSize:13}}>🤖 AI Мулоқот тарихи</div>
+        {b.aiChats.length===0?(
+          <div className="card" style={{textAlign:"center",color:"var(--text3)",padding:32}}>AI мулоқоти мавжуд эмас</div>
+        ):(
+          <div className="card">
+            <div className="chat">
+              {b.aiChats.map((m,i)=>(
+                <div key={i} style={{display:"flex",flexDirection:"column",alignItems:m.role==="ai"?"flex-start":"flex-end"}}>
+                  <div className={`chat-msg ${m.role==="ai"?"chat-ai":"chat-user"}`}>
+                    {m.role==="ai"&&<div style={{fontSize:10,color:"var(--accent)",marginBottom:4,fontWeight:700}}>🤖 AI Бот</div>}
+                    {m.text}
+                  </div>
+                  <div className="chat-time">{m.time}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      <div>
+        <div style={{fontWeight:700,marginBottom:10,fontSize:13}}>💡 AI Тавсиялар</div>
+        <div className="card" style={{marginBottom:12}}>
+          {b.aiRecommendations.map((r,i)=>(
+            <div key={i} style={{display:"flex",gap:10,alignItems:"center",padding:"8px 0",borderBottom:i<b.aiRecommendations.length-1?"1px solid var(--border)":"none"}}>
+              <span style={{fontSize:18,flexShrink:0}}>{r.icon}</span>
+              <span style={{fontSize:12,flex:1}}>{r.text}</span>
+              <button className="btn btn-secondary btn-sm">Бажариш</button>
+            </div>
+          ))}
+        </div>
+        <div style={{fontWeight:700,marginBottom:10,fontSize:13}}>🤖 AI га савол бериш</div>
+        <div className="card">
+          <textarea value={inp} onChange={e=>setInp(e.target.value)}
+            placeholder="Масалан: мижоз билан мулоқот стратегияси нима бўлади?"
+            style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:7,padding:8,color:"var(--text)",fontSize:12,height:80,resize:"none",outline:"none"}}/>
+          <button className="btn btn-primary btn-sm" style={{marginTop:6,width:"100%"}}>🤖 AI дан жавоб олиш</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TabCollateral({b}){
+  if(!b.collateral.length) return(
+    <div style={{textAlign:"center",padding:40,color:"var(--text3)"}}>
+      <div style={{fontSize:32,marginBottom:8}}>🏠</div>
+      <div>Гаров маълумоти мавжуд эмас</div>
+    </div>
+  );
+  return <div>{b.collateral.map((c,i)=>(
+    <div key={i} className="card" style={{marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:12,alignItems:"center",flexWrap:"wrap",gap:8}}>
+        <div style={{fontWeight:700,fontSize:14}}>{c.type}: {c.object}</div>
+        <div style={{display:"flex",gap:6}}>
+          <Badge type={c.auctioned?"purple":"green"}>{c.auctioned?"🔨 Аукционга чиқарилган":"✓ Аукционга чиқарилмаган"}</Badge>
+          <Badge type="blue">{c.status}</Badge>
+        </div>
+      </div>
+      <div className="info-grid">
+        <InfoRow label="Гаров тури" value={c.type}/>
+        <InfoRow label="Гаров объекти" value={c.object}/>
+        <InfoRow label="Манзил" value={c.address}/>
+        <InfoRow label="Баҳоланган қиймат" value={fmt(c.value)+" сўм"} color="var(--accent)"/>
+        <InfoRow label="Кадастр маълумоти" value={c.cadastre}/>
+        <InfoRow label="Жорий ҳолат" value={c.status}/>
+      </div>
+      <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap"}}>
+        <button className="btn btn-secondary btn-sm">📄 Ҳужжатлар</button>
+        <button className="btn btn-secondary btn-sm">🗺 Харита</button>
+        <button className="btn btn-secondary btn-sm">📊 Қайта баҳолаш</button>
+        {!c.auctioned&&<button className="btn btn-primary btn-sm">🔨 Аукционга чиқариш</button>}
+      </div>
+    </div>
+  ))}</div>;
+}
+
+function TabCourt({b}){
+  if(!b.court.length) return(
+    <div style={{textAlign:"center",padding:40,color:"var(--text3)"}}>
+      <div style={{fontSize:32,marginBottom:8}}>⚖</div>
+      <div>Суд жараёни мавжуд эмас</div>
+      <button className="btn btn-primary btn-sm" style={{marginTop:12}}>+ Суд иши очиш</button>
+    </div>
+  );
+  return <div>{b.court.map((c,i)=>(
+    <div key={i} className="card" style={{marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:12,alignItems:"center"}}>
+        <div style={{fontWeight:800,fontSize:15}}>{c.caseNo}</div>
+        <Badge type="yellow">{c.status}</Badge>
+      </div>
+      <div className="info-grid">
+        <InfoRow label="Суд иши рақами" value={c.caseNo}/>
+        <InfoRow label="Суд босқичи" value={c.stage}/>
+        <InfoRow label="Жорий ҳолат" value={c.status}/>
+        <InfoRow label="Охирги қарор" value={c.lastDecision}/>
+        <InfoRow label="Кейинги мажлис санаси" value={c.nextDate} color={c.nextDate!=="—"?"var(--accent)":undefined}/>
+        <InfoRow label="Масъул юрист" value={c.lawyer}/>
+      </div>
+      <div style={{marginTop:16}}>
+        <div style={{fontSize:12,color:"var(--text3)",marginBottom:8,fontWeight:600}}>ЖАРАЁН ТАРИХИ</div>
+        <div className="timeline">
+          {c.history.map((h,j)=>(
+            <div key={j} className="tl-item">
+              <div className="tl-line">
+                <div className="tl-dot" style={{background:j===c.history.length-1?"var(--warn)":"var(--accent3)"}}/>
+                {j<c.history.length-1&&<div className="tl-connector"/>}
+              </div>
+              <div className="tl-content">
+                <div style={{fontSize:11,color:"var(--text3)"}}>{h.date}</div>
+                <div style={{fontSize:13}}>{h.text}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{display:"flex",gap:8,marginTop:12}}>
+        <button className="btn btn-secondary btn-sm">📄 Ҳужжатлар</button>
+        <button className="btn btn-secondary btn-sm">📝 Янги қарор киритиш</button>
+      </div>
+    </div>
+  ))}</div>;
+}
+
+function TabMIB({b}){
+  if(!b.mib.length) return(
+    <div style={{textAlign:"center",padding:40,color:"var(--text3)"}}>
+      <div style={{fontSize:32,marginBottom:8}}>🏛</div>
+      <div>МИБ жараёни мавжуд эмас</div>
+      <button className="btn btn-primary btn-sm" style={{marginTop:12}}>+ МИБ иши юбориш</button>
+    </div>
+  );
+  return <div>{b.mib.map((m,i)=>(
+    <div key={i} className="card" style={{marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:12,alignItems:"center"}}>
+        <div style={{fontWeight:800,fontSize:15}}>{m.execNo}</div>
+        <Badge type="yellow">{m.status}</Badge>
+      </div>
+      <div className="info-grid">
+        <InfoRow label="Ижро иши рақами" value={m.execNo}/>
+        <InfoRow label="Ижро иши ҳолати" value={m.status}/>
+        <InfoRow label="Масъул давлат ижрочиси" value={m.executor}/>
+        <InfoRow label="Ундирилган маблағ" value={fmt(m.collected)+" сўм"} color="var(--accent3)"/>
+        <InfoRow label="Қолдиқ қарздорлик" value={fmt(m.remaining)+" сўм"} color="var(--danger)"/>
+        <InfoRow label="Охирги ҳаракат санаси" value={m.lastAction}/>
+      </div>
+      <div style={{marginTop:12}}>
+        <div style={{display:"flex",justifyContent:"space-between",marginBottom:4,fontSize:12}}>
+          <span style={{color:"var(--text3)"}}>Ундириш прогресси</span>
+          <span style={{fontSize:12}}>{fmtM(m.collected)} / {fmtM(m.collected+m.remaining)}</span>
+        </div>
+        <div className="progress-bar">
+          <div className="progress-fill" style={{width:`${Math.round(m.collected/(m.collected+m.remaining)*100)}%`,background:"var(--accent3)"}}/>
+        </div>
+      </div>
+      <div style={{display:"flex",gap:8,marginTop:12}}>
+        <button className="btn btn-secondary btn-sm">📋 Ижро хужжати</button>
+        <button className="btn btn-secondary btn-sm">📞 Ижрочи билан боғланиш</button>
+        <button className="btn btn-secondary btn-sm">📝 Янги ҳаракат қайд этиш</button>
+      </div>
+    </div>
+  ))}</div>;
+}
+
+function TabAuction({b}){
+  if(!b.auctions.length) return(
+    <div style={{textAlign:"center",padding:40}}>
+      <div style={{fontSize:32,marginBottom:8}}>🔨</div>
+      <div style={{color:"var(--text3)",marginBottom:16}}>Аукцион маълумотлари мавжуд эмас</div>
+      {b.collateral.length>0&&<button className="btn btn-primary">🔨 Гаровни аукционга чиқариш</button>}
+    </div>
+  );
+  return <div>{b.auctions.map((a,i)=>(
+    <div key={i} className="card" style={{marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:12,alignItems:"center"}}>
+        <div style={{fontWeight:700}}>Аукцион #{i+1}</div>
+        <Badge type={a.payStatus==="Амалга оширилган"?"green":"yellow"}>{a.payStatus}</Badge>
+      </div>
+      <div className="info-grid">
+        <InfoRow label="Аукцион санаси" value={a.date}/>
+        <InfoRow label="Ғолиб иштирокчи" value={a.winner||"—"}/>
+        <InfoRow label="Сотув нархи" value={a.salePrice?fmt(a.salePrice)+" сўм":"—"} color={a.salePrice?"var(--accent)":undefined}/>
+        <InfoRow label="Тўловни амалга ошириш муддати" value={a.payDeadline||"—"}/>
+        <InfoRow label="Тўлов ҳолати" value={a.payStatus}/>
+        <InfoRow label="Тўлов санаси" value={a.payDate||"—"}/>
+        <InfoRow label="Мулкни расмийлаштириш ҳолати" value={a.regStatus}/>
+      </div>
+      <div style={{display:"flex",gap:8,marginTop:12}}>
+        <button className="btn btn-secondary btn-sm">📄 Аукцион протоколи</button>
+        <button className="btn btn-secondary btn-sm">📝 Натижа киритиш</button>
+      </div>
+    </div>
+  ))}</div>;
+}
+
+function TabPayments({b}){
+  if(!b.payments.length) return <div style={{color:"var(--text3)",padding:32,textAlign:"center"}}>Тўловлар тарихи мавжуд эмас</div>;
+  const total=b.payments.reduce((a,p)=>a+p.amount,0);
+  return(
+    <div>
+      <div style={{display:"flex",gap:12,marginBottom:12}}>
+        <div className="card" style={{flex:1,textAlign:"center"}}>
+          <div style={{fontSize:11,color:"var(--text3)"}}>Жами тўланган</div>
+          <div style={{fontWeight:800,fontSize:18,color:"var(--accent3)"}}>{fmtM(total)}</div>
+        </div>
+        <div className="card" style={{flex:1,textAlign:"center"}}>
+          <div style={{fontSize:11,color:"var(--text3)"}}>Тўловлар сони</div>
+          <div style={{fontWeight:800,fontSize:18,color:"var(--accent2)"}}>{b.payments.length} та</div>
+        </div>
+      </div>
+      <div className="card" style={{padding:0}}>
+        <table>
+          <thead><tr><th>Сана</th><th>Сумма</th><th>Тури</th><th>Канал</th></tr></thead>
+          <tbody>
+            {b.payments.map((p,i)=>(
+              <tr key={i}>
+                <td style={{fontWeight:600}}>{p.date}</td>
+                <td style={{fontWeight:700,color:"var(--accent3)"}}>{fmt(p.amount)} сўм</td>
+                <td><Badge type="blue">{p.type}</Badge></td>
+                <td>{p.channel}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function TabNotes({b}){
+  const[text,setText]=useState("");
+  return(
+    <div>
+      <div className="card" style={{marginBottom:16}}>
+        <div style={{fontWeight:700,marginBottom:8,fontSize:13}}>Янги изоҳ қўшиш</div>
+        <textarea value={text} onChange={e=>setText(e.target.value)}
+          placeholder="Изоҳингизни ёзинг..."
+          style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:7,padding:10,color:"var(--text)",fontSize:13,height:80,resize:"none",outline:"none",marginBottom:8}}/>
+        <button className="btn btn-primary btn-sm">+ Изоҳ сақлаш</button>
+      </div>
+      {b.notes.length===0?(
+        <div style={{color:"var(--text3)",textAlign:"center",padding:20}}>Изоҳлар мавжуд эмас</div>
+      ):(
+        <div className="timeline">
+          {b.notes.map((n,i)=>(
+            <div key={i} className="tl-item">
+              <div className="tl-line">
+                <div className="tl-dot"/>
+                {i<b.notes.length-1&&<div className="tl-connector"/>}
+              </div>
+              <div className="tl-content">
+                <div style={{display:"flex",gap:8,marginBottom:4,alignItems:"center"}}>
+                  <span style={{fontSize:11,color:"var(--text3)"}}>{n.date}</span>
+                  <Badge type="blue">{n.author}</Badge>
+                </div>
+                <div style={{fontSize:13}}>{n.text}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Placeholder({title,icon}){
+  return(
+    <div style={{textAlign:"center",padding:80}}>
+      <div style={{fontSize:56,marginBottom:16}}>{icon}</div>
+      <div style={{fontSize:20,fontWeight:700,marginBottom:8}}>{title}</div>
+      <div style={{color:"var(--text3)"}}>Бу бўлим ишлаб чиқилмоқда</div>
+    </div>
+  );
+}
+
+const NAV=[
+  {id:"dashboard",label:"Бош панел",icon:"📊",sec:"Умумий"},
+  {id:"monitoring",label:"Мониторинг",icon:"👁",sec:"Умумий"},
+  {id:"borrowers",label:"Мижозлар",icon:"📋",sec:"Коллекция",badge:4},
+  {id:"promises",label:"Тўлов ваъдалари",icon:"📅",sec:"Коллекция"},
+  {id:"auction",label:"Аукцион",icon:"🔨",sec:"Коллекция"},
+  {id:"sms",label:"SMS кампаниялар",icon:"💬",sec:"Воситалар"},
+  {id:"docs",label:"Ҳужжатлар",icon:"📄",sec:"Воситалар"},
+  {id:"reports",label:"Ҳисоботлар",icon:"📈",sec:"Воситалар"},
+  {id:"audit",label:"Аудит журнали",icon:"🔐",sec:"Тизим"},
+];
+
+function App(){
+  const[page,setPage]=useState("dashboard");
+  const[sel,setSel]=useState(null);
+  const secs=[...new Set(NAV.map(n=>n.sec))];
+  const titles={dashboard:"Бош панел",monitoring:"Мониторинг",borrowers:"Мижозлар рўйхати",promises:"Тўлов ваъдалари",auction:"Аукцион",sms:"SMS Кампаниялар",docs:"Ҳужжатлар",reports:"Ҳисоботлар",audit:"Аудит журнали"};
+  return(
+    <>
+      <div className="sidebar">
+        <div className="logo">
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:4}}>
+            <div style={{width:34,height:34,background:"var(--accent)",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:900,color:"#000",fontSize:13,flexShrink:0}}>TB</div>
+            <div>
+              <div className="logo-title">TRASTBANK</div>
+              <div className="logo-sub">COLLECTION CRM</div>
+            </div>
+          </div>
+        </div>
+        {secs.map(sec=>(
+          <div key={sec} className="nav-section">
+            <div className="nav-label">{sec}</div>
+            {NAV.filter(n=>n.sec===sec).map(n=>(
+              <div key={n.id} className={`nav-item ${page===n.id?"active":""}`} onClick={()=>setPage(n.id)}>
+                <span className="icon">{n.icon}</span>
+                <span>{n.label}</span>
+                {n.badge&&<span className="nav-badge">{n.badge}</span>}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="main">
+        <div className="topbar">
+          <div className="topbar-title">{titles[page]||"—"}</div>
+          <div style={{marginLeft:"auto",display:"flex",gap:8,alignItems:"center"}}>
+            <button className="btn btn-secondary btn-sm">🔔 <span style={{color:"var(--danger)",fontWeight:700}}>3</span></button>
+            <div style={{width:32,height:32,background:"var(--accent)",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:"#000",fontSize:12,cursor:"pointer"}}>АН</div>
+          </div>
+        </div>
+        <div className="content">
+          {page==="dashboard"&&<Dashboard/>}
+          {page==="borrowers"&&<BorrowerList onOpen={b=>setSel(b)}/>}
+          {page==="monitoring"&&<Placeholder title="Мониторинг" icon="👁"/>}
+          {page==="promises"&&<Placeholder title="Тўлов ваъдалари" icon="📅"/>}
+          {page==="auction"&&<Placeholder title="Аукцион" icon="🔨"/>}
+          {page==="sms"&&<Placeholder title="SMS Кампаниялар" icon="💬"/>}
+          {page==="docs"&&<Placeholder title="Ҳужжатлар" icon="📄"/>}
+          {page==="reports"&&<Placeholder title="Ҳисоботлар" icon="📈"/>}
+          {page==="audit"&&<Placeholder title="Аудит журнали" icon="🔐"/>}
+        </div>
+      </div>
+      {sel&&<Card360 b={sel} onClose={()=>setSel(null)}/>}
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
 </html>
