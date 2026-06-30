@@ -1,16 +1,1473 @@
 <!DOCTYPE html>
 <html lang="uz">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trastbank Collection CRM</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/prototypes/trastbank-pmo/collection_crm/assets/styles-BMLUoUJR.css" />
-    <script type="module" src="/prototypes/trastbank-pmo/collection_crm/assets/index-BgisnpP0.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+<meta charset="UTF-8">
+<title>Trastbank — Collection CRM</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #1B2A4A; --navy-2:#243759; --navy-3:#2d4368;
+  --gold: #C8922A; --gold-2:#e0a838;
+  --bg: #F4F6F8; --card:#fff;
+  --red:#C0392B; --court:#2F6FDB; --mib:#123C69; --auction:#1E8449;
+  --border:#e4e8ee; --text:#1f2937; --muted:#6b7280; --muted-2:#9aa3af;
+  --yellow:#E5A50A; --orange:#E67E22; --purple:#7E3FBF;
+}
+html,body { height:100%; }
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px; color: var(--text); background: var(--bg);
+  overflow:hidden;
+}
+/* Layout */
+.app { display:grid; grid-template-columns: 240px 1fr; grid-template-rows: 56px 1fr; height:100vh; }
+.sidebar { grid-row:1/3; background: var(--navy); color:#cdd6e3; display:flex; flex-direction:column; }
+.brand { padding: 14px 18px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #ffffff14; }
+.brand-logo { width:32px; height:32px; border-radius:6px; background:linear-gradient(135deg,var(--gold),#a67620); display:flex; align-items:center; justify-content:center; color:var(--navy); font-weight:800; }
+.brand-name { font-weight:700; color:#fff; font-size:15px; letter-spacing:.3px; }
+.brand-sub { font-size:10px; color:#8d9bb4; text-transform:uppercase; letter-spacing:1px; }
+.menu { padding: 10px 8px; overflow-y:auto; flex:1; }
+.menu .group { font-size:10px; text-transform:uppercase; color:#6f7c93; padding: 12px 12px 6px; letter-spacing:1px; }
+.menu a { display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:6px; color:#cdd6e3; cursor:pointer; font-size:13px; user-select:none; }
+.menu a:hover { background:#ffffff0c; color:#fff; }
+.menu a.active { background:linear-gradient(90deg,#ffffff10,transparent); color:#fff; border-left:3px solid var(--gold); padding-left:9px; }
+.menu a.disabled { opacity:.35; pointer-events:none; }
+.menu .ic { width:16px; text-align:center; opacity:.8; }
+.sidebar-foot { padding:12px 16px; font-size:11px; color:#6f7c93; border-top:1px solid #ffffff14; }
+/* Topbar */
+.topbar { background:#fff; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:14px; padding: 0 18px; }
+.breadcrumbs { font-size:12px; color:var(--muted); }
+.breadcrumbs b { color:var(--text); }
+.topbar .search { flex:1; max-width: 380px; position:relative; }
+.topbar .search input { width:100%; padding:8px 10px 8px 30px; border:1px solid var(--border); border-radius:6px; background:#fafbfc; font-size:13px; }
+.topbar .search::before { content:"⌕"; position:absolute; left:9px; top:6px; color:var(--muted); font-size:15px;}
+.topbar .filt { display:flex; gap:8px; }
+.topbar select, .topbar input[type="date"] { padding:7px 8px; border:1px solid var(--border); border-radius:6px; background:#fff; font-size:12px; }
+.topbar .spacer { flex:1; }
+.role-switch { display:flex; align-items:center; gap:6px; background:#f4f6f8; padding:4px 8px; border-radius:6px; border:1px solid var(--border); }
+.role-switch select { border:none; background:transparent; font-weight:600; color:var(--navy); }
+.icon-btn { width:34px; height:34px; border-radius:50%; background:#f4f6f8; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; border:1px solid var(--border); }
+.icon-btn .dot { position:absolute; top:5px; right:6px; width:7px; height:7px; border-radius:50%; background:var(--red); }
+.avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--navy),var(--navy-3)); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+/* Main */
+.main { overflow:auto; padding:16px 18px 60px; }
+.section { display:none; }
+.section.active { display:block; }
+.page-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.page-title h1 { font-size: 18px; color:var(--navy); font-weight:700; }
+.page-title .actions { display:flex; gap:8px; }
+.btn { padding:7px 12px; border-radius:6px; border:1px solid var(--border); background:#fff; cursor:pointer; font-size:12px; font-weight:600; color:var(--text); }
+.btn.primary { background:var(--navy); color:#fff; border-color:var(--navy); }
+.btn.gold { background:var(--gold); color:#fff; border-color:var(--gold); }
+.btn.danger { background:var(--red); color:#fff; border-color:var(--red); }
+.btn.sm { padding:4px 8px; font-size:11px; }
+.btn:hover { filter:brightness(0.96); }
+/* Filters */
+.filters { background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px; display:grid; grid-template-columns:repeat(7,1fr) auto auto; gap:8px; margin-bottom:14px; align-items:end; }
+.filters .f label { display:block; font-size:10.5px; color:var(--muted); margin-bottom:3px; text-transform:uppercase; letter-spacing:.5px;}
+.filters .f select, .filters .f input { width:100%; padding:6px 8px; border:1px solid var(--border); border-radius:5px; font-size:12px; background:#fff; }
+/* KPI */
+.kpi-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:14px; }
+.kpi { background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px 14px; cursor:pointer; position:relative; overflow:hidden; }
+.kpi:hover { box-shadow: 0 2px 10px rgba(27,42,74,.08); border-color:#cdd6e3; }
+.kpi .label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; min-height:30px; }
+.kpi .val { font-size:22px; font-weight:700; color:var(--navy); margin:4px 0 2px; }
+.kpi .sub { font-size:11px; color:var(--muted); }
+.kpi .trend { position:absolute; top:12px; right:12px; font-size:11px; padding:2px 6px; border-radius:10px; }
+.kpi .trend.up { background:#e7f6ec; color:#1E8449; }
+.kpi .trend.down { background:#fdecea; color:var(--red); }
+.kpi.accent-court { border-top:3px solid var(--court); }
+.kpi.accent-mib { border-top:3px solid var(--mib); }
+.kpi.accent-auction { border-top:3px solid var(--auction); }
+.kpi.accent-red { border-top:3px solid var(--red); }
+.kpi.accent-gold { border-top:3px solid var(--gold); }
+/* Charts row */
+.charts-grid { display:grid; grid-template-columns: 1.4fr 1fr; gap:12px; margin-bottom:14px; }
+.card { background:#fff; border:1px solid var(--border); border-radius:8px; padding:14px; }
+.card h3 { font-size:13px; color:var(--navy); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
+.card h3 .hint { font-size:11px; color:var(--muted); font-weight:500; }
+/* Bar chart */
+.bar-row { display:grid; grid-template-columns: 60px 1fr 90px 110px; align-items:center; gap:8px; margin-bottom:6px; font-size:12px; }
+.bar { height:14px; border-radius:3px; background:#e4e8ee; position:relative; }
+.bar > span { display:block; height:100%; border-radius:3px; }
+.bar-row .amt { text-align:right; color:var(--muted); font-variant-numeric: tabular-nums; }
+.bar-row .cnt { text-align:right; font-weight:600; }
+/* Heatmap */
+.heatmap { width:100%; border-collapse:collapse; font-size:11.5px; }
+.heatmap th, .heatmap td { padding:6px 8px; text-align:right; border-bottom:1px solid #f1f3f6;}
+.heatmap th { background:#f8fafc; color:var(--muted); text-transform:uppercase; font-size:10px; font-weight:600; }
+.heatmap td:first-child, .heatmap th:first-child { text-align:left; }
+.heatmap .h1 { background:#e7f6ec; }
+.heatmap .h2 { background:#fff7e0; }
+.heatmap .h3 { background:#fde7d3; }
+.heatmap .h4 { background:#fadbd8; }
+/* Donut substitute */
+.type-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+.type-cell { padding:10px; border-radius:6px; background:#f8fafc; border-left:4px solid var(--navy); }
+.type-cell .lbl { font-size:11px; color:var(--muted); }
+.type-cell .v { font-size:15px; font-weight:700; color:var(--navy); }
+.type-cell .s { font-size:11px; color:var(--muted); }
+/* Funnel/stepper */
+.stepper { display:flex; flex-wrap:wrap; gap:6px; }
+.step { background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid var(--border); min-width:120px; flex:1; position:relative; }
+.step .n { font-weight:700; color:var(--navy); font-size:15px; }
+.step .t { font-size:11px; color:var(--muted); }
+.step.active { background:var(--gold); color:#fff; border-color:var(--gold);}
+.step.active .n, .step.active .t { color:#fff; }
+.step.done { background:#eaf3ff; border-color:#cfe0fa; }
+/* Table */
+.table-wrap { background:#fff; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+table.data { width:100%; border-collapse:collapse; font-size:12px; }
+table.data thead th { background:#f5f7fa; color:var(--muted); font-size:10.5px; text-transform:uppercase; letter-spacing:.4px; padding:8px 10px; text-align:left; position:sticky; top:0; border-bottom:1px solid var(--border); white-space:nowrap; }
+table.data tbody td { padding:8px 10px; border-bottom:1px solid #f1f3f6; vertical-align:middle; white-space:nowrap; }
+table.data tbody tr:nth-child(even) { background:#fafbfc; }
+table.data tbody tr:hover { background:#eaf0fa; cursor:pointer; }
+table.data td.num, table.data th.num { text-align:right; font-variant-numeric: tabular-nums; }
+table.data td.link { color:var(--court); font-weight:600; }
+/* Badges */
+.badge { display:inline-block; padding:2px 7px; border-radius:10px; font-size:10.5px; font-weight:600; line-height:16px; white-space:nowrap; }
+.b-gray { background:#eef0f3; color:#4b5563; }
+.b-yellow { background:#fff5d6; color:#9a7400; }
+.b-orange { background:#ffe2cc; color:#a85410; }
+.b-red { background:#fcdcd7; color:#a02818; }
+.b-dred { background:#7b1d12; color:#fff; }
+.b-purple { background:#ead4ff; color:#5c2599; }
+.b-blue { background:#dbe7fb; color:#1a4ea3; }
+.b-dblue { background:#123C69; color:#fff; }
+.b-green { background:#d4efdf; color:#15693a; }
+.b-black { background:#1f2937; color:#fff; }
+/* 360 layout */
+.creditcard-wrap { display:grid; grid-template-columns: 280px 1fr 280px; gap:12px; }
+.cc-header { grid-column:1/4; background:#fff; border:1px solid var(--border); border-radius:8px; padding:14px 16px; display:grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap:14px; align-items:center; }
+.cc-header .h-block { border-right:1px solid var(--border); padding-right:14px; }
+.cc-header .h-block:last-child { border-right:none; }
+.cc-header h2 { font-size:18px; color:var(--navy); }
+.cc-header .meta { font-size:11px; color:var(--muted); margin-top:4px; }
+.cc-header .big { font-size:18px; font-weight:700; color:var(--navy); }
+.cc-header .sm { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; }
+.cc-side { background:#fff; border:1px solid var(--border); border-radius:8px; padding:14px; }
+.cc-side h4 { font-size:11px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; letter-spacing:.5px;}
+.cc-side .row { display:flex; justify-content:space-between; padding:5px 0; font-size:12px; border-bottom:1px dashed #eef0f3; }
+.cc-side .row b { color:var(--navy); }
+.cc-main { display:flex; flex-direction:column; gap:12px; }
+.tab-strip { display:flex; gap:2px; border-bottom:1px solid var(--border); margin-bottom:10px;}
+.tab-strip button { background:transparent; border:none; padding:9px 14px; cursor:pointer; font-weight:600; color:var(--muted); font-size:12px; border-bottom:2px solid transparent; }
+.tab-strip button.active { color:var(--navy); border-bottom-color:var(--gold); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.kv { display:grid; grid-template-columns:repeat(3,1fr); gap:10px 18px; }
+.kv .item .l { font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px;}
+.kv .item .v { font-size:13px; color:var(--navy); font-weight:600; margin-top:2px;}
+/* Timeline */
+.timeline { border-left:2px solid #e4e8ee; padding-left:14px; }
+.tl-item { position:relative; padding:6px 0 10px; }
+.tl-item::before { content:""; position:absolute; left:-19px; top:11px; width:8px; height:8px; border-radius:50%; background:var(--gold); border:2px solid #fff; box-shadow:0 0 0 2px var(--gold);}
+.tl-item .d { font-size:11px; color:var(--muted); }
+.tl-item .t { font-size:12px; color:var(--navy); font-weight:600; }
+.tl-item .c { font-size:12px; color:#4b5563; }
+/* Right sidebar actions */
+.act-list { display:flex; flex-direction:column; gap:6px; }
+.act-list button { text-align:left; padding:8px 10px; border-radius:6px; border:1px solid var(--border); background:#fff; cursor:pointer; font-size:12px; }
+.act-list button:hover { background:#f8fafc; border-color:#cfe0fa; }
+.act-list .danger { color:var(--red); border-color:#f3c7c2;}
+.act-list .court { color:var(--court); }
+.act-list .mib { color:var(--mib); }
+.act-list .auction { color:var(--auction); }
+/* AI panel */
+.ai-card { background:linear-gradient(135deg,#101a30,#1B2A4A); color:#cdd6e3; border-radius:8px; padding:14px; border:1px solid #243759; }
+.ai-card h3 { color:#fff; }
+.ai-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:10px; }
+.ai-row .a-cell { background:#0c1426; border:1px solid #243759; padding:8px 10px; border-radius:6px; }
+.ai-row .a-cell .l { font-size:10px; color:#8d9bb4; text-transform:uppercase; }
+.ai-row .a-cell .v { font-size:13px; font-weight:600; color:#fff; margin-top:2px; }
+.chat { background:#0c1426; border-radius:6px; padding:12px; max-height:260px; overflow:auto; }
+.chat .msg { padding:8px 10px; border-radius:8px; margin-bottom:6px; max-width:78%; font-size:12px; }
+.chat .ai { background:#243759; color:#dde4ef; }
+.chat .cl { background:var(--gold); color:#1B2A4A; margin-left:auto; }
+.chat .meta { font-size:10px; color:#8d9bb4; margin-bottom:2px;}
+.sent-pos { color:#48d597 !important; }
+.sent-neu { color:#e0a838 !important; }
+.sent-neg { color:#ff6b6b !important; }
+/* Modal */
+.modal-mask { position:fixed; inset:0; background:rgba(17,24,39,.5); display:none; z-index:100; align-items:center; justify-content:center; }
+.modal-mask.show { display:flex; }
+.modal { background:#fff; border-radius:10px; width:520px; max-width:94%; max-height:90vh; overflow:auto; }
+.modal.wide { width:780px; }
+.modal h3 { padding:14px 18px; border-bottom:1px solid var(--border); color:var(--navy); font-size:14px; display:flex; justify-content:space-between; align-items:center; }
+.modal h3 .x { cursor:pointer; color:var(--muted); font-size:18px; }
+.modal .body { padding:16px 18px; }
+.modal .foot { padding:12px 18px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px;}
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.form-grid .full { grid-column:1/3; }
+.form-grid label { font-size:11px; color:var(--muted); text-transform:uppercase; display:block; margin-bottom:3px;}
+.form-grid input, .form-grid select, .form-grid textarea { width:100%; padding:7px 9px; border:1px solid var(--border); border-radius:5px; font-size:12px; font-family:inherit;}
+/* Drawer */
+.drawer-mask { position:fixed; inset:0; background:rgba(17,24,39,.4); display:none; z-index:90; }
+.drawer-mask.show { display:block; }
+.drawer { position:fixed; right:0; top:0; bottom:0; width:540px; background:#fff; z-index:91; transform:translateX(100%); transition:transform .25s; overflow-y:auto; box-shadow:-8px 0 30px rgba(0,0,0,.1);}
+.drawer.show { transform:translateX(0); }
+.drawer h3 { padding:14px 18px; border-bottom:1px solid var(--border); color:var(--navy); display:flex; justify-content:space-between; align-items:center; }
+.drawer .body { padding:16px 18px; }
+/* Toasts */
+.toasts { position:fixed; right:18px; bottom:18px; display:flex; flex-direction:column; gap:8px; z-index:200; }
+.toast { background:#1B2A4A; color:#fff; padding:10px 14px; border-radius:6px; font-size:12px; box-shadow:0 6px 18px rgba(0,0,0,.2); border-left:4px solid var(--gold); animation:slideIn .25s; }
+.toast.success { border-left-color: #1E8449; }
+.toast.error { border-left-color: var(--red); }
+@keyframes slideIn { from{transform:translateX(20px);opacity:0;} to{transform:none;opacity:1;} }
+/* Recovery chart */
+.recovery-bars { display:flex; align-items:flex-end; height:140px; gap:6px; padding:8px 4px; border-bottom:1px solid var(--border); }
+.recovery-bars .b { flex:1; background:linear-gradient(180deg,var(--gold) 0%,#a67620 100%); border-radius:3px 3px 0 0; position:relative; min-height:6px;}
+.recovery-bars .b::after { content:attr(data-m); position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px; color:var(--muted); }
+.recovery-bars .b::before { content:attr(data-v); position:absolute; top:-16px; left:0; right:0; text-align:center; font-size:9.5px; color:var(--navy); font-weight:600; }
+/* utility */
+.right { text-align:right; }
+.muted { color:var(--muted); }
+.flex { display:flex; gap:10px; align-items:center;}
+.split-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.split-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.risk-pill { font-size:11px; padding:3px 8px; border-radius:10px; font-weight:700;}
+.r-low { background:#d4efdf; color:#15693a;}
+.r-med { background:#fff5d6; color:#9a7400;}
+.r-high { background:#ffe2cc; color:#a85410;}
+.r-crit { background:#7b1d12; color:#fff;}
+.scrollbox { max-height:280px; overflow:auto; }
+.pipeline { display:flex; gap:0; align-items:stretch; }
+.pipeline .p { flex:1; background:#f4f6f8; padding:10px; border-right:1px solid #fff; position:relative; font-size:11px;}
+.pipeline .p .n { font-weight:700; font-size:14px; color:var(--navy);}
+.pipeline .p.active { background:var(--auction); color:#fff;}
+.pipeline .p.active .n { color:#fff;}
+.kanban { display:grid; grid-template-columns:repeat(6,1fr); gap:8px;}
+.kcol { background:#f4f6f8; border-radius:6px; padding:8px;}
+.kcol h4 { font-size:11px; color:var(--muted); text-transform:uppercase; margin-bottom:6px;}
+.kcard { background:#fff; padding:8px; border-radius:5px; margin-bottom:6px; border-left:3px solid var(--court); font-size:11px;}
+.kcard b { color:var(--navy); display:block; font-size:12px;}
+/* Tabs in client */
+.subnav { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;}
+.subnav button { background:#fff; border:1px solid var(--border); padding:6px 10px; font-size:12px; border-radius:5px; cursor:pointer;}
+.subnav button.active { background:var(--navy); color:#fff; border-color:var(--navy);}
+.crossed { text-decoration: line-through; color:var(--red); }
+.legal-tracks { display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.legal-tracks .lt { border:1px solid var(--border); border-radius:6px; padding:12px; background:#f8fafc;}
+.legal-tracks .lt h5 { font-size:12px; color:var(--navy); margin-bottom:8px;}
+.legal-tracks .ll { padding:6px 8px; background:#fff; border-radius:4px; margin-bottom:4px; font-size:11px; display:flex; justify-content:space-between; align-items:center;}
+.legal-tracks .ll.done { background:#d4efdf;}
+.legal-tracks .ll.active { background:var(--gold); color:#fff;}
+.legal-tracks .ll.active b { color:#fff;}
+::-webkit-scrollbar { width:10px; height:10px;}
+::-webkit-scrollbar-thumb { background:#cfd6df; border-radius:6px;}
+::-webkit-scrollbar-track { background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">T</div>
+      <div>
+        <div class="brand-name">Trastbank</div>
+        <div class="brand-sub">Collection CRM</div>
+      </div>
+    </div>
+    <nav class="menu" id="menu">
+      <div class="group">Операцион</div>
+      <a data-nav="dashboard" class="active"><span class="ic">▣</span> Бош панел</a>
+      <a data-nav="registry"><span class="ic">≡</span> Кредитлар реестри</a>
+      <a data-nav="credit360"><span class="ic">◉</span> 360° кредит карточкаси</a>
+      <a data-nav="client"><span class="ic">👤</span> Мижоз карточкаси</a>
+      <div class="group">Алоқа</div>
+      <a data-nav="callcenter"><span class="ic">☎</span> Қўнғироқлар маркази</a>
+      <a data-nav="ai"><span class="ic">★</span> AI қўнғироқлар панели</a>
+      <div class="group">Юридик</div>
+      <a data-nav="collateral"><span class="ic">⌂</span> Гаров мулклари</a>
+      <a data-nav="court"><span class="ic">⚖</span> Суд жараёнлари</a>
+      <a data-nav="mib"><span class="ic">▤</span> МИБ ижроси</a>
+      <a data-nav="auction"><span class="ic">⊕</span> Аукционлар</a>
+      <a data-nav="payments"><span class="ic">₿</span> Тўловлар ва ундирув</a>
+      <div class="group">Бошқарув</div>
+      <a data-nav="monitoring"><span class="ic">◎</span> Мониторинг</a>
+      <a data-nav="admin"><span class="ic">⚙</span> Бошқарув</a>
+      <a data-nav="reports"><span class="ic">▦</span> Ҳисоботлар</a>
+      <a data-nav="audit"><span class="ic">⌬</span> Аудит журнали</a>
+    </nav>
+    <div class="sidebar-foot">v1.0 · Trastbank Collection · 2026</div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="breadcrumbs">Trastbank / <b id="crumb">Бош панел</b></div>
+    <div class="search"><input id="globalSearch" placeholder="Излаш: мижоз, шартнома, телефон..."></div>
+    <div class="filt">
+      <input type="date" value="2026-06-01">
+      <input type="date" value="2026-06-30">
+      <select id="branchTop"><option>Барча филиаллар</option></select>
+    </div>
+    <div class="spacer"></div>
+    <div class="role-switch">
+      <span style="font-size:10px;color:var(--muted);text-transform:uppercase;">Роль:</span>
+      <select id="roleSelect">
+        <option value="head">Бош офис раҳбарияти</option>
+        <option value="mon">Мониторинг ходими</option>
+        <option value="call">Call Center оператори</option>
+        <option value="branch">Филиал ходими</option>
+      </select>
+    </div>
+    <div class="icon-btn">🔔<span class="dot"></span></div>
+    <div class="avatar">АК</div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+
+    <!-- ============== DASHBOARD ============== -->
+    <section class="section active" id="sec-dashboard">
+      <div class="page-title">
+        <h1>Бош панел — Муаммоли кредитлар портфели</h1>
+        <div class="actions">
+          <button class="btn">Экспорт Excel</button>
+          <button class="btn primary">Янгилаш</button>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="f"><label>Бошланиш санаси</label><input type="date" value="2026-06-01"></div>
+        <div class="f"><label>Тугаш санаси</label><input type="date" value="2026-06-30"></div>
+        <div class="f"><label>Филиал</label><select id="fBranch"></select></div>
+        <div class="f"><label>Кредит тури</label><select id="fType"></select></div>
+        <div class="f"><label>Қарздорлик ҳолати</label><select id="fBucket"></select></div>
+        <div class="f"><label>Суд/МИБ/Аукцион</label><select><option>Барчаси</option><option>Суд</option><option>МИБ</option><option>Аукцион</option></select></div>
+        <div class="f"><label>Масъул</label><select><option>Барчаси</option><option>А.Каримов</option><option>М.Йўлдошева</option><option>Ж.Раҳимов</option></select></div>
+        <button class="btn primary">Қўллаш</button>
+        <button class="btn">Тозалаш</button>
+      </div>
+
+      <div class="kpi-grid" id="kpiGrid"></div>
+
+      <div class="charts-grid">
+        <div class="card">
+          <h3>Қарздорлик bucket тақсимоти <span class="hint">соннинг ва суммасининг улуши</span></h3>
+          <div id="bucketBars"></div>
+        </div>
+        <div class="card">
+          <h3>Кредит тури бўйича тақсимот</h3>
+          <div class="type-grid" id="typeGrid"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px;">
+        <h3>Филиаллар кесимида heatmap</h3>
+        <div style="overflow:auto;">
+          <table class="heatmap" id="heatmap"></table>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="card">
+          <h3>Суд жараёнлари funnel</h3>
+          <div class="stepper" id="courtFunnel"></div>
+        </div>
+        <div class="card">
+          <h3>МИБ ижроси ҳолати</h3>
+          <div class="stepper" id="mibStatus"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px;">
+        <h3>Аукцион pipeline</h3>
+        <div class="pipeline" id="auctionPipeline"></div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="card">
+          <h3>Recovery trend — охирги 12 ой <span class="hint">млрд сўм</span></h3>
+          <div class="recovery-bars" id="recoveryBars" style="margin-bottom:24px;"></div>
+        </div>
+        <div class="card">
+          <h3>AI қўнғироқлар самарадорлиги</h3>
+          <div class="ai-row" style="grid-template-columns:repeat(3,1fr);">
+            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Жами AI қўнғироқ</div><div class="v" style="color:var(--navy)">12 488</div></div>
+            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Жавоб берган</div><div class="v" style="color:var(--navy)">7 932 (63%)</div></div>
+            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Тўлов ваъда қилган</div><div class="v" style="color:var(--auction)">2 217</div></div>
+            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Рад этган</div><div class="v" style="color:var(--red)">1 044</div></div>
+            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Нотўғри рақам</div><div class="v" style="color:var(--orange)">812</div></div>
+            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Қайта қўнғироқ</div><div class="v" style="color:var(--court)">3 859</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Кредитлар реестри <span class="hint" id="tableHint">— Барча шартномалар</span></h3>
+        <div class="table-wrap" style="border:none;">
+          <table class="data" id="dashTable"></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== REGISTRY ============== -->
+    <section class="section" id="sec-registry">
+      <div class="page-title"><h1>Кредитлар реестри</h1><div class="actions"><button class="btn">Excel</button><button class="btn primary">Янги қидирув</button></div></div>
+      <div class="card">
+        <table class="data" id="regTable"></table>
+      </div>
+    </section>
+
+    <!-- ============== 360 CREDIT CARD ============== -->
+    <section class="section" id="sec-credit360">
+      <div class="creditcard-wrap" id="creditCard"></div>
+    </section>
+
+    <!-- ============== CLIENT ============== -->
+    <section class="section" id="sec-client">
+      <div class="page-title"><h1>Мижоз карточкаси</h1></div>
+      <div class="card" style="margin-bottom:12px;">
+        <div class="kv">
+          <div class="item"><div class="l">Ф.И.Ш.</div><div class="v">Каримов Акрам Шукурович</div></div>
+          <div class="item"><div class="l">Уникал ID</div><div class="v">31408876540021</div></div>
+          <div class="item"><div class="l">Тури</div><div class="v">Жисмоний шахс</div></div>
+          <div class="item"><div class="l">Телефон рақамлар</div><div class="v">+998 90 123 45 67, +998 71 200 12 34</div></div>
+          <div class="item"><div class="l">Манзил</div><div class="v">Тошкент ш., Яккасарой т., Бобур кўч. 12</div></div>
+          <div class="item"><div class="l">Иш жойи</div><div class="v">"Sharq Logistic" МЧЖ</div></div>
+          <div class="item"><div class="l">Жами фаол шартномалар</div><div class="v">3</div></div>
+          <div class="item"><div class="l">Жами муддати ўтган сумма</div><div class="v" style="color:var(--red)">187 540 000 сўм</div></div>
+          <div class="item"><div class="l">Умумий риск</div><div class="v"><span class="risk-pill r-high">Юқори</span></div></div>
+        </div>
+      </div>
+      <div class="subnav" id="clientSubnav">
+        <button class="active" data-ct="contracts">Барча кредитлар</button>
+        <button data-ct="calls">Қўнғироқлар тарихи</button>
+        <button data-ct="ai">AI мулоқотлари</button>
+        <button data-ct="pay">Тўловлар тарихи</button>
+        <button data-ct="phones">Телефон рақамлари</button>
+        <button data-ct="notes">Изоҳлар</button>
+      </div>
+      <div class="card">
+        <div id="ct-contracts" class="cttab"><table class="data" id="clientContracts"></table></div>
+        <div id="ct-calls" class="cttab" style="display:none;"><table class="data" id="clientCalls"></table></div>
+        <div id="ct-ai" class="cttab" style="display:none;"><div class="muted">AI мулоқотлар тарихи — 8 та қўнғироқ. (Тафсилот учун 360° карточкасига ўтинг)</div></div>
+        <div id="ct-pay" class="cttab" style="display:none;"><table class="data" id="clientPay"></table></div>
+        <div id="ct-phones" class="cttab" style="display:none;">
+          <table class="data">
+            <thead><tr><th>Рақам</th><th>Манба</th><th>Ҳолат</th><th>Белгилаган</th><th>Сана</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>+998 90 123 45 67</td><td>iABS</td><td><span class="badge b-green">Тасдиқланган</span></td><td>—</td><td>2026-01-15</td><td></td></tr>
+              <tr><td class="crossed">+998 71 200 12 34</td><td>Manual</td><td><span class="badge b-red">Нотўғри</span></td><td>М.Йўлдошева</td><td>2026-05-22</td><td></td></tr>
+              <tr><td>+998 88 777 65 43</td><td>Call Center</td><td><span class="badge b-yellow">Жавоб бермайди</span></td><td>А.Каримов</td><td>2026-06-12</td><td></td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;"><button class="btn primary" onclick="toast('Янги рақам қўшилди','success')">+ Тўғри рақам қўшиш</button></div>
+        </div>
+        <div id="ct-notes" class="cttab" style="display:none;">
+          <div class="muted" style="margin-bottom:10px;">Collection ходимлари изоҳлари (4 та)</div>
+          <div style="border-left:3px solid var(--gold);padding:8px 12px;margin-bottom:8px;background:#fafbfc;">
+            <div style="font-size:11px;color:var(--muted)">2026-06-28 14:22 · М.Йўлдошева · Collection</div>
+            <div>Мижоз 5-июлгача 25 000 000 сўм тўлашга ваъда берди.</div>
+          </div>
+          <div style="border-left:3px solid var(--court);padding:8px 12px;margin-bottom:8px;background:#fafbfc;">
+            <div style="font-size:11px;color:var(--muted)">2026-06-21 11:05 · Ж.Раҳимов · Юрист</div>
+            <div>Палатага ҳужжатлар тайёрланди.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== CALL CENTER ============== -->
+    <section class="section" id="sec-callcenter">
+      <div class="page-title"><h1>Қўнғироқлар маркази — Менинг иш ўрним</h1></div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(6,1fr);">
+        <div class="kpi"><div class="label">Менга бириктирилган</div><div class="val">142</div><div class="sub">кредит</div></div>
+        <div class="kpi accent-auction"><div class="label">Бугун боғланилди</div><div class="val">38</div><div class="sub">26.7%</div></div>
+        <div class="kpi"><div class="label">Ҳафта давомида</div><div class="val">94</div><div class="sub">боғланиш</div></div>
+        <div class="kpi accent-gold"><div class="label">Тўлов ваъдалари</div><div class="val">22</div><div class="sub">412 М сўм</div></div>
+        <div class="kpi accent-red"><div class="label">Боғланиб бўлмаганлар</div><div class="val">48</div><div class="sub">33.8%</div></div>
+        <div class="kpi accent-red"><div class="label">3+ кундан бери йўқ</div><div class="val">19</div><div class="sub">диққат</div></div>
+      </div>
+      <div class="card">
+        <div class="subnav">
+          <button class="active">Барчаси</button><button>30+</button><button>60+</button><button>90+</button><button>180+</button><button>365+</button><button>Суд</button><button>МИБ</button><button>Аукцион</button>
+        </div>
+        <table class="data" id="callTable"></table>
+      </div>
+    </section>
+
+    <!-- ============== AI ============== -->
+    <section class="section" id="sec-ai">
+      <div class="page-title"><h1>AI қўнғироқлар панели</h1><div class="actions"><button class="btn primary">+ Янги сценарий</button></div></div>
+      <div class="subnav">
+        <button class="active" data-ai="queue">Кутиш навбати</button>
+        <button data-ai="done">Якунланган</button>
+        <button data-ai="analytics">Аналитика</button>
+        <button data-ai="scripts">Сценарийлар</button>
+        <button data-ai="recs">Тавсиялар</button>
+      </div>
+      <div class="card" id="aiContent"></div>
+    </section>
+
+    <!-- ============== COLLATERAL ============== -->
+    <section class="section" id="sec-collateral">
+      <div class="page-title"><h1>Гаров мулклари</h1></div>
+      <div class="card"><table class="data" id="collateralTable"></table></div>
+    </section>
+
+    <!-- ============== COURT ============== -->
+    <section class="section" id="sec-court">
+      <div class="page-title"><h1>Суд жараёнлари</h1></div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(6,1fr);">
+        <div class="kpi"><div class="label">Судга тайёр</div><div class="val">87</div><div class="sub">кредит</div></div>
+        <div class="kpi accent-court"><div class="label">Судга берилган</div><div class="val">312</div><div class="sub">4.2 млрд</div></div>
+        <div class="kpi accent-court"><div class="label">Суд буйруғи чиққан</div><div class="val">198</div><div class="sub">2.8 млрд</div></div>
+        <div class="kpi accent-gold"><div class="label">Даъво жараёнида</div><div class="val">76</div><div class="sub">1.5 млрд</div></div>
+        <div class="kpi accent-auction"><div class="label">Қарор чиққан</div><div class="val">142</div><div class="sub">2.1 млрд</div></div>
+        <div class="kpi accent-mib"><div class="label">МИБга ўтказилган</div><div class="val">118</div><div class="sub">1.9 млрд</div></div>
+      </div>
+      <div class="card" style="margin-bottom:12px;">
+        <h3>Канбан — суд босқичлари</h3>
+        <div class="kanban" id="courtKanban"></div>
+      </div>
+      <div class="card"><table class="data" id="courtTable"></table></div>
+    </section>
+
+    <!-- ============== MIB ============== -->
+    <section class="section" id="sec-mib">
+      <div class="page-title"><h1>МИБ ижроси</h1></div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(6,1fr);">
+        <div class="kpi accent-mib"><div class="label">Жами ишлар</div><div class="val">428</div><div class="sub">МИБда</div></div>
+        <div class="kpi"><div class="label">Фаол</div><div class="val">241</div><div class="sub">56%</div></div>
+        <div class="kpi accent-gold"><div class="label">Қисман ундирилган</div><div class="val">76</div><div class="sub">410 М сўм</div></div>
+        <div class="kpi accent-auction"><div class="label">Якунланган</div><div class="val">88</div><div class="sub">1.2 млрд</div></div>
+        <div class="kpi accent-auction"><div class="label">Аукционга ўтказилган</div><div class="val">53</div><div class="sub">2.4 млрд</div></div>
+        <div class="kpi accent-red"><div class="label">Натижасиз</div><div class="val">20</div><div class="sub">диққат</div></div>
+      </div>
+      <div class="card"><table class="data" id="mibTable"></table></div>
+    </section>
+
+    <!-- ============== AUCTION ============== -->
+    <section class="section" id="sec-auction">
+      <div class="page-title"><h1>Аукционлар</h1></div>
+      <div class="card" style="margin-bottom:12px;">
+        <div class="pipeline" id="aucPipe2"></div>
+      </div>
+      <div class="card"><table class="data" id="aucTable"></table></div>
+    </section>
+
+    <!-- ============== PAYMENTS ============== -->
+    <section class="section" id="sec-payments">
+      <div class="page-title"><h1>Тўловлар ва ундирув — Promise-to-pay tracker</h1></div>
+      <div class="subnav">
+        <button class="active">Календар</button><button>Ваъдалар</button><button>Бузилган ваъдалар</button><button>Бажарилган</button><button>Агент самарадорлиги</button>
+      </div>
+      <div class="card"><table class="data" id="payTable"></table></div>
+    </section>
+
+    <!-- ============== MONITORING ============== -->
+    <section class="section" id="sec-monitoring">
+      <div class="page-title"><h1>Мониторинг — Агент ва филиал самарадорлиги</h1></div>
+      <div class="split-2">
+        <div class="card"><h3>Агент самарадорлиги</h3><table class="data" id="agentPerf"></table></div>
+        <div class="card"><h3>Филиал самарадорлиги</h3><table class="data" id="branchPerf"></table></div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <h3>Судга тайёр кредитлар <span class="hint">90+ кун · ҳужжатлар тўлиқ</span></h3>
+        <div style="margin-bottom:8px;"><button class="btn primary" onclick="toast('Барча шартномаларга суд олди огоҳлантириш хатлари юборилди (24)', 'success')">Барчасига суд олди огоҳлантириш хатини юбориш</button></div>
+        <table class="data" id="courtReady"></table>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <h3>Огоҳлантириш хатлари</h3>
+        <div class="form-grid">
+          <div><label>Филиал</label><select id="wlBranch"></select></div>
+          <div><label>Шартнома</label><select><option>HK-2026-0381 — Каримов А.</option><option>MK-2026-1207 — Юсупова М.</option></select></div>
+          <div><label>Шаблон</label><select><option>Огоҳлантириш хати</option><option>Суд олди хати</option><option>Якуний талабнома</option></select></div>
+          <div><label>Юбориш усули</label><select><option>SMS + почта</option><option>SMS</option><option>Почта</option></select></div>
+          <div class="full"><label>Кўриб чиқиш</label><textarea rows="3">Ҳурматли мижоз, Сизнинг HK-2026-0381 рақамли шартномангиз бўйича муддати ўтган қарздорлик мавжуд...</textarea></div>
+        </div>
+        <div style="margin-top:10px;"><button class="btn primary" onclick="toast('Огоҳлантириш хати юборилди ва аудитга ёзилди','success')">Юбориш</button></div>
+      </div>
+    </section>
+
+    <!-- ============== ADMIN ============== -->
+    <section class="section" id="sec-admin">
+      <div class="page-title"><h1>Бошқарув</h1></div>
+      <div class="split-2">
+        <div class="card">
+          <h3>Филиал — Агент бириктириш</h3>
+          <table class="data">
+            <thead><tr><th>Агент</th><th>Бириктирилган филиаллар</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>А.Каримов</td><td>Яккасарой, Бектемир</td><td><button class="btn sm">Ўзгартириш</button></td></tr>
+              <tr><td>М.Йўлдошева</td><td>Тошкент, Рақамли</td><td><button class="btn sm">Ўзгартириш</button></td></tr>
+              <tr><td>Ж.Раҳимов</td><td>Самарқанд, Бухоро</td><td><button class="btn sm">Ўзгартириш</button></td></tr>
+              <tr><td>З.Тошматова</td><td>Андижон, Наманган, Фарғона</td><td><button class="btn sm">Ўзгартириш</button></td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;"><button class="btn primary" onclick="toast('Ўзгаришлар сақланди ва аудитга ёзилди','success')">Сақлаш</button></div>
+        </div>
+        <div class="card">
+          <h3>Фойдаланувчилар</h3>
+          <table class="data">
+            <thead><tr><th>Ф.И.Ш.</th><th>Роль</th><th>Филиал</th><th>Ҳолат</th><th>Охирги кириш</th></tr></thead>
+            <tbody>
+              <tr><td>А.Усмонов</td><td>Бош офис</td><td>HQ</td><td><span class="badge b-green">Фаол</span></td><td>2026-06-30 09:14</td></tr>
+              <tr><td>М.Йўлдошева</td><td>Call Center</td><td>Тошкент</td><td><span class="badge b-green">Фаол</span></td><td>2026-06-30 08:52</td></tr>
+              <tr><td>Ш.Назаров</td><td>Филиал</td><td>Бухоро</td><td><span class="badge b-gray">Нофаол</span></td><td>2026-06-12 17:31</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <h3>Тизим параметрлари</h3>
+        <div class="split-3">
+          <div><h4 style="font-size:12px;margin-bottom:6px;color:var(--navy)">Bucket чегаралари (кун)</h4>
+            <div class="form-grid">
+              <div><label>30+</label><input value="30"></div>
+              <div><label>60+</label><input value="60"></div>
+              <div><label>90+</label><input value="90"></div>
+              <div><label>180+</label><input value="180"></div>
+              <div><label>365+</label><input value="365"></div>
+            </div>
+          </div>
+          <div><h4 style="font-size:12px;margin-bottom:6px;color:var(--navy)">Алоқа қоидалари</h4>
+            <div class="form-grid">
+              <div class="full"><label>Минимал қўнғироқ оралиғи</label><input value="48 соат"></div>
+              <div class="full"><label>AI қўнғироқ — bucket</label><select><option>30+, 60+, 90+</option></select></div>
+              <div class="full"><label>Судга ўтказиш мезони</label><input value="90 кун, гаров, ҳужжатлар"></div>
+            </div>
+          </div>
+          <div><h4 style="font-size:12px;margin-bottom:6px;color:var(--navy)">SMS шаблонлари</h4>
+            <ul style="font-size:12px; padding-left:18px; color:var(--text);">
+              <li>Биринчи огоҳлантириш</li><li>Иккинчи огоҳлантириш</li><li>Тўлов эслатмаси</li><li>Суд олди</li><li>Якуний талабнома</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== REPORTS ============== -->
+    <section class="section" id="sec-reports">
+      <div class="page-title"><h1>Ҳисоботлар</h1></div>
+      <div class="split-3" id="reportCards"></div>
+    </section>
+
+    <!-- ============== AUDIT ============== -->
+    <section class="section" id="sec-audit">
+      <div class="page-title"><h1>Аудит журнали</h1></div>
+      <div class="filters" style="grid-template-columns:repeat(6,1fr) auto;">
+        <div class="f"><label>Фойдаланувчи</label><select><option>Барчаси</option><option>А.Усмонов</option><option>М.Йўлдошева</option></select></div>
+        <div class="f"><label>Сана</label><input type="date" value="2026-06-30"></div>
+        <div class="f"><label>Ҳаракат тури</label><select><option>Барчаси</option><option>UPDATE</option><option>CREATE</option><option>STATUS_CHANGE</option></select></div>
+        <div class="f"><label>Модул</label><select><option>Барчаси</option><option>Кредит</option><option>Мижоз</option><option>Гаров</option><option>Суд</option></select></div>
+        <div class="f"><label>Шартнома</label><input placeholder="HK-2026-..."></div>
+        <div class="f"><label>Филиал</label><select id="fAudBr"></select></div>
+        <button class="btn primary">Қўллаш</button>
+      </div>
+      <div class="card"><table class="data" id="auditTable"></table></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Modals -->
+<div class="modal-mask" id="callResultModal">
+  <div class="modal">
+    <h3>Қўнғироқ натижасини киритиш <span class="x" onclick="closeModal('callResultModal')">×</span></h3>
+    <div class="body">
+      <div class="form-grid">
+        <div><label>Мижоз</label><input value="Каримов Акрам Шукурович" readonly></div>
+        <div><label>Шартнома</label><input value="HK-2026-0381" readonly></div>
+        <div><label>Натижа</label><select>
+          <option>Мижоз билан боғланилди — тўлов ваъда қилди</option>
+          <option>Мижоз билан боғланилди — рад этди</option>
+          <option>Банд</option><option>Жавоб бермади</option><option>Нотўғри рақам</option>
+          <option>Рақам ўчирилган</option><option>Қайта қўнғироқ қилиш керак</option>
+        </select></div>
+        <div><label>Давомийлиги (сония)</label><input value="124"></div>
+        <div><label>Йўналиш</label><select><option>Чиқувчи</option><option>Кирувчи</option></select></div>
+        <div><label>Ваъда санаси</label><input type="date" value="2026-07-05"></div>
+        <div><label>Ваъда суммаси</label><input value="25 000 000"></div>
+        <div><label><input type="checkbox"> Нотўғри рақам</label><input placeholder="Янги тўғри рақам"></div>
+        <div class="full"><label>Изоҳ</label><textarea rows="3">Мижоз 5-июлгача маошидан тўлайди деб ваъда берди.</textarea></div>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn" onclick="closeModal('callResultModal')">Бекор</button>
+      <button class="btn primary" onclick="closeModal('callResultModal');toast('Қўнғироқ натижаси сақланди ва Promise-to-pay tracker-га қўшилди','success')">Сақлаш</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" id="aiTranscriptModal">
+  <div class="modal wide">
+    <h3>AI қўнғироқ transcript — HK-2026-0381 <span class="x" onclick="closeModal('aiTranscriptModal')">×</span></h3>
+    <div class="body">
+      <div class="ai-row">
+        <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Сана</div><div class="v" style="color:var(--navy)">2026-06-28 11:24</div></div>
+        <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Давомийлиги</div><div class="v" style="color:var(--navy)">02:14</div></div>
+        <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Sentiment</div><div class="v sent-pos">Positive</div></div>
+        <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Тўлов ваъдаси</div><div class="v" style="color:var(--auction)">Бор · 25 М сўм</div></div>
+      </div>
+      <div class="chat" style="background:#f4f6f8;">
+        <div class="msg ai" style="background:#fff;color:var(--text);"><div class="meta">AI · 11:24:02</div>Ассалому алейкум, Акрам Шукурович. Мен Trastbank ассистентиман. HK-2026-0381 рақамли шартномангиз бўйича 25 432 000 сўм муддати ўтган қарздорлик бор.</div>
+        <div class="msg cl" style="background:var(--gold);color:#1B2A4A;"><div class="meta" style="color:#1B2A4A99;">Мижоз · 11:24:18</div>Ҳа, биламан. Шу ҳафтада ҳал қиламан.</div>
+        <div class="msg ai" style="background:#fff;color:var(--text);"><div class="meta">AI · 11:24:24</div>Қачонгача тўлай оласиз? Аниқ санани айта оласизми?</div>
+        <div class="msg cl" style="background:var(--gold);color:#1B2A4A;"><div class="meta" style="color:#1B2A4A99;">Мижоз · 11:24:40</div>5-июлгача 25 миллион сўм ўтказаман.</div>
+        <div class="msg ai" style="background:#fff;color:var(--text);"><div class="meta">AI · 11:24:46</div>Раҳмат, ваъдангиз тизимга киритилди. Ҳужжат тайёр бўлганда SMS келади.</div>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:#f8fafc;border-radius:6px;font-size:12px;">
+        <b style="color:var(--navy);">AI тавсиялари:</b> Қайта қўнғироқ 2026-07-04, СМС эслатма юбориш — ҳа, Юристга ўтказиш — йўқ, МИБга тайёрлаш — йўқ, Risk score: 64 → 52
+      </div>
+    </div>
+    <div class="foot"><button class="btn" onclick="closeModal('aiTranscriptModal')">Ёпиш</button><button class="btn primary">Тўлиқ протоколни юклаб олиш</button></div>
+  </div>
+</div>
+
+<!-- Drawer -->
+<div class="drawer-mask" id="drawerMask" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <h3 id="drawerTitle">Тафсилот <span class="x" style="cursor:pointer;" onclick="closeDrawer()">×</span></h3>
+  <div class="body" id="drawerBody"></div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="./data/app-data.js"></script>
+<script>
+/* ============ MOCK DATA ============ */
+const APP_DATA = window.__APP_DATA__ || {};
+const BRANCHES = APP_DATA.branches || [];
+const TYPES = APP_DATA.types || [];
+const BUCKETS = APP_DATA.buckets || ["Жорий","30+","60+","90+","180+","365+","Суд","МИБ","Аукцион"];
+const BUCKET_BADGE = APP_DATA.bucketBadge || {"Жорий":"b-gray","30+":"b-yellow","60+":"b-orange","90+":"b-red","180+":"b-dred","365+":"b-purple","Суд":"b-blue","МИБ":"b-dblue","Аукцион":"b-green"};
+const NAMES = ["Каримов Акрам Ш.","Юсупова Мадина Р.","Тошматов Бекзод А.","Раҳимова Зулайҳо М.","Ғофуров Шуҳрат К.","Алимова Нодира Б.","Эргашев Жасур Х.","Нурматов Сардор Ў.","Сафарова Гулноз И.","Холиқов Музаффар Т.","Қодиров Аброр Н.","Йўлдошева Дилфуза У.","Ҳамидов Ислом Р.","Маматқулов Шерзод А.","Усмонова Лола Ж.","Тошматова Зебо А.","Раҳмонов Бахтиёр С.","Ёқубов Камрон Ў.","Турсунов Шавкат М.","Ҳасанова Феруза К.","Махмудов Алишер Б.","Камилова Дилнура С."];
+const COURT = ["—","Палатага берилган","Суд буйруғи киритилган","Суд буйруғи чиққан","Даъво киритилган","Қарор чиққан"];
+const MIB = ["—","Фаол","Тўхтатилган","Қисман ундирилган","Якунланган","Натижасиз","Аукционга ўтказилган"];
+const AUC = ["—","Баҳолашда","МИБга топширилган","Аукционга чиқарилган","Савдода","Сотилган","Тўлов кутилмоқда","Расмийлаштирилган"];
+const STAFF = ["А.Каримов","М.Йўлдошева","Ж.Раҳимов","З.Тошматова","Ш.Назаров"];
+const LAWYERS = ["Б.Алимов","Н.Эргашева","К.Усмонов"];
+const RISKS = ["Low","Medium","High","Critical"];
+const RISK_PILL = {Low:"r-low",Medium:"r-med",High:"r-high",Critical:"r-crit"};
+const RISK_TXT = {Low:"Паст",Medium:"Ўрта",High:"Юқори",Critical:"Критик"};
+
+function fmt(n){ return n.toLocaleString('ru-RU').replace(/,/g,' ') + ' сўм'; }
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function pick(a){return a[rnd(0,a.length-1)];}
+const CONTRACTS = APP_DATA.contracts || [];
+
+/* ============ KPI ============ */
+const KPIS = APP_DATA.kpis || [];
+
+/* ============ INIT ============ */
+function renderKPIs(){
+  document.getElementById('kpiGrid').innerHTML = KPIS.map((k,i)=>`
+    <div class="kpi ${k.cls||''}" onclick="filterByKPI(${i})">
+      <div class="trend ${k.trClass}">${k.trend}</div>
+      <div class="label">${k.label}</div>
+      <div class="val">${k.val}</div>
+      <div class="sub">${k.sub}</div>
+    </div>`).join('');
+}
+
+function fillSelect(id, opts, first="Барчаси"){
+  const el = document.getElementById(id); if(!el) return;
+  el.innerHTML = `<option>${first}</option>` + opts.map(o=>`<option>${o}</option>`).join('');
+}
+
+function renderBucketBars(){
+  const data = (APP_DATA.bucketStats || []).map(d=>({ b: d.bucket, c: d.count, a: d.amount }));
+  const max = Math.max(...data.map(d=>d.c));
+  const colors = {"Жорий":"#9aa3af","30+":"#E5A50A","60+":"#E67E22","90+":"#C0392B","180+":"#7b1d12","365+":"#7E3FBF","Суд":"#2F6FDB","МИБ":"#123C69","Аукцион":"#1E8449"};
+  document.getElementById('bucketBars').innerHTML = data.map(d=>`
+    <div class="bar-row">
+      <div><span class="badge ${BUCKET_BADGE[d.b]}">${d.b}</span></div>
+      <div class="bar"><span style="width:${(d.c/max*100)||4}%; background:${colors[d.b]}"></span></div>
+      <div class="cnt">${d.c}</div>
+      <div class="amt">${(d.a/1e9).toFixed(2)} млрд</div>
+    </div>`).join('');
+}
+
+function renderTypeGrid(){
+  const tg = document.getElementById('typeGrid');
+  tg.innerHTML = (APP_DATA.typeStats || []).map((item,i)=>{
+    const colors = ["#1B2A4A","#C8922A","#2F6FDB","#1E8449","#C0392B","#7E3FBF","#E67E22"];
+    return `<div class="type-cell" style="border-left-color:${colors[i]}">
+      <div class="lbl">${item.type}</div>
+      <div class="v">${item.count} та</div>
+      <div class="s">${(item.amount/1e9).toFixed(2)} млрд сўм</div>
+    </div>`;
+  }).join('');
+}
+
+function renderHeatmap(){
+  const cols = ["Жами","60+","90+","365+","Суд","МИБ","Аукцион","Ундирилган","Recovery %"];
+  let html = `<thead><tr><th>Филиал</th>${cols.map(c=>`<th class="num">${c}</th>`).join('')}</tr></thead><tbody>`;
+  (APP_DATA.branchStats || []).forEach(item=>{
+    const cell = (n,heat)=>`<td class="num ${heat}">${n}</td>`;
+    const total = item.total;
+    const b60 = item.b60;
+    const b90 = item.b90;
+    const b365 = item.b365;
+    const ct = item.court;
+    const mb = item.mib;
+    const ac = item.auction;
+    const rec = `${Math.round(item.recovered/1e6)} М`;
+    const rr = item.recoveryRate;
+    const h = (n,th)=> n>=th[2]?"h4":n>=th[1]?"h3":n>=th[0]?"h2":"h1";
+    html += `<tr><td>${item.branch}</td>${cell(total,"")}${cell(b60,h(b60,[50,200,500]))}${cell(b90,h(b90,[30,100,250]))}${cell(b365,h(b365,[10,30,60]))}${cell(ct,h(ct,[10,40,100]))}${cell(mb,h(mb,[5,20,50]))}${cell(ac,h(ac,[1,3,6]))}<td class="num h1">${rec}</td>${cell(rr+'%',rr>20?"h1":rr>10?"h2":rr>5?"h3":"h4")}</tr>`;
+  });
+  html += '</tbody>';
+  document.getElementById('heatmap').innerHTML = html;
+}
+
+function renderFunnels(){
+  const cf = APP_DATA.courtFunnel || [];
+  document.getElementById('courtFunnel').innerHTML = cf.map((s,i)=>`<div class="step ${i===2?'active':'done'}"><div class="n">${s.n}</div><div class="t">${s.t}</div></div>`).join('');
+  const mb = APP_DATA.mibFunnel || [];
+  document.getElementById('mibStatus').innerHTML = mb.map((s,i)=>`<div class="step ${i===0?'active':''}"><div class="n">${s.n}</div><div class="t">${s.t}</div></div>`).join('');
+  const ap = APP_DATA.auctionPipeline || [];
+  const pp = document.getElementById('auctionPipeline');
+  pp.innerHTML = ap.map((s,i)=>`<div class="p ${i===4?'active':''}"><div class="n">${s.n}</div>${s.t}</div>`).join('');
+  document.getElementById('aucPipe2').innerHTML = ap.map((s,i)=>`<div class="p ${i===4?'active':''}"><div class="n">${s.n}</div>${s.t}</div>`).join('');
+}
+
+function renderRecovery(){
+  const monthly = APP_DATA.recoveryMonthly || [];
+  const months = monthly.map(x=>x.m);
+  const vals = monthly.map(x=>x.v);
+  const max = Math.max(...vals);
+  document.getElementById('recoveryBars').innerHTML = months.map((m,i)=>`<div class="b" style="height:${vals[i]/max*100}%" data-m="${m}" data-v="${vals[i]}"></div>`).join('');
+}
+
+function renderContractsTable(target, filter){
+  const data = filter ? CONTRACTS.filter(filter) : CONTRACTS;
+  const t = document.getElementById(target);
+  const head = `<thead><tr>
+    <th>№</th><th>Филиал</th><th>Шартнома</th><th>Мижоз</th><th>Тури</th><th>Кредит тури</th>
+    <th class="num">Ажратилган</th><th class="num">Қолдиқ</th><th class="num">Муддати ўтган</th><th class="num">Кун</th>
+    <th>Ҳолат</th><th>Суд</th><th>МИБ</th><th>Аукцион</th><th>Охирги</th>
+  </tr></thead>`;
+  const body = `<tbody>${data.map((c,i)=>`<tr onclick="openCredit('${c.id}')">
+    <td>${i+1}</td><td>${c.branch}</td><td class="link">${c.id}</td><td>${c.name}</td><td>${c.ctype}</td><td>${c.type}</td>
+    <td class="num">${fmt(c.issued)}</td><td class="num">${fmt(c.remain)}</td><td class="num">${fmt(c.overP)}</td><td class="num">${c.days}</td>
+    <td><span class="badge ${BUCKET_BADGE[c.bucket]}">${c.bucket}</span></td>
+    <td>${c.court==="—"?'<span class="muted">—</span>':`<span class="badge b-blue">${c.court}</span>`}</td>
+    <td>${c.mib==="—"?'<span class="muted">—</span>':`<span class="badge b-dblue">${c.mib}</span>`}</td>
+    <td>${c.auc==="—"?'<span class="muted">—</span>':`<span class="badge b-green">${c.auc}</span>`}</td>
+    <td>${c.lastAct}</td>
+  </tr>`).join('')}</tbody>`;
+  t.innerHTML = head+body;
+}
+
+/* ============ 360 CARD ============ */
+function openCredit(id){
+  const c = CONTRACTS.find(x=>x.id===id);
+  if(!c) return;
+  navigate('credit360');
+  document.getElementById('crumb').textContent = `360° карточкаси · ${c.id}`;
+  document.getElementById('creditCard').innerHTML = renderCreditCard(c);
+  initTabs();
+}
+function renderCreditCard(c){
+  return `
+  <div class="cc-header">
+    <div class="h-block">
+      <h2>${c.id} · ${c.name}</h2>
+      <div class="meta">${c.branch} филиал · ${c.ctype} · ID ${c.cid} · ${c.type}</div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="badge ${BUCKET_BADGE[c.bucket]}">${c.bucket}</span>
+        <span class="risk-pill ${RISK_PILL[c.risk]}">Risk: ${RISK_TXT[c.risk]}</span>
+        ${c.court!=="—"?`<span class="badge b-blue">Суд: ${c.court}</span>`:''}
+        ${c.mib!=="—"?`<span class="badge b-dblue">МИБ: ${c.mib}</span>`:''}
+        ${c.auc!=="—"?`<span class="badge b-green">Аукцион: ${c.auc}</span>`:''}
+      </div>
+    </div>
+    <div class="h-block"><div class="sm">Ажратилган</div><div class="big">${fmt(c.issued)}</div><div class="sm" style="margin-top:6px;">Қолдиқ</div><div class="big" style="color:var(--red)">${fmt(c.remain)}</div></div>
+    <div class="h-block"><div class="sm">Муддати ўтган қарз</div><div class="big" style="color:var(--red)">${fmt(c.overP)}</div><div class="sm" style="margin-top:6px;">Фоиз</div><div class="big">${fmt(c.overI)}</div></div>
+    <div class="h-block"><div class="sm">Recovery эҳтимоли</div><div class="big" style="color:var(--auction)">${c.recovery}%</div><div class="sm" style="margin-top:6px;">Тавсия</div><div style="font-size:12px;color:var(--navy);font-weight:600;margin-top:2px;">${c.recovery>60?'AI қўнғироқ + SMS':'Юристга ўтказиш'}</div></div>
+  </div>
+
+  <!-- LEFT -->
+  <div class="cc-side">
+    <h4>Кредит маълумотлари</h4>
+    <div class="row"><span>Шартнома</span><b>${c.id}</b></div>
+    <div class="row"><span>Тур</span><b>${c.type}</b></div>
+    <div class="row"><span>Берилган сана</span><b>2024-03-12</b></div>
+    <div class="row"><span>Тугаш санаси</span><b>2029-03-12</b></div>
+    <div class="row"><span>Ажратилган</span><b>${fmt(c.issued)}</b></div>
+    <div class="row"><span>Қолдиқ</span><b>${fmt(c.remain)}</b></div>
+    <div class="row"><span>Муддати ўтган</span><b>${fmt(c.overP)}</b></div>
+    <div class="row"><span>Фоиз қарзи</span><b>${fmt(c.overI)}</b></div>
+    <div class="row"><span>Пеня</span><b>${fmt(Math.floor(c.overP*0.04))}</b></div>
+    <div class="row"><span>Кун</span><b>${c.days}</b></div>
+    <div class="row"><span>Жорий bucket</span><b><span class="badge ${BUCKET_BADGE[c.bucket]}">${c.bucket}</span></b></div>
+    <div class="row"><span>Олдинги bucket</span><b>60+</b></div>
+    <div class="row"><span>Ўтган сана</span><b>2026-05-18</b></div>
+
+    <h4 style="margin-top:14px;">Мижоз</h4>
+    <div class="row"><span>Ф.И.Ш.</span><b>${c.name}</b></div>
+    <div class="row"><span>ID</span><b>${c.cid}</b></div>
+    <div class="row"><span>Тури</span><b>${c.ctype}</b></div>
+    <div class="row"><span>Телефон</span><b>${c.phone}</b></div>
+    <div class="row"><span>Манзил</span><b>Тошкент, Яккасарой</b></div>
+    <div class="row"><span>Иш жойи</span><b>Sharq Logistic МЧЖ</b></div>
+    <div class="row"><span>Боғлиқ шартномалар</span><b>3</b></div>
+    <div class="row"><span>Тўлов қобилияти</span><b style="color:#9a7400">Вақтинча қийинчилик</b></div>
+    <div class="row"><span>Кутилаётган тўлов</span><b>2026-07-05</b></div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="cc-main">
+    <div class="card">
+      <div class="tab-strip" id="ccTabs">
+        <button class="active" data-tab="calls">Қўнғироқлар тарихи</button>
+        <button data-tab="ai">AI мулоқотлари</button>
+        <button data-tab="collateral">Гаров</button>
+        <button data-tab="court">Суд</button>
+        <button data-tab="mib">МИБ</button>
+        <button data-tab="auction">Аукцион</button>
+        <button data-tab="pay">Тўловлар</button>
+        <button data-tab="notes">Изоҳлар</button>
+        <button data-tab="timeline">Timeline</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-calls">
+        <table class="data">
+          <thead><tr><th>Сана</th><th>Вақт</th><th>Давом</th><th>Тур</th><th>Оператор</th><th>Канал</th><th>Натижа</th><th>Изоҳ</th><th>Кейинги</th></tr></thead>
+          <tbody>
+            <tr><td>2026-06-28</td><td>11:24</td><td>02:14</td><td>Чиқувчи</td><td>AI Bot</td><td><span class="badge b-purple">AI</span></td><td><span class="badge b-green">Тўлов ваъда қилди</span></td><td>25 М · 5-июлгача</td><td>2026-07-04</td></tr>
+            <tr><td>2026-06-22</td><td>15:08</td><td>00:43</td><td>Чиқувчи</td><td>М.Йўлдошева</td><td><span class="badge b-blue">Call Center</span></td><td><span class="badge b-yellow">Жавоб бермади</span></td><td>—</td><td>2026-06-25</td></tr>
+            <tr><td>2026-06-18</td><td>10:11</td><td>01:32</td><td>Чиқувчи</td><td>М.Йўлдошева</td><td><span class="badge b-blue">Call Center</span></td><td><span class="badge b-green">Боғланилди — рад этмади</span></td><td>Иш бошлади</td><td>2026-06-22</td></tr>
+            <tr><td>2026-06-12</td><td>09:30</td><td>00:00</td><td>Чиқувчи</td><td>AI Bot</td><td><span class="badge b-purple">AI</span></td><td><span class="badge b-red">Нотўғри рақам</span></td><td>—</td><td>—</td></tr>
+            <tr><td>2026-06-04</td><td>14:55</td><td>02:48</td><td>Кирувчи</td><td>А.Каримов</td><td><span class="badge b-gray">Branch</span></td><td><span class="badge b-green">Боғланилди</span></td><td>Реструктуризация сўради</td><td>2026-06-10</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:10px;display:flex;gap:6px;">
+          <button class="btn primary" onclick="openModal('callResultModal')">+ Қўнғироқ натижаси</button>
+          <button class="btn" onclick="toast('SMS юборилди','success')">SMS юбориш</button>
+          <button class="btn" onclick="toast('Рақам нотўғри деб белгиланди','success')">Рақамни нотўғри белгилаш</button>
+          <button class="btn" onclick="toast('Янги рақам қўшилди','success')">+ Тўғри рақам</button>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-ai">
+        <div class="ai-card">
+          <h3>AI мулоқот — охирги қўнғироқ</h3>
+          <div class="ai-row">
+            <div class="a-cell"><div class="l">Сана / вақт</div><div class="v">2026-06-28 11:24</div></div>
+            <div class="a-cell"><div class="l">Давомийлиги</div><div class="v">02:14</div></div>
+            <div class="a-cell"><div class="l">Сценарий</div><div class="v">PTP_60plus_v3</div></div>
+            <div class="a-cell"><div class="l">Жавоб бердими?</div><div class="v">Ҳа</div></div>
+            <div class="a-cell"><div class="l">AI натижа</div><div class="v sent-pos">Тўлов ваъдаси</div></div>
+            <div class="a-cell"><div class="l">Sentiment</div><div class="v sent-pos">Positive</div></div>
+            <div class="a-cell"><div class="l">PTP суммаси</div><div class="v">25 000 000 сўм</div></div>
+            <div class="a-cell"><div class="l">Recommended</div><div class="v">SMS эслатма</div></div>
+          </div>
+          <div class="chat">
+            <div class="msg ai"><div class="meta">AI · 11:24:02</div>Ассалому алейкум. HK-2026-0381 бўйича 25.4 М сўм муддати ўтган қарздорлик бор.</div>
+            <div class="msg cl"><div class="meta" style="color:#1B2A4A99;">Мижоз · 11:24:18</div>Ҳа, шу ҳафтада ҳал қиламан.</div>
+            <div class="msg ai"><div class="meta">AI · 11:24:24</div>Қачонгача тўлай оласиз?</div>
+            <div class="msg cl"><div class="meta" style="color:#1B2A4A99;">Мижоз · 11:24:40</div>5-июлгача 25 миллион сўм ўтказаман.</div>
+            <div class="msg ai"><div class="meta">AI · 11:24:46</div>Раҳмат, ваъдангиз тизимга киритилди.</div>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:6px;">
+            <button class="btn gold" onclick="openModal('aiTranscriptModal')">Тўлиқ transcript</button>
+            <button class="btn" onclick="toast('AI қўнғироқ навбатга қўшилди','success')">Қайта AI қўнғироқ</button>
+          </div>
+          <div style="margin-top:10px;padding:10px;background:#0c1426;border-radius:6px;font-size:12px;">
+            <b style="color:#fff;">AI Тавсия:</b> <span style="color:#cdd6e3">Қайта қўнғироқ 04.07.2026 · SMS эслатма — ҳа · Юристга — йўқ · МИБга — йўқ · Risk score: 64 → 52</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-collateral">
+        <table class="data">
+          <thead><tr><th>Тури</th><th>Объект</th><th>Манзил</th><th class="num">Баҳо</th><th>Кадастр</th><th>Ҳолат</th><th>Кимда</th><th>Суғурта</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Кўчмас мулк</td><td>3 хонали квартира</td><td>Тошкент, Яккасарой, Бобур 12-25</td><td class="num">680 000 000</td><td>10:09:01:01:1234:5678</td><td><span class="badge b-orange">Аукционга чиқарилган</span></td><td><span class="badge b-dblue">МИБда</span></td><td><span class="badge b-green">Фаол</span></td><td><button class="btn sm" onclick="openCollateralDrawer()">Тафсилот</button></td></tr>
+            <tr><td>Транспорт</td><td>Chevrolet Cobalt 2023</td><td>—</td><td class="num">125 000 000</td><td>—</td><td><span class="badge b-yellow">Баҳолашда</span></td><td><span class="badge b-gray">Мижозда</span></td><td><span class="badge b-red">Муддати ўтган</span></td><td><button class="btn sm" onclick="openCollateralDrawer()">Тафсилот</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tab-panel" id="tab-court">
+        <div class="legal-tracks">
+          <div class="lt">
+            <h5>Суд буйруғи тартиби · Иш №А-2026-04412 · 145 М сўм</h5>
+            <div class="ll done">Палатага берилган <b>2026-04-12</b></div>
+            <div class="ll done">Судга киритилган <b>2026-04-28</b></div>
+            <div class="ll active">Суд буйруғи чиққан <b>2026-05-18</b></div>
+          </div>
+          <div class="lt">
+            <h5>Даъво тартиби · Иш №Д-2026-01893 · 42 М сўм</h5>
+            <div class="ll done">Даъво киритилган <b>2026-05-25</b></div>
+            <div class="ll active">Суд мажлиси <b>2026-07-08</b></div>
+            <div class="ll">Ҳал қилув қарори</div>
+            <div class="ll">Қаноатлантирилди</div>
+          </div>
+        </div>
+        <div class="kv" style="margin-top:14px;">
+          <div class="item"><div class="l">Суд номи</div><div class="v">Тошкент шаҳри иқтисодий суди</div></div>
+          <div class="item"><div class="l">Масъул юрист</div><div class="v">${c.lawyer}</div></div>
+          <div class="item"><div class="l">Кейинги мажлис</div><div class="v">2026-07-08</div></div>
+          <div class="item"><div class="l">Охирги қарор</div><div class="v">Суд буйруғи чиққан (2026-05-18)</div></div>
+          <div class="item"><div class="l">Даъво суммаси</div><div class="v">145 000 000 сўм</div></div>
+          <div class="item"><div class="l">Ариза санаси</div><div class="v">2026-04-28</div></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-mib">
+        <div class="kv">
+          <div class="item"><div class="l">Ижро иши рақами</div><div class="v">МИБ-2026-008412</div></div>
+          <div class="item"><div class="l">Очилган сана</div><div class="v">2026-05-28</div></div>
+          <div class="item"><div class="l">Ҳолат</div><div class="v"><span class="badge b-dblue">Фаол</span></div></div>
+          <div class="item"><div class="l">Давлат ижрочиси</div><div class="v">Қ.Назаров</div></div>
+          <div class="item"><div class="l">МИБ ҳудуди</div><div class="v">Яккасарой тумани МИБ бўлими</div></div>
+          <div class="item"><div class="l">Ундирилган маблағ</div><div class="v">12 400 000 сўм</div></div>
+          <div class="item"><div class="l">Қолдиқ қарздорлик</div><div class="v" style="color:var(--red)">${fmt(c.remain - 12_400_000)}</div></div>
+          <div class="item"><div class="l">Охирги ҳаракат</div><div class="v">2026-06-25 — Мулк ҳибсга олинди</div></div>
+          <div class="item"><div class="l">Кейинги ҳаракат</div><div class="v">2026-07-12 — Баҳолаш</div></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-auction">
+        <div class="pipeline" style="margin-bottom:14px;">
+          <div class="p done"><div class="n">✓</div>Баҳолаш</div>
+          <div class="p done"><div class="n">✓</div>МИБга</div>
+          <div class="p done"><div class="n">✓</div>Аукционга</div>
+          <div class="p active"><div class="n">●</div>Савдо</div>
+          <div class="p"><div class="n">—</div>Ғолиб</div>
+          <div class="p"><div class="n">—</div>Тўлов</div>
+          <div class="p"><div class="n">—</div>Расмийлаштириш</div>
+          <div class="p"><div class="n">—</div>Якун</div>
+        </div>
+        <div class="kv">
+          <div class="item"><div class="l">Аукцион санаси</div><div class="v">2026-07-15</div></div>
+          <div class="item"><div class="l">Лот рақами</div><div class="v">LOT-2026-04781</div></div>
+          <div class="item"><div class="l">Платформа</div><div class="v">E-Auction.uz</div></div>
+          <div class="item"><div class="l">Бошланғич нарх</div><div class="v">544 000 000 сўм</div></div>
+          <div class="item"><div class="l">Тўлов муддати</div><div class="v">Сотилгандан кейин 30 кун</div></div>
+          <div class="item"><div class="l">Расмийлаштириш</div><div class="v"><span class="badge b-yellow">Кутилмоқда</span></div></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-pay">
+        <table class="data">
+          <thead><tr><th>Сана</th><th class="num">Сумма</th><th>Манба</th><th class="num">Асосий қарзга</th><th class="num">Фоизга</th><th class="num">Пеняга</th><th class="num">Қолдиқ</th><th>Ҳолат</th></tr></thead>
+          <tbody>
+            <tr><td>2026-06-25</td><td class="num">12 400 000</td><td>МИБ ундируви</td><td class="num">10 000 000</td><td class="num">2 000 000</td><td class="num">400 000</td><td class="num">${fmt(c.remain-12_400_000)}</td><td><span class="badge b-green">Қабул қилинди</span></td></tr>
+            <tr><td>2026-05-10</td><td class="num">5 000 000</td><td>Мижоз</td><td class="num">3 800 000</td><td class="num">1 000 000</td><td class="num">200 000</td><td class="num">${fmt(c.remain-7_400_000)}</td><td><span class="badge b-green">Қабул қилинди</span></td></tr>
+            <tr><td>2026-04-02</td><td class="num">8 000 000</td><td>Мижоз</td><td class="num">6 500 000</td><td class="num">1 200 000</td><td class="num">300 000</td><td class="num">${fmt(c.remain-2_400_000)}</td><td><span class="badge b-green">Қабул қилинди</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tab-panel" id="tab-notes">
+        <div style="border-left:3px solid var(--gold);padding:8px 12px;margin-bottom:8px;background:#fafbfc;">
+          <div style="font-size:11px;color:var(--muted)">2026-06-28 14:22 · М.Йўлдошева · Collection · 📎 ptp_form.pdf</div>
+          <div>Мижоз 5-июлгача 25 М сўм тўлашга ваъда берди. Маошидан тўлайди.</div>
+        </div>
+        <div style="border-left:3px solid var(--court);padding:8px 12px;margin-bottom:8px;background:#fafbfc;">
+          <div style="font-size:11px;color:var(--muted)">2026-06-21 11:05 · ${c.lawyer} · Юрист</div>
+          <div>Палатага ҳужжатлар тайёрланди ва жўнатилди.</div>
+        </div>
+        <div style="border-left:3px solid var(--mib);padding:8px 12px;margin-bottom:8px;background:#fafbfc;">
+          <div style="font-size:11px;color:var(--muted)">2026-06-15 10:14 · А.Каримов · Branch</div>
+          <div>Мижоз филиалга келди, реструктуризация ҳақида сўради. Бошқарувга юборилди.</div>
+        </div>
+        <button class="btn primary" onclick="toast('Изоҳ қўшилди','success')">+ Изоҳ қўшиш</button>
+      </div>
+
+      <div class="tab-panel" id="tab-timeline">
+        <div class="timeline">
+          <div class="tl-item"><div class="d">2026-06-28 11:26 · AI</div><div class="t">AI қўнғироқ якунланди — тўлов ваъдаси</div><div class="c">PTP: 25 М сўм, 2026-07-05. Risk score: 64 → 52</div></div>
+          <div class="tl-item"><div class="d">2026-06-25 14:08 · МИБ</div><div class="t">Қисман тўлов қабул қилинди</div><div class="c">12 400 000 сўм · МИБ ундируви</div></div>
+          <div class="tl-item"><div class="d">2026-05-28 09:30 · Manual</div><div class="t">МИБга ўтказилди</div><div class="c">Ижро иши МИБ-2026-008412</div></div>
+          <div class="tl-item"><div class="d">2026-05-18 16:42 · Court</div><div class="t">Суд буйруғи чиққан</div><div class="c">Иш А-2026-04412 · 145 М сўм</div></div>
+          <div class="tl-item"><div class="d">2026-04-28 10:00 · Manual</div><div class="t">Судга киритилди</div><div class="c">${c.lawyer} томонидан</div></div>
+          <div class="tl-item"><div class="d">2026-04-12 12:00 · Manual</div><div class="t">Bucket: 60+ → 90+</div><div class="c">iABS автоматик</div></div>
+          <div class="tl-item"><div class="d">2026-03-22 09:00 · iABS</div><div class="t">Bucket: 30+ → 60+</div><div class="c">Тизим</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="cc-side">
+    <h4>Тезкор ҳаракатлар</h4>
+    <div class="act-list">
+      <button onclick="toast('Изоҳ қўшилди','success')">📝 Изоҳ қўшиш</button>
+      <button onclick="openModal('callResultModal')">☎ Қўнғироқ натижаси</button>
+      <button onclick="toast('AI қўнғироқ навбатга қўшилди','success')">★ AI қўнғироқ</button>
+      <button onclick="toast('SMS юборилди','success')">✉ SMS юбориш</button>
+      <button onclick="toast('Огоҳлантириш хати юборилди','success')">⚠ Огоҳлантириш хати</button>
+      <button class="court" onclick="toast('Кредит судга ўтказилди','success')">⚖ Судга ўтказиш</button>
+      <button class="mib" onclick="toast('МИБга ўтказилди','success')">▤ МИБга ўтказиш</button>
+      <button class="auction" onclick="toast('Аукционга чиқарилди','success')">⊕ Аукционга чиқариш</button>
+      <button onclick="toast('Ҳужжат юкланди','success')">📎 Ҳужжат юклаш</button>
+      <button onclick="toast('Ҳисоботга қўшилди','success')">▦ Ҳисоботга қўшиш</button>
+      <button class="danger" onclick="toast('Контракт реструктуризацияга юборилди','success')">↻ Реструктуризация</button>
+    </div>
+    <h4 style="margin-top:14px;">Масъуллар</h4>
+    <div class="row" style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px dashed #eef0f3;"><span>Collection</span><b>${c.staff}</b></div>
+    <div class="row" style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px dashed #eef0f3;"><span>Юрист</span><b>${c.lawyer}</b></div>
+    <div class="row" style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px dashed #eef0f3;"><span>Охирги алоқа</span><b>${c.lastCont}</b></div>
+    <div class="row" style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px dashed #eef0f3;"><span>Кейинги ҳаракат</span><b>${c.nextAct}</b></div>
+  </div>`;
+}
+function initTabs(){
+  const tabs = document.querySelectorAll('#ccTabs button');
+  tabs.forEach(b=> b.onclick = ()=>{
+    tabs.forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('tab-'+b.dataset.tab).classList.add('active');
+  });
+}
+
+/* ============ NAVIGATION ============ */
+function navigate(key){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const sec = document.getElementById('sec-'+key);
+  if(sec) sec.classList.add('active');
+  document.querySelectorAll('#menu a').forEach(a=>a.classList.toggle('active', a.dataset.nav===key));
+  const labels = {dashboard:"Бош панел",registry:"Кредитлар реестри",credit360:"360° кредит карточкаси",client:"Мижоз карточкаси",callcenter:"Қўнғироқлар маркази",ai:"AI панел",collateral:"Гаров мулклари",court:"Суд жараёнлари",mib:"МИБ ижроси",auction:"Аукционлар",payments:"Тўловлар",monitoring:"Мониторинг",admin:"Бошқарув",reports:"Ҳисоботлар",audit:"Аудит журнали"};
+  document.getElementById('crumb').textContent = labels[key]||key;
+  document.getElementById('main').scrollTop=0;
+}
+document.querySelectorAll('#menu a').forEach(a=>{
+  a.addEventListener('click',()=>navigate(a.dataset.nav));
+});
+
+/* ============ KPI FILTER ============ */
+function filterByKPI(i){
+  const k = KPIS[i];
+  let filter = null; let hint = `— ${k.label}`;
+  if (i===4) filter = c=>c.bucket==="Суд";
+  else if (i===5) filter = c=>c.bucket==="МИБ";
+  else if (i===6||i===7||i===8) filter = c=>c.bucket==="Аукцион";
+  else if (i===1) filter = c=>["30+","60+"].includes(c.bucket);
+  else if (i===9) filter = c=>c.bucket!=="Жорий";
+  document.getElementById('tableHint').textContent = hint;
+  renderContractsTable('dashTable', filter);
+  document.getElementById('dashTable').scrollIntoView({behavior:'smooth', block:'start'});
+  toast(`Жадвал филтрланди: ${k.label}`,'success');
+}
+
+/* ============ MODALS / DRAWER ============ */
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+function openCollateralDrawer(){
+  document.getElementById('drawerTitle').innerHTML = 'Гаров мулки тафсилоти <span class="x" style="cursor:pointer;" onclick="closeDrawer()">×</span>';
+  document.getElementById('drawerBody').innerHTML = `
+    <div class="kv">
+      <div class="item"><div class="l">Гаров тури</div><div class="v">Кўчмас мулк (квартира)</div></div>
+      <div class="item"><div class="l">Объект</div><div class="v">3 хонали квартира, 76 м²</div></div>
+      <div class="item"><div class="l">Манзил</div><div class="v">Тошкент, Яккасарой т., Бобур 12-25</div></div>
+      <div class="item"><div class="l">Кадастр</div><div class="v">10:09:01:01:1234:5678</div></div>
+      <div class="item"><div class="l">Баҳоланган қиймат</div><div class="v">680 000 000 сўм</div></div>
+      <div class="item"><div class="l">Баҳолаш санаси</div><div class="v">2026-05-12</div></div>
+      <div class="item"><div class="l">Жорий ҳолат</div><div class="v"><span class="badge b-orange">Аукционга чиқарилган</span></div></div>
+      <div class="item"><div class="l">Мулк кимда</div><div class="v"><span class="badge b-dblue">МИБда</span></div></div>
+      <div class="item"><div class="l">Суғурта</div><div class="v"><span class="badge b-green">Фаол · 31.12.2026 гача</span></div></div>
+    </div>
+    <h4 style="margin-top:16px;color:var(--navy);font-size:13px;margin-bottom:8px;">Ҳужжатлар</h4>
+    <ul style="font-size:12px; padding-left:18px;">
+      <li>📎 Гаров шартномаси — gar_HK-2026-0381.pdf</li>
+      <li>📎 Баҳолаш ҳисоботи — bah_2026-05-12.pdf</li>
+      <li>📎 Кадастр кўчирмаси — kadastr.pdf</li>
+      <li>📎 Суғурта полиси — sugurta_2026.pdf</li>
+    </ul>
+    <div style="margin-top:10px;display:flex;gap:6px;"><button class="btn">Ҳужжат юклаш</button><button class="btn primary">Янги баҳолаш</button></div>`;
+  document.getElementById('drawer').classList.add('show');
+  document.getElementById('drawerMask').classList.add('show');
+}
+function closeDrawer(){ document.getElementById('drawer').classList.remove('show'); document.getElementById('drawerMask').classList.remove('show'); }
+function toast(msg,type){
+  const t = document.createElement('div');
+  t.className = 'toast '+(type||'');
+  t.textContent = msg;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(()=>t.remove(),3500);
+}
+
+/* ============ ROLE SWITCH ============ */
+const ROLE_MENU = {
+  head: ['dashboard','registry','credit360','client','callcenter','ai','collateral','court','mib','auction','payments','monitoring','admin','reports','audit'],
+  mon: ['dashboard','registry','credit360','client','collateral','court','mib','auction','monitoring','reports','audit'],
+  call: ['dashboard','callcenter','credit360','client','ai','payments'],
+  branch: ['dashboard','registry','credit360','client']
+};
+document.getElementById('roleSelect').addEventListener('change', e=>{
+  const r = e.target.value; const allowed = ROLE_MENU[r];
+  document.querySelectorAll('#menu a').forEach(a=>{
+    a.classList.toggle('disabled', !allowed.includes(a.dataset.nav));
+  });
+  toast('Роль ўзгартирилди: '+e.target.options[e.target.selectedIndex].text,'success');
+  if (!allowed.includes('dashboard')) navigate(allowed[0]);
+});
+
+/* ============ SEARCH ============ */
+document.getElementById('globalSearch').addEventListener('input', e=>{
+  const q = e.target.value.toLowerCase().trim();
+  if (!q){ renderContractsTable('dashTable'); document.getElementById('tableHint').textContent="— Барча шартномалар"; return; }
+  renderContractsTable('dashTable', c=>(c.name.toLowerCase().includes(q)||c.id.toLowerCase().includes(q)||c.phone.includes(q)));
+  document.getElementById('tableHint').textContent = `— Қидирув: "${q}"`;
+});
+
+/* ============ CALL CENTER TABLE ============ */
+function renderCallTable(){
+  const data = CONTRACTS.slice(0,16);
+  document.getElementById('callTable').innerHTML = `
+    <thead><tr><th>Priority</th><th>Филиал</th><th>Шартнома</th><th>Мижоз</th><th>Кредит тури</th><th class="num">Муддати ўтган</th><th class="num">Кун</th><th>Охирги алоқа</th><th>Кейинги</th><th></th></tr></thead>
+    <tbody>${data.map((c,i)=>`<tr onclick="openCredit('${c.id}')">
+      <td>${i<3?'<span class="badge b-red">Юқори</span>':i<7?'<span class="badge b-orange">Ўрта</span>':'<span class="badge b-gray">Паст</span>'}</td>
+      <td>${c.branch}</td><td class="link">${c.id}</td><td>${c.name}</td><td>${c.type}</td>
+      <td class="num">${fmt(c.overP)}</td><td class="num">${c.days}</td><td>${c.lastCont}</td><td>${c.nextAct}</td>
+      <td><button class="btn sm primary" onclick="event.stopPropagation();openModal('callResultModal')">Қўнғироқ натижаси</button></td>
+    </tr>`).join('')}</tbody>`;
+}
+
+/* ============ AI views ============ */
+function renderAI(view){
+  const c = document.getElementById('aiContent');
+  if (view==='queue'){
+    c.innerHTML = `<table class="data">
+      <thead><tr><th>Шартнома</th><th>Мижоз</th><th>Телефон</th><th>Bucket</th><th class="num">Муддати ўтган</th><th>Сценарий</th><th>Режа</th><th>Ҳолат</th><th>Приоритет</th></tr></thead>
+      <tbody>${CONTRACTS.slice(0,12).map(c=>`<tr>
+        <td class="link">${c.id}</td><td>${c.name}</td><td>${c.phone}</td>
+        <td><span class="badge ${BUCKET_BADGE[c.bucket]}">${c.bucket}</span></td>
+        <td class="num">${fmt(c.overP)}</td><td>PTP_${c.bucket.replace('+','plus')}_v3</td>
+        <td>2026-07-${String(rnd(1,15)).padStart(2,'0')} ${rnd(9,18)}:00</td>
+        <td><span class="badge b-yellow">Кутилмоқда</span></td>
+        <td><span class="badge b-red">Юқори</span></td>
+      </tr>`).join('')}</tbody></table>`;
+  } else if (view==='done'){
+    c.innerHTML = `<table class="data">
+      <thead><tr><th>Сана</th><th>Шартнома</th><th>Мижоз</th><th>Давом</th><th>Натижа</th><th>PTP</th><th>Sentiment</th><th>Кейинги</th><th></th></tr></thead>
+      <tbody>${CONTRACTS.slice(0,10).map((c,i)=>`<tr>
+        <td>2026-06-${String(rnd(20,29)).padStart(2,'0')} ${rnd(9,18)}:${rnd(10,59)}</td>
+        <td class="link">${c.id}</td><td>${c.name}</td><td>0${rnd(1,3)}:${rnd(10,59)}</td>
+        <td><span class="badge ${i%3===0?'b-green':i%3===1?'b-yellow':'b-red'}">${i%3===0?'Тўлов ваъдаси':i%3===1?'Жавоб бермади':'Рад этди'}</span></td>
+        <td>${i%3===0?fmt(c.overP):'<span class="muted">—</span>'}</td>
+        <td>${i%3===0?'<span class="sent-pos">Positive</span>':i%3===1?'<span class="sent-neu">Neutral</span>':'<span class="sent-neg">Negative</span>'}</td>
+        <td>SMS эслатма</td>
+        <td><button class="btn sm" onclick="openModal('aiTranscriptModal')">Transcript</button></td>
+      </tr>`).join('')}</tbody></table>`;
+  } else if (view==='analytics'){
+    c.innerHTML = `<div class="split-3">
+      <div class="card"><h3>Жавоб бериш фоизи</h3><div style="font-size:28px;font-weight:700;color:var(--navy)">63.4%</div><div class="muted">7 932 / 12 488</div></div>
+      <div class="card"><h3>PTP конверсия</h3><div style="font-size:28px;font-weight:700;color:var(--auction)">27.9%</div><div class="muted">2 217 ваъда</div></div>
+      <div class="card"><h3>Ўртача давомийлик</h3><div style="font-size:28px;font-weight:700;color:var(--navy)">01:42</div><div class="muted">сония</div></div>
+    </div>`;
+  } else if (view==='scripts'){
+    c.innerHTML = `<table class="data"><thead><tr><th>Номи</th><th>Bucket</th><th>Версия</th><th>Қўлланилди</th><th>Самарадорлик</th><th></th></tr></thead><tbody>
+      <tr><td>PTP_30plus_v2</td><td><span class="badge b-yellow">30+</span></td><td>v2.1</td><td>3 412</td><td>34%</td><td><button class="btn sm">Таҳрир</button></td></tr>
+      <tr><td>PTP_60plus_v3</td><td><span class="badge b-orange">60+</span></td><td>v3.0</td><td>2 877</td><td>28%</td><td><button class="btn sm">Таҳрир</button></td></tr>
+      <tr><td>PTP_90plus_v3</td><td><span class="badge b-red">90+</span></td><td>v3.0</td><td>1 998</td><td>22%</td><td><button class="btn sm">Таҳрир</button></td></tr>
+      <tr><td>Court_warning_v1</td><td><span class="badge b-dred">180+</span></td><td>v1.4</td><td>814</td><td>18%</td><td><button class="btn sm">Таҳрир</button></td></tr>
+    </tbody></table>`;
+  } else {
+    c.innerHTML = `<div class="muted">AI тизим тавсиялари (тимга юбориш): 142 шартнома МИБга тайёр, 87 шартнома суд олди хатига номзод, 53 шартнома реструктуризация кандидати.</div>`;
+  }
+}
+
+/* ============ OTHER TABLES ============ */
+function renderCollateral(){
+  document.getElementById('collateralTable').innerHTML = `
+    <thead><tr><th>ID</th><th>Шартнома</th><th>Мижоз</th><th>Филиал</th><th>Тур</th><th>Объект</th><th>Манзил</th><th class="num">Баҳо</th><th>Ҳолат</th><th>Аукцион</th><th>Кимда</th></tr></thead>
+    <tbody>${CONTRACTS.slice(0,14).map((c,i)=>`<tr onclick="openCollateralDrawer()">
+      <td class="link">GAR-${1000+i}</td><td>${c.id}</td><td>${c.name}</td><td>${c.branch}</td>
+      <td>${i%2?'Кўчмас мулк':'Транспорт'}</td>
+      <td>${i%2?'Квартира':'Chevrolet Cobalt'}</td><td>${c.branch} ш.</td>
+      <td class="num">${fmt(c.remain*2)}</td>
+      <td><span class="badge ${i%3===0?'b-orange':i%3===1?'b-green':'b-yellow'}">${i%3===0?'Аукционга':i%3===1?'Сотилган':'Баҳолашда'}</span></td>
+      <td>${c.auc==="—"?'<span class="muted">—</span>':`<span class="badge b-green">${c.auc}</span>`}</td>
+      <td><span class="badge b-${i%2?'dblue':'gray'}">${i%2?'МИБда':'Мижозда'}</span></td>
+    </tr>`).join('')}</tbody>`;
+}
+function renderCourt(){
+  document.getElementById('courtTable').innerHTML = `
+    <thead><tr><th>Шартнома</th><th>Мижоз</th><th>Филиал</th><th>Иш рақами</th><th>Босқич</th><th>Ҳолат</th><th>Кейинги мажлис</th><th>Юрист</th><th class="num">Сумма</th><th></th></tr></thead>
+    <tbody>${CONTRACTS.filter(c=>c.court!=="—").slice(0,12).map(c=>`<tr onclick="openCredit('${c.id}')">
+      <td class="link">${c.id}</td><td>${c.name}</td><td>${c.branch}</td>
+      <td>А-2026-${rnd(1000,9999)}</td><td><span class="badge b-blue">${c.court}</span></td>
+      <td>Жараёнда</td><td>2026-07-${String(rnd(1,28)).padStart(2,'0')}</td>
+      <td>${c.lawyer}</td><td class="num">${fmt(c.overP)}</td>
+      <td><button class="btn sm" onclick="event.stopPropagation();toast('МИБга ўтказилди','success')">МИБга</button></td>
+    </tr>`).join('')}</tbody>`;
+  const cols = ["Палата","Суд буйруғи","Даъво","Қарор","МИБ","Ёпилган"];
+  const k = document.getElementById('courtKanban');
+  k.innerHTML = cols.map((c,i)=>{
+    const items = CONTRACTS.filter(x=>x.court!=="—").slice(i*2,i*2+3);
+    return `<div class="kcol"><h4>${c} (${rnd(20,80)})</h4>${items.map(x=>`<div class="kcard"><b>${x.name}</b>${x.id} · ${fmt(x.overP)}</div>`).join('')}</div>`;
+  }).join('');
+}
+function renderMIB(){
+  document.getElementById('mibTable').innerHTML = `
+    <thead><tr><th>Шартнома</th><th>Мижоз</th><th>Филиал</th><th>Ижро иши</th><th>Ҳолат</th><th>Ижрочи</th><th>МИБ ҳудуди</th><th class="num">Ундирилган</th><th class="num">Қолдиқ</th><th>Охирги ҳаракат</th><th></th></tr></thead>
+    <tbody>${CONTRACTS.filter(c=>c.mib!=="—").slice(0,14).map(c=>`<tr onclick="openCredit('${c.id}')">
+      <td class="link">${c.id}</td><td>${c.name}</td><td>${c.branch}</td>
+      <td>МИБ-2026-${String(rnd(1000,99999)).padStart(6,'0')}</td>
+      <td><span class="badge b-dblue">${c.mib}</span></td>
+      <td>Қ.Назаров</td><td>${c.branch} МИБ</td>
+      <td class="num">${fmt(rnd(1,50)*1_000_000)}</td>
+      <td class="num">${fmt(c.remain)}</td>
+      <td>${c.lastAct}</td>
+      <td><button class="btn sm" onclick="event.stopPropagation();toast('Ҳолат янгиланди','success')">Янгилаш</button></td>
+    </tr>`).join('')}</tbody>`;
+}
+function renderAuction(){
+  document.getElementById('aucTable').innerHTML = `
+    <thead><tr><th>Лот</th><th>Шартнома</th><th>Мижоз</th><th>Объект</th><th>Манзил</th><th class="num">Баҳо</th><th>Аукцион</th><th>Ғолиб</th><th class="num">Сотилди</th><th>Тўлов</th><th>Расмийлаштириш</th></tr></thead>
+    <tbody>${CONTRACTS.slice(0,12).map((c,i)=>`<tr onclick="openCredit('${c.id}')">
+      <td class="link">LOT-${10000+i}</td><td>${c.id}</td><td>${c.name}</td>
+      <td>${i%2?'Квартира':'Автомобиль'}</td><td>${c.branch}</td>
+      <td class="num">${fmt(c.remain*2)}</td><td>2026-07-${String(rnd(1,30)).padStart(2,'0')}</td>
+      <td>${i%3===0?'Иванов Б.':i%3===1?'ООО Tashkent Realty':'—'}</td>
+      <td class="num">${i%3===2?'—':fmt(c.remain*2.2)}</td>
+      <td><span class="badge ${i%3===0?'b-green':i%3===1?'b-yellow':'b-gray'}">${i%3===0?'Амалга оширилган':i%3===1?'Кутилмоқда':'—'}</span></td>
+      <td><span class="badge ${i%3===0?'b-green':'b-yellow'}">${i%3===0?'Якунланган':'Расмийлаштирилмоқда'}</span></td>
+    </tr>`).join('')}</tbody>`;
+}
+function renderPayments(){
+  document.getElementById('payTable').innerHTML = `
+    <thead><tr><th>Ваъда санаси</th><th>Шартнома</th><th>Мижоз</th><th>Агент</th><th>Филиал</th><th class="num">Ваъда</th><th class="num">Тўланди</th><th>Ҳолат</th><th>Кейинги</th></tr></thead>
+    <tbody>${CONTRACTS.slice(0,14).map((c,i)=>`<tr onclick="openCredit('${c.id}')">
+      <td>2026-07-${String(rnd(1,28)).padStart(2,'0')}</td><td class="link">${c.id}</td><td>${c.name}</td>
+      <td>${c.staff}</td><td>${c.branch}</td>
+      <td class="num">${fmt(c.overP || c.overdueTotal || c.remain)}</td>
+      <td class="num">${i%4===0?fmt(c.overP || c.overdueTotal || c.remain):i%4===1?fmt(Math.floor((c.overP || c.overdueTotal || c.remain)*0.6)):fmt(Math.floor((c.overP || c.overdueTotal || c.remain)*0.25))}</td>
+      <td><span class="badge ${i%4===0?'b-green':i%4===1?'b-yellow':i%4===2?'b-red':'b-gray'}">${i%4===0?'Бажарилди':i%4===1?'Қисман':i%4===2?'Бузилди':'Кутилмоқда'}</span></td>
+      <td>Қўнғироқ · 2026-07-${String(rnd(1,28)).padStart(2,'0')}</td>
+    </tr>`).join('')}</tbody>`;
+}
+function renderMonitoring(){
+  const ags = [
+    {n:"А.Каримов",br:"Яккасарой, Бектемир",t:48,c:34,r:71,p:412,rr:24,wr:3,ai:128,bp:4,st:"green"},
+    {n:"М.Йўлдошева",br:"Тошкент, Рақамли",t:62,c:51,r:82,p:584,rr:31,wr:5,ai:212,bp:2,st:"green"},
+    {n:"Ж.Раҳимов",br:"Самарқанд, Бухоро",t:54,c:28,r:52,p:213,rr:14,wr:8,ai:97,bp:7,st:"yellow"},
+    {n:"З.Тошматова",br:"Андижон, Наманган, Фарғона",t:71,c:24,r:34,p:121,rr:9,wr:12,ai:74,bp:14,st:"red"},
+  ];
+  document.getElementById('agentPerf').innerHTML = `
+    <thead><tr><th>Агент</th><th>Филиал</th><th>Контракт</th><th>Боғланди</th><th>%</th><th>PTP М</th><th>Recovery%</th><th>Хато №</th><th>AI</th><th>Бузилган</th><th>Ҳолат</th></tr></thead>
+    <tbody>${ags.map(a=>`<tr><td>${a.n}</td><td>${a.br}</td><td class="num">${a.t}</td><td class="num">${a.c}</td><td class="num">${a.r}%</td><td class="num">${a.p}</td><td class="num">${a.rr}%</td><td class="num">${a.wr}</td><td class="num">${a.ai}</td><td class="num">${a.bp}</td><td><span class="badge b-${a.st==='green'?'green':a.st==='yellow'?'yellow':'red'}">${a.st==='green'?'Мақсадда':a.st==='yellow'?'Паст':'Критик'}</span></td></tr>`).join('')}</tbody>`;
+  document.getElementById('branchPerf').innerHTML = `
+    <thead><tr><th>Филиал</th><th>Агент</th><th>Жами</th><th>60+</th><th>90+</th><th>365+</th><th>Суд</th><th>МИБ</th><th>Аукцион</th><th class="num">Ундирилди</th><th>Хатлар</th></tr></thead>
+    <tbody>${(APP_DATA.branchStats || []).slice(0,10).map(b=>{
+      return `<tr><td>${b.branch}</td><td>${pick(STAFF)}</td><td class="num">${b.total}</td><td class="num">${b.b60}</td><td class="num">${b.b90}</td><td class="num">${b.b365}</td><td class="num">${b.court}</td><td class="num">${b.mib}</td><td class="num">${b.auction}</td><td class="num">${Math.round(b.recovered/1e6)} М</td><td class="num">${b.issues}</td></tr>`;
+    }).join('')}</tbody>`;
+  document.getElementById('courtReady').innerHTML = `
+    <thead><tr><th><input type="checkbox" checked></th><th>Шартнома</th><th>Мижоз</th><th>Филиал</th><th class="num">Кун</th><th class="num">Муддати ўтган</th><th>Палата ҳолати</th><th>Огоҳлантириш</th><th>Юрист</th><th></th></tr></thead>
+    <tbody>${CONTRACTS.filter(c=>c.days>90 && c.court==="—").slice(0,10).map(c=>`<tr>
+      <td><input type="checkbox" checked></td><td class="link" onclick="openCredit('${c.id}')">${c.id}</td><td>${c.name}</td><td>${c.branch}</td><td class="num">${c.days}</td><td class="num">${fmt(c.overP)}</td>
+      <td><span class="badge b-gray">Берилмаган</span></td><td><span class="badge b-yellow">Юборилди (2)</span></td><td>${c.lawyer}</td>
+      <td><button class="btn sm primary" onclick="toast('Суд олди хати юборилди','success')">Хат юбориш</button></td>
+    </tr>`).join('')}</tbody>`;
+}
+function renderAudit(){
+  const actions = ["STATUS_CHANGE","UPDATE","CREATE","DELETE","ASSIGN","CALL_LOG","DOC_UPLOAD"];
+  const objects = ["Contract","Client","Collateral","Court","MIB","Auction","Payment","User"];
+  let rows = '';
+  for (let i=0;i<24;i++){
+    const c = pick(CONTRACTS);
+    rows += `<tr>
+      <td>2026-06-${String(rnd(20,30)).padStart(2,'0')} ${String(rnd(8,18)).padStart(2,'0')}:${String(rnd(10,59)).padStart(2,'0')}</td>
+      <td>${pick(STAFF)}</td><td>${pick(["Bosh ofis","Call Center","Юрист","Филиал"])}</td>
+      <td><span class="badge b-blue">${pick(actions)}</span></td>
+      <td>${pick(objects)}</td><td class="link">${c.id}</td>
+      <td>${pick(BUCKETS)}</td><td>${pick(BUCKETS)}</td>
+      <td>${"10.10."+rnd(10,250)+"."+rnd(10,250)}</td>
+      <td class="muted">—</td>
+    </tr>`;
+  }
+  document.getElementById('auditTable').innerHTML = `
+    <thead><tr><th>Сана/вақт</th><th>Фойдаланувчи</th><th>Роль</th><th>Ҳаракат</th><th>Объект тури</th><th>Объект ID</th><th>Эски қиймат</th><th>Янги қиймат</th><th>IP</th><th>Изоҳ</th></tr></thead>
+    <tbody>${rows}</tbody>`;
+}
+function renderReports(){
+  const reports = [
+    {t:"НОММА-НОМ ҳисобот",d:"Ҳар бир шартнома бўйича батафсил"},
+    {t:"ФИЛИАЛ КЕСИМИДА",d:"Филиаллар бўйича агрегация"},
+    {t:"Суд жараёнлари",d:"Палата, буйруқ, даъво, қарор"},
+    {t:"МИБ ижроси",d:"Ижро ишлари ва ундирилган сумма"},
+    {t:"Аукцион натижалари",d:"Лотлар, сотилган, тўлов"},
+    {t:"Ундирув ҳисоботи",d:"Recovery, манбалар, тенденция"},
+    {t:"Call Center самарадорлиги",d:"Агентлар, боғланиш, PTP"},
+    {t:"AI қўнғироқлар ҳисоботи",d:"Жавоб, sentiment, конверсия"},
+    {t:"Promise-to-pay",d:"Бажарилган, бузилган ваъдалар"},
+  ];
+  document.getElementById('reportCards').innerHTML = reports.map(r=>`
+    <div class="card">
+      <h3>${r.t}</h3>
+      <div class="muted" style="margin-bottom:10px;">${r.d}</div>
+      <div class="form-grid">
+        <div><label>Сана дан</label><input type="date" value="2026-06-01"></div>
+        <div><label>Сана гача</label><input type="date" value="2026-06-30"></div>
+        <div><label>Филиал</label><select><option>Барчаси</option></select></div>
+        <div><label>Жадвал</label><select><option>Бир марта</option><option>Ҳар куни</option><option>Ҳар ҳафта</option><option>Ҳар ой</option></select></div>
+        <div class="full"><label>E-mail юбориш</label><input placeholder="user@trastbank.uz"></div>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:6px;">
+        <button class="btn primary" onclick="toast('Excel юклаб олиш бошланди','success')">Excel</button>
+        <button class="btn" onclick="toast('PDF тайёрланмоқда','success')">PDF</button>
+        <button class="btn" onclick="toast('Жадвал сақланди','success')">Жадвалга қўшиш</button>
+      </div>
+    </div>`).join('');
+}
+
+/* CLIENT TAB ============ */
+function renderClientTab(){
+  document.getElementById('clientContracts').innerHTML = `
+    <thead><tr><th>Шартнома</th><th>Тур</th><th class="num">Ажратилган</th><th class="num">Қолдиқ</th><th class="num">Кун</th><th>Ҳолат</th><th>Масъул</th></tr></thead>
+    <tbody>${CONTRACTS.slice(0,3).map(c=>`<tr onclick="openCredit('${c.id}')"><td class="link">${c.id}</td><td>${c.type}</td><td class="num">${fmt(c.issued)}</td><td class="num">${fmt(c.remain)}</td><td class="num">${c.days}</td><td><span class="badge ${BUCKET_BADGE[c.bucket]}">${c.bucket}</span></td><td>${c.staff}</td></tr>`).join('')}</tbody>`;
+  document.getElementById('clientCalls').innerHTML = `
+    <thead><tr><th>Сана</th><th>Шартнома</th><th>Канал</th><th>Оператор</th><th>Натижа</th><th>Изоҳ</th></tr></thead>
+    <tbody><tr><td>2026-06-28 11:24</td><td>HK-2026-1000</td><td>AI</td><td>AI Bot</td><td><span class="badge b-green">Тўлов ваъдаси</span></td><td>25 М · 5-июлгача</td></tr>
+    <tr><td>2026-06-22 15:08</td><td>HK-2026-1000</td><td>Call Center</td><td>М.Йўлдошева</td><td><span class="badge b-yellow">Жавоб бермади</span></td><td>—</td></tr></tbody>`;
+  document.getElementById('clientPay').innerHTML = `
+    <thead><tr><th>Сана</th><th>Шартнома</th><th class="num">Сумма</th><th>Манба</th></tr></thead>
+    <tbody><tr><td>2026-06-25</td><td>HK-2026-1000</td><td class="num">12 400 000 сўм</td><td>МИБ</td></tr></tbody>`;
+}
+document.querySelectorAll('#clientSubnav button').forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll('#clientSubnav button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('.cttab').forEach(x=>x.style.display='none');
+    document.getElementById('ct-'+b.dataset.ct).style.display='block';
+  };
+});
+
+/* ============ AI subnav ============ */
+document.querySelectorAll('#sec-ai .subnav button').forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll('#sec-ai .subnav button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); renderAI(b.dataset.ai);
+  };
+});
+
+/* ============ BOOT ============ */
+fillSelect('fBranch', BRANCHES);
+fillSelect('fType', TYPES);
+fillSelect('fBucket', BUCKETS);
+fillSelect('branchTop', BRANCHES);
+fillSelect('wlBranch', BRANCHES);
+fillSelect('fAudBr', BRANCHES);
+renderKPIs();
+renderBucketBars();
+renderTypeGrid();
+renderHeatmap();
+renderFunnels();
+renderRecovery();
+renderContractsTable('dashTable');
+renderContractsTable('regTable');
+renderCallTable();
+renderAI('queue');
+renderCollateral();
+renderCourt();
+renderMIB();
+renderAuction();
+renderPayments();
+renderMonitoring();
+renderAudit();
+renderReports();
+renderClientTab();
+openCredit(CONTRACTS[0].id);
+navigate('dashboard');
+</script>
+</body>
 </html>
