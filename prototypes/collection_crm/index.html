@@ -248,11 +248,22 @@ table.data td.link { color:var(--court); font-weight:600; }
 .toast.success { border-left-color: #1E8449; }
 .toast.error { border-left-color: var(--red); }
 @keyframes slideIn { from{transform:translateX(20px);opacity:0;} to{transform:none;opacity:1;} }
-/* Recovery chart */
-.recovery-bars { display:flex; align-items:flex-end; height:140px; gap:6px; padding:8px 4px; border-bottom:1px solid var(--border); }
-.recovery-bars .b { flex:1; background:linear-gradient(180deg,var(--gold) 0%,#a67620 100%); border-radius:3px 3px 0 0; position:relative; min-height:6px;}
-.recovery-bars .b::after { content:attr(data-m); position:absolute; bottom:-18px; left:0; right:0; text-align:center; font-size:10px; color:var(--muted); }
-.recovery-bars .b::before { content:attr(data-v); position:absolute; top:-16px; left:0; right:0; text-align:center; font-size:9.5px; color:var(--navy); font-weight:600; }
+/* Recovery chart (SVG) */
+.recovery-svg { width:100%; height:auto; display:block; overflow:visible; }
+/* Legal funnel SVG */
+.legal-funnel-svg { width:100%; height:auto; display:block; overflow:visible; }
+.lf-rect { transition:opacity .12s; cursor:default; }
+.lf-rect:hover { opacity:.82; }
+/* Dashboard KPI strip — compact variant */
+#dashKpis .kpi .val { font-size:18px; }
+#dashKpis .kpi .label { min-height:24px; font-size:10.5px; }
+/* AI calls chart */
+.ai-calls-row { display:flex; flex-direction:column; gap:8px; padding:4px 0; }
+.ai-calls-item { display:flex; align-items:center; gap:8px; font-size:12px; }
+.ai-calls-item .aci-label { width:130px; color:var(--text); flex-shrink:0; }
+.ai-calls-item .aci-bar-wrap { flex:1; background:#f0f2f5; border-radius:3px; height:10px; overflow:hidden; }
+.ai-calls-item .aci-bar { height:100%; border-radius:3px; }
+.ai-calls-item .aci-val { width:80px; text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; flex-shrink:0; }
 /* utility */
 .right { text-align:right; }
 .muted { color:var(--muted); }
@@ -362,9 +373,14 @@ table.data td.link { color:var(--court); font-weight:600; }
           <button class="btn primary">Янгилаш</button>
         </div>
       </div>
+
+      <!-- 1. KPI strip -->
+      <div class="kpi-grid" id="dashKpis" style="grid-template-columns:repeat(5,1fr);margin-bottom:14px;"></div>
+
+      <!-- 2. Portfolio structure -->
       <div class="charts-grid" id="dashChartsTop">
         <div class="card">
-          <h3>Қарздорлик bucket тақсимоти <span class="hint">соннинг ва суммасининг улуши</span></h3>
+          <h3>Қарздорлик bucket тақсимоти <span class="hint">сон ва сумма улуши</span></h3>
           <div id="bucketBars"></div>
         </div>
         <div class="card">
@@ -373,45 +389,37 @@ table.data td.link { color:var(--court); font-weight:600; }
         </div>
       </div>
 
+      <!-- 3. Legal pipeline full-width -->
       <div class="card" style="margin-bottom:14px;">
-        <h3>Филиаллар кесимида heatmap</h3>
+        <h3>Юридик ундирув конвейери <span class="hint">Палата → Суд → МИБ → Аукцион</span></h3>
+        <div id="legalPipeline"></div>
+      </div>
+
+      <!-- 4. Recovery trend + AI calls -->
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:14px;">
+        <div class="card">
+          <h3>Recovery тренд — охирги 12 ой <span class="hint">млрд сўм</span></h3>
+          <div id="recoveryBars"></div>
+        </div>
+        <div class="card">
+          <h3>AI қўнғироқлар <span class="hint">натижалар</span></h3>
+          <div id="aiCallsChart"></div>
+        </div>
+      </div>
+
+      <!-- 5. Branch heatmap -->
+      <div class="card" style="margin-bottom:14px;">
+        <h3>Филиаллар кесимида кўрсаткичлар</h3>
         <div style="overflow:auto;">
           <table class="heatmap" id="heatmap"></table>
         </div>
       </div>
 
-      <div class="charts-grid">
-        <div class="card">
-          <h3>Суд жараёнлари funnel</h3>
-          <div class="stepper" id="courtFunnel"></div>
-        </div>
-        <div class="card">
-          <h3>МИБ ижроси ҳолати</h3>
-          <div class="stepper" id="mibStatus"></div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-bottom:14px;">
-        <h3>Аукцион pipeline</h3>
-        <div class="pipeline" id="auctionPipeline"></div>
-      </div>
-
-      <div class="charts-grid">
-        <div class="card">
-          <h3>Recovery trend — охирги 12 ой <span class="hint">млрд сўм</span></h3>
-          <div class="recovery-bars" id="recoveryBars" style="margin-bottom:24px;"></div>
-        </div>
-        <div class="card">
-          <h3>AI қўнғироқлар самарадорлиги</h3>
-          <div class="ai-row" style="grid-template-columns:repeat(3,1fr);">
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Жами AI қўнғироқ</div><div class="v" style="color:var(--navy)">12 488</div></div>
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Жавоб берган</div><div class="v" style="color:var(--navy)">7 932 (63%)</div></div>
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Тўлов ваъда қилган</div><div class="v" style="color:var(--auction)">2 217</div></div>
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Рад этган</div><div class="v" style="color:var(--red)">1 044</div></div>
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Нотўғри рақам</div><div class="v" style="color:var(--orange)">812</div></div>
-            <div class="a-cell" style="background:#f8fafc;border-color:#e4e8ee;"><div class="l" style="color:var(--muted)">Қайта қўнғироқ</div><div class="v" style="color:var(--court)">3 859</div></div>
-          </div>
-        </div>
+      <!-- hidden: keep ids for renderFunnels backward compat -->
+      <div style="display:none;">
+        <div id="courtFunnel"></div>
+        <div id="mibStatus"></div>
+        <div id="auctionPipeline"></div>
       </div>
     </section>
 
@@ -1086,23 +1094,126 @@ function renderHeatmap(){
   document.getElementById('heatmap').innerHTML = html;
 }
 
+function renderDashKPIs(){
+  const picks = [0, 1, 2, 3, 5]; // indices from KPIS array
+  const el = document.getElementById('dashKpis');
+  if (!el) return;
+  el.innerHTML = picks.map(i => {
+    const k = KPIS[i];
+    if (!k) return '';
+    return `<div class="kpi ${k.cls||''}">
+      <div class="trend ${k.trClass}">${k.trend}</div>
+      <div class="label">${k.label}</div>
+      <div class="val">${k.val}</div>
+      <div class="sub">${k.sub}</div>
+    </div>`;
+  }).join('');
+}
+
 function renderFunnels(){
+  // Dashboard: SVG horizontal legal pipeline
   const cf = APP_DATA.courtFunnel || [];
-  document.getElementById('courtFunnel').innerHTML = cf.map((s,i)=>`<div class="step ${i===2?'active':'done'}"><div class="n">${s.n}</div><div class="t">${s.t}</div></div>`).join('');
-  const mb = APP_DATA.mibFunnel || [];
-  document.getElementById('mibStatus').innerHTML = mb.map((s,i)=>`<div class="step ${i===0?'active':''}"><div class="n">${s.n}</div><div class="t">${s.t}</div></div>`).join('');
+  const lp = document.getElementById('legalPipeline');
+  if (lp && cf.length) {
+    const STAGE_COLORS = ['#2F6FDB','#1f5ec2','#154fa8','#123C69','#1E8449'];
+    const W = 600, H = 90, LBLH = 36, GAP = 5, n = cf.length;
+    const sw = (W - GAP * (n - 1)) / n;
+    const maxN = Math.max(...cf.map(s => s.n));
+    const MIN_H = 30;
+    const barH = s => Math.max((s.n / maxN) * (H - 10), MIN_H);
+    const y0 = s => (H - barH(s)) / 2;
+
+    let paths = '';
+    cf.forEach((step, i) => {
+      const bh = barH(step), by = y0(step);
+      const x = i * (sw + GAP);
+      const col = STAGE_COLORS[i] || '#2F6FDB';
+      // connector trapezoid to next stage
+      if (i < n - 1) {
+        const nbh = barH(cf[i + 1]), nby = y0(cf[i + 1]);
+        const x1 = x + sw;
+        paths += `<polygon points="${x1},${by} ${x1+GAP},${nby} ${x1+GAP},${nby+nbh} ${x1},${by+bh}" fill="${col}" opacity=".35"/>`;
+      }
+      // rect
+      paths += `<rect class="lf-rect" x="${x.toFixed(1)}" y="${by.toFixed(1)}" width="${sw.toFixed(1)}" height="${bh.toFixed(1)}" rx="5" fill="${col}"><title>${step.t}: ${step.n.toLocaleString('ru-RU')}</title></rect>`;
+      // count label inside
+      const cx = x + sw / 2;
+      const showCount = bh > 24;
+      if (showCount) {
+        paths += `<text x="${cx.toFixed(1)}" y="${(H/2).toFixed(1)}" fill="#fff" font-size="13" font-weight="700" text-anchor="middle" dominant-baseline="middle">${step.n.toLocaleString('ru-RU')}</text>`;
+      }
+      // stage label below
+      const words = step.t.split(' ');
+      if (words.length > 2) {
+        const line1 = words.slice(0, Math.ceil(words.length/2)).join(' ');
+        const line2 = words.slice(Math.ceil(words.length/2)).join(' ');
+        paths += `<text x="${cx.toFixed(1)}" y="${(H + 14).toFixed(1)}" fill="#4b5563" font-size="9" text-anchor="middle">${line1}</text>`;
+        paths += `<text x="${cx.toFixed(1)}" y="${(H + 25).toFixed(1)}" fill="#4b5563" font-size="9" text-anchor="middle">${line2}</text>`;
+      } else {
+        paths += `<text x="${cx.toFixed(1)}" y="${(H + 18).toFixed(1)}" fill="#4b5563" font-size="9" text-anchor="middle">${step.t}</text>`;
+      }
+    });
+
+    lp.innerHTML = `<svg class="legal-funnel-svg" viewBox="0 0 ${W} ${H + LBLH}">${paths}</svg>`;
+  }
+
+  // Backward compat: hidden elements for other renderFunnels uses
   const ap = APP_DATA.auctionPipeline || [];
-  const pp = document.getElementById('auctionPipeline');
-  pp.innerHTML = ap.map((s,i)=>`<div class="p ${i===4?'active':''}"><div class="n">${s.n}</div>${s.t}</div>`).join('');
-  document.getElementById('aucPipe2').innerHTML = ap.map((s,i)=>`<div class="p ${i===4?'active':''}"><div class="n">${s.n}</div>${s.t}</div>`).join('');
+  const aucPipe2 = document.getElementById('aucPipe2');
+  if (aucPipe2) aucPipe2.innerHTML = ap.map((s,i)=>`<div class="p ${i===4?'active':''}"><div class="n">${s.n}</div>${s.t}</div>`).join('');
 }
 
 function renderRecovery(){
   const monthly = APP_DATA.recoveryMonthly || [];
-  const months = monthly.map(x=>x.m);
-  const vals = monthly.map(x=>x.v);
-  const max = Math.max(...vals);
-  document.getElementById('recoveryBars').innerHTML = months.map((m,i)=>`<div class="b" style="height:${vals[i]/max*100}%" data-m="${m}" data-v="${vals[i]}"></div>`).join('');
+  const vals = monthly.map(x => x.v);
+  const max = Math.max(...vals) || 1;
+  const W = 560, CH = 100, ML = 36, MR = 10, MT = 16, MB = 28;
+  const cw = W - ML - MR;
+  const bg = cw / vals.length;
+  const bw = bg * 0.55;
+
+  const gridVals = [0, Math.round(max * 0.5), max];
+  let gridSvg = gridVals.map(v => {
+    const y = MT + CH * (1 - v / max);
+    return `<line x1="${ML}" y1="${y}" x2="${W - MR}" y2="${y}" stroke="#e4e8ee" stroke-dasharray="${v ? '4 3' : 'none'}"/>
+      <text x="${ML - 5}" y="${y + 4}" fill="#9aa3af" font-size="9" text-anchor="end">${v}</text>`;
+  }).join('');
+
+  let barsSvg = vals.map((v, i) => {
+    const bh = (v / max) * CH;
+    const x = ML + i * bg + (bg - bw) / 2;
+    const y = MT + CH - bh;
+    const isCurrent = i === vals.length - 1;
+    return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="3" fill="${isCurrent ? 'var(--gold)' : 'var(--navy)'}" opacity="${isCurrent ? '1' : '0.72'}"/>
+      <text x="${(x + bw/2).toFixed(1)}" y="${(y - 4).toFixed(1)}" fill="${isCurrent ? 'var(--gold)' : '#1f2937'}" font-size="9" font-weight="700" text-anchor="middle">${v}</text>
+      <text x="${(x + bw/2).toFixed(1)}" y="${(MT + CH + 14).toFixed(1)}" fill="#9aa3af" font-size="9" text-anchor="middle">${monthly[i].m}</text>`;
+  }).join('');
+
+  document.getElementById('recoveryBars').innerHTML =
+    `<svg class="recovery-svg" viewBox="0 0 ${W} ${MT + CH + MB}">${gridSvg}${barsSvg}</svg>`;
+}
+
+function renderAICalls(){
+  const el = document.getElementById('aiCallsChart');
+  if (!el) return;
+  const total = 12488, answered = 7932, ptp = 2217, rejected = 1044, wrong = 812, callback = 3859;
+  const noAnswer = total - answered;
+  const rows = [
+    { label:'Жами қўнғироқ', val:total, pct:100, color:'var(--navy)', bold:true },
+    { label:'Жавоб берди', val:answered, pct:Math.round(answered/total*100), color:'var(--auction)' },
+    { label:'  ∟ Тўлов ваъдаси', val:ptp, pct:Math.round(ptp/answered*100), color:'#1E8449', sub:true },
+    { label:'  ∟ Қайта қўнғироқ', val:callback, pct:Math.round(callback/answered*100), color:'var(--court)', sub:true },
+    { label:'  ∟ Рад этди', val:rejected, pct:Math.round(rejected/answered*100), color:'var(--orange)', sub:true },
+    { label:'  ∟ Нотўғри рақам', val:wrong, pct:Math.round(wrong/answered*100), color:'var(--muted)', sub:true },
+    { label:'Жавоб бермади', val:noAnswer, pct:Math.round(noAnswer/total*100), color:'#c0392b' },
+  ];
+  el.innerHTML = `<div class="ai-calls-row">${rows.map(r=>`
+    <div class="ai-calls-item" style="${r.sub?'margin-left:12px;':''}">
+      <div class="aci-label" style="font-weight:${r.bold?'700':'400'};font-size:${r.sub?'11px':'12px'};color:${r.sub?'var(--muted)':''}">${r.label}</div>
+      <div class="aci-bar-wrap"><div class="aci-bar" style="width:${r.pct}%;background:${r.color}"></div></div>
+      <div class="aci-val">${r.val.toLocaleString('ru-RU')} <span style="color:var(--muted);font-size:10px">${r.pct}%</span></div>
+    </div>`).join('')}
+  </div>`;
 }
 
 function renderContractsTable(target, filter){
@@ -1714,11 +1825,13 @@ fillSelect('branchTop', BRANCHES);
 fillSelect('wlBranch', BRANCHES);
 fillSelect('fAudBr', BRANCHES);
 renderKPIs();
+renderDashKPIs();
 renderBucketBars();
 renderTypeGrid();
-renderHeatmap();
 renderFunnels();
 renderRecovery();
+renderAICalls();
+renderHeatmap();
 applyRegistryFilters();
 renderCallTable();
 renderAI('queue');
