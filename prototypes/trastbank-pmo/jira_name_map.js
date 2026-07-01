@@ -41,6 +41,8 @@ const JIRA_TO_EMP = {
   'Akramhujaev Muhammadrasul': "Akramxo'jayev Muhammadrasul",
   'jamshid.trastpay':          'Saidov Jamshid',
   'Diyorbek':                  'Jabbarov Diyorbek',
+  'Diyorbek Jabborov':         'Jabbarov Diyorbek',
+  'Ikhtiyar Abdukhashimov':    'Abduxoshimov Ixtiyor',
   'Ali Yadgarov':               'Yodgorov Alibek',
   "Ahmadillo Jo'raboyev":      "Jo'raboyev Axmadillo",
   'Yakubjonov Azizjon':        'Yokubjonov Azizjon',
