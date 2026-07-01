@@ -34,9 +34,10 @@ const IconPaths = {
   products: "M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12",
   changes: "M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z",
   sync_log: "M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01",
+  feedback: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
 };
 function Icon({ name, size = 18 }) {
-  const stroke = ["portfolio", "board", "roadmap", "workload", "risks", "reports", "products", "changes", "devops", "operations", "sync_log"].includes(name);
+  const stroke = ["portfolio", "board", "roadmap", "workload", "risks", "reports", "products", "changes", "devops", "operations", "sync_log", "feedback"].includes(name);
   return (
     <svg className="ic" width={size} height={size} viewBox="0 0 24 24"
       fill={stroke ? "none" : "currentColor"} stroke={stroke ? "currentColor" : "none"}
@@ -50,7 +51,7 @@ const NAV = [
   { group: "nav_group_overview", items: [
     { id: "dashboard", icon: "dashboard", label: "nav_dashboard" },
     { id: "portfolio", icon: "portfolio", label: "nav_portfolio", count: () => ALL_P.filter(p => ((DATA.boardTypes || {})[p.product]) !== "Operations").length },
-    { id: "operations", icon: "operations", label: "nav_operations" },
+    { id: "operations", icon: "operations", label: "nav_operations", count: () => (window.getOpsTickets ? window.getOpsTickets() : []).length },
     { id: "changes", icon: "changes", label: "nav_changes" },
     { id: "roadmap", icon: "roadmap", label: "nav_roadmap" },
   ]},
@@ -61,6 +62,7 @@ const NAV = [
     { id: "risks", icon: "risks", label: "nav_risks", warn: true, count: () => (window.STOPPERS || []).filter(s => s.open).length },
     { id: "reports", icon: "reports", label: "nav_reports" },
     { id: "sync_log", icon: "sync_log", label: "nav_sync_log" },
+    { id: "feedback", icon: "feedback", label: "nav_feedback" },
   ]},
 ];
 
@@ -69,6 +71,7 @@ const PAGES = {
   workload: Workload, employee: EmployeeProfile, project: ProjectDetail, risks: Risks, reports: Reports,
   products: Products, changes: RecentChanges, devops: DevopsReport, operations: OperationsReport,
   sync_log: SyncLogPage,
+  feedback: FeedbackPage,
 };
 window.PAGES_MAP = PAGES;
 // which sidebar item is highlighted for a given route
@@ -141,8 +144,14 @@ function PmoSyncButton() {
                   </div>
                 )}
                 {result.report.newBoards && result.report.newBoards.length > 0 && (
-                  <div style={{ color: "#B45309" }}>
+                  <div style={{ color: "#B45309", marginBottom: 8 }}>
                     <b>{t("sync_new_boards")}:</b> {result.report.newBoards.join(", ")}
+                  </div>
+                )}
+                {result.report.newProjects && result.report.newProjects.length > 0 && (
+                  <div style={{ color: "#B45309" }}>
+                    <b>{t("sync_new_projects")}:</b>{" "}
+                    {result.report.newProjects.map(p => `${p.id} ${p.name}`).join("; ")}
                   </div>
                 )}
               </>
@@ -160,6 +169,72 @@ function PmoSyncButton() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function FeedbackWidget() {
+  const t = useT();
+  const { route } = useApp();
+  const [open, setOpen] = uSA(false);
+  const [text, setText] = uSA("");
+  const [status, setStatus] = uSA("idle"); // idle | sending | sent | error
+  const ref = uRA(null);
+
+  uEA(() => {
+    if (!open) return;
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  const endpoint = window.PMO_FEEDBACK_ENDPOINT;
+  if (!endpoint) return null;
+
+  const submit = async () => {
+    if (!text.trim()) return;
+    setStatus("sending");
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, page: route.name }),
+      });
+      const json = await res.json();
+      if (!res.ok || json.ok === false) throw new Error(json.error || ("HTTP " + res.status));
+      setStatus("sent");
+      setText("");
+      setTimeout(() => { setOpen(false); setStatus("idle"); }, 1400);
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  return (
+    <div style={{ position: "fixed", bottom: 22, right: 22, zIndex: 200 }} ref={ref}>
+      {open && (
+        <div className="card" style={{ width: 280, marginBottom: 10, boxShadow: "var(--shadow-lg)" }}>
+          <div className="card-pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ fontWeight: 700, fontSize: 13, color: "var(--ink)" }}>{t("feedback_title")}</div>
+            <textarea value={text} onChange={e => setText(e.target.value)} rows={4}
+              placeholder={t("feedback_placeholder")}
+              style={{ resize: "vertical", border: "1px solid var(--line)", borderRadius: 8, padding: 8,
+                       fontSize: 12.5, fontFamily: "inherit", background: "var(--select-bg)", color: "var(--ink)", outline: "none" }} />
+            {status === "sent" && <div style={{ color: "#138A5E", fontSize: 12 }}>{t("feedback_sent")}</div>}
+            {status === "error" && <div style={{ color: "#C2410C", fontSize: 12 }}>{t("sync_error")}</div>}
+            <button className="btn" disabled={status === "sending" || !text.trim()}
+              style={{ justifyContent: "center" }} onClick={submit}>
+              {status === "sending" ? t("sync_running") : t("feedback_submit")}
+            </button>
+          </div>
+        </div>
+      )}
+      <button className="btn" title={t("feedback_title")} onClick={() => setOpen(o => !o)}
+        style={{ width: 46, height: 46, borderRadius: "50%", padding: 0, justifyContent: "center", boxShadow: "var(--shadow-lg)" }}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+      </button>
     </div>
   );
 }
@@ -303,6 +378,7 @@ function App() {
             </main>
           </div>
         </div>
+        <FeedbackWidget />
       </ToastHost>
     </AppCtx.Provider>
   );

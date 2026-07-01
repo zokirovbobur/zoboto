@@ -11,8 +11,9 @@ function fmtLogTime(iso) {
 }
 
 function SyncLogEntry({ entry }) {
-  const { lang } = useApp();
+  const { lang, nav } = useApp();
   const ru = lang === "ru";
+  const [expanded, setExpanded] = uS8(false);
   if (!entry.ok) {
     return (
       <div className="card card-pad" style={{ borderLeft: "3px solid #C2410C" }}>
@@ -42,13 +43,46 @@ function SyncLogEntry({ entry }) {
         {entry.emptyEpics.length > 0 && <span><b style={{ color: "var(--ink)" }}>{entry.emptyEpics.length}</b> bo'sh epic</span>}
         {entry.epicNotFound.length > 0 && <span><b style={{ color: "var(--ink)" }}>{entry.epicNotFound.length}</b> topilmagan epic</span>}
         {entry.newBoards && entry.newBoards.length > 0 && <span><b style={{ color: "var(--ink)" }}>{entry.newBoards.length}</b> yangi doska</span>}
+        {entry.newProjects && entry.newProjects.length > 0 && <span><b style={{ color: "var(--ink)" }}>{entry.newProjects.length}</b> yangi loyiha</span>}
       </div>
       {entry.newBoards && entry.newBoards.length > 0 && (
         <div style={{ marginTop: 6, fontSize: 12, color: "#B45309" }}>
           Yangi doska(lar) topildi: {entry.newBoards.join(", ")} — Mahsulot deb qabul qilindi.
         </div>
       )}
-      {entry.updated.length > 0 && (
+      {entry.newProjects && entry.newProjects.length > 0 && (
+        <div style={{ marginTop: 6, fontSize: 12, color: "#B45309" }}>
+          Yangi loyiha(lar) yaratildi (goal/budget/customer qo'lda to'ldiring):{" "}
+          {entry.newProjects.map(p => `${p.id} ${p.name}`).join("; ")}
+        </div>
+      )}
+      {entry.diffs && entry.diffs.length > 0 ? (
+        <div style={{ marginTop: 8 }}>
+          <button className="btn btn-ghost" style={{ fontSize: 11.5, padding: "3px 10px" }} onClick={() => setExpanded(e => !e)}>
+            {expanded ? "Yopish ▲" : `O'zgarishlarni ko'rish (${entry.diffs.length} loyiha) ▼`}
+          </button>
+          {expanded && (
+            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+              {entry.diffs.map((d, i) => (
+                <div key={i} style={{ fontSize: 12, borderTop: "1px solid var(--line-2)", paddingTop: 6 }}>
+                  <span className="link-text" style={{ color: "var(--accent)", fontWeight: 600, cursor: "pointer" }}
+                    onClick={() => nav("project", { id: d.id })}>{d.id} — {d.name}</span>
+                  <div style={{ marginTop: 3, display: "flex", flexDirection: "column", gap: 2 }}>
+                    {d.diffs.map(([field, oldV, newV], j) => (
+                      <div key={j} style={{ color: "var(--muted)" }}>
+                        <b style={{ color: "var(--ink)" }}>{field}</b>:{" "}
+                        <span style={{ color: "#C2410C" }}>{oldV || "—"}</span>
+                        {" → "}
+                        <span style={{ color: "#138A5E" }}>{newV || "—"}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : entry.updated.length > 0 && (
         <div style={{ marginTop: 8, fontSize: 12, color: "var(--muted)" }}>
           {entry.updated.join(", ")}
         </div>
