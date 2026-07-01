@@ -18,6 +18,13 @@ const OPS_STATUS = {
 
 const OPS_DONE = new Set(["DONE", "Готово"]);
 
+function opsCategory(status) {
+  if (OPS_DONE.has(status)) return "done";
+  if (status === "IN PROGRESS" || status === "in dev") return "inprog";
+  if (status === "Проверка" || status === "Ready for dev") return "review";
+  return "todo";
+}
+
 function opsStatusMeta(status, lang) {
   const m = OPS_STATUS[status] || { label_uz: status, label_ru: status, color: "#8A93A6" };
   return { ...m, bg: m.color + "22", label: lang === "ru" ? m.label_ru : m.label_uz };
@@ -108,6 +115,7 @@ function OperationsReport() {
   const [productFilter, setProductFilter] = uS7("all");
   const [statusFilter, setStatusFilter] = uS7("all");
   const [assigneeFilter, setAssigneeFilter] = uS7("all");
+  const [kpiFilter, setKpiFilter] = uS7("all"); // all | done | inprog | review | open
   const [search, setSearch] = uS7("");
 
   const allTickets = uM7(() => getOpsTickets(), []);
@@ -119,13 +127,18 @@ function OperationsReport() {
       if (productFilter !== "all" && product !== productFilter) return false;
       if (statusFilter !== "all" && status !== statusFilter) return false;
       if (assigneeFilter !== "all" && assignee !== assigneeFilter) return false;
+      if (kpiFilter !== "all") {
+        const cat = opsCategory(status);
+        if (kpiFilter === "open") { if (cat === "done") return false; }
+        else if (cat !== kpiFilter) return false;
+      }
       if (search) {
         const q = search.toLowerCase();
         if (!key.toLowerCase().includes(q) && !summary.toLowerCase().includes(q)) return false;
       }
       return true;
     });
-  }, [allTickets, productFilter, statusFilter, assigneeFilter, search]);
+  }, [allTickets, productFilter, statusFilter, assigneeFilter, kpiFilter, search]);
 
   const kpi = uM7(() => {
     const src = productFilter === "all" ? allTickets : allTickets.filter(t => t.product === productFilter);
@@ -169,7 +182,7 @@ function OperationsReport() {
 
   const jiraBase = window.DEVOPS_JIRA_BASE || "https://test-tb.atlassian.net";
 
-  const resetFilters = () => { setStatusFilter("all"); setAssigneeFilter("all"); setSearch(""); };
+  const resetFilters = () => { setStatusFilter("all"); setAssigneeFilter("all"); setKpiFilter("all"); setSearch(""); };
 
   return (
     <div className="fade-in">
@@ -187,17 +200,22 @@ function OperationsReport() {
       {/* KPI Row */}
       <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
         {[
-          { val: kpi.total,  label: lang === "ru" ? "Всего тикетов"  : "Jami ticketlar", accent: "#2563EB" },
-          { val: kpi.done,   label: lang === "ru" ? "Выполнено"       : "Bajarildi",      accent: "#138A5E" },
-          { val: kpi.inprog, label: lang === "ru" ? "В работе"        : "Jarayonda",      accent: "#2563EB" },
-          { val: kpi.review, label: lang === "ru" ? "На проверке"     : "Tekshiruvda",    accent: "#0E9C8E" },
-          { val: kpi.open,   label: lang === "ru" ? "Открытых"        : "Ochiq ticketlar",accent: "#C2410C" },
-        ].map((k, i) => (
-          <div key={i} className="kpi" style={{ "--kpi-accent": k.accent }}>
-            <div className="kpi-val" style={{ color: k.accent }}>{k.val}</div>
-            <div className="kpi-label">{k.label}</div>
-          </div>
-        ))}
+          { cat: "all",    val: kpi.total,  label: lang === "ru" ? "Всего тикетов"  : "Jami ticketlar", accent: "#2563EB" },
+          { cat: "done",   val: kpi.done,   label: lang === "ru" ? "Выполнено"       : "Bajarildi",      accent: "#138A5E" },
+          { cat: "inprog", val: kpi.inprog, label: lang === "ru" ? "В работе"        : "Jarayonda",      accent: "#2563EB" },
+          { cat: "review", val: kpi.review, label: lang === "ru" ? "На проверке"     : "Tekshiruvda",    accent: "#0E9C8E" },
+          { cat: "open",   val: kpi.open,   label: lang === "ru" ? "Открытых"        : "Ochiq ticketlar",accent: "#C2410C" },
+        ].map((k, i) => {
+          const active = kpiFilter === k.cat;
+          return (
+            <div key={i} className="kpi" style={{ "--kpi-accent": k.accent, cursor: "pointer",
+              outline: active ? "2px solid " + k.accent : "none" }}
+              onClick={() => setKpiFilter(k.cat === "all" ? "all" : (active ? "all" : k.cat))}>
+              <div className="kpi-val" style={{ color: k.accent }}>{k.val}</div>
+              <div className="kpi-label">{k.label}</div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Product breakdown */}
@@ -214,7 +232,7 @@ function OperationsReport() {
           return (
             <div key={prod} style={{ display: "flex", flexDirection: "column", gap: 6, cursor: "pointer",
               padding: 6, margin: -6, borderRadius: 8, background: active ? color + "14" : "transparent" }}
-              onClick={() => { setProductFilter(active ? "all" : prod); setAssigneeFilter("all"); setStatusFilter("all"); setSearch(""); }}>
+              onClick={() => { setProductFilter(active ? "all" : prod); setAssigneeFilter("all"); setStatusFilter("all"); setKpiFilter("all"); setSearch(""); }}>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
                 <span style={{ fontWeight: 600, color: "var(--ink)" }}>{prod}</span>
                 <span style={{ color: "var(--muted)" }}>{doneC}/{cnt} · {pct}%</span>
@@ -277,7 +295,7 @@ function OperationsReport() {
               {assignees.map(a => <option key={a} value={a}>{a}</option>)}
             </select>
           </div>
-          {(statusFilter !== "all" || assigneeFilter !== "all" || search) && (
+          {(statusFilter !== "all" || assigneeFilter !== "all" || kpiFilter !== "all" || search) && (
             <button className="btn btn-ghost" style={{ fontSize: 12 }} onClick={resetFilters}>
               {t("resetFilters")}
             </button>
