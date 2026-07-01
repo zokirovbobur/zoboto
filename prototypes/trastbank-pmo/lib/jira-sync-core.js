@@ -133,21 +133,46 @@ async function fetchOperationsTickets(cfg, boardKey) {
   }));
 }
 
+/**
+ * Runs async `fn` over `items` with at most `limit` in flight at once.
+ * A serverless function has a hard wall-clock budget, and a sync run can
+ * involve 80+ Jira calls (9 boards + ~70 epics) — doing them one at a time
+ * blows past that; firing all of them at once risks Jira's rate limiter.
+ */
+async function mapWithConcurrency(items, limit, fn) {
+  const results = new Array(items.length);
+  let next = 0;
+  async function worker() {
+    for (;;) {
+      const i = next++;
+      if (i >= items.length) return;
+      results[i] = await fn(items[i], i);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
 /** Fetches everything from Jira needed for a full sync run. */
 async function fetchAllJiraData(cfg, report) {
   const epicsByBoard = {};
   const childrenByEpic = {};
-  for (const board of MAHSULOT_BOARDS) {
-    const epics = await fetchMahsulotEpics(cfg, board);
-    epicsByBoard[board] = epics;
-    for (const epic of epics) {
-      childrenByEpic[epic.key] = await fetchChildren(cfg, epic.key);
-    }
-  }
+
+  const epicLists = await mapWithConcurrency(MAHSULOT_BOARDS, MAHSULOT_BOARDS.length, board =>
+    fetchMahsulotEpics(cfg, board)
+  );
+  MAHSULOT_BOARDS.forEach((board, i) => { epicsByBoard[board] = epicLists[i]; });
+
+  const allEpics = epicLists.flat();
+  const childLists = await mapWithConcurrency(allEpics, 8, epic => fetchChildren(cfg, epic.key));
+  allEpics.forEach((epic, i) => { childrenByEpic[epic.key] = childLists[i]; });
+
   const opsTickets = {};
-  for (const board of OPERATIONS_BOARDS) {
-    opsTickets[board] = await fetchOperationsTickets(cfg, board);
-  }
+  const opsLists = await mapWithConcurrency(OPERATIONS_BOARDS, OPERATIONS_BOARDS.length, board =>
+    fetchOperationsTickets(cfg, board)
+  );
+  OPERATIONS_BOARDS.forEach((board, i) => { opsTickets[board] = opsLists[i]; });
+
   return { epicsByBoard, childrenByEpic, opsTickets };
 }
 
