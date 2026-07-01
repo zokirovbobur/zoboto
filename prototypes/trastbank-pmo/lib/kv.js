@@ -1,15 +1,20 @@
 // ===================================================================
-// lib/kv.js — thin client for Vercel KV (Upstash Redis REST API).
+// lib/kv.js — thin client for the Upstash Redis REST API.
 //
-// Attach a "KV" (Upstash Redis) store to the Vercel project in the
-// dashboard (Storage tab) — Vercel then auto-injects KV_REST_API_URL
-// and KV_REST_API_TOKEN as env vars, no extra config needed here.
+// Attach an Upstash Redis store to the Vercel project (Storage tab).
+// Depending on how it was provisioned, Vercel injects either the
+// legacy Vercel-KV names (KV_REST_API_URL/TOKEN) or Upstash's own
+// names (UPSTASH_REDIS_REST_URL/TOKEN) — this checks both.
 // ===================================================================
 
 function kvEnv() {
-  const url = process.env.KV_REST_API_URL;
-  const token = process.env.KV_REST_API_TOKEN;
-  if (!url || !token) throw new Error("Missing KV_REST_API_URL / KV_REST_API_TOKEN (attach a KV store to the Vercel project)");
+  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) {
+    throw new Error(
+      "Missing KV_REST_API_URL/TOKEN (or UPSTASH_REDIS_REST_URL/TOKEN) — attach an Upstash Redis store to the Vercel project"
+    );
+  }
   return { url, token };
 }
 
