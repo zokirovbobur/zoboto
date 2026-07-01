@@ -189,6 +189,8 @@ function Workload() {
   const sortVal = (e, k) => {
     if (k === "active") return e.statusCounts.progress + e.statusCounts.planned;
     if (k === "completed_col") return e.statusCounts.completed;
+    if (k === "sp_active") return e.storyPoints?.active ?? 0;
+    if (k === "sp_completed") return e.storyPoints?.completed ?? 0;
     if (k === "loadLevel") return LOAD_RANK[e.loadLevel] ?? 0;
     const v = e[k];
     return typeof v === "string" ? v.toLowerCase() : (v ?? 0);
@@ -313,6 +315,8 @@ function Workload() {
             <SortTh k="grade" label={t("emp_grade")} />
             <SortTh k="active" label={t("col_active")} />
             <SortTh k="completed_col" label={t("col_done")} />
+            <SortTh k="sp_active" label={t("col_sp_active")} />
+            <SortTh k="sp_completed" label={t("col_sp_done")} />
             <SortTh k="totalMatched" label="Σ" />
             <SortTh k="loadLevel" label={t("col_load")} />
           </tr></thead>
@@ -326,6 +330,8 @@ function Workload() {
                 <td className="t-muted">{e.grade}</td>
                 <td><b>{e.statusCounts.progress + e.statusCounts.planned}</b></td>
                 <td className="t-muted">{e.statusCounts.completed}</td>
+                <td className="t-muted">{e.storyPoints?.active ?? 0}</td>
+                <td className="t-muted">{e.storyPoints?.completed ?? 0}</td>
                 <td><b>{e.totalMatched}</b></td>
                 <td><span className={"pill pill-" + LOAD[e.loadLevel].t}>{t(LOAD[e.loadLevel].k)}</span></td>
               </tr>

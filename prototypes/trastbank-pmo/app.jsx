@@ -33,9 +33,10 @@ const IconPaths = {
   reports: "M6 3h9l4 4v14H6zM14 3v5h5M9 13h6M9 17h6",
   products: "M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12",
   changes: "M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z",
+  sync_log: "M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01",
 };
 function Icon({ name, size = 18 }) {
-  const stroke = ["portfolio", "board", "roadmap", "workload", "risks", "reports", "products", "changes", "devops", "operations"].includes(name);
+  const stroke = ["portfolio", "board", "roadmap", "workload", "risks", "reports", "products", "changes", "devops", "operations", "sync_log"].includes(name);
   return (
     <svg className="ic" width={size} height={size} viewBox="0 0 24 24"
       fill={stroke ? "none" : "currentColor"} stroke={stroke ? "currentColor" : "none"}
@@ -59,6 +60,7 @@ const NAV = [
   { group: "nav_group_control", items: [
     { id: "risks", icon: "risks", label: "nav_risks", warn: true, count: () => (window.STOPPERS || []).filter(s => s.open).length },
     { id: "reports", icon: "reports", label: "nav_reports" },
+    { id: "sync_log", icon: "sync_log", label: "nav_sync_log" },
   ]},
 ];
 
@@ -66,6 +68,7 @@ const PAGES = {
   dashboard: Dashboard, portfolio: Portfolio, board: StatusBoard, roadmap: Roadmap,
   workload: Workload, employee: EmployeeProfile, project: ProjectDetail, risks: Risks, reports: Reports,
   products: Products, changes: RecentChanges, devops: DevopsReport, operations: OperationsReport,
+  sync_log: SyncLogPage,
 };
 window.PAGES_MAP = PAGES;
 // which sidebar item is highlighted for a given route

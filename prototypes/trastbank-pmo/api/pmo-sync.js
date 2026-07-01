@@ -18,6 +18,15 @@
 const { runSync } = require("../lib/jira-sync-core.js");
 const { kvGet, kvSet } = require("../lib/kv.js");
 
+const SYNC_LOG_MAX_ENTRIES = 50;
+
+/** Prepends a compact record to the SYNC_LOG list in KV, capped to the most recent N. */
+async function appendSyncLog(entry) {
+  const log = (await kvGet("SYNC_LOG")) || [];
+  log.unshift(entry);
+  await kvSet("SYNC_LOG", log.slice(0, SYNC_LOG_MAX_ENTRIES));
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -54,6 +63,17 @@ module.exports = async function handler(req, res) {
         kvSet("TB_JIRA_ISSUES", result.jiraIssuesObj),
         kvSet("DEVOPS_ISSUES", result.devopsIssuesArr),
         kvSet("SYNC_LAST_REPORT", { dateStr: result.dateStr, report: result.report, reportText: result.reportText }),
+        appendSyncLog({
+          timestamp: new Date().toISOString(),
+          dateStr: result.dateStr,
+          ok: true,
+          changed: result.changed,
+          updated: result.report.updated,
+          unchangedCount: result.report.unchanged.length,
+          newNames: result.report.newNames,
+          emptyEpics: [...new Set(result.report.emptyEpics)],
+          epicNotFound: result.report.epicNotFound,
+        }),
       ]);
     }
 
@@ -65,6 +85,12 @@ module.exports = async function handler(req, res) {
       reportText: result.reportText,
     });
   } catch (err) {
+    await appendSyncLog({
+      timestamp: new Date().toISOString(),
+      dateStr: new Date().toISOString().slice(0, 10),
+      ok: false,
+      error: err.message,
+    }).catch(() => {});
     return res.status(500).json({ ok: false, error: err.message });
   }
 };
