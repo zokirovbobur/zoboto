@@ -71,6 +71,91 @@ window.PAGES_MAP = PAGES;
 // which sidebar item is highlighted for a given route
 const ACTIVE_OF = { project: "portfolio", employee: "workload" };
 
+function PmoSyncButton() {
+  const t = useT();
+  const [status, setStatus] = uSA("idle"); // idle | running | done | error
+  const [result, setResult] = uSA(null);
+  const [open, setOpen] = uSA(false);
+  const ref = uRA(null);
+
+  uEA(() => {
+    if (!open) return;
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  const endpoint = window.PMO_SYNC_ENDPOINT;
+  if (!endpoint) return null;
+
+  const run = async () => {
+    setStatus("running"); setOpen(true); setResult(null);
+    try {
+      const headers = { "Content-Type": "application/json" };
+      if (window.PMO_SYNC_SECRET) headers["x-sync-secret"] = window.PMO_SYNC_SECRET;
+      const res = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify({}) });
+      const json = await res.json();
+      if (!res.ok || json.ok === false) throw new Error(json.error || ("HTTP " + res.status));
+      setResult(json);
+      setStatus("done");
+    } catch (e) {
+      setResult({ error: e.message });
+      setStatus("error");
+    }
+  };
+
+  return (
+    <div style={{ position: "relative" }} ref={ref}>
+      <button className="btn" style={{ padding: "0 12px", height: 38, fontSize: 12.5, display: "flex", alignItems: "center" }}
+        onClick={run} disabled={status === "running"} title={t("sync_btn")}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          style={status === "running" ? { animation: "spin 1s linear infinite" } : undefined}>
+          <path d="M21 2v6h-6M3 22v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L21 8M20.49 15a9 9 0 0 1-14.85 3.36L3 16" />
+        </svg>
+        <span style={{ marginLeft: 6 }}>{status === "running" ? t("sync_running") : t("sync_btn")}</span>
+      </button>
+      {open && status !== "running" && result && (
+        <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, width: 360, background: "var(--modal-bg)",
+                      borderRadius: 12, border: "1px solid var(--line)", boxShadow: "var(--shadow-lg)", zIndex: 100, overflow: "hidden" }}>
+          <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--line-2)", fontWeight: 700, fontSize: 13, color: "var(--ink)" }}>
+            {status === "error" ? t("sync_error") : (result.report && result.report.updated.length ? t("sync_success") : t("sync_nochange"))}
+          </div>
+          <div style={{ maxHeight: 360, overflowY: "auto", padding: "12px 16px", fontSize: 12.5, color: "var(--muted)" }}>
+            {status === "error" ? (
+              <div style={{ color: "#C2410C" }}>{result.error}</div>
+            ) : (
+              <>
+                <div style={{ marginBottom: 8 }}>
+                  <b style={{ color: "var(--ink)" }}>{t("sync_updated")}:</b> {result.report.updated.length ? result.report.updated.join(", ") : "—"}
+                </div>
+                <div style={{ marginBottom: 8 }}>
+                  <b style={{ color: "var(--ink)" }}>{t("sync_unchanged")}:</b> {result.report.unchanged.length}
+                </div>
+                {result.report.newNames.length > 0 && (
+                  <div>
+                    <b style={{ color: "var(--ink)" }}>{t("sync_new_names")}:</b>{" "}
+                    {result.report.newNames.map(n => n.displayName + " → " + n.project).join("; ")}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+          <div style={{ padding: "10px 16px", borderTop: "1px solid var(--line-2)", display: "flex", gap: 8 }}>
+            <button className="btn btn-ghost" style={{ flex: 1, justifyContent: "center", fontSize: 12 }} onClick={() => setOpen(false)}>
+              {t("sync_close")}
+            </button>
+            {status === "done" && result.changed && (
+              <button className="btn" style={{ flex: 1, justifyContent: "center", fontSize: 12 }} onClick={() => location.reload()}>
+                {t("sync_reload")}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const [lang, setLang] = uSA(() => localStorage.getItem("tb_lang") || "uz");
   const [route, setRoute] = uSA(() => parseRouteFromHash());
@@ -148,6 +233,8 @@ function App() {
                   onFocus={() => { if (!["portfolio", "board", "workload"].includes(route.name)) nav("portfolio"); }} />
               </div>
               <div className="topbar-spacer" />
+
+              <PmoSyncButton />
 
               <div style={{ position: "relative" }} ref={bellRef}>
                 <button className="btn" style={{ padding: "0 10px", height: 38, position: "relative" }}
