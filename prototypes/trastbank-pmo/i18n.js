@@ -23,7 +23,7 @@ window.TB_I18N = {
     sync_btn: "Jiradan yangilash",
     sync_running: "Yangilanmoqda…",
     sync_success: "Sync tugadi",
-    sync_nochange: "Farq topilmadi — hammasi yangi",
+    sync_nochange: "Farq topilmadi — hammasi joyida",
     sync_error: "Sync xatosi",
     sync_updated: "Yangilangan loyihalar",
     sync_unchanged: "Farqsiz loyihalar",
