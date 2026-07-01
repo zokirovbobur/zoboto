@@ -6,7 +6,8 @@
     { "source": "/prototypes/trastbank-pmo/:path*", "destination": "https://pmo-board.vercel.app/:path*" },
     { "source": "/prototypes/collection_crm/:path*", "destination": "/prototypes/collection_crm/index.html" },
     { "source": "/prototypes/trastbank-pmo/collection_crm/:path*", "destination": "/prototypes/trastbank-pmo/collection_crm/index.html" },
-    { "source": "/prototypes/safa/mvp/:path*", "destination": "/prototypes/safa/mvp/index.html" }
+    { "source": "/prototypes/safa/mvp/:path*", "destination": "/prototypes/safa/mvp/index.html" },
+    { "source": "/slides/trastbank-islamic-banking", "destination": "/slides/trastbank-islamic-banking.html" }
   ],
   "redirects": [
     { "source": "/prototypes/trastbank-pmo/collection_crm", "destination": "/prototypes/collection_crm", "permanent": false },
