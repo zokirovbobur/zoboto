@@ -333,10 +333,10 @@ select.f-sel:hover{border-color:#c8d3e4;}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 <script>
-  // Set after deploying the api/pmo-sync.js serverless function to Vercel,
-  // e.g. "https://pmo-board-sync.vercel.app/api/pmo-sync". The "Jiradan
-  // yangilash" button stays hidden while this is empty.
-  window.PMO_SYNC_ENDPOINT = "";
+  // Same Vercel project serves both the frontend and /api/*, so a relative
+  // path works. Point at a full URL instead if the board is ever hosted
+  // separately from the API (e.g. "https://pmo-board.vercel.app/api/pmo-sync").
+  window.PMO_SYNC_ENDPOINT = "/api/pmo-sync";
   // Optional: must match the SYNC_SHARED_SECRET env var on the function, if set.
   window.PMO_SYNC_SECRET = "";
 </script>
