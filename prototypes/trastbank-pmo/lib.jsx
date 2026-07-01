@@ -344,6 +344,7 @@ function JiraSection({ epicKey, product }) {
                   <th style={{ padding: "6px 8px 6px 0", textAlign: "left", fontWeight: 600, color: "var(--muted)", fontSize: 11, width: 52 }}>Tur</th>
                   <th style={{ padding: "6px 8px", textAlign: "left", fontWeight: 600, color: "var(--muted)", fontSize: 11 }}>Vazifa</th>
                   <th style={{ padding: "6px 8px", textAlign: "left", fontWeight: 600, color: "var(--muted)", fontSize: 11, whiteSpace: "nowrap" }}>Ijrochi</th>
+                  <th style={{ padding: "6px 8px", textAlign: "right", fontWeight: 600, color: "var(--muted)", fontSize: 11, whiteSpace: "nowrap", width: 36 }}>SP</th>
                   <th style={{ padding: "6px 0 6px 8px", textAlign: "right", fontWeight: 600, color: "var(--muted)", fontSize: 11, whiteSpace: "nowrap" }}>Status</th>
                 </tr>
               </thead>
@@ -375,6 +376,9 @@ function JiraSection({ epicKey, product }) {
                               <span style={{ color: "var(--ink)", fontSize: 12 }}>{assigneeShort}</span>
                             </span>
                           : <span style={{ color: "var(--muted-2)", fontSize: 11 }}>—</span>}
+                      </td>
+                      <td style={{ padding: "7px 8px", verticalAlign: "middle", textAlign: "right", fontSize: 12, color: "var(--muted)" }}>
+                        {iss.storyPoints ?? "—"}
                       </td>
                       <td style={{ padding: "7px 0 7px 8px", verticalAlign: "middle", textAlign: "right" }}>
                         <span style={{ fontSize: 10, fontWeight: 600, color: sc, background: sc + "18",
