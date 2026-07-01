@@ -3,6 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>
+  // Resolve relative asset paths (i18n.js, favicon.svg, lib.jsx, etc.) against
+  // this app's own directory, whatever path it's mounted at (domain root on
+  // pmo-board.vercel.app, or /prototypes/trastbank-pmo/ when mirrored onto
+  // zoboto.uz). Without a trailing slash, the browser treats the last path
+  // segment as a filename and resolves relative URLs one level too high.
+  (function () {
+    var b = document.createElement("base");
+    b.href = location.pathname.replace(/\/?$/, "/");
+    document.currentScript.insertAdjacentElement("afterend", b);
+  })();
+</script>
 <title>Trastbank — Project Reporting Board</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
