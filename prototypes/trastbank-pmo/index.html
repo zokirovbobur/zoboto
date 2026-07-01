@@ -333,10 +333,10 @@ select.f-sel:hover{border-color:#c8d3e4;}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 <script>
-  // Same Vercel project serves both the frontend and /api/*, so a relative
-  // path works. Point at a full URL instead if the board is ever hosted
-  // separately from the API (e.g. "https://pmo-board.vercel.app/api/pmo-sync").
-  window.PMO_SYNC_ENDPOINT = "/api/pmo-sync";
+  // Absolute URL so this works both on pmo-board.vercel.app itself and on
+  // any static mirror of these files hosted elsewhere (e.g. the
+  // zoboto.uz/prototypes/trastbank-pmo copy synced via GitHub Actions).
+  window.PMO_SYNC_ENDPOINT = "https://pmo-board.vercel.app/api/pmo-sync";
   // Optional: must match the SYNC_SHARED_SECRET env var on the function, if set.
   window.PMO_SYNC_SECRET = "";
 </script>
@@ -344,11 +344,10 @@ select.f-sel:hover{border-color:#c8d3e4;}
 <script src="i18n.js?v=20260701-sync"></script>
 
 <script>
-  // Where the board's data now lives (Vercel KV via api/pmo-data.js) instead
-  // of static data.js/jira_issues.js/devops_issues.js files. Leave as "/api/pmo-data"
-  // if this page is served from the same Vercel project as the API; otherwise
-  // point it at the full URL, e.g. "https://pmo-board-sync.vercel.app/api/pmo-data".
-  window.PMO_DATA_ENDPOINT = "/api/pmo-data";
+  // Same reasoning as PMO_SYNC_ENDPOINT above: absolute URL so mirrors of
+  // this static site (e.g. zoboto.uz/prototypes/trastbank-pmo) still pull
+  // live data from the one place it actually lives (Vercel KV, via this API).
+  window.PMO_DATA_ENDPOINT = "https://pmo-board.vercel.app/api/pmo-data";
 </script>
 
 <script>
