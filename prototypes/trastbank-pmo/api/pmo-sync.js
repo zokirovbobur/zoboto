@@ -71,6 +71,7 @@ module.exports = async function handler(req, res) {
           updated: result.report.updated,
           unchangedCount: result.report.unchanged.length,
           newNames: result.report.newNames,
+          newBoards: result.report.newBoards || [],
           emptyEpics: [...new Set(result.report.emptyEpics)],
           epicNotFound: result.report.epicNotFound,
         }),

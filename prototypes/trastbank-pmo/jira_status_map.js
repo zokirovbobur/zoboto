@@ -32,6 +32,9 @@ const JIRA_STATUS_MAP = {
     "API Integrations",
     "UseCase & User Story",
     "Проверка",
+    "IN QA",
+    "in qa",
+    "qa",
   ],
 
   planned: [

@@ -226,6 +226,8 @@ function Workload() {
 
   // top 12 for charts
   const topActive = [...DATA.employees].sort((a, b) => (b.statusCounts.progress + b.statusCounts.planned) - (a.statusCounts.progress + a.statusCounts.planned)).slice(0, 12);
+  const topActiveSP = [...DATA.employees].filter(e => (e.storyPoints?.active || 0) > 0)
+    .sort((a, b) => (b.storyPoints?.active || 0) - (a.storyPoints?.active || 0)).slice(0, 12);
 
   // Compute completed Mahsulot projects per PM dynamically (accurate vs stale statusCounts)
   const topDone = uM2(() => {
@@ -268,7 +270,7 @@ function Workload() {
         <KPI label={t("col_stack")} value={stacks.length} accent="#0E9C8E" />
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: "1fr 1fr 1fr", marginBottom: 16 }}>
+      <div className="grid" style={{ gridTemplateColumns: "0.8fr 1fr 1fr 1fr", marginBottom: 16 }}>
         <div className="card"><div className="card-h"><h3>{t("ch_stack")}</h3></div><div className="card-pad">
           {(() => { const sd = stacks.map(s => [s, DATA.employees.filter(e => e.stack === s).length]).sort((a, b) => b[1] - a[1]); return (
           <Chart_ type="pie" height={250}
@@ -277,7 +279,7 @@ function Workload() {
               labels: sd.map(d => d[0]),
               datasets: [{ data: sd.map(d => d[1]), backgroundColor: ["#2563EB","#138A5E","#6D5CD6","#C2410C","#0E7490","#D97706","#9333EA","#0E9C8E","#B45309","#64748B","#1D4ED8","#065F46","#4C1D95","#7F1D1D","#0C4A6E"], borderWidth: 2, borderColor: "#fff", hoverOffset: 4 }],
             }}
-            options={{ plugins: { legend: { position: "right", labels: { usePointStyle: true, pointStyle: "circle", padding: 10, font: { size: 11 } } } } }} />
+            options={{ plugins: { legend: { position: "bottom", labels: { usePointStyle: true, pointStyle: "circle", padding: 8, boxWidth: 8, font: { size: 10 } } } } }} />
           ); })()}
         </div></div>
 
@@ -292,6 +294,13 @@ function Workload() {
           <Chart_ type="bar" height={320}
             onClickIndex={(i) => nav("employee", { id: topDone[i].id })}
             data={{ labels: topDone.map(e => e.shortName), datasets: [{ label: t("col_done"), data: topDone.map(e => e.count), backgroundColor: "#138A5E", borderRadius: 3, maxBarThickness: 14 }] }}
+            options={{ indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } } }} />
+        </div></div>
+
+        <div className="card"><div className="card-h"><h3>{t("col_sp_active")}</h3></div><div className="card-pad">
+          <Chart_ type="bar" height={320}
+            onClickIndex={(i) => nav("employee", { id: topActiveSP[i].id })}
+            data={{ labels: topActiveSP.map(e => e.shortName), datasets: [{ label: t("col_sp_active"), data: topActiveSP.map(e => e.storyPoints?.active || 0), backgroundColor: "#6D5CD6", borderRadius: 3, maxBarThickness: 14 }] }}
             options={{ indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { grid: { color: "#EEF2F8" }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } } }} />
         </div></div>
       </div>

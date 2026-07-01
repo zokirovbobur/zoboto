@@ -135,9 +135,14 @@ function PmoSyncButton() {
                   <b style={{ color: "var(--ink)" }}>{t("sync_unchanged")}:</b> {result.report.unchanged.length}
                 </div>
                 {result.report.newNames.length > 0 && (
-                  <div>
+                  <div style={{ marginBottom: 8 }}>
                     <b style={{ color: "var(--ink)" }}>{t("sync_new_names")}:</b>{" "}
                     {result.report.newNames.map(n => n.displayName + " → " + n.project).join("; ")}
+                  </div>
+                )}
+                {result.report.newBoards && result.report.newBoards.length > 0 && (
+                  <div style={{ color: "#B45309" }}>
+                    <b>{t("sync_new_boards")}:</b> {result.report.newBoards.join(", ")}
                   </div>
                 )}
               </>

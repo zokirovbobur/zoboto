@@ -256,6 +256,14 @@ function Dashboard() {
   );
 }
 
+// Sum of storyPoints across all Jira tickets under a project's epic
+function epicStoryPoints(p) {
+  if (!p.jiraEpicKey || !window.TB_JIRA_ISSUES) return 0;
+  const items = window.TB_JIRA_ISSUES[p.jiraEpicKey];
+  if (!items) return 0;
+  return items.reduce((sum, i) => sum + (i.storyPoints || 0), 0);
+}
+
 // Persists Portfolio filter state across navigation
 const _pf = { status: "all", product: "all", pm: "all", origin: "all", sort: { k: "name", dir: 1 } };
 
@@ -310,6 +318,7 @@ function Portfolio() {
       if (k === "deadline") { a = parseDate(x.endDate) || 0; b = parseDate(y.endDate) || 0; }
       else if (k === "status") { a = STATUS_ORDER.indexOf(x.norm); b = STATUS_ORDER.indexOf(y.norm); }
       else if (k === "pm") { a = projectPmName(x).toLowerCase(); b = projectPmName(y).toLowerCase(); }
+      else if (k === "sp") { a = epicStoryPoints(x); b = epicStoryPoints(y); }
       else { a = (x[k] || "").toString().toLowerCase(); b = (y[k] || "").toString().toLowerCase(); }
       return (a < b ? -1 : a > b ? 1 : 0) * sort.dir;
     });
@@ -415,6 +424,7 @@ function Portfolio() {
               <SortTh k="pm" label={t("col_pm")} />
               <SortTh k="customer" label={t("col_customer")} />
               <SortTh k="deadline" label={t("col_deadline")} />
+              <SortTh k="sp" label={t("col_sp")} />
               <SortTh k="origin" label="Origin" />
             </tr></thead>
             <tbody>
@@ -447,6 +457,7 @@ function Portfolio() {
                   <td>{projectPmName(p) ? <span className="row"><Avatar name={projectPmName(p)} size={24} /> {projectPmName(p)}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
                   <td className="t-muted">{p.customer || "—"}</td>
                   <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
+                  <td className="t-muted" style={{ textAlign: "right" }}>{epicStoryPoints(p) || "—"}</td>
                   <td>
                     {(() => {
                       const org = p.origin || "Google Sheet";
@@ -456,7 +467,7 @@ function Portfolio() {
                   </td>
                 </tr>
               ))}
-              {!rows.length && <tr><td colSpan="8" className="empty">{t("noData")}</td></tr>}
+              {!rows.length && <tr><td colSpan="9" className="empty">{t("noData")}</td></tr>}
             </tbody>
           </table>
         </div>

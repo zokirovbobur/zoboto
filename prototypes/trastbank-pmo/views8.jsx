@@ -41,7 +41,13 @@ function SyncLogEntry({ entry }) {
         {entry.newNames.length > 0 && <span><b style={{ color: "var(--ink)" }}>{entry.newNames.length}</b> yangi ism</span>}
         {entry.emptyEpics.length > 0 && <span><b style={{ color: "var(--ink)" }}>{entry.emptyEpics.length}</b> bo'sh epic</span>}
         {entry.epicNotFound.length > 0 && <span><b style={{ color: "var(--ink)" }}>{entry.epicNotFound.length}</b> topilmagan epic</span>}
+        {entry.newBoards && entry.newBoards.length > 0 && <span><b style={{ color: "var(--ink)" }}>{entry.newBoards.length}</b> yangi doska</span>}
       </div>
+      {entry.newBoards && entry.newBoards.length > 0 && (
+        <div style={{ marginTop: 6, fontSize: 12, color: "#B45309" }}>
+          Yangi doska(lar) topildi: {entry.newBoards.join(", ")} — Mahsulot deb qabul qilindi.
+        </div>
+      )}
       {entry.updated.length > 0 && (
         <div style={{ marginTop: 8, fontSize: 12, color: "var(--muted)" }}>
           {entry.updated.join(", ")}
