@@ -60,7 +60,10 @@ function Dashboard() {
   ];
   const opsData = uM1(() => {
     const tickets = window.getOpsTickets ? window.getOpsTickets() : [];
-    const stCounts = OPS_GROUPS.map(g => ({ ...g, cnt: tickets.filter(tk => g.test(tk.status)).length })).filter(g => g.cnt > 0);
+    // "done" is surfaced as its own KPI block instead of a bar in this chart
+    const stCounts = OPS_GROUPS.filter(g => g.key !== "done").map(g => ({ ...g, cnt: tickets.filter(tk => g.test(tk.status)).length })).filter(g => g.cnt > 0);
+    const doneGroup = OPS_GROUPS.find(g => g.key === "done");
+    const doneCount = tickets.filter(tk => doneGroup.test(tk.status)).length;
     const empMap = {};
     tickets.forEach(({ status, assignee }) => {
       if (!assignee) return;
@@ -70,7 +73,7 @@ function Dashboard() {
       if (g) empMap[assignee][g.key]++;
     });
     const load = Object.entries(empMap).sort((a, b) => b[1].total - a[1].total).slice(0, 12);
-    return { stCounts, load, hasData: tickets.length > 0 };
+    return { stCounts, load, doneCount, hasData: tickets.length > 0 };
   }, []);
 
   const kpis = [
@@ -83,6 +86,7 @@ function Dashboard() {
     { label: t("kpi_noowner"), value: a.noOwner, accent: "#B45309", go: () => nav("risks", {}) },
     { label: t("kpi_employees"), value: a.employees, accent: "#2563EB", go: () => nav("workload", {}) },
     { label: t("kpi_incidents"), value: a.incidents, accent: "#C0392B", go: () => nav("risks", {}) },
+    { label: t("kpi_ops_done"), value: opsData.doneCount, accent: "#138A5E", go: () => nav("operations", {}) },
   ];
 
   const stoppers = (window.STOPPERS || []).filter(s => s.open);
@@ -118,7 +122,7 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(4,1fr)" }}>
+      <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
         {kpis.slice(5).map((k, i) => <KPI key={i} {...k} onClick={k.go} accent={k.accent} />)}
       </div>
 
@@ -316,6 +320,7 @@ function Portfolio() {
     r = [...r].sort((x, y) => {
       let a, b;
       if (k === "deadline") { a = parseDate(x.endDate) || 0; b = parseDate(y.endDate) || 0; }
+      else if (k === "epicCreated") { a = parseDate(x.epicCreatedDate) || 0; b = parseDate(y.epicCreatedDate) || 0; }
       else if (k === "status") { a = STATUS_ORDER.indexOf(x.norm); b = STATUS_ORDER.indexOf(y.norm); }
       else if (k === "pm") { a = projectPmName(x).toLowerCase(); b = projectPmName(y).toLowerCase(); }
       else if (k === "sp") { a = epicStoryPoints(x); b = epicStoryPoints(y); }
@@ -423,6 +428,7 @@ function Portfolio() {
               <SortTh k="status" label={t("col_status")} />
               <SortTh k="pm" label={t("col_pm")} />
               <SortTh k="customer" label={t("col_customer")} />
+              <SortTh k="epicCreated" label={t("col_epic_created")} />
               <SortTh k="deadline" label={t("col_deadline")} />
               <SortTh k="sp" label={t("col_sp")} />
               <SortTh k="origin" label="Origin" />
@@ -456,6 +462,7 @@ function Portfolio() {
                   <td><StatusBadge norm={p.norm} /></td>
                   <td>{projectPmName(p) ? <span className="row"><Avatar name={projectPmName(p)} size={24} /> {projectPmName(p)}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
                   <td className="t-muted">{p.customer || "—"}</td>
+                  <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{p.epicCreatedDate ? fmtDate(p.epicCreatedDate, lang) : "—"}</td>
                   <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
                   <td className="t-muted" style={{ textAlign: "right" }}>{epicStoryPoints(p) || "—"}</td>
                   <td>
@@ -467,7 +474,7 @@ function Portfolio() {
                   </td>
                 </tr>
               ))}
-              {!rows.length && <tr><td colSpan="9" className="empty">{t("noData")}</td></tr>}
+              {!rows.length && <tr><td colSpan="10" className="empty">{t("noData")}</td></tr>}
             </tbody>
           </table>
         </div>

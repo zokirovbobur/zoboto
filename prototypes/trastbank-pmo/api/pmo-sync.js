@@ -72,8 +72,10 @@ module.exports = async function handler(req, res) {
           unchangedCount: result.report.unchanged.length,
           newNames: result.report.newNames,
           newBoards: result.report.newBoards || [],
+          newProjects: result.report.newProjects || [],
           emptyEpics: [...new Set(result.report.emptyEpics)],
           epicNotFound: result.report.epicNotFound,
+          diffs: result.report.diffs,
         }),
       ]);
     }

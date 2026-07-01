@@ -352,6 +352,7 @@ select.f-sel:hover{border-color:#c8d3e4;}
   // for now, so data changes are still shared — only the *code* is isolated.
   window.PMO_SYNC_ENDPOINT = "https://pmo-board-test.vercel.app/api/pmo-sync";
   window.PMO_SYNC_LOG_ENDPOINT = "https://pmo-board-test.vercel.app/api/pmo-sync-log";
+  window.PMO_FEEDBACK_ENDPOINT = "https://pmo-board-test.vercel.app/api/pmo-feedback";
   // Optional: must match the SYNC_SHARED_SECRET env var on the function, if set.
   window.PMO_SYNC_SECRET = "";
 </script>
@@ -365,7 +366,7 @@ select.f-sel:hover{border-color:#c8d3e4;}
 
 <script>
 (async function boot() {
-  const BOOT_V = "20260701-sp-log";
+  const BOOT_V = "20260701-feedback";
   const rootEl = document.getElementById("root");
 
   function showError(msg) {
@@ -393,7 +394,7 @@ select.f-sel:hover{border-color:#c8d3e4;}
   // time), so they must run strictly after the fetch above resolves — plain
   // <script type="text/babel" src="..."> tags can't be delayed like that,
   // hence fetching + transforming + eval'ing them here in order.
-  const files = ["lib.jsx", "views1.jsx", "views2.jsx", "views3.jsx", "views4.jsx", "views5.jsx", "views6.jsx", "views7.jsx", "views8.jsx", "app.jsx"];
+  const files = ["lib.jsx", "views1.jsx", "views2.jsx", "views3.jsx", "views4.jsx", "views5.jsx", "views6.jsx", "views7.jsx", "views8.jsx", "views9.jsx", "app.jsx"];
   try {
     for (const f of files) {
       const src = await fetch(f + "?v=" + BOOT_V).then(r => r.text());

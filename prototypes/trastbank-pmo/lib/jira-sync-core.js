@@ -111,6 +111,7 @@ async function fetchMahsulotEpics(cfg, boardKey) {
     reporter: i.fields.reporter?.displayName || null,
     created: i.fields.created,
     projectKey: i.fields.project?.key || boardKey,
+    projectName: i.fields.project?.name || boardKey,
   }));
 }
 
@@ -278,6 +279,47 @@ function buildDevopsIssues(opsTickets, employees, report) {
 
 // ---------- data.js projects update (step 5/7) ----------
 
+/** Next "Pnnn" id after the highest currently in use. */
+function nextProjectId(projects) {
+  const nums = projects.map(p => parseInt((p.id || "").replace(/^P/, ""), 10)).filter(n => !isNaN(n));
+  const next = (nums.length ? Math.max(...nums) : 0) + 1;
+  return "P" + String(next).padStart(3, "0");
+}
+
+/**
+ * Creates a minimal skeleton project row for every Mahsulot epic that has
+ * no existing PMO project pointing at it (e.g. a board created in Jira
+ * after the last manual data.js curation — MuamalatPay/MP, website trust
+ * bank/WTB were missing entirely until this existed). Fields Jira can't
+ * supply (goal, budget, customer, dates) are left blank for someone to
+ * fill in manually; norm/team/dates get computed on the same sync run by
+ * the normal per-project loop below since these rows are added to
+ * dataObj.projects BEFORE that loop starts.
+ */
+function createMissingProjects(dataObj, allEpics, report) {
+  const existingKeys = new Set(dataObj.projects.map(p => p.jiraEpicKey).filter(Boolean));
+  for (const epic of Object.values(allEpics)) {
+    if (existingKeys.has(epic.key)) continue;
+    const id = nextProjectId(dataObj.projects);
+    const product = epic.projectName || epic.projectKey;
+    if (!dataObj.products.includes(product)) dataObj.products.push(product);
+    const { name: pmName } = normalizeJiraName(epic.reporter, dataObj.employees);
+    const { name: executorName } = normalizeJiraName(epic.assignee, dataObj.employees);
+    dataObj.projects.push({
+      id, name: epic.summary, product,
+      goal: "", basis: "", department: "", customer: "", supplier: "",
+      startDate: "", endDate: "", sum: "", paidFact: "",
+      norm: "planned", originalStatus: epic.status,
+      pm: epic.reporter ? pmName : "", demoReady: false, info: "",
+      executor: epic.assignee ? executorName : "",
+      team: [], pmId: "",
+      jiraEpicKey: epic.key, origin: "Jira Epic",
+    });
+    existingKeys.add(epic.key);
+    report.newProjects.push({ id, name: epic.summary, product, jiraEpicKey: epic.key });
+  }
+}
+
 /**
  * For every project with a jiraEpicKey (completed or not — Jira is the
  * source of truth, so a completed project's team/pm data shouldn't be
@@ -290,6 +332,8 @@ function updateProjects(dataObj, jira, report) {
   const { epicsByBoard, childrenByEpic, opsTickets } = jira;
   const allEpics = {};
   for (const list of Object.values(epicsByBoard)) for (const e of list) allEpics[e.key] = e;
+
+  createMissingProjects(dataObj, allEpics, report);
 
   const employees = dataObj.employees;
   const boardTypes = dataObj.boardTypes || {};
@@ -320,6 +364,16 @@ function updateProjects(dataObj, jira, report) {
     }
 
     const diffs = [];
+
+    // epic's own created date (Mahsulot only — Operations boards have no single epic)
+    if (bt !== "Operations") {
+      const epic = allEpics[p.jiraEpicKey];
+      const newEpicCreated = epic ? fmtDate(epic.created) : "";
+      if (newEpicCreated && newEpicCreated !== p.epicCreatedDate) {
+        diffs.push(["epicCreatedDate", p.epicCreatedDate || "", newEpicCreated]);
+        p.epicCreatedDate = newEpicCreated;
+      }
+    }
 
     // norm
     const norms = pseudoChildren.map(c => jiraNorm(c.status));
@@ -454,6 +508,10 @@ function renderReportText(report, dateStr) {
     lines.push("YANGI DOSKALAR TOPILDI (Mahsulot deb qabul qilindi — agar bu Operations bo'lsa, " +
       "OPERATIONS_BOARDS va data.js boardTypes'ni qo'lda yangilang): " + report.newBoards.join(", "));
   }
+  if (report.newProjects && report.newProjects.length) {
+    lines.push("YANGI LOYIHALAR YARATILDI (goal/budget/customer qo'lda to'ldirilishi kerak): " +
+      report.newProjects.map(p => `${p.id} ${p.name} (${p.jiraEpicKey})`).join("; "));
+  }
   lines.push("===================================");
   return lines.join("\n");
 }
@@ -466,7 +524,7 @@ function renderReportText(report, dateStr) {
  * @returns {object} { dataObj, jiraIssuesObj, devopsIssuesArr, report, reportText, changed }
  */
 async function runSync(cfg, currentData) {
-  const report = { updated: [], unchanged: [], emptyEpics: [], epicNotFound: [], newNames: [], newBoards: [], diffs: [], _seenNewNames: new Set() };
+  const report = { updated: [], unchanged: [], emptyEpics: [], epicNotFound: [], newNames: [], newBoards: [], newProjects: [], diffs: [], _seenNewNames: new Set() };
 
   const jira = await fetchAllJiraData(cfg, report);
 
@@ -489,7 +547,7 @@ async function runSync(cfg, currentData) {
     report,
     reportText,
     dateStr,
-    changed: report.updated.length > 0,
+    changed: report.updated.length > 0 || report.newProjects.length > 0,
   };
 }
 
