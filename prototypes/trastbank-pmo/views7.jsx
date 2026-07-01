@@ -73,18 +73,18 @@ function getOpsTickets() {
   return [...bsa, ...td];
 }
 
-function OpsEngineerCard({ name, stats, color, lang, empId, nav }) {
+function OpsEngineerCard({ name, stats, color, lang, active, onSelect }) {
   const pct = stats.total ? Math.round((stats.done / stats.total) * 100) : 0;
   const initials = avatarInitials7(name);
   const shortName = name.split(" ").slice(0, 2).join(" ");
   return (
     <div className="card card-pad" style={{ display: "flex", flexDirection: "column", gap: 12,
-      cursor: empId ? "pointer" : "default" }}
-      onClick={() => empId && nav("employee", { id: empId })}>
+      cursor: "pointer", outline: active ? "2px solid #2563EB" : "none" }}
+      onClick={onSelect}>
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <div className="avatar" style={{ width: 38, height: 38, fontSize: 14, background: color }}>{initials}</div>
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13.5, color: empId ? "#2563EB" : "var(--ink)" }}>{shortName}</div>
+          <div style={{ fontWeight: 700, fontSize: 13.5, color: "#2563EB" }}>{shortName}</div>
           <div style={{ fontSize: 11, color: "var(--muted-2)" }}>{stats.total} {lang === "ru" ? "тикетов" : "ta ticket"}</div>
         </div>
         <div style={{ marginLeft: "auto", fontWeight: 700, fontSize: 20, color }}>{pct}%</div>
@@ -184,17 +184,6 @@ function OperationsReport() {
         ]}
       />
 
-      {/* Product tabs */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
-        {["all", ...products].map(p => (
-          <button key={p} onClick={() => { setProductFilter(p); setAssigneeFilter("all"); setStatusFilter("all"); setSearch(""); }}
-            className={"btn" + (productFilter === p ? "" : " btn-ghost")}
-            style={{ fontSize: 12, padding: "6px 14px" }}>
-            {p === "all" ? (lang === "ru" ? "Все доски" : "Barcha doskalar") : p}
-          </button>
-        ))}
-      </div>
-
       {/* KPI Row */}
       <div className="kpi-row" style={{ gridTemplateColumns: "repeat(5,1fr)" }}>
         {[
@@ -211,94 +200,31 @@ function OperationsReport() {
         ))}
       </div>
 
-      {/* Progress + Status breakdown */}
-      <div className="grid" style={{ gridTemplateColumns: "1fr 1.6fr", marginBottom: 16 }}>
-        <div className="card card-pad" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <div style={{ fontWeight: 700, fontSize: 14, color: "var(--ink)", marginBottom: 4 }}>
-            {lang === "ru" ? "Прогресс выполнения" : "Bajarish ko'rsatkichi"}
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div className="health-ring" style={{ background: completionPct >= 80 ? "#138A5E" : completionPct >= 50 ? "#2563EB" : "#C2410C" }}>
-              {completionPct}%
-            </div>
-            <div style={{ flex: 1 }}>
-              <div className="progress" style={{ height: 10, marginBottom: 8 }}>
-                <div className="progress-fill" style={{ width: completionPct + "%", background: completionPct >= 80 ? "#138A5E" : "#2563EB" }} />
-              </div>
-              <div style={{ fontSize: 12, color: "var(--muted)" }}>
-                {kpi.done} / {kpi.total} {lang === "ru" ? "тикетов закрыто" : "ticket yopildi"}
-              </div>
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 4 }}>
-            {activeStatuses.map(st => {
-              const src = productFilter === "all" ? allTickets : allTickets.filter(t => t.product === productFilter);
-              const cnt = src.filter(t => t.status === st).length;
-              if (!cnt) return null;
-              const pct = Math.round((cnt / kpi.total) * 100);
-              const meta = OPS_STATUS[st];
-              const label = lang === "ru" ? meta.label_ru : meta.label_uz;
-              return (
-                <div key={st} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: meta.color, flexShrink: 0 }} />
-                  <span style={{ flex: 1, color: "var(--muted)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</span>
-                  <span style={{ fontWeight: 600, color: "var(--ink)" }}>{cnt}</span>
-                  <div style={{ width: 60 }}>
-                    <div className="progress" style={{ height: 4 }}>
-                      <div className="progress-fill" style={{ width: pct + "%", background: meta.color }} />
-                    </div>
-                  </div>
-                  <span style={{ color: "var(--muted-2)", width: 28, textAlign: "right" }}>{pct}%</span>
-                </div>
-              );
-            })}
-          </div>
+      {/* Product breakdown */}
+      <div className="card card-pad" style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16 }}>
+        <div style={{ fontWeight: 700, fontSize: 14, color: "var(--ink)", marginBottom: 4 }}>
+          {lang === "ru" ? "По дискам" : "Doskalar bo'yicha"}
         </div>
-
-        {/* Product breakdown */}
-        <div className="card card-pad" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ fontWeight: 700, fontSize: 14, color: "var(--ink)", marginBottom: 4 }}>
-            {lang === "ru" ? "По дискам" : "Doskalar bo'yicha"}
-          </div>
-          {products.map((prod, i) => {
-            const cnt = allTickets.filter(t => t.product === prod).length;
-            const doneC = allTickets.filter(t => t.product === prod && OPS_DONE.has(t.status)).length;
-            const pct = cnt ? Math.round((doneC / cnt) * 100) : 0;
-            const color = OPS_COLORS[i % OPS_COLORS.length];
-            return (
-              <div key={prod} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
-                  <span style={{ fontWeight: 600, color: "var(--ink)" }}>{prod}</span>
-                  <span style={{ color: "var(--muted)" }}>{doneC}/{cnt} · {pct}%</span>
-                </div>
-                <div className="progress" style={{ height: 6 }}>
-                  <div className="progress-fill" style={{ width: pct + "%", background: color }} />
-                </div>
+        {products.map((prod, i) => {
+          const cnt = allTickets.filter(t => t.product === prod).length;
+          const doneC = allTickets.filter(t => t.product === prod && OPS_DONE.has(t.status)).length;
+          const pct = cnt ? Math.round((doneC / cnt) * 100) : 0;
+          const color = OPS_COLORS[i % OPS_COLORS.length];
+          const active = productFilter === prod;
+          return (
+            <div key={prod} style={{ display: "flex", flexDirection: "column", gap: 6, cursor: "pointer",
+              padding: 6, margin: -6, borderRadius: 8, background: active ? color + "14" : "transparent" }}
+              onClick={() => { setProductFilter(active ? "all" : prod); setAssigneeFilter("all"); setStatusFilter("all"); setSearch(""); }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
+                <span style={{ fontWeight: 600, color: "var(--ink)" }}>{prod}</span>
+                <span style={{ color: "var(--muted)" }}>{doneC}/{cnt} · {pct}%</span>
               </div>
-            );
-          })}
-          {engineers.length > 0 && (
-            <>
-              <div style={{ fontWeight: 700, fontSize: 13, color: "var(--ink)", marginTop: 8 }}>
-                {lang === "ru" ? "Исполнители" : "Ijrochilar"}
+              <div className="progress" style={{ height: 6 }}>
+                <div className="progress-fill" style={{ width: pct + "%", background: color }} />
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {engineers.slice(0, 8).map(([name, stats], idx) => {
-                  const initials = avatarInitials7(name);
-                  const color = OPS_COLORS[idx % OPS_COLORS.length];
-                  return (
-                    <div key={name} title={name} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11,
-                      background: color + "18", borderRadius: 20, padding: "3px 10px 3px 4px" }}>
-                      <div className="avatar" style={{ width: 20, height: 20, fontSize: 9, background: color }}>{initials}</div>
-                      <span style={{ color, fontWeight: 600 }}>{name.split(" ")[0]}</span>
-                      <span style={{ color: "var(--muted-2)" }}>{stats.done}/{stats.total}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          )}
-        </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Engineer cards */}
@@ -309,7 +235,9 @@ function OperationsReport() {
           </div>
           <div className="grid" style={{ gridTemplateColumns: "repeat(4,1fr)", marginBottom: 20 }}>
             {engineers.slice(0, 8).map(([name, stats], idx) => (
-              <OpsEngineerCard key={name} name={name} stats={stats} color={OPS_COLORS[idx % OPS_COLORS.length]} lang={lang} empId={lookupEmpId(name)} nav={nav} />
+              <OpsEngineerCard key={name} name={name} stats={stats} color={OPS_COLORS[idx % OPS_COLORS.length]} lang={lang}
+                active={assigneeFilter === name}
+                onSelect={() => setAssigneeFilter(assigneeFilter === name ? "all" : name)} />
             ))}
           </div>
         </>
