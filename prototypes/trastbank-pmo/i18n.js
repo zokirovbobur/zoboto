@@ -114,7 +114,7 @@ window.TB_I18N = {
     col_start: "Boshlanish",
     col_deadline: "Yakunlanish",
     col_epic_created: "Epic yaratilgan",
-    col_epic_start: "Дата начала",
+    col_epic_start: "Boshlash sanasi",
     col_sp: "SP",
     col_demo: "Demo",
     col_sum: "Summa",
