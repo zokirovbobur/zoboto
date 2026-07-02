@@ -10,6 +10,21 @@ function fmtLogTime(iso) {
   return `${p(d.getDate())}.${p(d.getMonth() + 1)}.${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
 }
 
+// "kim yangilagan" + vaqt — har bir sync yozuvining o'ng yuqori burchagida.
+function SyncMeta({ entry }) {
+  const ru = useApp().lang === "ru";
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 2 }}>
+      {entry.updatedBy && (
+        <span style={{ fontSize: 11.5, color: "var(--ink)", fontWeight: 600 }}>
+          {(ru ? "Обновил: " : "Yangiladi: ") + entry.updatedBy}
+        </span>
+      )}
+      <span style={{ fontSize: 11.5, color: "var(--muted-2)" }}>{fmtLogTime(entry.timestamp)}</span>
+    </div>
+  );
+}
+
 function SyncLogEntry({ entry }) {
   const { lang, nav } = useApp();
   const ru = lang === "ru";
@@ -19,7 +34,7 @@ function SyncLogEntry({ entry }) {
       <div className="card card-pad" style={{ borderLeft: "3px solid #C2410C" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
           <span className="pill" style={{ background: "#FBEADD", color: "#C2410C" }}>{ru ? "Xato" : "Xato"}</span>
-          <span style={{ fontSize: 11.5, color: "var(--muted-2)" }}>{fmtLogTime(entry.timestamp)}</span>
+          <SyncMeta entry={entry} />
         </div>
         <div style={{ fontSize: 13, color: "var(--ink)" }}>{entry.error}</div>
       </div>
@@ -34,7 +49,7 @@ function SyncLogEntry({ entry }) {
             ? (ru ? `${entry.updated.length} loyiha yangilandi` : `${entry.updated.length} loyiha yangilandi`)
             : (ru ? "Farq topilmadi" : "Farq topilmadi")}
         </span>
-        <span style={{ fontSize: 11.5, color: "var(--muted-2)" }}>{fmtLogTime(entry.timestamp)}</span>
+        <SyncMeta entry={entry} />
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 16, fontSize: 12.5, color: "var(--muted)" }}>
         <span><b style={{ color: "var(--ink)" }}>{entry.updated.length}</b> yangilangan</span>
