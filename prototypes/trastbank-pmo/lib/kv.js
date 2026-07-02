@@ -18,7 +18,15 @@ function kvEnv() {
   return { url, token };
 }
 
+// KV_PREFIX (default "") is prepended to every key by these helpers, so a
+// test deployment can point at the same Upstash database with e.g.
+// KV_PREFIX="TEST:" without touching production data.
+function prefixed(key) {
+  return (process.env.KV_PREFIX || "") + key;
+}
+
 async function kvGet(key) {
+  key = prefixed(key);
   const { url, token } = kvEnv();
   const res = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -29,6 +37,7 @@ async function kvGet(key) {
 }
 
 async function kvSet(key, value) {
+  key = prefixed(key);
   const { url, token } = kvEnv();
   const res = await fetch(`${url}/set/${encodeURIComponent(key)}`, {
     method: "POST",
@@ -39,4 +48,58 @@ async function kvSet(key, value) {
   return true;
 }
 
-module.exports = { kvGet, kvSet };
+/**
+ * SET NX EX — atomically takes `key` only if it doesn't exist, with a TTL
+ * (seconds). Returns true if the key was taken, false if it already existed.
+ * Used as a poor-man's distributed lock (e.g. SYNC_LOCK).
+ */
+async function kvSetNX(key, value, ttlSeconds) {
+  key = prefixed(key);
+  const { url, token } = kvEnv();
+  const res = await fetch(`${url}/set/${encodeURIComponent(key)}?nx=true&ex=${ttlSeconds}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "text/plain" },
+    body: JSON.stringify(value),
+  });
+  if (!res.ok) throw new Error(`KV SETNX ${key} failed: ${res.status} ${await res.text()}`);
+  const { result } = await res.json();
+  return result === "OK";
+}
+
+async function kvDel(key) {
+  key = prefixed(key);
+  const { url, token } = kvEnv();
+  const res = await fetch(`${url}/del/${encodeURIComponent(key)}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error(`KV DEL ${key} failed: ${res.status} ${await res.text()}`);
+  return true;
+}
+
+/** INCR — returns the counter's new integer value. */
+async function kvIncr(key) {
+  key = prefixed(key);
+  const { url, token } = kvEnv();
+  const res = await fetch(`${url}/incr/${encodeURIComponent(key)}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error(`KV INCR ${key} failed: ${res.status} ${await res.text()}`);
+  const { result } = await res.json();
+  return result;
+}
+
+/** EXPIRE — sets a TTL (seconds) on an existing key. */
+async function kvExpire(key, seconds) {
+  key = prefixed(key);
+  const { url, token } = kvEnv();
+  const res = await fetch(`${url}/expire/${encodeURIComponent(key)}/${seconds}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error(`KV EXPIRE ${key} failed: ${res.status} ${await res.text()}`);
+  return true;
+}
+
+module.exports = { kvGet, kvSet, kvSetNX, kvDel, kvIncr, kvExpire };

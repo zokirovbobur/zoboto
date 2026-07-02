@@ -7,10 +7,10 @@
 // ===================================================================
 
 const { kvGet } = require("../lib/kv.js");
+const { applyCors } = require("../lib/cors.js");
 
 module.exports = async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  applyCors(req, res, "GET, OPTIONS");
   res.setHeader("Cache-Control", "no-store");
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "GET") return res.status(405).json({ ok: false, error: "Use GET" });
@@ -19,6 +19,7 @@ module.exports = async function handler(req, res) {
     const log = (await kvGet("SYNC_LOG")) || [];
     return res.status(200).json({ ok: true, log });
   } catch (err) {
-    return res.status(500).json({ ok: false, error: err.message });
+    console.error("pmo-sync-log error:", err);
+    return res.status(500).json({ ok: false, error: "Ichki xatolik" });
   }
 };

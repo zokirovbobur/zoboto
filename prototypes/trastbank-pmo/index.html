@@ -339,10 +339,12 @@ select.f-sel:hover{border-color:#c8d3e4;}
 </svg>
 </template>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<!-- dist/chart.umd.js is the package's own (already minified) UMD build; the
+     .min.js URL is a jsdelivr rewrite whose bytes SRI can't pin to the npm release. -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js" integrity="sha384-dug+JxfBvklEQdJ4AYuBBAIScUz0bVN73xpy273gcAwHjb3qI0fXmuYNaNfdyYJG" crossorigin="anonymous"></script>
 
 <script>
   // Production (main branch): pmo-board.vercel.app. The `test` branch's
@@ -354,8 +356,8 @@ select.f-sel:hover{border-color:#c8d3e4;}
   window.PMO_SYNC_ENDPOINT = "https://pmo-board.vercel.app/api/pmo-sync";
   window.PMO_SYNC_LOG_ENDPOINT = "https://pmo-board.vercel.app/api/pmo-sync-log";
   window.PMO_FEEDBACK_ENDPOINT = "https://pmo-board.vercel.app/api/pmo-feedback";
-  // Optional: must match the SYNC_SHARED_SECRET env var on the function, if set.
-  window.PMO_SYNC_SECRET = "";
+  // The sync secret is never hardcoded here: app.jsx prompts for it on the
+  // first "Jiradan yangilash" click and keeps it in sessionStorage.
 </script>
 
 <script src="i18n.js?v=20260701-sync"></script>
@@ -379,31 +381,41 @@ select.f-sel:hover{border-color:#c8d3e4;}
       + '</div>';
   }
 
-  try {
+  // lib.jsx/views*.jsx/app.jsx read window.TB_DATA at top-level (script-eval
+  // time), so they may only be EVAL'ed after /api/pmo-data resolves — but the
+  // network fetches themselves are independent, so both start immediately
+  // and run in parallel.
+  const files = ["lib.jsx", "views1.jsx", "views2.jsx", "views3.jsx", "views4.jsx", "views5.jsx", "views6.jsx", "views7.jsx", "views8.jsx", "views9.jsx", "app.jsx"];
+
+  const dataPromise = (async () => {
     const res = await fetch(window.PMO_DATA_ENDPOINT);
     const json = await res.json();
     if (!res.ok || json.ok === false) throw new Error(json.error || ("HTTP " + res.status));
-    window.TB_DATA = json.TB_DATA;
-    window.TB_JIRA_ISSUES = json.TB_JIRA_ISSUES;
-    window.DEVOPS_ISSUES = json.DEVOPS_ISSUES;
+    return json;
+  })();
+  const sourcesPromise = Promise.all(files.map(f => fetch(f + "?v=" + BOOT_V).then(r => r.text())));
+
+  let json, sources;
+  try {
+    [json, sources] = await Promise.all([dataPromise, sourcesPromise]);
   } catch (e) {
     showError(e.message);
     return;
   }
 
-  // lib.jsx/views*.jsx/app.jsx read window.TB_DATA at top-level (script-eval
-  // time), so they must run strictly after the fetch above resolves — plain
-  // <script type="text/babel" src="..."> tags can't be delayed like that,
-  // hence fetching + transforming + eval'ing them here in order.
-  const files = ["lib.jsx", "views1.jsx", "views2.jsx", "views3.jsx", "views4.jsx", "views5.jsx", "views6.jsx", "views7.jsx", "views8.jsx", "views9.jsx", "app.jsx"];
+  window.TB_DATA = json.TB_DATA;
+  window.TB_JIRA_ISSUES = json.TB_JIRA_ISSUES;
+  window.DEVOPS_ISSUES = json.DEVOPS_ISSUES;
+
   try {
-    for (const f of files) {
-      const src = await fetch(f + "?v=" + BOOT_V).then(r => r.text());
-      const code = Babel.transform(src, { presets: ["react"], filename: f }).code;
+    // Transform + eval stays strictly in `files` order (lib.jsx defines
+    // globals the views need, app.jsx mounts last).
+    files.forEach((f, i) => {
+      const code = Babel.transform(sources[i], { presets: ["react"], filename: f }).code;
       const script = document.createElement("script");
       script.textContent = code;
       document.body.appendChild(script);
-    }
+    });
   } catch (e) {
     showError(e.message);
   }

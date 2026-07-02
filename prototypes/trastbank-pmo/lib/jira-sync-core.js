@@ -134,9 +134,10 @@ async function fetchChildren(cfg, epicKey) {
  * Discovers Mahsulot board keys straight from Jira instead of a hardcoded
  * list — every project on the site is a Mahsulot board except the two
  * Operations ones. Falls back to MAHSULOT_BOARDS_FALLBACK if the project
- * list can't be fetched, so a transient error doesn't stall the whole sync.
+ * list can't be fetched, so a transient error doesn't stall the whole sync;
+ * the fallback is flagged on the report so it never happens silently.
  */
-async function fetchMahsulotBoardKeys(cfg) {
+async function fetchMahsulotBoardKeys(cfg, report) {
   try {
     const res = await fetch(`${cfg.jiraBaseUrl}/rest/api/3/project/search?maxResults=200`, {
       headers: {
@@ -149,7 +150,9 @@ async function fetchMahsulotBoardKeys(cfg) {
     return (body.values || [])
       .map(p => p.key)
       .filter(key => !OPERATIONS_BOARDS.includes(key));
-  } catch {
+  } catch (err) {
+    console.error("fetchMahsulotBoardKeys fell back to the static list:", err);
+    if (report) report.fallbackUsed = true;
     return MAHSULOT_BOARDS_FALLBACK;
   }
 }
@@ -195,7 +198,7 @@ async function fetchAllJiraData(cfg, report) {
   const epicsByBoard = {};
   const childrenByEpic = {};
 
-  const mahsulotBoards = await fetchMahsulotBoardKeys(cfg);
+  const mahsulotBoards = await fetchMahsulotBoardKeys(cfg, report);
   report.newBoards = mahsulotBoards.filter(b => !MAHSULOT_BOARDS_FALLBACK.includes(b));
 
   const epicLists = await mapWithConcurrency(mahsulotBoards, mahsulotBoards.length, board =>
@@ -335,6 +338,7 @@ function updateProjects(dataObj, jira, report) {
 
   createMissingProjects(dataObj, allEpics, report);
 
+  report.staleTeamMembers = report.staleTeamMembers || [];
   const employees = dataObj.employees;
   const boardTypes = dataObj.boardTypes || {};
 
@@ -343,6 +347,10 @@ function updateProjects(dataObj, jira, report) {
 
     const bt = boardTypes[p.product] || "Mahsulot";
     let pseudoChildren; // [{status, assignee, created}]
+    // true when pseudoChildren are real Jira tickets — stale-member detection
+    // is only meaningful then (an empty epic's single stand-in row would
+    // otherwise flag the whole team as stale).
+    let fromRealTickets = true;
 
     if (bt === "Operations") {
       const boardKey = p.jiraEpicKey === "BSA-BOARD" ? "BSA" : p.jiraEpicKey === "TD-BOARD" ? "TD" : null;
@@ -358,6 +366,7 @@ function updateProjects(dataObj, jira, report) {
       if (children.length === 0) {
         report.emptyEpics.push(p.jiraEpicKey);
         pseudoChildren = [{ status: epic.status, assignee: epic.assignee, created: epic.created }];
+        fromRealTickets = false;
       } else {
         pseudoChildren = children;
       }
@@ -408,6 +417,14 @@ function updateProjects(dataObj, jira, report) {
     const teamChanged = mergedTeam.length !== (p.team || []).length ||
       mergedTeam.some(n => !(p.team || []).includes(n));
     if (teamChanged) { diffs.push(["team", (p.team || []).join(", "), mergedTeam.join(", ")]); p.team = mergedTeam; }
+
+    // Members no longer visible on any Jira ticket are kept on the team
+    // (never auto-deleted) but reported for manual review.
+    if (fromRealTickets) {
+      const currentNames = new Set(newNames);
+      const stale = [...new Set(existingNormalized.filter(n => n && !currentNames.has(n)))];
+      if (stale.length) report.staleTeamMembers.push({ projectId: p.id, names: stale });
+    }
 
     // startDate: only fill if currently empty
     if (!p.startDate) {
@@ -504,6 +521,10 @@ function renderReportText(report, dateStr) {
   if (report.epicNotFound.length) lines.push("TOPILMAGAN EPIC KEYLAR: " + report.epicNotFound.join(", "));
   lines.push("YANGI JIRA ISMLARI (JIRA_TO_EMP da yo'q): " +
     (report.newNames.map(n => `${n.displayName} → ${n.project}`).join("; ") || "—"));
+  if (report.fallbackUsed) {
+    lines.push("OGOHLANTIRISH: Jira project ro'yxati olinmadi — zaxira ro'yxat ishlatildi " +
+      "(yangi doskalar bu runda ko'rinmaydi).");
+  }
   if (report.newBoards && report.newBoards.length) {
     lines.push("YANGI DOSKALAR TOPILDI (Mahsulot deb qabul qilindi — agar bu Operations bo'lsa, " +
       "OPERATIONS_BOARDS va data.js boardTypes'ni qo'lda yangilang): " + report.newBoards.join(", "));
@@ -511,6 +532,10 @@ function renderReportText(report, dateStr) {
   if (report.newProjects && report.newProjects.length) {
     lines.push("YANGI LOYIHALAR YARATILDI (goal/budget/customer qo'lda to'ldirilishi kerak): " +
       report.newProjects.map(p => `${p.id} ${p.name} (${p.jiraEpicKey})`).join("; "));
+  }
+  if (report.staleTeamMembers && report.staleTeamMembers.length) {
+    lines.push("JIRADA ENDI KO'RINMAYDIGAN TEAM A'ZOLARI (avtomatik o'chirilmaydi — qo'lda ko'rib chiqing): " +
+      report.staleTeamMembers.map(s => `${s.projectId}: ${s.names.join(", ")}`).join(" | "));
   }
   lines.push("===================================");
   return lines.join("\n");
@@ -524,7 +549,7 @@ function renderReportText(report, dateStr) {
  * @returns {object} { dataObj, jiraIssuesObj, devopsIssuesArr, report, reportText, changed }
  */
 async function runSync(cfg, currentData) {
-  const report = { updated: [], unchanged: [], emptyEpics: [], epicNotFound: [], newNames: [], newBoards: [], newProjects: [], diffs: [], _seenNewNames: new Set() };
+  const report = { updated: [], unchanged: [], emptyEpics: [], epicNotFound: [], newNames: [], newBoards: [], newProjects: [], staleTeamMembers: [], diffs: [], fallbackUsed: false, _seenNewNames: new Set() };
 
   const jira = await fetchAllJiraData(cfg, report);
 
@@ -558,6 +583,8 @@ module.exports = {
   fetchMahsulotBoardKeys,
   fetchAllJiraData,
   priorityNorm,
+  mostFrequent,
+  nextProjectId,
   updateProjects,
   recomputeWorkload,
   computeEmployeeStoryPoints,

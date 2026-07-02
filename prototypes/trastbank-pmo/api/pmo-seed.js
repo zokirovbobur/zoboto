@@ -9,16 +9,18 @@
 
 const seed = require("../seed/pmo-seed.json");
 const { kvGet, kvSet } = require("../lib/kv.js");
+const { applyCors } = require("../lib/cors.js");
 
 module.exports = async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-sync-secret");
+  applyCors(req, res, "POST, OPTIONS");
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ ok: false, error: "Use POST" });
 
   const secret = process.env.SYNC_SHARED_SECRET;
-  if (secret && req.headers["x-sync-secret"] !== secret) {
+  if (!secret) {
+    return res.status(503).json({ ok: false, error: "SYNC_SHARED_SECRET sozlanmagan" });
+  }
+  if (req.headers["x-sync-secret"] !== secret) {
     return res.status(401).json({ ok: false, error: "Unauthorized" });
   }
 
@@ -38,6 +40,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({ ok: true, seeded: true });
   } catch (err) {
-    return res.status(500).json({ ok: false, error: err.message });
+    console.error("pmo-seed error:", err);
+    return res.status(500).json({ ok: false, error: "Ichki xatolik" });
   }
 };

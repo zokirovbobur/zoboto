@@ -11,14 +11,36 @@
 //   JIRA_EMAIL        Jira account email for the API token
 //   JIRA_API_TOKEN    https://id.atlassian.com/manage-profile/security/api-tokens
 //   KV_REST_API_URL / KV_REST_API_TOKEN  auto-set when a KV store is attached
-// Optional:
-//   SYNC_SHARED_SECRET  if set, caller must send header x-sync-secret matching it
+//   SYNC_SHARED_SECRET  REQUIRED — caller must send header x-sync-secret
+//                       matching it; the endpoint returns 503 until it is set
 // ===================================================================
 
 const { runSync } = require("../lib/jira-sync-core.js");
-const { kvGet, kvSet } = require("../lib/kv.js");
+const { kvGet, kvSet, kvSetNX, kvDel } = require("../lib/kv.js");
+const { applyCors } = require("../lib/cors.js");
 
 const SYNC_LOG_MAX_ENTRIES = 50;
+// A sync run is capped at 60s (vercel.json maxDuration); the lock's TTL is
+// double that so a crashed run can never wedge the button for long.
+const SYNC_LOCK_TTL_SECONDS = 120;
+
+// Only these known, safe error shapes are forwarded to the client (endpoint
+// + HTTP status, never the response body). Anything else becomes a generic
+// "Ichki xatolik" — the full error is still logged server-side.
+const SAFE_ERROR_PATTERNS = [
+  /^Jira \/search\/jql \d{3}/,
+  /^Jira \/search \d{3}/,
+  /^Jira project search \d{3}/,
+];
+
+function clientErrorMessage(err) {
+  const msg = String((err && err.message) || "");
+  for (const re of SAFE_ERROR_PATTERNS) {
+    const hit = msg.match(re);
+    if (hit) return hit[0];
+  }
+  return "Ichki xatolik";
+}
 
 /** Prepends a compact record to the SYNC_LOG list in KV, capped to the most recent N. */
 async function appendSyncLog(entry) {
@@ -28,14 +50,15 @@ async function appendSyncLog(entry) {
 }
 
 module.exports = async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-sync-secret");
+  applyCors(req, res, "POST, OPTIONS");
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ ok: false, error: "Use POST" });
 
   const secret = process.env.SYNC_SHARED_SECRET;
-  if (secret && req.headers["x-sync-secret"] !== secret) {
+  if (!secret) {
+    return res.status(503).json({ ok: false, error: "SYNC_SHARED_SECRET sozlanmagan" });
+  }
+  if (req.headers["x-sync-secret"] !== secret) {
     return res.status(401).json({ ok: false, error: "Unauthorized" });
   }
 
@@ -46,7 +69,13 @@ module.exports = async function handler(req, res) {
 
   const dryRun = req.body?.dryRun === true || req.query?.dryRun === "1";
 
+  let lockAcquired = false;
   try {
+    lockAcquired = await kvSetNX("SYNC_LOCK", 1, SYNC_LOCK_TTL_SECONDS);
+    if (!lockAcquired) {
+      return res.status(409).json({ ok: false, error: "Sync allaqachon ketmoqda" });
+    }
+
     const dataObj = await kvGet("TB_DATA");
     if (!dataObj) {
       return res.status(409).json({ ok: false, error: "KV bo'sh — avval /api/pmo-seed ni chaqiring" });
@@ -58,26 +87,27 @@ module.exports = async function handler(req, res) {
     );
 
     if (!dryRun) {
-      await Promise.all([
-        kvSet("TB_DATA", result.dataObj),
-        kvSet("TB_JIRA_ISSUES", result.jiraIssuesObj),
-        kvSet("DEVOPS_ISSUES", result.devopsIssuesArr),
-        kvSet("SYNC_LAST_REPORT", { dateStr: result.dateStr, report: result.report, reportText: result.reportText }),
-        appendSyncLog({
-          timestamp: new Date().toISOString(),
-          dateStr: result.dateStr,
-          ok: true,
-          changed: result.changed,
-          updated: result.report.updated,
-          unchangedCount: result.report.unchanged.length,
-          newNames: result.report.newNames,
-          newBoards: result.report.newBoards || [],
-          newProjects: result.report.newProjects || [],
-          emptyEpics: [...new Set(result.report.emptyEpics)],
-          epicNotFound: result.report.epicNotFound,
-          diffs: result.report.diffs,
-        }),
-      ]);
+      // Written sequentially, TB_DATA LAST on purpose: if a write in the
+      // middle fails, the main object stays at its previous consistent state
+      // instead of pointing at half-updated satellite keys.
+      await kvSet("TB_JIRA_ISSUES", result.jiraIssuesObj);
+      await kvSet("DEVOPS_ISSUES", result.devopsIssuesArr);
+      await kvSet("SYNC_LAST_REPORT", { dateStr: result.dateStr, report: result.report, reportText: result.reportText });
+      await appendSyncLog({
+        timestamp: new Date().toISOString(),
+        dateStr: result.dateStr,
+        ok: true,
+        changed: result.changed,
+        updated: result.report.updated,
+        unchangedCount: result.report.unchanged.length,
+        newNames: result.report.newNames,
+        newBoards: result.report.newBoards || [],
+        newProjects: result.report.newProjects || [],
+        emptyEpics: [...new Set(result.report.emptyEpics)],
+        epicNotFound: result.report.epicNotFound,
+        diffs: result.report.diffs,
+      });
+      await kvSet("TB_DATA", result.dataObj);
     }
 
     return res.status(200).json({
@@ -88,12 +118,16 @@ module.exports = async function handler(req, res) {
       reportText: result.reportText,
     });
   } catch (err) {
+    console.error("pmo-sync error:", err);
+    const safeMessage = clientErrorMessage(err);
     await appendSyncLog({
       timestamp: new Date().toISOString(),
       dateStr: new Date().toISOString().slice(0, 10),
       ok: false,
-      error: err.message,
+      error: safeMessage,
     }).catch(() => {});
-    return res.status(500).json({ ok: false, error: err.message });
+    return res.status(500).json({ ok: false, error: safeMessage });
+  } finally {
+    if (lockAcquired) await kvDel("SYNC_LOCK").catch(() => {});
   }
 };
