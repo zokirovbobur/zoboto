@@ -67,15 +67,37 @@ function fmtSum(s) {
 // ---- people helpers ----
 const EMP = {}; window.TB_DATA.employees.forEach(e => { EMP[e.id] = e; });
 const PROJ = {}; window.TB_DATA.projects.forEach(p => { PROJ[p.id] = p; });
-// Keep employee workload data consistent even if projects are removed independently.
+// Build each employee's unified work history — Mahsulot projects AND the
+// individual Operations tickets assigned to them — then derive the workload
+// counts from it, so Operations work is counted alongside projects everywhere
+// (workload table, dashboard, employee card). An Operations board is stored as
+// a single project row (jiraEpicKey BSA-BOARD/TD-BOARD); we expand it into the
+// tickets whose normalized assignee matches this employee's shortName.
+const _BOARD_TYPES = window.TB_DATA.boardTypes || {};
 window.TB_DATA.employees.forEach(e => {
   e.projectIds = (e.projectIds || []).filter(id => PROJ[id]);
-  e.statusCounts = { completed: 0, progress: 0, planned: 0, paused: 0 };
+  const items = [];
   e.projectIds.forEach(id => {
-    const norm = PROJ[id].norm;
-    if (e.statusCounts[norm] !== undefined) e.statusCounts[norm]++;
+    const p = PROJ[id];
+    const isOps = (_BOARD_TYPES[p.product] || "Mahsulot") === "Operations";
+    if (isOps && p.jiraEpicKey && window.TB_JIRA_ISSUES) {
+      (window.TB_JIRA_ISSUES[p.jiraEpicKey] || []).forEach(tk => {
+        if (tk.assignee !== e.shortName) return;
+        items.push({
+          kind: "operation", id: tk.key, name: tk.summary, product: p.product,
+          norm: tk.done ? "completed" : "progress",
+          jiraKey: tk.key, origin: tk.type === "История" ? "Jira Story" : "Jira Task",
+          _isTicket: true,
+        });
+      });
+    } else {
+      items.push({ kind: "project", id: p.id, name: p.name, product: p.product, norm: p.norm, jiraEpicKey: p.jiraEpicKey });
+    }
   });
-  e.totalMatched = e.projectIds.length;
+  e.workItems = items;
+  e.statusCounts = { completed: 0, progress: 0, planned: 0, paused: 0 };
+  items.forEach(w => { if (e.statusCounts[w.norm] !== undefined) e.statusCounts[w.norm]++; });
+  e.totalMatched = items.length;
   const _active = e.statusCounts.progress + e.statusCounts.planned;
   e.loadLevel = _active >= 10 ? "critical" : _active >= 6 ? "high" : _active >= 2 ? "normal" : "low";
 });

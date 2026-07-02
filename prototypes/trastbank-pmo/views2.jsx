@@ -326,7 +326,6 @@ function Workload() {
             <SortTh k="completed_col" label={t("col_done")} />
             <SortTh k="sp_active" label={t("col_sp_active")} />
             <SortTh k="sp_completed" label={t("col_sp_done")} />
-            <SortTh k="totalMatched" label="Σ" />
             <SortTh k="loadLevel" label={t("col_load")} />
           </tr></thead>
           <tbody>
@@ -341,7 +340,6 @@ function Workload() {
                 <td className="t-muted">{e.statusCounts.completed}</td>
                 <td className="t-muted">{e.storyPoints?.active ?? 0}</td>
                 <td className="t-muted">{e.storyPoints?.completed ?? 0}</td>
-                <td><b>{e.totalMatched}</b></td>
                 <td><span className={"pill pill-" + LOAD[e.loadLevel].t}>{t(LOAD[e.loadLevel].k)}</span></td>
               </tr>
             ))}
@@ -359,24 +357,9 @@ function EmployeeProfile() {
   const e = EMP[route.id];
   if (!e) return <div className="empty">{t("noData")}</div>;
 
-  const allProjs = e.projectIds.flatMap(id => {
-    const p = PROJ[id];
-    if (!p) return [];
-    const bt = ((window.TB_DATA.boardTypes || {})[p.product]) || "Mahsulot";
-    if (bt === "Operations" && p.jiraEpicKey && window.TB_JIRA_ISSUES) {
-      const tickets = window.TB_JIRA_ISSUES[p.jiraEpicKey] || [];
-      return tickets.map(tk => ({
-        id: tk.key,
-        name: tk.summary,
-        product: p.product,
-        norm: tk.done ? "completed" : "progress",
-        origin: tk.type === "История" ? "Jira Story" : "Jira Task",
-        jiraKey: tk.key,
-        _isTicket: true,
-      }));
-    }
-    return [p];
-  });
+  // Unified work history (Mahsulot projects + this employee's Operations
+  // tickets), precomputed in lib.jsx so the counts match the workload table.
+  const allProjs = e.workItems || [];
   const filteredProjs = statusFilter === "all" ? allProjs : allProjs.filter(p => p.norm === statusFilter);
   const ledProjs = ALL_P.filter(p => p.pmId === e.id);
   const LOAD = { low: "load_low", normal: "load_normal", high: "load_high", critical: "load_critical" };
@@ -426,8 +409,8 @@ function EmployeeProfile() {
 
       <div className="card" style={{ marginTop: 16 }}>
         <div className="card-h">
-          <h3>{t("emp_projects")}</h3>
-          <span className="hint">{filteredProjs.length}{statusFilter !== "all" ? " / " + allProjs.length : ""} {t("col_project")}</span>
+          <h3>{t("work_history")}</h3>
+          <span className="hint">{filteredProjs.length}{statusFilter !== "all" ? " / " + allProjs.length : ""} {t("work_items")}</span>
           {statusFilter !== "all" && (
             <button className="btn btn-ghost" style={{ fontSize: 11, marginLeft: "auto" }} onClick={() => setStatusFilter("all")}>↺ {t("resetFilters")}</button>
           )}
@@ -435,7 +418,8 @@ function EmployeeProfile() {
         <div className="tbl-wrap">
           <table className="tbl" style={{ fontSize: 12.5 }}>
             <thead><tr>
-              <th style={{ fontSize: 10.5 }}>{t("nav_portfolio")}</th>
+              <th style={{ fontSize: 10.5 }}>{t("col_name")}</th>
+              <th style={{ fontSize: 10.5 }}>{t("col_work_type")}</th>
               <th style={{ fontSize: 10.5 }}>{t("emp_product")}</th>
               <th style={{ fontSize: 10.5 }}>{t("col_status")}</th>
             </tr></thead>
@@ -454,6 +438,11 @@ function EmployeeProfile() {
                         background: p.origin === "Jira Story" ? "#7C3AED18" : "#0E749018",
                         borderRadius: 4, padding: "1px 5px" }}>{p.jiraKey}</span>
                     )}
+                  </td>
+                  <td>
+                    {p.kind === "operation"
+                      ? <span style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6, color: "#0E9C8E", background: "#0E9C8E18" }}>{t("type_operation")}</span>
+                      : <span style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 6, color: "#2563EB", background: "#2563EB18" }}>{t("type_project")}</span>}
                   </td>
                   <td><span className="tag">{prodShort(p.product)}</span></td>
                   <td style={{ whiteSpace: "nowrap" }}><StatusBadge norm={p.norm} /></td>
