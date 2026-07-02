@@ -378,6 +378,7 @@ function Portfolio() {
       let a, b;
       if (k === "deadline") { a = parseDate(x.endDate) || 0; b = parseDate(y.endDate) || 0; }
       else if (k === "epicCreated") { a = parseDate(x.epicCreatedDate) || 0; b = parseDate(y.epicCreatedDate) || 0; }
+      else if (k === "epicStart") { a = parseDate(x.startDate) || 0; b = parseDate(y.startDate) || 0; }
       else if (k === "status") { a = STATUS_ORDER.indexOf(x.norm); b = STATUS_ORDER.indexOf(y.norm); }
       else if (k === "pm") { a = projectPmName(x).toLowerCase(); b = projectPmName(y).toLowerCase(); }
       else if (k === "sp") { a = epicStoryPoints(x); b = epicStoryPoints(y); }
@@ -486,6 +487,7 @@ function Portfolio() {
               <SortTh k="pm" label={t("col_pm")} />
               <SortTh k="customer" label={t("col_customer")} />
               <SortTh k="epicCreated" label={t("col_epic_created")} />
+              <SortTh k="epicStart" label={t("col_epic_start")} />
               <SortTh k="deadline" label={t("col_deadline")} />
               <SortTh k="sp" label={t("col_sp")} />
               <SortTh k="origin" label="Origin" />
@@ -520,6 +522,7 @@ function Portfolio() {
                   <td>{projectPmName(p) ? <span className="row"><Avatar name={projectPmName(p)} size={24} /> {projectPmName(p)}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
                   <td className="t-muted">{p.customer || "—"}</td>
                   <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{p.epicCreatedDate ? fmtDate(p.epicCreatedDate, lang) : "—"}</td>
+                  <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{p.startDate ? fmtDate(p.startDate, lang) : "—"}</td>
                   <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
                   <td className="t-muted" style={{ textAlign: "right" }}>{epicStoryPoints(p) || "—"}</td>
                   <td>
@@ -531,7 +534,7 @@ function Portfolio() {
                   </td>
                 </tr>
               ))}
-              {!rows.length && <tr><td colSpan="10" className="empty">{t("noData")}</td></tr>}
+              {!rows.length && <tr><td colSpan="11" className="empty">{t("noData")}</td></tr>}
             </tbody>
           </table>
         </div>
