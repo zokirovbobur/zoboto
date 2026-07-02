@@ -102,11 +102,6 @@ function SyncLogEntry({ entry }) {
           {entry.updated.join(", ")}
         </div>
       )}
-      {entry.newNames.length > 0 && (
-        <div style={{ marginTop: 6, fontSize: 11.5, color: "var(--muted-2)" }}>
-          {entry.newNames.map(n => `${n.displayName} → ${n.project}`).join("; ")}
-        </div>
-      )}
     </div>
   );
 }
