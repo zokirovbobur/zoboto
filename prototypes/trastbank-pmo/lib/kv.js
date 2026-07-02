@@ -56,14 +56,18 @@ async function kvSet(key, value) {
 async function kvSetNX(key, value, ttlSeconds) {
   key = prefixed(key);
   const { url, token } = kvEnv();
-  const res = await fetch(`${url}/set/${encodeURIComponent(key)}?nx=true&ex=${ttlSeconds}`, {
+  // Upstash REST maps a Redis command to path segments: `SET key value NX EX ttl`
+  // becomes /set/{key}/{value}/NX/EX/{ttl}. Passing the options as a query
+  // string (?nx=true&ex=..) instead makes Upstash forward them as bogus
+  // command args ("SET key value nx true ex ..") → Redis "ERR syntax error".
+  const path = `${url}/set/${encodeURIComponent(key)}/${encodeURIComponent(String(value))}/NX/EX/${ttlSeconds}`;
+  const res = await fetch(path, {
     method: "POST",
-    headers: { Authorization: `Bearer ${token}`, "Content-Type": "text/plain" },
-    body: JSON.stringify(value),
+    headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) throw new Error(`KV SETNX ${key} failed: ${res.status} ${await res.text()}`);
   const { result } = await res.json();
-  return result === "OK";
+  return result === "OK"; // null when the key already existed (NX prevented the set)
 }
 
 async function kvDel(key) {

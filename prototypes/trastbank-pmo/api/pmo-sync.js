@@ -128,9 +128,7 @@ module.exports = async function handler(req, res) {
       updatedBy,
       error: safeMessage,
     }).catch(() => {});
-    const _body = { ok: false, error: safeMessage };
-    if (req.query?.debug === "1") { _body.detail = String(err && err.message); _body.stack = String((err && err.stack) || "").split("\n").slice(0, 5).join(" | "); }
-    return res.status(500).json(_body);
+    return res.status(500).json({ ok: false, error: safeMessage });
   } finally {
     if (lockAcquired) await kvDel("SYNC_LOCK").catch(() => {});
   }
