@@ -21,7 +21,10 @@ const OPERATIONS_BOARDS = ["BSA", "TD"];
 // date opportunistically; not load-bearing when Jira is reachable.
 const MAHSULOT_BOARDS_FALLBACK = ["SL", "KT", "FC", "ABS", "AI", "MW", "MDI", "PH", "TB", "MP", "WTB"];
 
-const EPIC_FIELDS = ["summary", "status", "assignee", "reporter", "created", "project"];
+// resolutiondate — Jira sets this automatically when an issue is transitioned
+// to a "Done"/"Resolved" status. It is the canonical "completion date" for an
+// epic and is therefore the correct source for a project's endDate.
+const EPIC_FIELDS = ["summary", "status", "assignee", "reporter", "created", "resolutiondate", "project"];
 // customfield_10016 = "Story point estimate" on this Jira Cloud site (verified via
 // issue type field metadata; the field ID is global to the site, not per-project).
 const STORY_POINTS_FIELD = "customfield_10016";
@@ -110,6 +113,9 @@ async function fetchMahsulotEpics(cfg, boardKey) {
     assignee: i.fields.assignee?.displayName || null,
     reporter: i.fields.reporter?.displayName || null,
     created: i.fields.created,
+    // resolutiondate is set by Jira when the epic moves to a Done/Resolved
+    // status — null when the epic is still open.
+    resolutionDate: i.fields.resolutiondate || null,
     projectKey: i.fields.project?.key || boardKey,
     projectName: i.fields.project?.name || boardKey,
   }));
@@ -464,6 +470,30 @@ function updateProjects(dataObj, jira, report) {
         const oldest = fmtDate(dates[0]);
         diffs.push(["startDate", "", oldest]);
         p.startDate = oldest;
+      }
+    }
+
+    // endDate: sync from Jira epic's resolutiondate (Mahsulot only).
+    // Updated whenever Jira has a resolutiondate — both for completed projects
+    // (first time it was missed) and if the date ever changes. Also clears the
+    // field if the epic was re-opened (resolutiondate becomes null) and the
+    // stored endDate looks like it was auto-set (matches epicCreatedDate guard
+    // would be wrong here — we just trust Jira). Manual endDate overrides are
+    // preserved: we only auto-write when Jira explicitly provides a date.
+    if (bt !== "Operations") {
+      const epic = allEpics[p.jiraEpicKey];
+      if (epic) {
+        const newEndDate = epic.resolutionDate ? fmtDate(epic.resolutionDate) : "";
+        if (newEndDate && newEndDate !== (p.endDate || "")) {
+          diffs.push(["endDate", p.endDate || "", newEndDate]);
+          p.endDate = newEndDate;
+        } else if (!newEndDate && p._endDateFromJira && p.endDate) {
+          // Epic was re-opened — clear the previously auto-set date
+          diffs.push(["endDate", p.endDate, ""]);
+          p.endDate = "";
+          p._endDateFromJira = false;
+        }
+        if (newEndDate) p._endDateFromJira = true;
       }
     }
 
