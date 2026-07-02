@@ -94,12 +94,29 @@ function PmoSyncButton() {
   const endpoint = window.PMO_SYNC_ENDPOINT;
   if (!endpoint) return null;
 
+  // The sync secret lives only in sessionStorage: asked once per browser
+  // session, re-asked if the server rejects it with 401.
+  const SYNC_SECRET_KEY = "pmo_sync_secret";
+  const askSecret = () => {
+    let secret = sessionStorage.getItem(SYNC_SECRET_KEY);
+    if (!secret) {
+      secret = window.prompt(t("sync_secret_prompt"));
+      if (secret) sessionStorage.setItem(SYNC_SECRET_KEY, secret);
+    }
+    return secret;
+  };
+
   const run = async () => {
+    const secret = askSecret();
+    if (!secret) return;
     setStatus("running"); setOpen(true); setResult(null);
     try {
-      const headers = { "Content-Type": "application/json" };
-      if (window.PMO_SYNC_SECRET) headers["x-sync-secret"] = window.PMO_SYNC_SECRET;
+      const headers = { "Content-Type": "application/json", "x-sync-secret": secret };
       const res = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify({}) });
+      if (res.status === 401) {
+        sessionStorage.removeItem(SYNC_SECRET_KEY);
+        throw new Error(t("sync_secret_wrong"));
+      }
       const json = await res.json();
       if (!res.ok || json.ok === false) throw new Error(json.error || ("HTTP " + res.status));
       setResult(json);
@@ -141,6 +158,11 @@ function PmoSyncButton() {
                   <div style={{ marginBottom: 8 }}>
                     <b style={{ color: "var(--ink)" }}>{t("sync_new_names")}:</b>{" "}
                     {result.report.newNames.map(n => n.displayName + " → " + n.project).join("; ")}
+                  </div>
+                )}
+                {result.report.fallbackUsed && (
+                  <div style={{ color: "#C0392B", marginBottom: 8 }}>
+                    <b>{t("sync_fallback_used")}</b>
                   </div>
                 )}
                 {result.report.newBoards && result.report.newBoards.length > 0 && (
