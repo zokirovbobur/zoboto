@@ -13,7 +13,7 @@ transform qiladi; data `/api/pmo-data` orqali KV'dan keladi.
 | `JIRA_EMAIL` | ha (sync uchun) | Jira API token egasining emaili |
 | `JIRA_API_TOKEN` | ha (sync uchun) | https://id.atlassian.com/manage-profile/security/api-tokens |
 | `KV_REST_API_URL` / `KV_REST_API_TOKEN` | ha | Upstash Redis store ulanganda Vercel o'zi qo'yadi (`UPSTASH_REDIS_REST_URL/TOKEN` nomlari ham qo'llab-quvvatlanadi) |
-| `SYNC_SHARED_SECRET` | **ha** | `/api/pmo-sync` va `/api/pmo-seed` uchun `x-sync-secret` header shu qiymatga teng bo'lishi shart. O'rnatilmagan bo'lsa endpoint **503** qaytaradi; noto'g'ri/yo'q header — **401**. Frontend secretni birinchi "Jiradan yangilash" bosilganda `prompt()` orqali so'rab `sessionStorage`da saqlaydi (401 kelsa tozalab qayta so'raydi). |
+| `SYNC_SHARED_SECRET` | faqat `/api/pmo-seed` uchun | `/api/pmo-seed` (KV'ni birlamchi to'ldirish) hali `x-sync-secret` header shu qiymatga teng bo'lishini talab qiladi. **`/api/pmo-sync` endi secret talab qilmaydi** — "Jiradan yangilash" tugmasi idempotent qayta-sync'ni ishga tushiradi, barcha haqiqiy sirlar (`JIRA_API_TOKEN` va h.k.) faqat server tomonida qoladi, brauzerga hech qachon chiqmaydi. Suiiste'mol `SYNC_LOCK` (bir vaqtda bitta run) va CORS allowlist bilan cheklanadi. |
 | `ALLOWED_ORIGINS` | yo'q | CORS uchun ruxsat etilgan originlar (vergul bilan). Default: `https://pmo-board.vercel.app,https://pmo-board-test.vercel.app,https://zoboto.uz`. Faqat ro'yxatdagi Origin'ga `Access-Control-Allow-Origin` qaytariladi — `*` ishlatilmaydi. |
 | `KV_PREFIX` | yo'q | Har bir KV kaliti oldiga qo'shiladigan prefix (default: bo'sh). Test deployment'da `KV_PREFIX="TEST:"` qo'yilsa, bir xil Upstash bazasida production data'ga tegmasdan ishlaydi. |
 

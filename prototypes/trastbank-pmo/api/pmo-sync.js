@@ -11,8 +11,11 @@
 //   JIRA_EMAIL        Jira account email for the API token
 //   JIRA_API_TOKEN    https://id.atlassian.com/manage-profile/security/api-tokens
 //   KV_REST_API_URL / KV_REST_API_TOKEN  auto-set when a KV store is attached
-//   SYNC_SHARED_SECRET  REQUIRED — caller must send header x-sync-secret
-//                       matching it; the endpoint returns 503 until it is set
+//
+// No client-provided secret is required: the button triggers an idempotent
+// re-sync and all real credentials (JIRA_API_TOKEN etc.) stay server-side in
+// Vercel env vars, never exposed to the browser. Abuse is limited by the
+// SYNC_LOCK (one run at a time) and the CORS allowlist.
 // ===================================================================
 
 const { runSync } = require("../lib/jira-sync-core.js");
@@ -53,14 +56,6 @@ module.exports = async function handler(req, res) {
   applyCors(req, res, "POST, OPTIONS");
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ ok: false, error: "Use POST" });
-
-  const secret = process.env.SYNC_SHARED_SECRET;
-  if (!secret) {
-    return res.status(503).json({ ok: false, error: "SYNC_SHARED_SECRET sozlanmagan" });
-  }
-  if (req.headers["x-sync-secret"] !== secret) {
-    return res.status(401).json({ ok: false, error: "Unauthorized" });
-  }
 
   const { JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN } = process.env;
   for (const [k, v] of Object.entries({ JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN })) {
