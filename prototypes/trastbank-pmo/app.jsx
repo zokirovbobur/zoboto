@@ -79,9 +79,11 @@ const ACTIVE_OF = { project: "portfolio", employee: "workload" };
 
 function PmoSyncButton() {
   const t = useT();
-  const [status, setStatus] = uSA("idle"); // idle | running | done | error
+  const [status, setStatus] = uSA("idle"); // idle | prompt | running | done | error
   const [result, setResult] = uSA(null);
   const [open, setOpen] = uSA(false);
+  const NAME_KEY = "pmo_sync_name";
+  const [name, setName] = uSA(() => { try { return localStorage.getItem(NAME_KEY) || ""; } catch { return ""; } });
   const ref = uRA(null);
 
   uEA(() => {
@@ -106,13 +108,25 @@ function PmoSyncButton() {
     return secret;
   };
 
+  const employees = (window.TB_DATA && window.TB_DATA.employees) || [];
+
+  // Opening the button first asks WHO is running the sync (autocomplete over
+  // the employee list, but any custom name is also allowed) before firing.
+  const openForm = () => {
+    if (open && status === "prompt") { setOpen(false); return; }
+    setResult(null); setStatus("prompt"); setOpen(true);
+  };
+
   const run = async () => {
+    const who = name.trim();
+    if (!who) return;
+    try { localStorage.setItem(NAME_KEY, who); } catch {}
     const secret = askSecret();
     if (!secret) return;
     setStatus("running"); setOpen(true); setResult(null);
     try {
       const headers = { "Content-Type": "application/json", "x-sync-secret": secret };
-      const res = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify({}) });
+      const res = await fetch(endpoint, { method: "POST", headers, body: JSON.stringify({ updatedBy: who }) });
       if (res.status === 401) {
         sessionStorage.removeItem(SYNC_SECRET_KEY);
         throw new Error(t("sync_secret_wrong"));
@@ -130,14 +144,42 @@ function PmoSyncButton() {
   return (
     <div style={{ position: "relative" }} ref={ref}>
       <button className="btn" style={{ padding: "0 12px", height: 38, fontSize: 12.5, display: "flex", alignItems: "center" }}
-        onClick={run} disabled={status === "running"} title={t("sync_btn")}>
+        onClick={openForm} disabled={status === "running"} title={t("sync_btn")}>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
           style={status === "running" ? { animation: "spin 1s linear infinite" } : undefined}>
           <path d="M21 2v6h-6M3 22v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L21 8M20.49 15a9 9 0 0 1-14.85 3.36L3 16" />
         </svg>
         <span style={{ marginLeft: 6 }}>{status === "running" ? t("sync_running") : t("sync_btn")}</span>
       </button>
-      {open && status !== "running" && result && (
+      {open && status === "prompt" && (
+        <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, width: 320, background: "var(--modal-bg)",
+                      borderRadius: 12, border: "1px solid var(--line)", boxShadow: "var(--shadow-lg)", zIndex: 100, overflow: "hidden" }}>
+          <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--line-2)", fontWeight: 700, fontSize: 13, color: "var(--ink)" }}>
+            {t("sync_who_title")}
+          </div>
+          <div style={{ padding: "12px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
+            <input list="pmo-sync-emp-list" value={name} autoFocus
+              onChange={e => setName(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter" && name.trim()) run(); }}
+              placeholder={t("sync_who_placeholder")}
+              style={{ border: "1px solid var(--line)", borderRadius: 8, padding: "8px 10px", fontSize: 13,
+                       fontFamily: "inherit", background: "var(--select-bg)", color: "var(--ink)", outline: "none" }} />
+            <datalist id="pmo-sync-emp-list">
+              {employees.map(e => <option key={e.id} value={e.fullName} />)}
+            </datalist>
+            <div style={{ fontSize: 11, color: "var(--muted-2)" }}>{t("sync_who_hint")}</div>
+          </div>
+          <div style={{ padding: "10px 16px", borderTop: "1px solid var(--line-2)", display: "flex", gap: 8 }}>
+            <button className="btn btn-ghost" style={{ flex: 1, justifyContent: "center", fontSize: 12 }} onClick={() => setOpen(false)}>
+              {t("sync_close")}
+            </button>
+            <button className="btn" style={{ flex: 1, justifyContent: "center", fontSize: 12 }} disabled={!name.trim()} onClick={run}>
+              {t("sync_start")}
+            </button>
+          </div>
+        </div>
+      )}
+      {open && status !== "running" && status !== "prompt" && result && (
         <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, width: 360, background: "var(--modal-bg)",
                       borderRadius: 12, border: "1px solid var(--line)", boxShadow: "var(--shadow-lg)", zIndex: 100, overflow: "hidden" }}>
           <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--line-2)", fontWeight: 700, fontSize: 13, color: "var(--ink)" }}>

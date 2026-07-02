@@ -69,6 +69,11 @@ module.exports = async function handler(req, res) {
 
   const dryRun = req.body?.dryRun === true || req.query?.dryRun === "1";
 
+  // Who triggered this sync — free-text (autocompleted from the employee list
+  // on the client, but any custom name is accepted). Trimmed and length-capped.
+  const updatedByRaw = req.body?.updatedBy;
+  const updatedBy = typeof updatedByRaw === "string" ? updatedByRaw.trim().slice(0, 80) : "";
+
   let lockAcquired = false;
   try {
     lockAcquired = await kvSetNX("SYNC_LOCK", 1, SYNC_LOCK_TTL_SECONDS);
@@ -97,6 +102,7 @@ module.exports = async function handler(req, res) {
         timestamp: new Date().toISOString(),
         dateStr: result.dateStr,
         ok: true,
+        updatedBy,
         changed: result.changed,
         updated: result.report.updated,
         unchangedCount: result.report.unchanged.length,
@@ -124,6 +130,7 @@ module.exports = async function handler(req, res) {
       timestamp: new Date().toISOString(),
       dateStr: new Date().toISOString().slice(0, 10),
       ok: false,
+      updatedBy,
       error: safeMessage,
     }).catch(() => {});
     return res.status(500).json({ ok: false, error: safeMessage });
