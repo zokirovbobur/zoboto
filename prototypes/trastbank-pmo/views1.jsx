@@ -291,6 +291,7 @@ function Dashboard() {
                     <th>{t("col_project")}</th>
                     <th>{t("col_product")}</th>
                     <th>{t("col_pm")}</th>
+                    <th style={{ textAlign: "right" }}>{t("col_sp")}</th>
                     <th>{t("col_completed_at")}</th>
                   </tr></thead>
                   <tbody>
@@ -300,10 +301,11 @@ function Dashboard() {
                         <td className="cell-proj">{p.name}<JiraLink epicKey={p.jiraEpicKey} product={p.product} /></td>
                         <td><span className="tag">{prodShort(p.product)}</span></td>
                         <td>{projectPmName(p) ? <span className="row"><Avatar name={projectPmName(p)} size={24} /> {projectPmName(p)}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
+                        <td className="t-muted" style={{ textAlign: "right" }}>{epicStoryPoints(p) || "—"}</td>
                         <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
                       </tr>
                     ))}
-                    {!tableRows.length && <tr><td colSpan="5" className="empty">{t("noData")}</td></tr>}
+                    {!tableRows.length && <tr><td colSpan="6" className="empty">{t("noData")}</td></tr>}
                   </tbody>
                 </table>
               </div>
