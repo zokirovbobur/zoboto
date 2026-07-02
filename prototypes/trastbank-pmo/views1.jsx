@@ -17,6 +17,7 @@ function agg() {
 function Dashboard() {
   const t = useT(); const { nav, lang } = useApp();
   const a = uM1(agg, []);
+  const [selMonth, setSelMonth] = uS1(null); // selected month key ("YYYY-MM") for the deliveries table filter
 
   // product breakdown by status
   const prodData = uM1(() => {
@@ -39,15 +40,25 @@ function Dashboard() {
     return [...DATA.employees].filter(e => e.totalMatched > 0)
       .sort((x, y) => y.totalMatched - x.totalMatched).slice(0, 12);
   }, []);
-  // deliveries per month (completed)
-  const tl = uM1(() => {
-    const m = {};
+  // deliveries per month (completed) over the last 12 months (anchored to the
+  // platform "today" = NOW), plus the underlying rows that feed the table below.
+  const deliv = uM1(() => {
+    const keys = [];
+    for (let i = 11; i >= 0; i--) {
+      const d = new Date(NOW.getFullYear(), NOW.getMonth() - i, 1);
+      keys.push(d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"));
+    }
+    const counts = {}; keys.forEach(k => { counts[k] = 0; });
+    const rows = [];
     ALL_P.filter(p => p.norm === "completed").forEach(p => {
-      const d = parseDate(p.endDate); if (!d) return;
-      const k = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
-      m[k] = (m[k] || 0) + 1;
+      const dt = parseDate(p.endDate); if (!dt) return;
+      const k = dt.getFullYear() + "-" + String(dt.getMonth() + 1).padStart(2, "0");
+      if (counts[k] === undefined) return; // outside the 12-month window
+      counts[k]++;
+      rows.push({ p, monthKey: k, date: dt });
     });
-    return Object.entries(m).sort().slice(-8);
+    rows.sort((a, b) => b.date - a.date); // newest first
+    return { keys, counts, rows };
   }, []);
   // Operations data (status counts + workload by assignee)
   const OPS_GROUPS = [
@@ -243,19 +254,65 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Row 4: Timeline — full width */}
-      <div className="card" style={{ marginTop: 16 }}>
-        <div className="card-h"><h3>{t("ch_timeline")}</h3><span className="hint">{t("st_completed_s")}</span></div>
-        <div className="card-pad">
-          <Chart_ type="bar" height={160}
-            data={{
-              labels: tl.map(d => { const [y, mo] = d[0].split("-"); return MONTHS[lang][+mo - 1] + " " + y.slice(2); }),
-              datasets: [{ data: tl.map(d => d[1]), backgroundColor: "#138A5E", borderRadius: 5, maxBarThickness: 52 }],
-            }}
-            options={{ plugins: { legend: { display: false } },
-              scales: { y: { grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, x: { grid: { display: false } } } }} />
-        </div>
-      </div>
+      {/* Row 4: Deliveries per month (last 12 months) + table below — clicking a bar filters the table by that month */}
+      {(() => {
+        const monthLabel = k => { const [y, mo] = k.split("-"); return MONTHS[lang][+mo - 1] + " " + y; };
+        const tableRows = selMonth ? deliv.rows.filter(r => r.monthKey === selMonth) : deliv.rows;
+        return (
+          <div className="card" style={{ marginTop: 16 }}>
+            <div className="card-h"><h3>{t("ch_timeline")}</h3><span className="hint">{t("clickHint")}</span></div>
+            <div className="card-pad">
+              <Chart_ type="bar" height={160}
+                onClickIndex={i => setSelMonth(selMonth === deliv.keys[i] ? null : deliv.keys[i])}
+                data={{
+                  labels: deliv.keys.map(k => { const [y, mo] = k.split("-"); return MONTHS[lang][+mo - 1] + " " + y.slice(2); }),
+                  datasets: [{ data: deliv.keys.map(k => deliv.counts[k]),
+                    backgroundColor: deliv.keys.map(k => (!selMonth || selMonth === k) ? "#138A5E" : "#C4E2D2"),
+                    borderRadius: 5, maxBarThickness: 52 }],
+                }}
+                options={{ plugins: { legend: { display: false } },
+                  scales: { y: { grid: { color: "var(--line-2)" }, ticks: { precision: 0 } }, x: { grid: { display: false } } } }} />
+            </div>
+
+            <div style={{ borderTop: "1px solid var(--line-2)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px" }}>
+                <b style={{ fontSize: 13, color: "var(--ink)" }}>
+                  {t("deliv_table_title")}
+                  <span style={{ color: "var(--muted)", fontWeight: 500 }}> — {tableRows.length}</span>
+                </b>
+                {selMonth
+                  ? <button className="btn btn-ghost" style={{ fontSize: 12 }} onClick={() => setSelMonth(null)}>{monthLabel(selMonth)} ✕</button>
+                  : <span className="hint">{t("deliv_sub")}</span>}
+              </div>
+              <div className="tbl-wrap">
+                <table className="tbl">
+                  <thead><tr>
+                    <th className="no-sort" style={{ width: 36, textAlign: "center" }}>№</th>
+                    <th>{t("col_project")}</th>
+                    <th>{t("col_product")}</th>
+                    <th>{t("col_pm")}</th>
+                    <th style={{ textAlign: "right" }}>{t("col_sp")}</th>
+                    <th>{t("col_completed_at")}</th>
+                  </tr></thead>
+                  <tbody>
+                    {tableRows.map(({ p }, idx) => (
+                      <tr key={p.id + idx} onClick={() => nav("project", { id: p.id })}>
+                        <td style={{ textAlign: "center", color: "var(--muted)", fontSize: 12, width: 36 }}>{idx + 1}</td>
+                        <td className="cell-proj">{p.name}<JiraLink epicKey={p.jiraEpicKey} product={p.product} /></td>
+                        <td><span className="tag">{prodShort(p.product)}</span></td>
+                        <td>{projectPmName(p) ? <span className="row"><Avatar name={projectPmName(p)} size={24} /> {projectPmName(p)}</span> : <span className="t-muted">{t("notSpecified")}</span>}</td>
+                        <td className="t-muted" style={{ textAlign: "right" }}>{epicStoryPoints(p) || "—"}</td>
+                        <td className="t-muted" style={{ whiteSpace: "nowrap" }}>{fmtDate(p.endDate, lang)}</td>
+                      </tr>
+                    ))}
+                    {!tableRows.length && <tr><td colSpan="6" className="empty">{t("noData")}</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
