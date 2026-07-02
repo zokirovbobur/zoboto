@@ -21,7 +21,14 @@ const OPERATIONS_BOARDS = ["BSA", "TD"];
 // date opportunistically; not load-bearing when Jira is reachable.
 const MAHSULOT_BOARDS_FALLBACK = ["SL", "KT", "FC", "ABS", "AI", "MW", "MDI", "PH", "TB", "MP", "WTB"];
 
-const EPIC_FIELDS = ["summary", "status", "assignee", "reporter", "created", "project"];
+// Custom date fields on this Jira Cloud site (verified via /rest/api/3/field):
+//   customfield_10015 = "Дата начала" (epic start date)
+//   customfield_10440 = "Дата релиза в прод" (release-to-prod / end date)
+// These are the correct source for project startDate/endDate — NOT the
+// standard `created` or `resolutiondate` fields which are often empty.
+const EPIC_START_DATE_FIELD = "customfield_10015";
+const EPIC_END_DATE_FIELD   = "customfield_10440";
+const EPIC_FIELDS = ["summary", "status", "assignee", "reporter", "created", "project", EPIC_START_DATE_FIELD, EPIC_END_DATE_FIELD];
 // customfield_10016 = "Story point estimate" on this Jira Cloud site (verified via
 // issue type field metadata; the field ID is global to the site, not per-project).
 const STORY_POINTS_FIELD = "customfield_10016";
@@ -110,6 +117,9 @@ async function fetchMahsulotEpics(cfg, boardKey) {
     assignee: i.fields.assignee?.displayName || null,
     reporter: i.fields.reporter?.displayName || null,
     created: i.fields.created,
+    // Custom date fields: "Дата начала" and "Дата релиза в прод"
+    epicStartDate: i.fields[EPIC_START_DATE_FIELD] || null,
+    epicEndDate:   i.fields[EPIC_END_DATE_FIELD]   || null,
     projectKey: i.fields.project?.key || boardKey,
     projectName: i.fields.project?.name || boardKey,
   }));
@@ -376,7 +386,7 @@ function updateProjects(dataObj, jira, report) {
 
     const diffs = [];
 
-    // epic's own created date (Mahsulot only — Operations boards have no single epic)
+    // epicCreatedDate: from Jira's built-in `created` timestamp (Mahsulot only)
     if (bt !== "Operations") {
       const epic = allEpics[p.jiraEpicKey];
       const newEpicCreated = epic ? fmtDate(epic.created) : "";
@@ -457,13 +467,48 @@ function updateProjects(dataObj, jira, report) {
       if (stale.length) report.staleTeamMembers.push({ projectId: p.id, names: stale });
     }
 
-    // startDate: only fill if currently empty
+    // startDate: from Jira's "Дата начала" custom field (customfield_10015).
+    // Only auto-fills when currently empty to avoid overwriting manual entries.
+    if (bt !== "Operations") {
+      const epic = allEpics[p.jiraEpicKey];
+      if (epic && epic.epicStartDate) {
+        const newStartDate = fmtDate(epic.epicStartDate);
+        if (newStartDate && !p.startDate) {
+          diffs.push(["startDate", "", newStartDate]);
+          p.startDate = newStartDate;
+        }
+      }
+    }
+    // startDate fallback: use oldest child ticket's created date if Jira
+    // custom field is also empty and startDate is still blank.
     if (!p.startDate) {
       const dates = pseudoChildren.map(c => c.created).filter(Boolean).sort();
       if (dates.length) {
         const oldest = fmtDate(dates[0]);
         diffs.push(["startDate", "", oldest]);
         p.startDate = oldest;
+      }
+    }
+
+    // endDate: from Jira's "Дата релиза в прод" custom field (customfield_10440).
+    // Updated on every sync — works for both open and completed projects.
+    // If Jira clears the field and the value was auto-set, the stored date is
+    // also cleared. Manually-entered dates (no _endDateFromJira flag) are left
+    // untouched when Jira has nothing to offer.
+    if (bt !== "Operations") {
+      const epic = allEpics[p.jiraEpicKey];
+      if (epic) {
+        const newEndDate = epic.epicEndDate ? fmtDate(epic.epicEndDate) : "";
+        if (newEndDate && newEndDate !== (p.endDate || "")) {
+          diffs.push(["endDate", p.endDate || "", newEndDate]);
+          p.endDate = newEndDate;
+          p._endDateFromJira = true;
+        } else if (!newEndDate && p._endDateFromJira && p.endDate) {
+          // "Дата релиза в прод" was removed in Jira — clear the auto-set date
+          diffs.push(["endDate", p.endDate, ""]);
+          p.endDate = "";
+          p._endDateFromJira = false;
+        }
       }
     }
 

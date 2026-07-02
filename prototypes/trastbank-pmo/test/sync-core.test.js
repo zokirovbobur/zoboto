@@ -153,6 +153,144 @@ test("updateProjects: refreshes stale PM (author) and executor (assignee) from t
   assert.ok(fields.includes("executor"));
 });
 
+// ---------- updateProjects: endDate from Jira custom field (customfield_10440) ----------
+
+test("updateProjects: sets endDate from epic epicEndDate (customfield_10440) when currently empty", () => {
+  const dataObj = {
+    products: ["Trastpay"],
+    boardTypes: {},
+    employees: [{ id: "E15", shortName: "Mirzabayev Damir", fullName: "Mirzabayev Damir Baxador Uli" }],
+    projects: [{
+      id: "P200", name: "Test loyiha", product: "Trastpay", jiraEpicKey: "SL-10",
+      pm: "Mirzabayev Damir", pmId: "E15", executor: "", team: [], norm: "completed",
+      startDate: "01.04.2026", endDate: "", epicCreatedDate: "01.04.2026", originalStatus: "Done",
+    }],
+  };
+  const epic = {
+    key: "SL-10", summary: "Test loyiha", status: "Done",
+    assignee: "Mirzabayev Damir", reporter: "Mirzabayev Damir",
+    created: "2026-04-01T10:00:00.000+0500",
+    epicEndDate: "2026-06-15T18:00:00.000+0500",
+    projectKey: "SL", projectName: "Trastpay",
+  };
+  const jira = {
+    epicsByBoard: { SL: [epic] },
+    childrenByEpic: { "SL-10": [{ status: "Done", assignee: "Mirzabayev Damir", created: "2026-04-01T10:00:00.000+0500", done: true }] },
+    opsTickets: {},
+  };
+  const report = emptyReport();
+
+  updateProjects(dataObj, jira, report);
+
+  const p = dataObj.projects[0];
+  assert.equal(p.endDate, "15.06.2026", "endDate must be set from epicEndDate");
+  assert.equal(p._endDateFromJira, true, "_endDateFromJira flag must be set");
+  assert.ok(report.updated.includes("P200"));
+  const fields = report.diffs.find(d => d.id === "P200").diffs.map(x => x[0]);
+  assert.ok(fields.includes("endDate"), "endDate must appear in diffs");
+});
+
+test("updateProjects: updates endDate when epicEndDate (customfield_10440) changes", () => {
+  const dataObj = {
+    products: ["Trastpay"],
+    boardTypes: {},
+    employees: [{ id: "E15", shortName: "Mirzabayev Damir", fullName: "Mirzabayev Damir Baxador Uli" }],
+    projects: [{
+      id: "P201", name: "Test loyiha 2", product: "Trastpay", jiraEpicKey: "SL-11",
+      pm: "Mirzabayev Damir", pmId: "E15", executor: "", team: [], norm: "completed",
+      startDate: "01.04.2026", endDate: "10.06.2026", _endDateFromJira: true,
+      epicCreatedDate: "01.04.2026", originalStatus: "Done",
+    }],
+  };
+  const epic = {
+    key: "SL-11", summary: "Test loyiha 2", status: "Done",
+    assignee: "Mirzabayev Damir", reporter: "Mirzabayev Damir",
+    created: "2026-04-01T10:00:00.000+0500",
+    epicEndDate: "2026-06-20T18:00:00.000+0500", // o'zgargan sana
+    projectKey: "SL", projectName: "Trastpay",
+  };
+  const jira = {
+    epicsByBoard: { SL: [epic] },
+    childrenByEpic: { "SL-11": [{ status: "Done", assignee: "Mirzabayev Damir", created: "2026-04-01T10:00:00.000+0500", done: true }] },
+    opsTickets: {},
+  };
+  const report = emptyReport();
+
+  updateProjects(dataObj, jira, report);
+
+  const p = dataObj.projects[0];
+  assert.equal(p.endDate, "20.06.2026", "endDate must be updated to new epicEndDate");
+  assert.ok(report.updated.includes("P201"));
+});
+
+test("updateProjects: clears endDate when epicEndDate is removed and date was auto-set", () => {
+  const dataObj = {
+    products: ["Trastpay"],
+    boardTypes: {},
+    employees: [{ id: "E15", shortName: "Mirzabayev Damir", fullName: "Mirzabayev Damir Baxador Uli" }],
+    projects: [{
+      id: "P202", name: "Re-opened loyiha", product: "Trastpay", jiraEpicKey: "SL-12",
+      pm: "Mirzabayev Damir", pmId: "E15", executor: "", team: [], norm: "progress",
+      startDate: "01.04.2026", endDate: "15.06.2026", _endDateFromJira: true,
+      epicCreatedDate: "01.04.2026", originalStatus: "In Progress",
+    }],
+  };
+  const epic = {
+    key: "SL-12", summary: "Re-opened loyiha", status: "In Progress",
+    assignee: "Mirzabayev Damir", reporter: "Mirzabayev Damir",
+    created: "2026-04-01T10:00:00.000+0500",
+    epicEndDate: null, // Jira'da "Дата релиза в прод" olib tashlandi
+    projectKey: "SL", projectName: "Trastpay",
+  };
+  const jira = {
+    epicsByBoard: { SL: [epic] },
+    childrenByEpic: { "SL-12": [{ status: "In Progress", assignee: "Mirzabayev Damir", created: "2026-04-01T10:00:00.000+0500", done: false }] },
+    opsTickets: {},
+  };
+  const report = emptyReport();
+
+  updateProjects(dataObj, jira, report);
+
+  const p = dataObj.projects[0];
+  assert.equal(p.endDate, "", "endDate must be cleared when epic is re-opened");
+  assert.equal(p._endDateFromJira, false, "_endDateFromJira flag must be cleared");
+  assert.ok(report.updated.includes("P202"));
+  const fields = report.diffs.find(d => d.id === "P202").diffs.map(x => x[0]);
+  assert.ok(fields.includes("endDate"), "endDate clearance must appear in diffs");
+});
+
+test("updateProjects: does NOT change manually-set endDate when epic has no epicEndDate", () => {
+  const dataObj = {
+    products: ["Trastpay"],
+    boardTypes: {},
+    employees: [{ id: "E15", shortName: "Mirzabayev Damir", fullName: "Mirzabayev Damir Baxador Uli" }],
+    projects: [{
+      id: "P203", name: "Qo'lda saqlangan sana", product: "Trastpay", jiraEpicKey: "SL-13",
+      pm: "Mirzabayev Damir", pmId: "E15", executor: "", team: [], norm: "completed",
+      startDate: "01.04.2026", endDate: "30.06.2026", // _endDateFromJira yo'q = qo'lda kiritilgan
+      epicCreatedDate: "01.04.2026", originalStatus: "Done",
+    }],
+  };
+  const epic = {
+    key: "SL-13", summary: "Qo'lda saqlangan sana", status: "Done",
+    assignee: "Mirzabayev Damir", reporter: "Mirzabayev Damir",
+    created: "2026-04-01T10:00:00.000+0500",
+    epicEndDate: null, // Jira'da custom field yo'q
+    projectKey: "SL", projectName: "Trastpay",
+  };
+  const jira = {
+    epicsByBoard: { SL: [epic] },
+    childrenByEpic: { "SL-13": [{ status: "Done", assignee: "Mirzabayev Damir", created: "2026-04-01T10:00:00.000+0500", done: true }] },
+    opsTickets: {},
+  };
+  const report = emptyReport();
+
+  updateProjects(dataObj, jira, report);
+
+  const p = dataObj.projects[0];
+  assert.equal(p.endDate, "30.06.2026", "Manually-set endDate must NOT be changed");
+});
+
 test("updateProjects: leaves PM/executor untouched when the epic already matches", () => {
   const dataObj = {
     products: ["Trastpay"],
