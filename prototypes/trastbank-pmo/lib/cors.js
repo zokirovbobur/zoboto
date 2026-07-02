@@ -7,7 +7,7 @@
 // ===================================================================
 
 const DEFAULT_ALLOWED_ORIGINS =
-  "https://pmo-board.vercel.app,https://pmo-board-test.vercel.app,https://zoboto.uz";
+  "https://pmo-board.vercel.app,https://pmo-board-test.vercel.app,https://zoboto.uz,https://www.zoboto.uz";
 
 function allowedOrigins() {
   return (process.env.ALLOWED_ORIGINS || DEFAULT_ALLOWED_ORIGINS)
