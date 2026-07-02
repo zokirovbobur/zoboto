@@ -341,6 +341,8 @@ function updateProjects(dataObj, jira, report) {
   report.staleTeamMembers = report.staleTeamMembers || [];
   const employees = dataObj.employees;
   const boardTypes = dataObj.boardTypes || {};
+  const empById = new Map(employees.map(e => [e.id, e]));
+  const empByShort = new Map(employees.map(e => [e.shortName, e]));
 
   for (const p of dataObj.projects) {
     if (!p.jiraEpicKey) continue;
@@ -381,6 +383,35 @@ function updateProjects(dataObj, jira, report) {
       if (newEpicCreated && newEpicCreated !== p.epicCreatedDate) {
         diffs.push(["epicCreatedDate", p.epicCreatedDate || "", newEpicCreated]);
         p.epicCreatedDate = newEpicCreated;
+      }
+    }
+
+    // PM / author (epic reporter) and executor (epic assignee): the Jira epic
+    // is the source of truth. These used to be set ONLY when a project was
+    // first created, so existing — especially already-completed — projects
+    // kept a stale PM/executor that never re-synced. Mahsulot boards only
+    // (Operations boards have no single owning epic). pmId is kept aligned so
+    // the board (which prefers pmId over pm) reflects the change.
+    if (bt !== "Operations") {
+      const epic = allEpics[p.jiraEpicKey];
+      if (epic && epic.reporter) {
+        const { name: pmName, isNew } = normalizeJiraName(epic.reporter, employees);
+        if (isNew) addNewName(report, epic.reporter, p.id + " " + p.name);
+        const pmEmp = empByShort.get(pmName);
+        const oldPmDisplay = (p.pmId && empById.get(p.pmId)) ? empById.get(p.pmId).shortName : (p.pm || "");
+        if (pmName && pmName !== oldPmDisplay) {
+          diffs.push(["pm", oldPmDisplay || "", pmName]);
+          p.pm = pmName;
+          p.pmId = pmEmp ? pmEmp.id : "";
+        }
+      }
+      if (epic && epic.assignee) {
+        const { name: exName, isNew } = normalizeJiraName(epic.assignee, employees);
+        if (isNew) addNewName(report, epic.assignee, p.id + " " + p.name);
+        if (exName && exName !== (p.executor || "")) {
+          diffs.push(["executor", p.executor || "", exName]);
+          p.executor = exName;
+        }
       }
     }
 
